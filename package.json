@@ -1,10 +1,19 @@
 {
   "name": "ask-me",
   "version": "0.1.0",
+  "description": "Портал вопросов и ответов",
+  "author": "Григорий Алексанян",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "prettier": "prettier --write ./**/*.{js,vue,css,scss}",
+    "eslint": "eslint ./**/*.{js,vue} --color --fix",
+    "stylelint:css": "stylelint ./src/**/*.{css,scss} --custom-syntax postcss-scss --aei --color --fix",
+    "stylelint:vue": "stylelint ./src/**/*.vue --custom-syntax postcss-html --aei --color --fix",
+    "lint": "npm run eslint & npm run stylelint:css & npm run stylelint:vue",
+    "husky:prepare": "husky install",
+    "commit": "git-cz"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -13,12 +22,58 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
+    "@commitlint/cli": "^16.2.3",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-airbnb": "^6.0.0",
+    "commitizen": "^4.2.4",
+    "cz-customizable": "^6.3.0",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.5.0",
+    "eslint-plugin-vuejs-accessibility": "^1.1.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
+    "postcss": "^8.4.12",
+    "postcss-html": "^1.3.0",
+    "postcss-scss": "^4.0.3",
+    "prettier": "^2.6.2",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
+    "stylelint": "^14.6.1",
+    "stylelint-config-html": "^1.0.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-recommended-scss": "^6.0.0",
+    "stylelint-config-recommended-vue": "^1.4.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-prettier": "^2.0.0",
     "vue-template-compiler": "^2.6.14"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./config/git/commitizen.js"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run eslint"
+    ],
+    "*.vue": [
+      "npm run eslint",
+      "npm run stylelint:vue"
+    ],
+    "*.{css,scss}": [
+      "npm run stylelint:scss"
+    ]
   }
 }
