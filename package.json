@@ -1,9 +1,9 @@
 {
   "name": "ask-me",
   "version": "0.1.0",
+  "private": true,
   "description": "Портал вопросов и ответов",
   "author": "Григорий Алексанян",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -16,12 +16,15 @@
     "commit": "git-cz"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
+    "vuetify": "^2.6.0",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@mdi/font": "^6.6.96",
     "@babel/eslint-parser": "^7.17.0",
     "@commitlint/cli": "^16.2.3",
     "@vue/cli-plugin-babel": "~5.0.0",
@@ -54,7 +57,9 @@
     "stylelint-config-recommended-vue": "^1.4.0",
     "stylelint-order": "^5.0.0",
     "stylelint-prettier": "^2.0.0",
-    "vue-template-compiler": "^2.6.14"
+    "vue-cli-plugin-vuetify": "^2.4.8",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.7.0"
   },
   "config": {
     "commitizen": {
