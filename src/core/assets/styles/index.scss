@@ -1,5 +1,27 @@
 @import './variables';
 
+@font-face {
+  font-weight: 400;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-display: swap;
+  src: local('Roboto'), local('Roboto-Regular'), url('../fonts/Roboto.woff2') format('woff2'),
+    url('../fonts/Roboto.woff') format('woff');
+}
+
+@font-face {
+  font-weight: 700;
+  font-family: 'Roboto';
+  font-style: normal;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/Roboto-Bold.woff2') format('woff2'),
+    url('../fonts/Roboto-Bold.woff') format('woff');
+}
+
 html {
   overflow-y: auto;
+}
+
+html,
+body {
+  font-family: 'Roboto', 'Arial', sans-serif;
 }
