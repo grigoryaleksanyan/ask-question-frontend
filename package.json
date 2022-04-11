@@ -78,7 +78,7 @@
       "npm run stylelint:vue"
     ],
     "*.{css,scss}": [
-      "npm run stylelint:scss"
+      "npm run stylelint:css"
     ]
   }
 }
