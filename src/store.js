@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import preloader from '@/modules/preloader/store';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -8,5 +10,7 @@ export default new Vuex.Store({
   getters: {},
   mutations: {},
   actions: {},
-  modules: {},
+  modules: {
+    preloader,
+  },
 });
