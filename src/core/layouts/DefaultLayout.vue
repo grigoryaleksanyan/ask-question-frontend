@@ -6,7 +6,7 @@
 
     <v-app-bar app dark>
       <v-app-bar-nav-icon class="drawer-navigation-burger" @click="toggleDrawer" />
-      <v-app-bar-title>Заголовок</v-app-bar-title>
+      <AppLogo />
       <v-spacer></v-spacer>
       <HeaderNavigation :nav-items="navItems" class="header-navigation" />
     </v-app-bar>
@@ -33,12 +33,14 @@
 <script>
 import DrawerNavigation from '@/core/components/DrawerNavigation.vue';
 import HeaderNavigation from '@/core/components/HeaderNavigation.vue';
+import AppLogo from '@/core/components/AppLogo.vue';
 
 export default {
   name: 'DefaultLayout',
   components: {
     DrawerNavigation,
     HeaderNavigation,
+    AppLogo,
   },
   data() {
     return {
