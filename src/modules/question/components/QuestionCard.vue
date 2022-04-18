@@ -1,8 +1,8 @@
 <template>
   <v-card to="/card" elevation="2" width="750" color="#E8EAF6">
-    <v-card-title>
+    <v-card-title class="py-3">
       <v-row no-gutters class="text-caption text-sm-body-2">
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" align-self="center">
           <span>кому: {{ question.speaker }}</span>
         </v-col>
         <v-col class="d-flex justify-start justify-sm-end" cols="12" sm="6">
@@ -21,7 +21,7 @@
       </div>
     </v-card-text>
     <v-divider></v-divider>
-    <v-card-actions>
+    <v-card-actions class="py-1">
       <v-container fluid class="py-0">
         <v-row no-gutters align="center">
           <v-col align-self="center">
@@ -56,20 +56,7 @@ export default {
   props: {
     question: {
       type: Object,
-      default() {
-        return {
-          speaker: 'Иван Иванов',
-          status: 2,
-          text: `Принимая во внимание показатели успешности, новая модель организационной деятельности
-          однозначно фиксирует необходимость поставленных обществом задач. Ясность нашей позиции
-          очевидна: базовый вектор развития является качественно новой ступенью распределения
-          внутренних резервов и ресурсов. Учитывая ключевые сценарии поведения, синтетическое
-          тестирование предполагает независимые способы реализации кластеризации усилий.`,
-          views: 99,
-          likes: 999,
-          dislikes: 1000,
-        };
-      },
+      required: true,
     },
   },
   computed: {
