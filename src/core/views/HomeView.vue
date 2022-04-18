@@ -26,7 +26,7 @@
         </v-row>
       </VideoBackground>
     </v-row>
-    <v-row style="height: 100vh">
+    <v-row style="min-height: 100vh">
       <v-col id="popular" cols="12">
         <PopularQuestions />
       </v-col>
