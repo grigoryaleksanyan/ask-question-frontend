@@ -6,19 +6,16 @@
 
     <v-app-bar app dark>
       <v-app-bar-nav-icon class="drawer-navigation-burger" @click="toggleDrawer" />
-      <v-app-bar-title>Заголовок</v-app-bar-title>
+      <AppLogo />
       <v-spacer></v-spacer>
       <HeaderNavigation :nav-items="navItems" class="header-navigation" />
     </v-app-bar>
 
-    <v-main>
-      <v-container fluid>
-        <p>Стандартный слой</p>
-        <router-view></router-view>
-      </v-container>
+    <v-main style="min-height: 100vh">
+      <router-view></router-view>
     </v-main>
 
-    <v-footer app dark>
+    <v-footer dark>
       @{{ year }} Grigory Aleksanyan
       <v-spacer></v-spacer>
       <v-tooltip left>
@@ -36,12 +33,14 @@
 <script>
 import DrawerNavigation from '@/core/components/DrawerNavigation.vue';
 import HeaderNavigation from '@/core/components/HeaderNavigation.vue';
+import AppLogo from '@/core/components/AppLogo.vue';
 
 export default {
   name: 'DefaultLayout',
   components: {
     DrawerNavigation,
     HeaderNavigation,
+    AppLogo,
   },
   data() {
     return {
