@@ -34,8 +34,15 @@
               <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
             </v-col>
           </v-row>
-          <v-row v-for="question in questions" :key="question.id" align="center" justify="center" class="pa-3">
-            <QuestionCard :question="question" />
+          <v-row>
+            <v-col cols="12">
+              <QuestionFilters />
+            </v-col>
+          </v-row>
+          <v-row v-for="question in questions" :key="question.id">
+            <v-col cols="12" class="d-flex justify-center">
+              <QuestionCard :question="question" />
+            </v-col>
           </v-row>
         </v-container>
       </v-col>
@@ -48,6 +55,7 @@ import VideoBackground from 'vue-responsive-video-background-player';
 
 import QuestionAddForm from '@/modules/question/components/QuestionAddForm.vue';
 import QuestionCard from '@/modules/question/components/QuestionCard.vue';
+import QuestionFilters from '@/modules/question/components/QuestionFilters.vue';
 
 export default {
   name: 'HomeView',
@@ -55,6 +63,7 @@ export default {
     VideoBackground,
     QuestionAddForm,
     QuestionCard,
+    QuestionFilters,
   },
   data() {
     return {
