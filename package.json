@@ -1,8 +1,8 @@
 {
-  "name": "ask-me",
+  "name": "ask-me_frontend",
   "version": "0.1.0",
   "private": true,
-  "description": "Портал вопросов и ответов",
+  "description": "Frontend портала вопросов и ответов",
   "author": "Григорий Алексанян",
   "scripts": {
     "serve": "vue-cli-service serve",
