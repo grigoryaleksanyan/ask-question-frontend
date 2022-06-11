@@ -1,4 +1,4 @@
-# ask-me
+# ask-question-frontend
 
 ## Project setup
 ```
