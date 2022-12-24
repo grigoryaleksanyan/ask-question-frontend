@@ -14,7 +14,8 @@
               outlined
               hide-details
               no-resize
-              placeholder="Задайте вопрос*" />
+              placeholder="Задайте вопрос"
+              @change="showDetails" />
           </v-col>
           <v-col class="d-flex justify-end" style="max-width: 85px">
             <v-btn depressed elevation="1" color="primary" @click="toggleForm">
@@ -24,7 +25,7 @@
         </v-row>
 
         <v-expand-transition>
-          <v-row v-show="showDetails" no-gutters>
+          <v-row v-show="details" no-gutters>
             <v-col cols="12" class="px-0 py-2 ma-0">
               <v-divider />
             </v-col>
@@ -34,12 +35,12 @@
                   <v-text-field label="Имя" />
                 </v-col>
                 <v-col>
-                  <v-select label="МРФ/ДЗО*" :rules="rules" />
+                  <v-select label="МРФ/ДЗО*" :rules="rules" :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
               </v-row>
               <v-row class="mt-0">
                 <v-col class="pt-0">
-                  <v-select label="Спикер*" :rules="rules" />
+                  <v-select label="Спикер*" :rules="rules" :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
                 <v-col class="pt-0">
                   <v-text-field label="Код*" :rules="rules" />
@@ -70,14 +71,20 @@ export default {
   data() {
     return {
       valid: true,
-      showDetails: false,
+      details: false,
 
       rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
     };
   },
   methods: {
     toggleForm() {
-      this.showDetails = !this.showDetails;
+      this.details = !this.details;
+    },
+
+    showDetails() {
+      if (!this.details) {
+        this.details = true;
+      }
     },
 
     submitForm() {},
