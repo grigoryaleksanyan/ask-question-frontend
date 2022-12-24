@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="px-0" style="max-width: 750px">
+  <v-container>
     <v-row justify="space-between">
       <v-col cols="6">
         <v-btn-toggle v-model="sortingDirection" borderless>
@@ -23,14 +23,35 @@
 
     <v-expand-transition>
       <v-row v-show="showFilters" justify="center" class="mt-6">
-        <v-col cols="auto" style="max-width: 250px">
-          <v-select :items="speaker" label="Спикер" clearable hide-details dense />
+        <v-col cols="12" class="col-sm-4">
+          <v-select
+            :items="speaker"
+            label="Спикер"
+            outlined
+            clearable
+            hide-details
+            dense
+            :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
-        <v-col cols="auto" style="max-width: 250px">
-          <v-select :items="zone" label="Зона ответственности" clearable hide-details dense />
+        <v-col cols="12" class="col-sm-4">
+          <v-select
+            :items="zone"
+            label="Зона ответственности"
+            outlined
+            clearable
+            hide-details
+            dense
+            :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
-        <v-col cols="auto" style="max-width: 250px">
-          <v-select :items="status" label="Статус" clearable hide-details dense />
+        <v-col cols="12" class="col-sm-4">
+          <v-select
+            :items="status"
+            label="Статус"
+            outlined
+            clearable
+            hide-details
+            dense
+            :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
       </v-row>
     </v-expand-transition>
