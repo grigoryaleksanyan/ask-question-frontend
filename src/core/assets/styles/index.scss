@@ -26,14 +26,14 @@ body {
   font-family: 'Roboto', 'Arial', sans-serif;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 6px;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   border: 3px solid $scrollbar-color;
 }

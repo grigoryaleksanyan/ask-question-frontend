@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import { Q_NEW_COLOR, Q_FOCUS_COLOR, Q_COMMENT_COLOR, Q_ANSWERED_COLOR } from '@/core/constants/question-status-colors';
+import QUESTION_STATUSES from '@/core/constants/question-statuses';
 
 export default {
-  name: 'QuestionStatus',
+  name: 'QuestionStatusIcon',
   props: {
     status: {
       type: Number,
@@ -20,23 +20,23 @@ export default {
     return {
       statusList: [
         {
-          text: 'новый',
-          color: Q_NEW_COLOR,
+          text: QUESTION_STATUSES.NEW.TITLE,
+          color: QUESTION_STATUSES.NEW.COLOR,
           icon: 'mdi-new-box',
         },
         {
-          text: 'в фокусе',
-          color: Q_FOCUS_COLOR,
+          text: QUESTION_STATUSES.IN_FOCUS.TITLE,
+          color: QUESTION_STATUSES.IN_FOCUS.COLOR,
           icon: 'mdi-crosshairs-question',
         },
         {
-          text: 'с комментарием',
-          color: Q_COMMENT_COLOR,
+          text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
+          color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
           icon: 'mdi-comment-text-multiple-outline',
         },
         {
-          text: 'отвеченный',
-          color: Q_ANSWERED_COLOR,
+          text: QUESTION_STATUSES.ANSWERED.TITLE,
+          color: QUESTION_STATUSES.ANSWERED.COLOR,
           icon: 'mdi-bullhorn-outline',
         },
       ],

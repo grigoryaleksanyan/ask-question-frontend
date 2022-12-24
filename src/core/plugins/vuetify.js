@@ -15,4 +15,15 @@ export default new Vuetify({
   icons: {
     iconfont: 'mdi',
   },
+  theme: {
+    dark: false,
+    themes: {
+      options: {
+        customProperties: true,
+      },
+      light: {
+        'main-color': '#7e57c2',
+      },
+    },
+  },
 });
