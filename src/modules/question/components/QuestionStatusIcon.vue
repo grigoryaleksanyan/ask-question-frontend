@@ -1,7 +1,12 @@
 <template>
   <span>
     <span>статус: {{ curentStatus.text }}</span>
-    <v-icon size="24" :color="curentStatus.color" class="ml-2"> {{ curentStatus.icon }} </v-icon>
+    <v-icon
+      size="24"
+      :color="curentStatus.color"
+      class="ml-2">
+      {{ curentStatus.icon }}
+    </v-icon>
   </span>
 </template>
 

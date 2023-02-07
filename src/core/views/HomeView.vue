@@ -1,20 +1,29 @@
 <template>
-  <v-container fluid class="pa-0">
+  <v-container
+    fluid
+    class="pa-0">
     <VideoBackground
       style="height: 100vh"
       :src="require('@/core/assets/video/background.mp4')"
       :poster="require('@/core/assets/img/poster.jpg')"
       overlay="linear-gradient(0deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5))">
-      <v-row align-content="center" class="pa-3" style="height: 100vh">
+      <v-row
+        align-content="center"
+        class="pa-3"
+        style="height: 100vh">
         <v-col cols="12">
           <h1 class="portal-title">Ask me</h1>
           <p class="additional-text">Ты не получаешь ответов?</p>
           <p class="additional-text">Главная причина в том, что ты не задаешь вопросов.</p>
         </v-col>
-        <v-col cols="12" class="d-flex justify-center">
+        <v-col
+          cols="12"
+          class="d-flex justify-center">
           <QuestionAddForm />
         </v-col>
-        <v-col cols="12" class="d-flex justify-center mt-12">
+        <v-col
+          cols="12"
+          class="d-flex justify-center mt-12">
           <v-btn
             class="btn-to-popular-question"
             color="rgba(255, 255, 255, 0.6)"
@@ -25,7 +34,10 @@
         </v-col>
       </v-row>
     </VideoBackground>
-    <v-row id="popular" class="my-5 mx-auto" style="max-width: 800px; min-height: 100vh">
+    <v-row
+      id="popular"
+      class="my-5 mx-auto"
+      style="max-width: 800px; min-height: 100vh">
       <v-col cols="12">
         <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
       </v-col>
@@ -33,7 +45,10 @@
         <QuestionFilters />
       </v-col>
       <v-col cols="12">
-        <QuestionCard v-for="question in questions" :key="question.id" :question="question" />
+        <QuestionCard
+          v-for="question in questions"
+          :key="question.id"
+          :question="question" />
       </v-col>
     </v-row>
   </v-container>

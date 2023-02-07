@@ -1,6 +1,13 @@
 <template>
-  <v-list nav class="ma-0 pa-0">
-    <v-list-item v-for="item in navItems" :key="item.title" :to="item.link" link class="mb-0">
+  <v-list
+    nav
+    class="ma-0 pa-0">
+    <v-list-item
+      v-for="item in navItems"
+      :key="item.title"
+      :to="item.link"
+      link
+      class="mb-0">
       <v-list-item-icon>
         <v-icon>{{ item.icon }}</v-icon>
       </v-list-item-icon>

@@ -1,6 +1,11 @@
 <template>
   <div class="logo_wrapper">
-    <v-img position="left center" alt="logo" contain height="100%" :src="require('@/core/assets/logo.png')" />
+    <v-img
+      position="left center"
+      alt="logo"
+      contain
+      height="100%"
+      :src="require('@/core/assets/logo.png')" />
   </div>
 </template>
 

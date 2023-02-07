@@ -1,9 +1,20 @@
 <template>
-  <v-card elevation="6" color="#E8EAF6" width="600">
-    <v-form v-model="valid" @submit.prevent="submitForm">
-      <v-container fluid class="pa-2">
-        <v-row no-gutters align="center">
-          <v-col cols="9" sm="10">
+  <v-card
+    elevation="6"
+    color="#E8EAF6"
+    width="600">
+    <v-form
+      v-model="valid"
+      @submit.prevent="submitForm">
+      <v-container
+        fluid
+        class="pa-2">
+        <v-row
+          no-gutters
+          align="center">
+          <v-col
+            cols="9"
+            sm="10">
             <v-textarea
               class="main-form-textarea"
               :rules="rules"
@@ -17,16 +28,26 @@
               placeholder="Задайте вопрос"
               @change="showDetails" />
           </v-col>
-          <v-col class="d-flex justify-end" style="max-width: 85px">
-            <v-btn depressed elevation="1" color="primary" @click="toggleForm">
+          <v-col
+            class="d-flex justify-end"
+            style="max-width: 85px">
+            <v-btn
+              depressed
+              elevation="1"
+              color="primary"
+              @click="toggleForm">
               <v-icon>mdi-account-question</v-icon>
             </v-btn>
           </v-col>
         </v-row>
 
         <v-expand-transition>
-          <v-row v-show="details" no-gutters>
-            <v-col cols="12" class="px-0 py-2 ma-0">
+          <v-row
+            v-show="details"
+            no-gutters>
+            <v-col
+              cols="12"
+              class="px-0 py-2 ma-0">
               <v-divider />
             </v-col>
             <v-col class="pa-2">
@@ -35,22 +56,41 @@
                   <v-text-field label="Имя" />
                 </v-col>
                 <v-col>
-                  <v-select label="МРФ/ДЗО*" :rules="rules" :menu-props="{ bottom: true, offsetY: true }" />
+                  <v-select
+                    label="МРФ/ДЗО*"
+                    :rules="rules"
+                    :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
               </v-row>
               <v-row class="mt-0">
                 <v-col class="pt-0">
-                  <v-select label="Спикер*" :rules="rules" :menu-props="{ bottom: true, offsetY: true }" />
+                  <v-select
+                    label="Спикер*"
+                    :rules="rules"
+                    :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
                 <v-col class="pt-0">
-                  <v-text-field label="Код*" :rules="rules" />
+                  <v-text-field
+                    label="Код*"
+                    :rules="rules" />
                 </v-col>
               </v-row>
               <v-row class="mt-0">
-                <v-col cols="6" class="d-flex justify-center" align-self="center">
-                  <v-btn type="submit" elevation="1" depressed color="primary"> Отправить </v-btn>
+                <v-col
+                  cols="6"
+                  class="d-flex justify-center"
+                  align-self="center">
+                  <v-btn
+                    type="submit"
+                    elevation="1"
+                    depressed
+                    color="primary">
+                    Отправить
+                  </v-btn>
                 </v-col>
-                <v-col cols="6" class="d-flex justify-center">
+                <v-col
+                  cols="6"
+                  class="d-flex justify-center">
                   <v-img
                     :src="require('@/core/assets/img/captcha.png')"
                     style="width: 100%; max-width: 160px; height: auto"
