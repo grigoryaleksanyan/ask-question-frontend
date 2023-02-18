@@ -7,9 +7,9 @@
       :to="item.link">
       <v-icon
         left
-        dark
-        >{{ item.icon }}</v-icon
-      >
+        dark>
+        {{ item.icon }}
+      </v-icon>
       <div>{{ item.title }}</div>
     </v-btn>
   </v-toolbar-items>
@@ -23,9 +23,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {};
   },
 };
 </script>
