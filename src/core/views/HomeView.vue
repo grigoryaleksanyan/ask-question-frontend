@@ -57,9 +57,9 @@
 <script>
 import VideoBackground from 'vue-responsive-video-background-player';
 
-import QuestionAddForm from '@/modules/question/components/QuestionAddForm.vue';
-import QuestionCard from '@/modules/question/components/QuestionCard.vue';
-import QuestionFilters from '@/modules/question/components/QuestionFilters.vue';
+import QuestionAddForm from '@/modules/question/ui/components/QuestionAddForm.vue';
+import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
+import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';
 
 export default {
   name: 'HomeView',

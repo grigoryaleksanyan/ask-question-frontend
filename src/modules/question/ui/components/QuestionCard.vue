@@ -34,7 +34,6 @@
             height="auto"
             width="100%"
             class="pa-3">
-            <!-- {{ sliceText(question.text) }} -->
             <p
               style="color: grey"
               class="pa-0 ma-0 text-sm-body-1 text-body-2"
@@ -93,7 +92,7 @@
 <script>
 import QUESTION_STATUSES from '@/core/constants/question-statuses';
 
-import QuestionStatusIcon from '@/modules/question/components/QuestionStatusIcon.vue';
+import QuestionStatusIcon from '@/modules/question/ui/components/QuestionStatusIcon.vue';
 
 export default {
   name: 'QuestionCard',

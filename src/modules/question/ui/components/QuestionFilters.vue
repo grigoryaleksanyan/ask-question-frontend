@@ -10,9 +10,9 @@
             title="Сначала новые">
             <v-icon
               size="20"
-              color="#717171"
-              >mdi-arrow-up-thin</v-icon
-            >
+              color="#717171">
+              mdi-arrow-up-thin
+            </v-icon>
           </v-btn>
 
           <v-btn
@@ -20,9 +20,9 @@
             title="Сначала старые">
             <v-icon
               size="20"
-              color="#717171"
-              >mdi-arrow-down-thin</v-icon
-            >
+              color="#717171">
+              mdi-arrow-down-thin
+            </v-icon>
           </v-btn>
         </v-btn-toggle>
       </v-col>

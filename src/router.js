@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/questions',
     name: 'questions',
-    component: () => import(/* webpackChunkName: "about" */ '@/core/views/QuestionsView.vue'),
+    component: () => import(/* webpackChunkName: "questions" */ '@/modules/question/ui/views/QuestionsView.vue'),
   },
   {
     path: '/about',
