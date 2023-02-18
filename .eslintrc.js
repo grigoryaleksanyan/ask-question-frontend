@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'no-param-reassign': ['off'],
     'prettier/prettier': ['error'],
     // Правила для Vue
     'vue/camelcase': ['error', { properties: 'always' }],
