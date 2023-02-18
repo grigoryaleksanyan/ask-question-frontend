@@ -1,16 +1,17 @@
 <template>
   <div
     class="alert-item"
-    :class="`alert-item_${alert.type}`">
-    <div class="alert-item-icon">
+    :class="`alert-item--${alert.type}`">
+    <span class="alert-item__icon">
       <component :is="`${alert.type}-icon`" />
-    </div>
+    </span>
 
-    <p class="alert-item-text">{{ alert.text }}</p>
+    <p class="alert-item__text">{{ alert.text }}</p>
 
     <button
       type="button"
-      class="alert-item-button"
+      title="Закрыть"
+      class="alert-item__button"
       @click="REMOVE_ALERT(alert.id)">
       <CloseIcon />
     </button>
@@ -53,55 +54,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+%icon-sizes {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+}
+
 .alert-item {
   display: flex;
   align-items: center;
   width: 100%;
   margin-bottom: 10px;
   padding: 15px;
-  background-color: #4caf50;
-  border-radius: 5px;
-
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-}
-
-.alert-item_success {
-  background-color: #4caf50;
-}
-
-.alert-item_info {
-  background-color: #2196f3;
-}
-
-.alert-item_warning {
-  background-color: #fb8c00;
-}
-
-.alert-item_error {
-  background-color: #ff5252;
-}
-
-.alert-item-icon {
-  width: 24px;
-  min-width: 24px;
-  height: 24px;
-  min-height: 24px;
-  margin-right: 10px;
   color: #ffffff;
+  background-color: $primary-color;
+  border-radius: 5px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+  &--success {
+    background-color: $success-color;
+  }
+
+  &--info {
+    background-color: $info-color;
+  }
+
+  &--warning {
+    background-color: $warning-color;
+  }
+
+  &--error {
+    background-color: $error-color;
+  }
 }
 
-.alert-item-text {
+.alert-item__icon {
+  @extend %icon-sizes;
+  margin-right: 10px;
+}
+
+.alert-item__text {
   flex-grow: 1;
   margin: 0;
   margin-right: 10px;
-  color: #ffffff;
 }
 
-.alert-item-button {
-  width: 24px;
-  min-width: 24px;
-  height: 24px;
-  min-height: 24px;
-  color: #ffffff;
+.alert-item__button {
+  @extend %icon-sizes;
 }
 </style>
