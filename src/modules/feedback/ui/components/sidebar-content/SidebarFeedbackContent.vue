@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import SidebarContentWrapper from './shared/components/base/sidebar/SidebarContentWrapper.vue';
+import SidebarContentWrapper from '@/core/components/shared/sidebar/SidebarContentWrapper.vue';
 
 export default {
   name: 'SidebarFeedbackContent',

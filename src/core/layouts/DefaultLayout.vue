@@ -61,11 +61,12 @@ import DrawerNavigation from '@/core/components/DrawerNavigation.vue';
 import HeaderNavigation from '@/core/components/HeaderNavigation.vue';
 import AppLogo from '@/core/components/AppLogo.vue';
 
-import SidebarModal from '@/modules/shared/components/base/sidebar/SidebarModal.vue';
-import SidebarFeedbackContent from '@/modules/SidebarFeedbackContent.vue';
+import SidebarModal from '@/core/components/shared/sidebar/SidebarModal.vue';
+import SidebarFeedbackContent from '@/modules/feedback/ui/components/sidebar-content/SidebarFeedbackContent.vue';
 
 export default {
   name: 'DefaultLayout',
+
   components: {
     DrawerNavigation,
     HeaderNavigation,
@@ -74,6 +75,7 @@ export default {
     SidebarModal,
     SidebarFeedbackContent,
   },
+
   data() {
     return {
       drawer: false,
@@ -93,18 +95,21 @@ export default {
       showFeedback: false,
     };
   },
+
   computed: {
     year() {
       const now = new Date();
       return now.getFullYear();
     },
   },
+
   methods: {
-    success() {
-      this.showFeedback = false;
-    },
     toggleDrawer() {
       this.drawer = !this.drawer;
+    },
+
+    success() {
+      this.showFeedback = false;
     },
   },
 };
