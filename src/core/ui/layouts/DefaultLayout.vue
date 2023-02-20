@@ -57,11 +57,10 @@
 </template>
 
 <script>
-import DrawerNavigation from '@/core/components/DrawerNavigation.vue';
-import HeaderNavigation from '@/core/components/HeaderNavigation.vue';
-import AppLogo from '@/core/components/AppLogo.vue';
+import DrawerNavigation from '@/core/ui/components/DrawerNavigation.vue';
+import HeaderNavigation from '@/core/ui/components/HeaderNavigation.vue';
+import AppLogo from '@/core/ui/components/AppLogo.vue';
 
-import SidebarModal from '@/core/components/shared/sidebar/SidebarModal.vue';
 import SidebarFeedbackContent from '@/modules/feedback/ui/components/sidebar-content/SidebarFeedbackContent.vue';
 
 export default {
@@ -72,7 +71,6 @@ export default {
     HeaderNavigation,
     AppLogo,
 
-    SidebarModal,
     SidebarFeedbackContent,
   },
 

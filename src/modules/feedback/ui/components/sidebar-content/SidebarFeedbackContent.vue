@@ -102,13 +102,8 @@
 </template>
 
 <script>
-import SidebarContentWrapper from '@/core/components/shared/sidebar/SidebarContentWrapper.vue';
-
 export default {
   name: 'SidebarFeedbackContent',
-  components: {
-    SidebarContentWrapper,
-  },
   data() {
     return {
       disabledSuccess: false,

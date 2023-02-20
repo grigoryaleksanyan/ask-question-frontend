@@ -82,6 +82,7 @@
         </v-tabs-items>
 
         <v-col cols="12">
+          <p>Вопросы отсутсвуют</p>
           <v-pagination
             v-model="page"
             :length="15"
@@ -124,7 +125,7 @@ export default {
         this.ADD_ALERT({ type: 'success', text: 'Все ок', delay: 5000 });
         this.ADD_ALERT({ type: 'info', text: 'Инфо' });
         setTimeout(() => {
-          this.ADD_ALERT({ type: 'warning', text: 'Предупреждение' });
+          this.ADD_ALERT({ type: 'warning', text: 'Предупреждение', delay: 15000 });
         }, 3000);
         setTimeout(() => {
           this.ADD_ALERT({ type: 'error', text: error.message });

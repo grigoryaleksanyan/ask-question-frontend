@@ -7,6 +7,8 @@ import httpClient from './core/plugins/http-client';
 
 import '@/core/assets/styles/index.scss';
 
+import '@/core/plugins/global-components';
+
 Vue.config.productionTip = false;
 Vue.prototype.httpClient = httpClient;
 

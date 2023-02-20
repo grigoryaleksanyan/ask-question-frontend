@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '@/core/views/HomeView.vue';
 
 Vue.use(VueRouter);
 
@@ -8,20 +7,20 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: () => import(/* webpackChunkName: "home" */ '@/core/ui/views/HomeView.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '@/modules/auth/ui/views/LoginView.vue'),
+    meta: {
+      layout: 'EmptyLayout',
+    },
   },
   {
     path: '/questions',
     name: 'questions',
     component: () => import(/* webpackChunkName: "questions" */ '@/modules/question/ui/views/QuestionsView.vue'),
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '@/core/views/AboutView.vue'),
-    meta: {
-      layout: 'EmptyLayout',
-    },
   },
 ];
 

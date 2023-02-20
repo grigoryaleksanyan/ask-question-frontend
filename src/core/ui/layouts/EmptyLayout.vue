@@ -1,9 +1,6 @@
 <template>
   <v-main>
-    <v-container fluid>
-      <p>Пустой слой</p>
-      <router-view />
-    </v-container>
+    <router-view />
   </v-main>
 </template>
 

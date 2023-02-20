@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import QUESTION_STATUSES from '@/core/constants/question-statuses';
+import QUESTION_STATUSES from '@/modules/question/constants/question-statuses';
 
 import QuestionStatusIcon from '@/modules/question/ui/components/QuestionStatusIcon.vue';
 
