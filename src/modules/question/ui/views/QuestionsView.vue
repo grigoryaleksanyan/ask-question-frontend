@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    style="max-width: 1000px">
+    style="max-width: 1200px">
     <v-row no-gutters>
       <v-col
         cols="12"
@@ -101,10 +101,12 @@ import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
 
 export default {
   name: 'QuestionsView',
+
   components: {
     QuestionFilters,
     QuestionCard,
   },
+
   data() {
     return {
       model: 'tab-1',
@@ -113,23 +115,19 @@ export default {
       questions: [],
     };
   },
+
   created() {
     this.fetchData();
   },
+
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
+
     async fetchData() {
       try {
         this.questions = await GetAll();
       } catch (error) {
-        this.ADD_ALERT({ type: 'success', text: 'Все ок', delay: 5000 });
-        this.ADD_ALERT({ type: 'info', text: 'Инфо' });
-        setTimeout(() => {
-          this.ADD_ALERT({ type: 'warning', text: 'Предупреждение', delay: 15000 });
-        }, 3000);
-        setTimeout(() => {
-          this.ADD_ALERT({ type: 'error', text: error.message });
-        }, 2000);
+        this.ADD_ALERT({ type: 'error', text: error.message });
       }
     },
   },

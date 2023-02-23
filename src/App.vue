@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import AppPreloader from '@/modules/preloader/components/AppPreloader.vue';
+import AppPreloader from '@/modules/preloader/ui/components/AppPreloader.vue';
 import AppAlert from '@/modules/alert/components/AppAlert.vue';
 
 export default {
