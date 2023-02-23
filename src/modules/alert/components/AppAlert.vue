@@ -36,7 +36,7 @@ export default {
 .alert {
   position: fixed;
   top: 75px;
-  right: 15px;
+  right: 10px;
   z-index: 1000;
   width: 370px;
 }
