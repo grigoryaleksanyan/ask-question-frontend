@@ -88,6 +88,11 @@ export default {
           icon: 'mdi-comment-question-outline',
           link: '/questions',
         },
+        {
+          title: 'FAQ',
+          icon: 'mdi-account-question-outline',
+          link: '/faq',
+        },
       ],
 
       showFeedback: false,
