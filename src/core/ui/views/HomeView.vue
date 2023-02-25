@@ -19,7 +19,7 @@
         <v-col
           cols="12"
           class="d-flex justify-center">
-          <QuestionAddForm />
+          <QuestionFormCreate />
         </v-col>
         <v-col
           cols="12"
@@ -57,16 +57,16 @@
 <script>
 import VideoBackground from 'vue-responsive-video-background-player';
 
-import QuestionAddForm from '@/modules/question/ui/components/QuestionAddForm.vue';
 import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
 import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';
+import QuestionFormCreate from '@/modules/question/ui/components/QuestionFormCreate.vue';
 
 export default {
   name: 'HomeView',
   components: {
     VideoBackground,
 
-    QuestionAddForm,
+    QuestionFormCreate,
     QuestionCard,
     QuestionFilters,
   },
@@ -111,19 +111,6 @@ export default {
           id: 4,
           speaker: 'Иван Иванов',
           status: 3,
-          text: `Принимая во внимание показатели успешности, новая модель организационной деятельности
-          однозначно фиксирует необходимость поставленных обществом задач. Ясность нашей позиции
-          очевидна: базовый вектор развития является качественно новой ступенью распределения
-          внутренних резервов и ресурсов. Учитывая ключевые сценарии поведения, синтетическое
-          тестирование предполагает независимые способы реализации кластеризации усилий.`,
-          views: 99,
-          likes: 999,
-          dislikes: 1000,
-        },
-        {
-          id: 5,
-          speaker: 'Иван Иванов',
-          status: 1,
           text: `Принимая во внимание показатели успешности, новая модель организационной деятельности
           однозначно фиксирует необходимость поставленных обществом задач. Ясность нашей позиции
           очевидна: базовый вектор развития является качественно новой ступенью распределения
