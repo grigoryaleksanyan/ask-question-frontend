@@ -171,7 +171,7 @@ export default {
       try {
         this.capcthaImg = await GetCapctha();
       } catch (error) {
-        this.ADD_ALERT({ type: 'error', text: error.message });
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }
     },
 

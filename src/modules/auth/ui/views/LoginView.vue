@@ -39,7 +39,8 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import Login from '../../repositories/auth-repository';
+import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { Login } from '../../repositories/auth-repository';
 
 export default {
   name: 'LoginView',
@@ -61,7 +62,7 @@ export default {
         await Login({ userName: this.controls.email, password: this.controls.password });
         this.$router.go(-1);
       } catch (error) {
-        this.ADD_ALERT({ type: 'error', text: error.message });
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }
     },
   },
