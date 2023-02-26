@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import AdminRoutes from '@/modules/admin/routes/index';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -32,6 +34,8 @@ const routes = [
     name: 'faq',
     component: () => import(/* webpackChunkName: "questions" */ '@/modules/faq/ui/views/FAQView.vue'),
   },
+
+  ...AdminRoutes,
 ];
 
 const router = new VueRouter({
