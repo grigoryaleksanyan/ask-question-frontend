@@ -7,7 +7,7 @@
       :key="item.title"
       :to="item.link"
       link
-      class="mb-0">
+      class="mb-0 pl-4">
       <v-list-item-icon>
         <v-icon>{{ item.icon }}</v-icon>
       </v-list-item-icon>
@@ -22,14 +22,12 @@
 <script>
 export default {
   name: 'DrawerNavigation',
+
   props: {
     navItems: {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {};
   },
 };
 </script>
