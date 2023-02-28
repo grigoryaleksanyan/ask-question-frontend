@@ -6,11 +6,11 @@ export default {
   }),
 
   mutations: {
-    ADD_LOAD(state) {
+    ADD_LOADER(state) {
       state.loadings += 1;
     },
 
-    REMOVE_LOAD(state) {
+    REMOVE_LOADER(state) {
       if (state.loadings > 0) {
         state.loadings -= 1;
       }
