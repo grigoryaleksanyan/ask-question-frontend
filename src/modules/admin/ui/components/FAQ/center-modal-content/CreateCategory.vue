@@ -1,25 +1,32 @@
 <template>
-  <CenterModalContentWrapper>
-    <template #default>
-      <v-text-field
-        v-model="title"
-        label="Название" />
-    </template>
-    <template #actions>
-      <v-btn
-        color="primary"
-        class="white--text"
-        @click="create">
-        Создать
-      </v-btn>
-      <v-btn
-        color="blue-grey"
-        class="white--text"
-        @click="cancel">
-        Отмена
-      </v-btn>
-    </template>
-  </CenterModalContentWrapper>
+  <v-form
+    ref="create-category"
+    v-model="valid"
+    @submit.prevent="submitForm">
+    <CenterModalContentWrapper>
+      <template #default>
+        <v-text-field
+          v-model="name"
+          :rules="rules"
+          outlined
+          label="Название" />
+      </template>
+      <template #actions>
+        <v-btn
+          type="submit"
+          color="primary"
+          class="white--text">
+          Создать
+        </v-btn>
+        <v-btn
+          color="blue-grey"
+          class="white--text"
+          @click="cancel">
+          Отмена
+        </v-btn>
+      </template>
+    </CenterModalContentWrapper>
+  </v-form>
 </template>
 
 <script>
@@ -31,29 +38,53 @@ import { Create } from '@/modules/faq/repositories/faq-category-repository';
 export default {
   name: 'CreateCategory',
 
+  props: {
+    order: {
+      type: Number,
+      required: true,
+    },
+
+    isOpen: {
+      type: Boolean,
+    },
+  },
+
   data() {
     return {
-      title: null,
+      valid: true,
+      name: null,
+
+      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
     };
+  },
+
+  watch: {
+    isOpen(newValue) {
+      if (!newValue) {
+        this.$refs['create-category'].reset();
+      }
+    },
   },
 
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
 
-    async create() {
-      try {
-        const category = { title: this.title };
+    async submitForm() {
+      if (this.$refs['create-category'].validate()) {
+        try {
+          const category = { name: this.name, order: this.order };
 
-        await Create(category);
+          const categoryId = await Create(category);
 
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Категория успешно создана' });
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+          category.categoryId = categoryId;
+
+          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Категория успешно создана' });
+
+          this.$emit('success', category);
+        } catch (error) {
+          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+        }
       }
-    },
-
-    success() {
-      this.$emit('success');
     },
 
     cancel() {

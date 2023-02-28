@@ -1,5 +1,6 @@
 <template>
   <v-container
+    style="max-width: 1920px"
     class="text-left pa-5 mx-auto"
     fluid>
     <v-row>
@@ -10,9 +11,9 @@
           </v-col>
           <v-col
             v-for="category in categories"
-            :key="category.categoryId"
+            :key="category.id"
             class="col-12 col-sm-4 col-md-4 col-lg-3 draggable">
-            <CategoryCard :title="category.title" />
+            <CategoryCard :title="category.name" />
           </v-col>
           <v-col class="col-12 col-sm-4 col-md-4 col-lg-3">
             <CreateCategoryCardButton
@@ -28,7 +29,9 @@
       :is-open="showCreateCategory"
       @close="showCreateCategory = false">
       <CreateCategory
-        @success="showCreateCategory = false"
+        :order="categories.length"
+        :is-open="showCreateCategory"
+        @success="successCreateCategory"
         @cancel="showCreateCategory = false" />
     </CenterModal>
   </v-container>
@@ -57,16 +60,7 @@ export default {
 
   data() {
     return {
-      categories: [
-        {
-          categoryId: 1,
-          title: 'Удаленная работа',
-        },
-        {
-          categoryId: 2,
-          title: 'Трансляция через Wink',
-        },
-      ],
+      categories: [],
 
       showCreateCategory: false,
     };
@@ -78,13 +72,22 @@ export default {
 
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
+    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
 
     async fetchData() {
       try {
+        this.ADD_LOADER();
         this.categories = await GetAll();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+      } finally {
+        this.REMOVE_LOADER();
       }
+    },
+
+    successCreateCategory(category) {
+      this.categories = [...this.categories, category];
+      this.showCreateCategory = false;
     },
   },
 };
