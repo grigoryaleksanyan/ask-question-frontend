@@ -24,6 +24,19 @@ export default [
     meta: {
       layout: 'AdminLayout',
     },
+    children: [
+      {
+        path: ':id',
+        name: 'admin-faq-category',
+        props: (route) => ({
+          id: route.params.id,
+        }),
+        meta: {
+          layout: 'AdminLayout',
+        },
+        component: () => import(/* webpackChunkName: "admin-faq-category" */ '../ui/views/AdminFAQCategoryView.vue'),
+      },
+    ],
   },
 
   {

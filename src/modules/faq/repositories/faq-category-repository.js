@@ -24,9 +24,9 @@ export async function GetById(id) {
   return result;
 }
 
-export async function Create(categoryData) {
+export async function Create(category) {
   const result = await httpClient
-    .post(`${apiRoute}/Create`, categoryData)
+    .post(`${apiRoute}/Create`, category)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка создания категории', { cause: error });
@@ -37,7 +37,7 @@ export async function Create(categoryData) {
 
 export async function Update(category) {
   const result = await httpClient
-    .put(`${apiRoute}/Update/${category.id}`, category)
+    .put(`${apiRoute}/Update`, category)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка изменения категории', { cause: error });
@@ -48,10 +48,21 @@ export async function Update(category) {
 
 export async function Delete(id) {
   const result = await httpClient
-    .delete(`${apiRoute}/Delete/${id}`)
+    .delete(`${apiRoute}/Delete?id=${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка удаления категории', { cause: error });
+    });
+
+  return result;
+}
+
+export async function SetOrder(categoryIds) {
+  const result = await httpClient
+    .put(`${apiRoute}/SetOrder`, categoryIds)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка сортировки категорий', { cause: error });
     });
 
   return result;
