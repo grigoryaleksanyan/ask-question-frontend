@@ -1,11 +1,11 @@
 <template>
   <div
     tabindex="0"
-    class="create-card"
-    @click="$emit('click')"
-    @keypress.enter="$emit('click')">
+    class="card"
+    @click="clickOnCard"
+    @keypress.enter="clickOnCard">
     <div class="card-info-block">
-      <span class="card-info-block__title">{{ title }}</span>
+      <span class="card-info-block__title">{{ category.name }}</span>
     </div>
   </div>
 </template>
@@ -14,22 +14,29 @@ export default {
   name: 'CategoryCard',
 
   props: {
-    title: {
-      type: String,
+    category: {
+      type: Object,
       required: true,
+    },
+  },
+
+  methods: {
+    clickOnCard() {
+      this.$router.push({ name: 'admin-faq-category', params: { id: this.category.id } });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.create-card {
+.card {
   display: flex;
   justify-content: center;
   width: 100%;
   height: 116px;
   padding: 15px;
   overflow: hidden;
+  background-color: #fff;
   border: 1px solid #d3d4db;
   border-radius: 12px;
   cursor: pointer;
@@ -56,7 +63,7 @@ export default {
   transition: all 0.2s linear;
 }
 
-.create-card:hover {
+.card:hover {
   -webkit-box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
   box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
 

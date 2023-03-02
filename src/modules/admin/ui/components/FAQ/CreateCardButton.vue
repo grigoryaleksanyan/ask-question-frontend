@@ -1,7 +1,7 @@
 <template>
   <div
     tabindex="0"
-    class="create-card"
+    class="card"
     @click="$emit('click')"
     @keypress.enter="$emit('click')">
     <div class="card-info-block">
@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-  name: 'CreateCategoryCardButton',
+  name: 'CreateCardButton',
 
   props: {
     title: {
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.create-card {
+.card {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -66,7 +66,7 @@ export default {
   transition: all 0.2s linear;
 }
 
-.create-card:hover {
+.card:hover {
   -webkit-box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
   box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
 
