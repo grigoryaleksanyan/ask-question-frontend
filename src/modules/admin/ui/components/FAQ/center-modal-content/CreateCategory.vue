@@ -21,6 +21,7 @@
         <v-btn
           color="blue-grey"
           class="white--text"
+          outlined
           @click="cancel">
           Отмена
         </v-btn>
