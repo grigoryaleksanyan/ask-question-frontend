@@ -37,3 +37,10 @@ body {
 *::-webkit-scrollbar-thumb {
   border: 3px solid $scrollbar-color;
 }
+
+blockquote {
+  margin: 20px 0 !important;
+  padding-left: 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
