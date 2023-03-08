@@ -4,6 +4,7 @@
     style="z-index: 9">
     <v-progress-circular
       :size="70"
+      :width="6"
       color="primary"
       indeterminate></v-progress-circular>
   </v-overlay>
