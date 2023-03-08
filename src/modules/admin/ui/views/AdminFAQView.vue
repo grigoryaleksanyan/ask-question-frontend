@@ -1,6 +1,6 @@
 <template>
   <v-container
-    style="max-width: 1920px"
+    style="max-width: 1200px"
     class="text-left pa-5 mx-auto"
     fluid>
     <template v-if="isMainCatalog">
@@ -104,15 +104,15 @@ export default {
         this.categories = newOrderCategories;
 
         try {
+          this.ADD_LOADER();
           const categoryIds = newOrderCategories.map((category) => category.id);
-
           await SetOrder(categoryIds);
-
           this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Сортировка применена' });
         } catch (error) {
           this.categories = oldOrderCategories;
-
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+        } finally {
+          this.REMOVE_LOADER();
         }
       },
     },

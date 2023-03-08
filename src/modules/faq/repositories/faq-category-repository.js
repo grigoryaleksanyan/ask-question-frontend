@@ -13,6 +13,17 @@ export async function GetAll() {
   return result;
 }
 
+export async function GetAllWithEntries() {
+  const result = await httpClient
+    .get(`${apiRoute}/GetAllWithEntries`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка получения списка категорий', { cause: error });
+    });
+
+  return result;
+}
+
 export async function GetById(id) {
   const result = await httpClient
     .get(`${apiRoute}/GetById?id=${id}`)
