@@ -48,7 +48,9 @@
             v-bind="dragOptions"
             class="col-12 pa-0"
             handle=".handle"
-            draggable=".draggable">
+            draggable=".draggable"
+            drag-class="vuedraggable-drag"
+            ghost-class="vuedraggable-ghost">
             <v-col
               v-for="entry in category.entries"
               :key="entry.id"

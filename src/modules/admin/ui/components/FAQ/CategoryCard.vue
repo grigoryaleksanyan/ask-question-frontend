@@ -30,6 +30,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
+  position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -73,5 +74,19 @@ export default {
   .card-info-block-icon {
     color: #2b82e6;
   }
+}
+
+.vuedraggable-drag > .card {
+  transform: rotate(3deg);
+}
+
+.vuedraggable-ghost > .card::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(230 230 230);
+  content: '';
 }
 </style>

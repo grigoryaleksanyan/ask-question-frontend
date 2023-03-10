@@ -1,5 +1,6 @@
 <template>
   <v-card
+    class="entry-card"
     elevation="2"
     color="#E8EAF6">
     <v-card-title class="py-2">
@@ -83,3 +84,23 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.entry-card {
+  position: relative;
+}
+
+.vuedraggable-drag > .entry-card {
+  transform: rotate(2deg);
+}
+
+.vuedraggable-ghost > .entry-card::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(230 230 230);
+  content: '';
+}
+</style>

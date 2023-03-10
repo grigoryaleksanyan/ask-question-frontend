@@ -17,7 +17,9 @@
               style="display: flex; flex-wrap: wrap"
               v-bind="dragOptions"
               handle=".draggable"
-              draggable=".draggable">
+              draggable=".draggable"
+              drag-class="vuedraggable-drag"
+              ghost-class="vuedraggable-ghost">
               <v-col
                 v-for="category in categories"
                 :key="category.id"
