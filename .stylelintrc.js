@@ -1,11 +1,11 @@
 module.exports = {
   extends: [
+    'stylelint-config-standard',
     'stylelint-config-html/vue',
-    'stylelint-config-recommended-scss',
+    'stylelint-config-standard-scss',
     'stylelint-config-recommended-vue/scss',
     'stylelint-config-rational-order',
-    'stylelint-prettier/recommended',
   ],
-  plugins: ['stylelint-order', 'stylelint-scss'],
-  files: ['./src/**/*.{vue,scss}'],
+  plugins: ['stylelint-scss', 'stylelint-order'],
+  files: ['./src/**/*.{vue,css,scss}'],
 };
