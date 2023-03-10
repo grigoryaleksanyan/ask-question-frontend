@@ -82,6 +82,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* stylelint-disable-next-line selector-class-pattern */
 .tiptap-vuetify-editor .ProseMirror {
   min-height: 150px !important;
   margin: 20px 10px !important;

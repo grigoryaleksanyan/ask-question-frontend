@@ -85,8 +85,7 @@ export default {
 
 .footer-block {
   padding: 8px 32px;
-  -webkit-box-shadow: inset 0px -1px 3px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0px -1px 3px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 -1px 3px 1px rgb(0 0 0 / 10%);
 }
 
 @media screen and (max-width: 700px) {

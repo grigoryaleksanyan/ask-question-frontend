@@ -1,17 +1,17 @@
 <template>
   <div
     class="alert-item"
-    :class="`alert-item--${alert.type}`">
-    <span class="alert-item__icon">
+    :class="`alert-item-${alert.type}`">
+    <span class="alert-item-icon">
       <component :is="`${alert.type}-icon`" />
     </span>
 
-    <p class="alert-item__text">{{ alert.text }}</p>
+    <p class="alert-item-text">{{ alert.text }}</p>
 
     <button
       type="button"
       title="Закрыть"
-      class="alert-item__button"
+      class="alert-item-button"
       @click="REMOVE_ALERT(alert.id)">
       <CloseIcon />
     </button>
@@ -67,40 +67,41 @@ export default {
   width: 100%;
   margin-bottom: 10px;
   padding: 15px;
-  color: #ffffff;
+  color: #fff;
   background-color: $primary-color;
   border-radius: 5px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
 
-  &--success {
+  &-success {
     background-color: $success-color;
   }
 
-  &--info {
+  &-info {
     background-color: $info-color;
   }
 
-  &--warning {
+  &-warning {
     background-color: $warning-color;
   }
 
-  &--error {
+  &-error {
     background-color: $error-color;
   }
 }
 
-.alert-item__icon {
+.alert-item-icon {
   @extend %icon-sizes;
+
   margin-right: 10px;
 }
 
-.alert-item__text {
+.alert-item-text {
   flex-grow: 1;
   margin: 0;
   margin-right: 10px;
 }
 
-.alert-item__button {
+.alert-item-button {
   @extend %icon-sizes;
 }
 </style>

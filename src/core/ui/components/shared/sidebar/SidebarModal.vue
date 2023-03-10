@@ -157,7 +157,7 @@ export default {
 @media screen and (max-width: 700px) {
   .sidebar-radius {
     border-top-right-radius: 16px;
-    border-bottom-left-radius: 0px;
+    border-bottom-left-radius: 0;
   }
 
   .header-block {

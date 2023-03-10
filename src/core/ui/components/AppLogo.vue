@@ -1,5 +1,5 @@
 <template>
-  <div class="logo_wrapper">
+  <div class="logo-wrapper">
     <v-img
       position="left center"
       alt="logo"
@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.logo_wrapper {
+.logo-wrapper {
   max-width: 140px;
   height: 100%;
   padding-top: 5px;

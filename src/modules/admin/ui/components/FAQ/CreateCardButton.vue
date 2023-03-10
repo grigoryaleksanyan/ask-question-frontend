@@ -5,9 +5,9 @@
     @click="$emit('click')"
     @keypress.enter="$emit('click')">
     <div class="card-info-block">
-      <h4 class="card-info-block__title">{{ title }}</h4>
+      <h4 class="card-info-block-title">{{ title }}</h4>
       <svg
-        class="card-info-block__icon"
+        class="card-info-block-icon"
         viewBox="0 0 24 24">
         <path
           fill="currentColor"
@@ -48,33 +48,32 @@ export default {
   align-items: center;
 }
 
-.card-info-block__title {
+.card-info-block-title {
   margin-right: 10px;
   color: #000;
   font-weight: bold;
 }
 
-.card-info-block__icon {
+.card-info-block-icon {
   width: 20px;
   min-width: 20px;
   height: 20px;
   min-height: 20px;
 }
 
-.card-info-block__title,
-.card-info-block__icon {
+.card-info-block-title,
+.card-info-block-icon {
   transition: all 0.2s linear;
 }
 
 .card:hover {
-  -webkit-box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
-  box-shadow: 0px 0px 15px 0px rgb(180, 180, 180, 0.65);
+  box-shadow: 0 0 15px 0 rgb(180 180 180 / 65%);
 
-  .card-info-block__title {
+  .card-info-block-title {
     color: #2b82e6;
   }
 
-  .card-info-block__icon {
+  .card-info-block-icon {
     color: #2b82e6;
   }
 }

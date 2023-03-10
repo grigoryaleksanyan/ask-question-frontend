@@ -146,6 +146,7 @@ export default {
   .portal-title {
     font-size: 3em;
   }
+
   .additional-text {
     font-size: 1em;
   }
@@ -157,15 +158,14 @@ export default {
 
 @keyframes pulsation {
   0% {
-    -webkit-transform: scale(1.2, 1.2);
     transform: scale(1.2, 1.2);
   }
+
   50% {
-    -webkit-transform: scale(0.9, 0.9);
     transform: scale(0.9, 0.9);
   }
+
   100% {
-    -webkit-transform: scale(1.2, 1.2);
     transform: scale(1.2, 1.2);
   }
 }

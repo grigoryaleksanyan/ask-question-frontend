@@ -124,6 +124,7 @@ export default {
     display: none;
   }
 }
+
 @media (min-width: 600px) {
   .drawer-navigation,
   .drawer-navigation-burger {
