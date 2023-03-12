@@ -35,9 +35,9 @@ export async function GetById(id) {
   return result;
 }
 
-export async function Create(capctha, questionData) {
+export async function Create(capctha, question) {
   const result = await httpClient
-    .post(`${apiRoute}/Create?capctha=${capctha}`, questionData)
+    .post(`${apiRoute}/Create?capctha=${capctha}`, question)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка создания вопроса', { cause: error });
@@ -57,9 +57,9 @@ export async function Update(question) {
   return result;
 }
 
-export async function Delete(questionId) {
+export async function Delete(id) {
   const result = await httpClient
-    .delete(`${apiRoute}/Delete/${questionId}`)
+    .delete(`${apiRoute}/Delete/${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка удаления вопроса', { cause: error });

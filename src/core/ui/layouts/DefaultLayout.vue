@@ -50,6 +50,7 @@
       title="Обратная связь по порталу"
       @close="showFeedback = false">
       <SidebarFeedbackContent
+        v-if="showFeedback"
         @success="success"
         @cancel="showFeedback = false" />
     </SidebarModal>

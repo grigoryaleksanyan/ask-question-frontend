@@ -61,8 +61,8 @@
                 </v-col>
                 <v-col>
                   <v-select
-                    v-model="controls.zone"
-                    label="Зона отвественности*"
+                    v-model="controls.affiliation"
+                    label="Принадлежность*"
                     :rules="rules"
                     :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
@@ -77,7 +77,7 @@
                 </v-col>
                 <v-col class="pt-0">
                   <v-text-field
-                    v-model="controls.capctha"
+                    v-model="capctha"
                     label="Код*"
                     :rules="rules" />
                 </v-col>
@@ -136,12 +136,13 @@ export default {
       details: false,
       capcthaImg: null,
 
+      capctha: null,
+
       controls: {
+        text: null,
         author: null,
         speaker: null,
-        zone: null,
-        text: null,
-        capctha: null,
+        affiliation: null,
       },
 
       rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
@@ -177,15 +178,8 @@ export default {
 
     async submitForm() {
       if (this.$refs['question-add'].validate()) {
-        const questionData = {
-          author: this.controls.author,
-          speaker: this.controls.speaker,
-          zone: this.controls.zone,
-          text: this.controls.text,
-        };
-
         try {
-          await Create(this.controls.capctha, questionData);
+          await Create(this.capctha, this.controls);
 
           this.toggleForm();
 
