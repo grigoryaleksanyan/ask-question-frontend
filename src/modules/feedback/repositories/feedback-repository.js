@@ -26,7 +26,7 @@ export async function Create(feedback) {
 
 export async function Delete(id) {
   const result = await httpClient
-    .delete(`${apiRoute}/Delete/${id}`)
+    .delete(`${apiRoute}/Delete?id=${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка удаления обратной связи', { cause: error });
