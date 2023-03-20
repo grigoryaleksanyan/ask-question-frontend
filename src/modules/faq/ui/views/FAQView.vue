@@ -31,6 +31,7 @@
             accordion>
             <v-expansion-panel
               v-for="entry in category.entries"
+              :id="entry.id"
               :key="entry.id">
               <v-expansion-panel-header>
                 <span class="question">{{ entry.question }}</span>
@@ -71,6 +72,25 @@ export default {
 
   created() {
     this.fetchData();
+  },
+
+  mounted() {
+    const { id } = this.$route.query;
+
+    if (id) {
+      setTimeout(() => {
+        const element = document.getElementById(id);
+
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+
+          element.children[0].click();
+        }
+      }, 100);
+    }
   },
 
   methods: {

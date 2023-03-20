@@ -46,10 +46,20 @@
             <v-icon
               style="cursor: move"
               title="Переместить"
-              size="20"
+              size="18"
               class="mr-2 handle">
               mdi-arrow-all
             </v-icon>
+
+            <v-btn
+              title="Скопировать ссылку на запись"
+              class="mr-1"
+              icon
+              small
+              @click="$emit('copy-link')">
+              <v-icon size="20">mdi-link</v-icon>
+            </v-btn>
+
             <v-btn
               title="Изменить"
               class="mr-1"

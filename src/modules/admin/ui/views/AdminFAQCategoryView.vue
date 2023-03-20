@@ -58,6 +58,7 @@
               class="draggable">
               <EntryCard
                 :entry="entry"
+                @copy-link="copyLink(entry)"
                 @update="clickUpdateEntryBtn(entry)"
                 @delete="clickDeleteEntryBtn(entry)" />
             </v-col>
@@ -135,6 +136,8 @@ import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
 import { GetById } from '@/modules/faq/repositories/faq-category-repository';
 import { SetOrder } from '@/modules/faq/repositories/faq-entry-repository';
+
+import copyToClipboard from '../../helpers/copy-to-clipboard';
 
 import UpdateCategory from '../components/FAQ/center-modal-content/UpdateCategory.vue';
 import DeleteCategory from '../components/FAQ/center-modal-content/DeleteCategory.vue';
@@ -244,6 +247,18 @@ export default {
       this.showDeleteCategory = false;
 
       this.$router.push({ name: 'admin-faq' });
+    },
+
+    copyLink(entry) {
+      const link = `${window.location.protocol}//${window.location.host}/faq?id=${entry.id}`;
+
+      copyToClipboard(link)
+        .then(() => {
+          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Ссылка скопирована в буфер обмена' });
+        })
+        .catch((error) => {
+          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+        });
     },
 
     successCreateEntry(entry) {
