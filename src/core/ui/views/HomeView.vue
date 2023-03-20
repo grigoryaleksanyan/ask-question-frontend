@@ -42,9 +42,6 @@
         <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
       </v-col>
       <v-col cols="12">
-        <QuestionFilters />
-      </v-col>
-      <v-col cols="12">
         <QuestionCard
           v-for="question in questions"
           :key="question.id"
@@ -58,18 +55,18 @@
 import VideoBackground from 'vue-responsive-video-background-player';
 
 import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
-import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';
 import QuestionFormCreate from '@/modules/question/ui/components/QuestionFormCreate.vue';
 
 export default {
   name: 'HomeView',
+
   components: {
     VideoBackground,
 
     QuestionFormCreate,
     QuestionCard,
-    QuestionFilters,
   },
+
   data() {
     return {
       questions: [
@@ -126,7 +123,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .portal-title {
   color: white;
   font-size: 6em;
