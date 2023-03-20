@@ -54,12 +54,12 @@ export default {
         },
         {
           title: 'Список вопросов',
-          icon: 'mdi-comment-question-outline',
+          icon: 'mdi-account-question',
           link: '/admin-questions',
         },
         {
           title: 'Записи в FAQ',
-          icon: 'mdi-account-question-outline',
+          icon: 'mdi-frequently-asked-questions',
           link: '/admin-faq',
         },
         {

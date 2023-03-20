@@ -81,17 +81,17 @@ export default {
       navItems: [
         {
           title: 'Главная',
-          icon: 'mdi-apps',
+          icon: 'mdi-home',
           link: '/',
         },
         {
           title: 'Все вопросы',
-          icon: 'mdi-comment-question-outline',
+          icon: 'mdi-account-question',
           link: '/questions',
         },
         {
           title: 'FAQ',
-          icon: 'mdi-account-question-outline',
+          icon: 'mdi-frequently-asked-questions',
           link: '/faq',
         },
       ],
