@@ -48,7 +48,7 @@
     <template v-else>
       <v-row>
         <v-col cols="12">
-          <p style="color: grey; font-size: 24px; text-align: center">Записей пока нет</p>
+          <p style="color: grey; font-size: 24px; text-align: center">Записи отсутсвуют</p>
         </v-col>
       </v-row>
     </template>

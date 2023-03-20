@@ -61,8 +61,8 @@
                 </v-col>
                 <v-col>
                   <v-select
-                    v-model="controls.affiliation"
-                    label="Принадлежность*"
+                    v-model="controls.area"
+                    label="Область*"
                     :rules="rules"
                     :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
@@ -142,7 +142,7 @@ export default {
         text: null,
         author: null,
         speaker: null,
-        affiliation: null,
+        area: null,
       },
 
       rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
@@ -197,26 +197,27 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.main-form-textarea textarea {
+<style lang="scss" scoped>
+::v-deep .main-form-textarea textarea {
   max-height: 90px !important;
-  margin-top: 0 !important;
-  margin-right: 1px;
-  padding-top: 15px !important;
-  padding-bottom: 10px !important;
+  margin-top: 3px !important;
+  margin-right: 3px;
+  margin-bottom: 3px !important;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
   overflow-y: auto !important;
   line-height: 1.5em !important;
 }
 
-.main-form-textarea textarea::-webkit-scrollbar {
+::v-deep .main-form-textarea textarea::-webkit-scrollbar {
   width: 5px;
 }
 
-.main-form-textarea textarea::-webkit-scrollbar-track {
+::v-deep .main-form-textarea textarea::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.main-form-textarea textarea::-webkit-scrollbar-thumb {
+::v-deep .main-form-textarea textarea::-webkit-scrollbar-thumb {
   background-color: $scrollbar-color;
   border-radius: 5px;
 }
