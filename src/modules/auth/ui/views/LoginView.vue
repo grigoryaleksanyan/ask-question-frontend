@@ -59,7 +59,7 @@ export default {
 
     async onSubmit() {
       try {
-        await Login({ userName: this.controls.email, password: this.controls.password });
+        await Login({ login: this.controls.email, password: this.controls.password });
         this.$router.go(-1);
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
