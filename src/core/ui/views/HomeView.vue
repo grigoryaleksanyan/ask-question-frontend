@@ -39,13 +39,17 @@
       class="my-5 mx-auto"
       style="max-width: 800px; min-height: 100vh">
       <v-col cols="12">
-        <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
-      </v-col>
-      <v-col cols="12">
-        <QuestionCard
-          v-for="question in questions"
-          :key="question.id"
-          :question="question" />
+        <v-row>
+          <v-col cols="12">
+            <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
+          </v-col>
+          <v-col cols="12">
+            <QuestionCard
+              v-for="question in questions"
+              :key="question.id"
+              :question="question" />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
