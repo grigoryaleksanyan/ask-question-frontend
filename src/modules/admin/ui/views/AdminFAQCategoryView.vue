@@ -30,6 +30,7 @@
         <v-row>
           <v-col cols="12">
             <v-btn
+              small
               color="blue-grey"
               class="white--text"
               @click="showCreateEntry = true">
@@ -37,7 +38,7 @@
               <v-icon
                 right
                 dark>
-                mdi-note-plus-outline
+                mdi-plus
               </v-icon>
             </v-btn>
           </v-col>
