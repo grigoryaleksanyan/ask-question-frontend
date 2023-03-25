@@ -62,6 +62,9 @@
                 <v-col>
                   <v-select
                     v-model="controls.area"
+                    :items="areas"
+                    item-text="title"
+                    item-value="title"
                     label="Область*"
                     :rules="rules"
                     :menu-props="{ bottom: true, offsetY: true }" />
@@ -127,6 +130,8 @@ import { mapMutations } from 'vuex';
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 import { GetCapctha, Create } from '@/modules/question/repositories/questions-repository';
 
+import { GetAll } from '@/modules/shared/repositories/areas-repository';
+
 export default {
   name: 'QuestionFormCreate',
 
@@ -134,8 +139,9 @@ export default {
     return {
       valid: true,
       details: false,
-      capcthaImg: null,
 
+      areas: [],
+      capcthaImg: null,
       capctha: null,
 
       controls: {
@@ -147,6 +153,10 @@ export default {
 
       rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
     };
+  },
+
+  created() {
+    this.GetAllAreas();
   },
 
   methods: {
@@ -171,6 +181,14 @@ export default {
 
       try {
         this.capcthaImg = await GetCapctha();
+      } catch (error) {
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+      }
+    },
+
+    async GetAllAreas() {
+      try {
+        this.areas = await GetAll();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }

@@ -49,6 +49,15 @@ export default [
   },
 
   {
+    path: '/admin-areas',
+    name: 'admin-areas',
+    component: () => import(/* webpackChunkName: "admin-areas" */ '../ui/views/AdminAreasView.vue'),
+    meta: {
+      layout: 'AdminLayout',
+    },
+  },
+
+  {
     path: '/admin-feedback',
     name: 'admin-feedback',
     component: () => import(/* webpackChunkName: "admin-feedback" */ '../ui/views/AdminFeedbackView.vue'),

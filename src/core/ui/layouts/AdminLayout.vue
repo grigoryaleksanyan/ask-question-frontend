@@ -53,7 +53,7 @@ export default {
           link: '/admin',
         },
         {
-          title: 'Список вопросов',
+          title: 'Вопросы',
           icon: 'mdi-account-question',
           link: '/admin-questions',
         },
@@ -63,9 +63,14 @@ export default {
           link: '/admin-faq',
         },
         {
-          title: 'Список спикеров',
+          title: 'Спикеры',
           icon: 'mdi-account-tie-voice',
           link: '/admin-speakers',
+        },
+        {
+          title: 'Области',
+          icon: 'mdi-arrow-decision-outline',
+          link: '/admin-areas',
         },
         {
           title: 'Обратная связь',
