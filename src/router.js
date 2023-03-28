@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import AdminRoutes from '@/modules/admin/routes/index';
+import checkAuth from '@/core/middleware/auth-middleware';
 
 Vue.use(VueRouter);
 
@@ -36,12 +37,28 @@ const routes = [
   },
 
   ...AdminRoutes,
+
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "not-found" */ '@/core/ui/views/NotFoundView.vue'),
+    meta: {
+      layout: 'EmptyLayout',
+    },
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.isProtected) {
+    checkAuth(next);
+  } else {
+    next();
+  }
 });
 
 export default router;

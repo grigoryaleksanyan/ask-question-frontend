@@ -56,10 +56,14 @@ export default {
 
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
+    ...mapMutations('auth', ['SET_AUTH_DATA']),
 
     async onSubmit() {
       try {
-        await Login({ login: this.controls.email, password: this.controls.password });
+        const user = await Login({ login: this.controls.email, password: this.controls.password });
+
+        this.SET_AUTH_DATA(user);
+
         this.$router.go(-1);
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });

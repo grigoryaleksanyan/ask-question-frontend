@@ -5,6 +5,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-main" */ '../ui/views/AdminMainView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
   },
 
@@ -14,6 +15,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-questions" */ '../ui/views/AdminQuestionsView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
   },
 
@@ -23,6 +25,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-faq" */ '../ui/views/AdminFAQView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
     children: [
       {
@@ -33,6 +36,7 @@ export default [
         }),
         meta: {
           layout: 'AdminLayout',
+          isProtected: true,
         },
         component: () => import(/* webpackChunkName: "admin-faq-category" */ '../ui/views/AdminFAQCategoryView.vue'),
       },
@@ -45,6 +49,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-speakers" */ '../ui/views/AdminSpeakersView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
   },
 
@@ -54,6 +59,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-areas" */ '../ui/views/AdminAreasView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
   },
 
@@ -63,6 +69,7 @@ export default [
     component: () => import(/* webpackChunkName: "admin-feedback" */ '../ui/views/AdminFeedbackView.vue'),
     meta: {
       layout: 'AdminLayout',
+      isProtected: true,
     },
   },
 ];

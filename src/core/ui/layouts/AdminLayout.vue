@@ -31,9 +31,9 @@ import { mapMutations } from 'vuex';
 
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
-import { Logout } from '@/modules/auth/repositories/auth-repository';
-
 import DrawerNavigation from '@/core/ui/components/DrawerNavigation.vue';
+
+import { Logout } from '@/modules/auth/repositories/auth-repository';
 
 export default {
   name: 'AdminLayout',
@@ -83,10 +83,13 @@ export default {
 
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
+    ...mapMutations('auth', ['REMOVE_AUTH_DATA']),
 
     async logout() {
       try {
         await Logout();
+
+        this.REMOVE_AUTH_DATA();
 
         this.$router.push('/');
 
