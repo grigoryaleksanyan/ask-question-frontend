@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-card-text class="pa-7">
+    <v-card-text
+      class="pa-7"
+      style="max-height: 400px; overflow-y: auto !important">
       <slot> </slot>
     </v-card-text>
     <v-divider></v-divider>
