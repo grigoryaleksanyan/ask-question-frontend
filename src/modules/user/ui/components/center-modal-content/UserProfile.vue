@@ -1,58 +1,81 @@
 <template>
-  <CenterModalContentWrapper>
-    <template #default>
-      <p><b>Id:</b> {{ GET_USER_DATA.id }}</p>
-      <p><b>Логин:</b> {{ GET_USER_DATA.login }}</p>
-      <p><b>Роль:</b> {{ getUserStringRole }}</p>
-      <p><b>Создан:</b> {{ new Date(GET_USER_DATA.сreated).toLocaleDateString() }}</p>
-      <p><b>Изменен:</b> {{ GET_USER_DATA.updated ? new Date(GET_USER_DATA.updated).toLocaleDateString() : '-' }}</p>
+  <ValidationObserver
+    ref="profile-settings"
+    v-slot="{ valid, handleSubmit }">
+    <CenterModalContentWrapper>
+      <template #default>
+        <p><b>Id:</b> {{ GET_USER_DATA.id }}</p>
+        <p><b>Логин:</b> {{ GET_USER_DATA.login }}</p>
+        <p><b>Роль:</b> {{ getUserStringRole }}</p>
+        <p><b>Создан:</b> {{ new Date(GET_USER_DATA.сreated).toLocaleDateString() }}</p>
+        <p><b>Изменен:</b> {{ GET_USER_DATA.updated ? new Date(GET_USER_DATA.updated).toLocaleDateString() : '-' }}</p>
 
-      <template v-if="!showChangePassword">
+        <template v-if="!showChangePassword">
+          <v-btn
+            depressed
+            small
+            @click="showChangePassword = true">
+            Изменить пароль
+          </v-btn>
+        </template>
+
+        <div
+          v-show="showChangePassword"
+          class="mt-4">
+          <ValidationProvider
+            v-slot="{ errors }"
+            rules="required">
+            <v-text-field
+              v-model="controls.password"
+              label="Старый пароль"
+              dense
+              outlined
+              :error-messages="errors" />
+          </ValidationProvider>
+
+          <ValidationProvider
+            v-slot="{ errors }"
+            rules="required"
+            vid="newPassword">
+            <v-text-field
+              v-model="controls.newPassword"
+              label="Новый пароль"
+              dense
+              outlined
+              :error-messages="errors" />
+          </ValidationProvider>
+
+          <ValidationProvider
+            v-slot="{ errors }"
+            rules="required|confirmed:newPassword">
+            <v-text-field
+              v-model="controls.confirmPassword"
+              label="Подтвердите новый пароль"
+              dense
+              outlined
+              :error-messages="errors" />
+          </ValidationProvider>
+        </div>
+      </template>
+      <template #actions>
         <v-btn
-          depressed
-          small
-          @click="showChangePassword = true">
-          Изменить пароль
+          v-if="showChangePassword"
+          :disabled="!valid"
+          color="primary"
+          class="white--text"
+          @click="handleSubmit(onSubmit)">
+          Сохранить
+        </v-btn>
+        <v-btn
+          color="blue-grey"
+          class="white--text"
+          outlined
+          @click="$emit('cancel')">
+          Отмена
         </v-btn>
       </template>
-
-      <div
-        v-show="showChangePassword"
-        class="mt-4">
-        <v-text-field
-          v-model="controls.password"
-          label="Старый пароль"
-          dense
-          outlined />
-        <v-text-field
-          v-model="controls.newPassword"
-          label="Новый пароль"
-          dense
-          outlined />
-        <v-text-field
-          v-model="controls.confirmPassword"
-          label="Подтвердите новый пароль"
-          dense
-          outlined />
-      </div>
-    </template>
-    <template #actions>
-      <v-btn
-        v-if="showChangePassword"
-        color="primary"
-        class="white--text"
-        @click="onSubmit">
-        Сохранить
-      </v-btn>
-      <v-btn
-        color="blue-grey"
-        class="white--text"
-        outlined
-        @click="$emit('cancel')">
-        Отмена
-      </v-btn>
-    </template>
-  </CenterModalContentWrapper>
+    </CenterModalContentWrapper>
+  </ValidationObserver>
 </template>
 
 <script>
