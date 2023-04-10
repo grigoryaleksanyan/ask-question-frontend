@@ -13,16 +13,51 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        depressed
-        @click="logout">
-        Выйти
-      </v-btn>
+      <v-menu offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on">
+            <v-icon>mdi-cog-outline</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item>
+            <v-btn
+              depressed
+              width="100%"
+              @click="showUserProfile = true">
+              Профиль
+            </v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn
+              depressed
+              width="100%"
+              @click="logout">
+              Выйти
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <CenterModal
+      title="Профиль пользователя"
+      :is-open="showUserProfile"
+      @close="showUserProfile = false">
+      <UserProfile
+        v-if="showUserProfile"
+        :is-open="showUserProfile"
+        @success="showUserProfile = false"
+        @cancel="showUserProfile = false" />
+    </CenterModal>
   </div>
 </template>
 
@@ -32,6 +67,7 @@ import { mapMutations } from 'vuex';
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
 import DrawerNavigation from '@/core/ui/components/DrawerNavigation.vue';
+import UserProfile from '@/modules/user/ui/components/center-modal-content/UserProfile.vue';
 
 import { Logout } from '@/modules/auth/repositories/auth-repository';
 
@@ -40,11 +76,14 @@ export default {
 
   components: {
     DrawerNavigation,
+    UserProfile,
   },
 
   data() {
     return {
       drawer: false,
+
+      showUserProfile: false,
 
       navItems: [
         {
