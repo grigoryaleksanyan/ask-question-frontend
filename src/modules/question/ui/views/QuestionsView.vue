@@ -1,12 +1,12 @@
 <template>
   <v-container
     fluid
-    style="max-width: 1200px">
+    style="max-width: 1000px">
     <v-row no-gutters>
       <v-col
         cols="12"
         class="my-8">
-        <h2 class="text-h4 text-sm-h3 text-center">Все вопросы</h2>
+        <h1 class="text-h4 text-sm-h3 text-center">Все вопросы</h1>
       </v-col>
     </v-row>
 
@@ -36,8 +36,8 @@
 
     <v-row
       no-gutters
-      justify="center"
-      class="mb-8">
+      class="mb-3"
+      justify="center">
       <v-col
         cols="12"
         class="mb-4">
@@ -66,34 +66,62 @@
           </v-tab>
         </v-tabs>
       </v-col>
+    </v-row>
+
+    <v-row
+      no-gutters
+      class="mb-3">
       <v-col cols="12">
         <QuestionFilters />
+      </v-col>
+    </v-row>
 
-        <v-tabs-items v-model="model">
-          <v-tab-item
-            v-for="i in 3"
-            :key="i"
-            :value="`tab-${i}`">
-            <QuestionCard
-              v-for="question in questions"
-              :key="question.id"
-              :question="question" />
-          </v-tab-item>
-        </v-tabs-items>
-
+    <template v-if="questions.length">
+      <v-row
+        no-gutters
+        class="mb-5">
         <v-col cols="12">
-          <p>Вопросы отсутсвуют</p>
+          <v-tabs-items v-model="model">
+            <v-tab-item
+              v-for="i in 3"
+              :key="i"
+              :value="`tab-${i}`">
+              <QuestionCard
+                v-for="question in questions"
+                :key="question.id"
+                :question="question" />
+            </v-tab-item>
+          </v-tabs-items>
+        </v-col>
+      </v-row>
+
+      <v-row
+        no-gutters
+        class="mb-5">
+        <v-col cols="12">
           <v-pagination
             v-model="page"
             :length="15"
-            :total-visible="7"></v-pagination>
+            :total-visible="7" />
         </v-col>
-      </v-col>
-    </v-row>
+      </v-row>
+    </template>
+
+    <template v-else>
+      <v-row
+        no-gutters
+        class="my-6">
+        <v-col cols="12">
+          <p style="margin: 0; color: grey; font-size: 22px; text-align: center">Вопросы отсутсвуют</p>
+        </v-col>
+      </v-row>
+    </template>
   </v-container>
 </template>
 <script>
 import { mapMutations } from 'vuex';
+
+import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 import { GetAll } from '@/modules/question/repositories/questions-repository';
 
 import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';
@@ -127,7 +155,7 @@ export default {
       try {
         this.questions = await GetAll();
       } catch (error) {
-        this.ADD_ALERT({ type: 'error', text: error.message });
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }
     },
   },
