@@ -4,6 +4,12 @@
     v-slot="{ valid, handleSubmit }">
     <CenterModalContentWrapper>
       <template #default>
+        <template v-if="GET_USER_DATA.userRoleId == 2">
+          <p><b>ФИО:</b> {{ GET_USER_DATA.userDetails.fullName }}</p>
+          <p><b>Почта:</b> {{ GET_USER_DATA.userDetails.email }}</p>
+          <p><b>Доп. инфо:</b> {{ GET_USER_DATA.userDetails.additionalInfo }}</p>
+        </template>
+
         <p><b>Id:</b> {{ GET_USER_DATA.id }}</p>
         <p><b>Логин:</b> {{ GET_USER_DATA.login }}</p>
         <p><b>Роль:</b> {{ getUserStringRole }}</p>
@@ -12,6 +18,7 @@
 
         <template v-if="!showChangePassword">
           <v-btn
+            class="mt-5"
             depressed
             small
             @click="showChangePassword = true">
@@ -132,3 +139,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+p {
+  margin: 0;
+}
+</style>
