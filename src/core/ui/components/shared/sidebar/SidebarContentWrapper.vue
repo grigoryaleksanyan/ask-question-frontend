@@ -88,7 +88,7 @@ export default {
   box-shadow: inset 0 -1px 3px 1px rgb(0 0 0 / 10%);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (width <= 700px) {
   .content-block {
     padding-right: 20px;
     padding-left: 20px;

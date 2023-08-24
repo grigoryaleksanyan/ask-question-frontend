@@ -32,11 +32,11 @@ export default {
 <style lang="scss" scoped>
 .card {
   display: flex;
-  justify-content: center;
+  overflow: hidden;
   width: 100%;
   height: 116px;
+  justify-content: center;
   padding: 15px;
-  overflow: hidden;
   border: 1px dashed #d3d4db;
   border-radius: 12px;
   cursor: pointer;

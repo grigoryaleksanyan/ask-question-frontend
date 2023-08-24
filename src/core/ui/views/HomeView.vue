@@ -131,8 +131,8 @@ export default {
 .portal-title {
   color: white;
   font-size: 6em;
-  white-space: nowrap;
   text-align: center;
+  white-space: nowrap;
 }
 
 .additional-text {
@@ -143,7 +143,7 @@ export default {
   text-align: center;
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .portal-title {
     font-size: 3em;
   }

@@ -69,8 +69,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(230 230 230);
   border-radius: 8px;
+  background-color: rgb(230 230 230);
   content: '';
 }
 </style>

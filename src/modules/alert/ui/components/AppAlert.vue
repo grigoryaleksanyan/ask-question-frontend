@@ -35,13 +35,13 @@ export default {
 <style lang="scss" scoped>
 .alert {
   position: fixed;
+  z-index: 1000;
   top: 75px;
   right: 10px;
-  z-index: 1000;
   width: 370px;
 }
 
-@media (max-width: 400px) {
+@media (width <= 400px) {
   .alert {
     right: unset;
     left: 50%;

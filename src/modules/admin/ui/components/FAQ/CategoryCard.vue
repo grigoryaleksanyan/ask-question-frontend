@@ -32,14 +32,14 @@ export default {
 .card {
   position: relative;
   display: flex;
-  justify-content: center;
+  overflow: hidden;
   width: 100%;
   height: 116px;
+  justify-content: center;
   padding: 15px;
-  overflow: hidden;
-  background-color: #fff;
   border: 1px solid #d3d4db;
   border-radius: 12px;
+  background-color: #fff;
   cursor: pointer;
   transition: all 0.2s linear;
 }

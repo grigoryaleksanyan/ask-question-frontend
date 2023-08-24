@@ -120,13 +120,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .header-navigation {
     display: none;
   }
 }
 
-@media (min-width: 600px) {
+@media (width >= 600px) {
   .drawer-navigation,
   .drawer-navigation-burger {
     display: none;

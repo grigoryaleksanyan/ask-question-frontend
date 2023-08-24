@@ -1,18 +1,18 @@
 @import './variables';
 
 @font-face {
-  font-weight: 400;
+  font-display: swap;
   font-family: Roboto;
   font-style: normal;
-  font-display: swap;
+  font-weight: 400;
   src: local('Roboto'), local('Roboto-Regular'), url('../fonts/Roboto.woff2') format('woff2'),
     url('../fonts/Roboto.woff') format('woff');
 }
 
 @font-face {
-  font-weight: 700;
   font-family: Roboto;
   font-style: normal;
+  font-weight: 700;
   src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/Roboto-Bold.woff2') format('woff2'),
     url('../fonts/Roboto-Bold.woff') format('woff');
 }
@@ -39,8 +39,8 @@ body {
 }
 
 blockquote {
-  margin: 20px 0 !important;
   padding-left: 1em;
-  color: #6a737d;
   border-left: 0.25em solid #dfe2e5;
+  margin: 20px 0 !important;
+  color: #6a737d;
 }

@@ -130,8 +130,8 @@ export default {
 
 <style lang="scss" scoped>
 .sidebar-radius {
-  border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
+  border-top-left-radius: 16px;
 }
 
 .header-block {
@@ -140,9 +140,9 @@ export default {
 
 .sidebar-title {
   color: var(--v-text-color-base);
-  font-weight: 600;
   font-size: 22px;
   font-style: normal;
+  font-weight: 600;
   line-height: 24px;
   text-align: left;
 }
@@ -150,14 +150,14 @@ export default {
 .mobile-touch-close-btn {
   width: 40px;
   height: 4px;
-  background: #cecece;
   border-radius: 4px;
+  background: #cecece;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (width <= 700px) {
   .sidebar-radius {
-    border-top-right-radius: 16px;
     border-bottom-left-radius: 0;
+    border-top-right-radius: 16px;
   }
 
   .header-block {

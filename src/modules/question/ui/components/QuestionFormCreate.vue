@@ -218,13 +218,13 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .main-form-textarea textarea {
   max-height: 90px !important;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
   margin-top: 3px !important;
   margin-right: 3px;
   margin-bottom: 3px !important;
-  padding-top: 13px !important;
-  padding-bottom: 13px !important;
-  overflow-y: auto !important;
   line-height: 1.5em !important;
+  overflow-y: auto !important;
 }
 
 ::v-deep .main-form-textarea textarea::-webkit-scrollbar {
@@ -236,7 +236,7 @@ export default {
 }
 
 ::v-deep .main-form-textarea textarea::-webkit-scrollbar-thumb {
-  background-color: $scrollbar-color;
   border-radius: 5px;
+  background-color: $scrollbar-color;
 }
 </style>
