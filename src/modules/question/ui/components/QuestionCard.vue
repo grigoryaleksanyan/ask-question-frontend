@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card
-      to="/card"
+      to="/question/123"
       elevation="2"
       color="#E8EAF6">
       <v-card-title class="py-2">
@@ -96,15 +96,18 @@ import QuestionStatusIcon from '@/modules/question/ui/components/QuestionStatusI
 
 export default {
   name: 'QuestionCard',
+
   components: {
     QuestionStatusIcon,
   },
+
   props: {
     question: {
       type: Object,
       required: true,
     },
   },
+
   computed: {
     color() {
       switch (this.question.status) {
@@ -121,6 +124,7 @@ export default {
       }
     },
   },
+
   methods: {
     sliceText(text) {
       const maxTextLength = 300;
@@ -130,6 +134,7 @@ export default {
       }
       return `${text.slice(0, maxTextLength)}... <b class="question-card-more">подробнее</b>`;
     },
+
     replaceСounter(value) {
       return value > 999 ? '999+' : value;
     },
