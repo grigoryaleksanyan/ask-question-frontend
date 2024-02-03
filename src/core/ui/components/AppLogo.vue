@@ -5,13 +5,19 @@
       alt="logo"
       contain
       height="100%"
-      :src="require('@/core/assets/logo.png')" />
+      :src="imageUrl" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'AppLogo',
+
+  data() {
+    return {
+      imageUrl: new URL('@/core/assets/logo.png', import.meta.url).href,
+    };
+  },
 };
 </script>
 

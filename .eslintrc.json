@@ -1,0 +1,48 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": ["eslint-config-airbnb-base", "plugin:vue/recommended", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["@", "./src"]]
+      }
+    }
+  },
+  "rules": {
+    // Правила для ESLint
+    "no-console": "error",
+    "no-debugger": "error",
+    "curly": ["error", "all"],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+
+    // Правила для Vue
+    "vue/camelcase": ["error", { "properties": "always" }],
+    "vue/require-name-property": "error",
+    "vue/match-component-file-name": [
+      "error",
+      {
+        "extensions": ["vue"],
+        "shouldMatchCase": true
+      }
+    ],
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase",
+      {
+        "registeredComponentsOnly": true,
+        "ignores": []
+      }
+    ]
+  }
+}

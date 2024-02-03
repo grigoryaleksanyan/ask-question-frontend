@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "octref.vetur",
+    "sdras.vue-vscode-snippets",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "Gruntfuggly.todo-tree"
+  ]
+}

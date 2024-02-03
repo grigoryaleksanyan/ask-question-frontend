@@ -2,7 +2,7 @@ export default [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import(/* webpackChunkName: "admin-main" */ '../ui/views/AdminMainView.vue'),
+    component: () => import('../ui/views/AdminMainView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,
@@ -12,7 +12,7 @@ export default [
   {
     path: '/admin-questions',
     name: 'admin-questions',
-    component: () => import(/* webpackChunkName: "admin-questions" */ '../ui/views/AdminQuestionsView.vue'),
+    component: () => import('../ui/views/AdminQuestionsView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,
@@ -22,7 +22,7 @@ export default [
   {
     path: '/admin-faq',
     name: 'admin-faq',
-    component: () => import(/* webpackChunkName: "admin-faq" */ '../ui/views/AdminFAQView.vue'),
+    component: () => import('../ui/views/AdminFAQView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,
@@ -38,7 +38,7 @@ export default [
           layout: 'AdminLayout',
           isProtected: true,
         },
-        component: () => import(/* webpackChunkName: "admin-faq-category" */ '../ui/views/AdminFAQCategoryView.vue'),
+        component: () => import('../ui/views/AdminFAQCategoryView.vue'),
       },
     ],
   },
@@ -46,7 +46,7 @@ export default [
   {
     path: '/admin-speakers',
     name: 'admin-speakers',
-    component: () => import(/* webpackChunkName: "admin-speakers" */ '../ui/views/AdminSpeakersView.vue'),
+    component: () => import('../ui/views/AdminSpeakersView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,
@@ -56,7 +56,7 @@ export default [
   {
     path: '/admin-areas',
     name: 'admin-areas',
-    component: () => import(/* webpackChunkName: "admin-areas" */ '../ui/views/AdminAreasView.vue'),
+    component: () => import('../ui/views/AdminAreasView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,
@@ -66,7 +66,7 @@ export default [
   {
     path: '/admin-feedback',
     name: 'admin-feedback',
-    component: () => import(/* webpackChunkName: "admin-feedback" */ '../ui/views/AdminFeedbackView.vue'),
+    component: () => import('../ui/views/AdminFeedbackView.vue'),
     meta: {
       layout: 'AdminLayout',
       isProtected: true,

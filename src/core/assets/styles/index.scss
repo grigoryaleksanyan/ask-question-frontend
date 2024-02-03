@@ -1,11 +1,12 @@
-@import './variables';
-
 @font-face {
   font-display: swap;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url('../fonts/Roboto.woff2') format('woff2'),
+  src:
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url('../fonts/Roboto.woff2') format('woff2'),
     url('../fonts/Roboto.woff') format('woff');
 }
 
@@ -13,7 +14,10 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/Roboto-Bold.woff2') format('woff2'),
+  src:
+    local('Roboto Bold'),
+    local('Roboto-Bold'),
+    url('../fonts/Roboto-Bold.woff2') format('woff2'),
     url('../fonts/Roboto-Bold.woff') format('woff');
 }
 

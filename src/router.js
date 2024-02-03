@@ -10,12 +10,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "home" */ '@/core/ui/views/HomeView.vue'),
+    component: () => import('@/core/ui/views/HomeView.vue'),
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '@/modules/auth/ui/views/LoginView.vue'),
+    component: () => import('@/modules/auth/ui/views/LoginView.vue'),
     meta: {
       layout: 'EmptyLayout',
     },
@@ -23,24 +23,24 @@ const routes = [
   {
     path: '/questions',
     name: 'questions',
-    component: () => import(/* webpackChunkName: "questions" */ '@/modules/question/ui/views/QuestionsView.vue'),
+    component: () => import('@/modules/question/ui/views/QuestionsView.vue'),
   },
   {
     path: '/question/:id',
     name: 'question',
-    component: () => import(/* webpackChunkName: "question" */ '@/modules/question/ui/views/QuestionIdView.vue'),
+    component: () => import('@/modules/question/ui/views/QuestionIdView.vue'),
   },
   {
     path: '/faq',
     name: 'faq',
-    component: () => import(/* webpackChunkName: "questions" */ '@/modules/faq/ui/views/FAQView.vue'),
+    component: () => import('@/modules/faq/ui/views/FAQView.vue'),
   },
 
   ...AdminRoutes,
 
   {
     path: '*',
-    component: () => import(/* webpackChunkName: "not-found" */ '@/core/ui/views/NotFoundView.vue'),
+    component: () => import('@/core/ui/views/NotFoundView.vue'),
     meta: {
       layout: 'EmptyLayout',
     },
@@ -49,7 +49,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: import.meta.env.BASE_URL,
   routes,
 });
 

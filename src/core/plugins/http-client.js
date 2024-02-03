@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-  baseURL: process.env.VUE_APP_SERVER_API || process.env.BASE_URL,
+  baseURL: import.meta.env.BASE_URL,
   withCredentials: true,
 });
 

@@ -2,22 +2,26 @@
   "name": "ask-question-frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^20",
+    "npm": "^10"
+  },
   "description": "Frontend портала вопросов и ответов",
   "author": "Григорий Алексанян",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "prettier": "prettier --write ./**/*.{js,vue,css,scss}",
-    "eslint": "eslint ./**/*.{js,vue} --color --fix",
-    "stylelint:css": "stylelint ./src/**/*.{css,scss} --custom-syntax postcss-scss --aei --color --fix",
-    "stylelint:vue": "stylelint ./src/**/*.vue --custom-syntax postcss-html --aei --color --fix",
-    "lint": "npm run eslint & npm run stylelint:css & npm run stylelint:vue",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prettier:check": "prettier ./src --check",
+    "eslint:check": "eslint ./src/**/*.{vue,js}",
+    "stylelint:check": "stylelint ./src/**/*.{vue,scss,css}",
+    "lint": "npm run prettier:check && npm run eslint:check && npm run stylelint:check",
     "husky:prepare": "husky || true",
     "commit": "git-cz"
   },
   "dependencies": {
     "axios": "^1.6.7",
-    "core-js": "^3.32.1",
     "tiptap-vuetify": "^2.24.0",
     "vee-validate": "^3.4.15",
     "vue": "^2.7.16",
@@ -29,62 +33,51 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.22.11",
     "@commitlint/cli": "^18.6.0",
     "@mdi/font": "^7.4.47",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "@vue/eslint-config-airbnb": "^7.0.0",
     "commitizen": "^4.3.0",
     "cz-customizable": "^7.0.0",
-    "eslint": "^8.47.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-babel": "^5.3.1",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "eslint-plugin-vuejs-accessibility": "^2.2.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-vue": "^9.20.1",
     "husky": "^9.0.10",
     "lint-staged": "^15.2.1",
-    "postcss": "^8.4.28",
-    "postcss-html": "^1.5.0",
-    "postcss-scss": "^4.0.7",
-    "prettier": "^3.0.2",
-    "sass": "^1.66.1",
-    "sass-loader": "^12.6.0",
-    "stylelint": "^15.10.3",
-    "stylelint-config-html": "^1.1.0",
-    "stylelint-config-idiomatic-order": "^9.0.0",
+    "prettier": "^3.2.4",
+    "sass": "~1.32",
+    "stylelint": "^16.2.0",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
     "stylelint-config-recommended-vue": "^1.5.0",
-    "stylelint-config-standard": "^34.0.0",
-    "stylelint-config-standard-scss": "^10.0.0",
-    "stylelint-order": "^6.0.3",
-    "stylelint-prettier": "^4.0.2",
-    "vue-cli-plugin-vuetify": "^2.5.8",
-    "vue-template-compiler": "^2.7.14",
-    "vuetify-loader": "^1.9.2"
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-order": "^6.0.4",
+    "unplugin-vue-components": "^0.26.0",
+    "vite": "^4.5.2",
+    "vite-plugin-vue2": "^2.0.3"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
     },
     "cz-customizable": {
-      "config": "./config/git/commitizen.js"
+      "config": "./configs/git/commitizen.cjs"
     }
   },
   "lint-staged": {
     "*.js": [
-      "npm run eslint"
+      "npm run prettier:check",
+      "npm run eslint:check"
     ],
     "*.vue": [
-      "npm run eslint",
-      "npm run stylelint:vue"
+      "npm run prettier:check",
+      "npm run eslint:check",
+      "npm run stylelint:check"
     ],
     "*.{css,scss}": [
-      "npm run stylelint:css"
+      "npm run prettier:check",
+      "npm run stylelint:check"
     ]
   }
 }

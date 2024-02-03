@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
 import ru from 'vuetify/lib/locale/ru';
+import * as directives from 'vuetify/es5/directives';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@mdi/font/css/materialdesignicons.css';
 
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 import 'tiptap-vuetify/dist/main.css';
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, { directives });
 
 const vuetify = new Vuetify({
   lang: {

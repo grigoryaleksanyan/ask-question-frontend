@@ -8,8 +8,14 @@ export default {
   }),
 
   mutations: {
-    ADD_ALERT(state, alert) {
-      alert.id = generateId();
+    ADD_ALERT(state, { type, text, delay }) {
+      const alert = {
+        id: generateId(),
+        type,
+        text,
+        delay,
+      };
+
       state.alerts.push(alert);
 
       if (alert.type !== 'error') {

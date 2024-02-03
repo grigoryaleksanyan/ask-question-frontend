@@ -4,8 +4,8 @@
     class="pa-0">
     <VideoBackground
       style="height: 100vh"
-      :src="require('@/core/assets/video/background.mp4')"
-      :poster="require('@/core/assets/img/poster.jpg')"
+      :src="backgroundVideo"
+      :poster="backgroundPoster"
       overlay="linear-gradient(0deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5))">
       <v-row
         align-content="center"
@@ -73,6 +73,8 @@ export default {
 
   data() {
     return {
+      backgroundVideo: new URL('@/core/assets/video/background.mp4', import.meta.url).href,
+      backgroundPoster: new URL('@/core/assets/img/poster.jpg', import.meta.url).href,
       questions: [
         {
           id: 1,
