@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "octref.vetur",
+    "Vue.volar",
     "sdras.vue-vscode-snippets",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
