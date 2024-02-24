@@ -2,6 +2,7 @@
   "root": true,
   "env": {
     "browser": true,
+    "node": true,
     "es2022": true
   },
   "extends": ["eslint-config-airbnb-base", "plugin:vue/recommended", "prettier"],
@@ -16,22 +17,33 @@
     }
   },
   "rules": {
-    // Правила для ESLint
-    "no-console": "error",
+    // Правила для JS
+    "no-console": "warn",
     "no-debugger": "error",
     "curly": ["error", "all"],
+    "max-depth": ["error", 4],
+    "max-lines-per-function": ["error", { "max": 40, "skipBlankLines": true, "skipComments": true }],
     "no-param-reassign": [
-      "error",
+      "warn",
       {
         "props": true,
         "ignorePropertyModificationsFor": ["state"]
       }
     ],
+    "lines-between-class-members": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-
     // Правила для Vue
     "vue/camelcase": ["error", { "properties": "always" }],
     "vue/require-name-property": "error",
+    "vue/component-options-name-casing": ["error", "PascalCase"],
+    "vue/match-component-import-name": "error",
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase",
+      {
+        "registeredComponentsOnly": true
+      }
+    ],
     "vue/match-component-file-name": [
       "error",
       {
@@ -39,13 +51,19 @@
         "shouldMatchCase": true
       }
     ],
-    "vue/component-name-in-template-casing": [
+    "vue/padding-lines-in-component-definition": ["error", "always"],
+    "vue/padding-line-between-blocks": ["error", "always"],
+    "vue/no-empty-component-block": "error",
+    "vue/block-order": [
       "error",
-      "PascalCase",
       {
-        "registeredComponentsOnly": true,
-        "ignores": []
+        "order": ["template", "script", "style"]
       }
-    ]
+    ],
+    "vue/prefer-prop-type-boolean-first": "error",
+    "vue/prefer-true-attribute-shorthand": ["error", "always"],
+    "vue/custom-event-name-casing": ["error", "kebab-case"],
+    "vue/prefer-separate-static-class": "error",
+    "vue/no-restricted-class": ["error", "/^(?![a-z]([a-z0-9-]+)?(__([a-z0-9]+-?)+)?(--([a-z0-9]+-?)+){0,2}$)/"]
   }
 }
