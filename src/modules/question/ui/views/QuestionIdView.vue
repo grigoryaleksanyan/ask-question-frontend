@@ -114,6 +114,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import QUESTION_STATUSES from '@/modules/question/constants/question-statuses';
 

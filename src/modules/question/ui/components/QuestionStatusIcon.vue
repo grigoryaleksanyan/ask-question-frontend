@@ -15,12 +15,14 @@ import QUESTION_STATUSES from '@/modules/question/constants/question-statuses';
 
 export default {
   name: 'QuestionStatusIcon',
+
   props: {
     status: {
       type: Number,
       default: 0,
     },
   },
+
   data() {
     return {
       statusList: [
@@ -47,6 +49,7 @@ export default {
       ],
     };
   },
+
   computed: {
     curentStatus() {
       return this.statusList[this.status];

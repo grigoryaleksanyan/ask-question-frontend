@@ -71,7 +71,6 @@ export default {
     DrawerNavigation,
     HeaderNavigation,
     AppLogo,
-
     SidebarFeedbackContent,
   },
 

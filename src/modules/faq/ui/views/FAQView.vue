@@ -54,6 +54,7 @@
     </template>
   </v-container>
 </template>
+
 <script>
 import { mapMutations } from 'vuex';
 

@@ -154,12 +154,9 @@ export default {
 
   components: {
     Draggable,
-
     UpdateCategory,
     DeleteCategory,
-
     EntryCard,
-
     CreateEntryContent,
     UpdateEntryContent,
     DeleteEntry,
@@ -199,6 +196,7 @@ export default {
       get() {
         return this.category.entries;
       },
+
       async set(newOrderEntries) {
         const oldOrderEntries = [...this.category.entries];
 

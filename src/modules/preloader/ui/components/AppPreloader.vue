@@ -15,6 +15,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'AppPreloader',
+
   computed: {
     ...mapGetters('preloader', ['SHOW_PRELOADER']),
   },

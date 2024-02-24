@@ -108,7 +108,6 @@ export default {
 
   components: {
     Draggable,
-
     AreaCard,
     CreateArea,
     UpdateArea,
@@ -139,6 +138,7 @@ export default {
       get() {
         return this.areas;
       },
+
       async set(newOrderAreas) {
         const oldOrderAreas = [...this.areas];
 

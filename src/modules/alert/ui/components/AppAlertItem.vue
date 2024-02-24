@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="alert-item"
-    :class="`alert-item-${alert.type}`">
+  <div :class="alertClasses">
     <span class="alert-item-icon">
       <component :is="`${alert.type}-icon`" />
     </span>
@@ -36,7 +34,6 @@ export default {
     InfoIcon,
     WarningIcon,
     ErrorIcon,
-
     CloseIcon,
   },
 
@@ -44,6 +41,15 @@ export default {
     alert: {
       type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    alertClasses() {
+      return {
+        'alert-item': true,
+        [`alert-item-${this.alert.type}`]: true,
+      };
     },
   },
 

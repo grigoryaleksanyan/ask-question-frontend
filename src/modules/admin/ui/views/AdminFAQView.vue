@@ -69,10 +69,8 @@ export default {
 
   components: {
     Draggable,
-
     CategoryCard,
     CreateCardButton,
-
     CreateCategory,
   },
 
@@ -100,6 +98,7 @@ export default {
       get() {
         return this.categories;
       },
+
       async set(newOrderCategories) {
         const oldOrderCategories = [...this.categories];
 

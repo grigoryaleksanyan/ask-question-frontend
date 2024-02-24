@@ -100,6 +100,7 @@
 <script>
 export default {
   name: 'QuestionFilters',
+
   data() {
     return {
       showFilters: false,
@@ -109,6 +110,7 @@ export default {
       status: ['новый', 'в фокусе'],
     };
   },
+
   methods: {
     toggleFilters() {
       this.showFilters = !this.showFilters;
