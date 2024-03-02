@@ -35,10 +35,6 @@ export default {
       type: String,
       required: true,
     },
-
-    isOpen: {
-      type: Boolean,
-    },
   },
 
   methods: {

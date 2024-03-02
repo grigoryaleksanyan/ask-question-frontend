@@ -20,12 +20,6 @@ export default {
     AppAlertItem,
   },
 
-  data() {
-    return {
-      showAlert: true,
-    };
-  },
-
   computed: {
     ...mapGetters('alert', ['GET_ALERTS']),
   },

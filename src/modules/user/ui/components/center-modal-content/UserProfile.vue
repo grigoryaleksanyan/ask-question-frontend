@@ -1,7 +1,5 @@
 <template>
-  <ValidationObserver
-    ref="profile-settings"
-    v-slot="{ valid, handleSubmit }">
+  <ValidationObserver v-slot="{ valid, handleSubmit }">
     <CenterModalContentWrapper>
       <template #default>
         <template v-if="GET_USER_DATA.userRoleId == 2">
