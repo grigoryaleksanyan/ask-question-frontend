@@ -64,6 +64,15 @@
     "vue/prefer-true-attribute-shorthand": ["error", "always"],
     "vue/custom-event-name-casing": ["error", "kebab-case"],
     "vue/prefer-separate-static-class": "error",
-    "vue/no-restricted-class": ["error", "/^(?![a-z]([a-z0-9-]+)?(__([a-z0-9]+-?)+)?(--([a-z0-9]+-?)+){0,2}$)/"]
+    "vue/no-restricted-class": ["error", "/^(?![a-z]([a-z0-9-]+)?(__([a-z0-9]+-?)+)?(--([a-z0-9]+-?)+){0,2}$)/"],
+    "vue/no-unused-properties": [
+      "error",
+      {
+        "groups": ["props", "data", "computed", "methods", "setup"],
+        "deepData": true
+      }
+    ],
+    "vue/no-unused-emit-declarations": "error",
+    "vue/no-unused-refs": "error"
   }
 }
