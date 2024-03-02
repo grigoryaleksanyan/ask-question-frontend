@@ -1,5 +1,0 @@
-export default {
-  HEADER_HEIGHT_PX: 75,
-  FOOTER_HEIGHT_PX: 70,
-  MARGIN_TOP_VH: 10,
-};
