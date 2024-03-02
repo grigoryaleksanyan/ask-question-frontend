@@ -37,7 +37,7 @@
             icon
             v-bind="attrs"
             v-on="on"
-            @click="showFeedback = true">
+            @click="showFeedbackModal">
             <v-icon size="24px">mdi-email-open</v-icon>
           </v-btn>
         </template>
@@ -45,14 +45,12 @@
       </v-tooltip>
     </v-footer>
 
-    <SidebarModal
-      :is-open="showFeedback"
-      title="Обратная связь по порталу"
-      @close="showFeedback = false">
-      <SidebarFeedbackContent
-        v-if="showFeedback"
-        @success="success"
-        @cancel="showFeedback = false" />
+    <SidebarModal ref="feedback-modal">
+      <template #default="{ confirm, close }">
+        <SidebarFeedbackContent
+          :modal-confirm="confirm"
+          :modal-close="close" />
+      </template>
     </SidebarModal>
   </div>
 </template>
@@ -94,8 +92,6 @@ export default {
           link: '/faq',
         },
       ],
-
-      showFeedback: false,
     };
   },
 
@@ -107,12 +103,12 @@ export default {
   },
 
   methods: {
-    toggleDrawer() {
-      this.drawer = !this.drawer;
+    async showFeedbackModal() {
+      await this.$refs['feedback-modal'].open();
     },
 
-    success() {
-      this.showFeedback = false;
+    toggleDrawer() {
+      this.drawer = !this.drawer;
     },
   },
 };

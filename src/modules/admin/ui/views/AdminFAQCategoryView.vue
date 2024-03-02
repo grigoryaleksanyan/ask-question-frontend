@@ -33,7 +33,7 @@
               small
               color="blue-grey"
               class="white--text"
-              @click="showCreateEntry = true">
+              @click="showCreateEntryModal">
               Добавить запись
               <v-icon
                 right
@@ -60,7 +60,7 @@
               <EntryCard
                 :entry="entry"
                 @copy-link="copyLink(entry)"
-                @update="clickUpdateEntryBtn(entry)"
+                @update="showUpdateEntryModal(entry)"
                 @delete="clickDeleteEntryBtn(entry)" />
             </v-col>
           </Draggable>
@@ -92,27 +92,23 @@
         @cancel="showDeleteCategory = false" />
     </CenterModal>
 
-    <SidebarModal
-      title="Создать запись в FAQ"
-      :is-open="showCreateEntry"
-      @close="showCreateEntry = false">
-      <CreateEntryContent
-        v-if="showCreateEntry"
-        :category-id="category.id"
-        :order="category.entries.length"
-        @success="successCreateEntry"
-        @cancel="showCreateEntry = false" />
+    <SidebarModal ref="create-entry-modal">
+      <template #default="{ confirm, close }">
+        <CreateEntryContent
+          :modal-confirm="confirm"
+          :modal-close="close"
+          :category-id="category.id"
+          :order="category.entries.length" />
+      </template>
     </SidebarModal>
 
-    <SidebarModal
-      title="Изменить запись в FAQ"
-      :is-open="showUpdateEntry"
-      @close="showUpdateEntry = false">
-      <UpdateEntryContent
-        v-if="showUpdateEntry"
-        :entry="currentEntry"
-        @success="successUpdateEntry"
-        @cancel="showUpdateEntry = false" />
+    <SidebarModal ref="update-entry-modal">
+      <template #default="{ confirm, close }">
+        <UpdateEntryContent
+          :modal-confirm="confirm"
+          :modal-close="close"
+          :entry="currentEntry" />
+      </template>
     </SidebarModal>
 
     <CenterModal
@@ -177,9 +173,6 @@ export default {
       showUpdateCategory: false,
       showDeleteCategory: false,
 
-      showCreateEntry: false,
-
-      showUpdateEntry: false,
       showDeleteEntry: false,
 
       dragOptions: {
@@ -236,6 +229,29 @@ export default {
       }
     },
 
+    async showCreateEntryModal() {
+      const result = await this.$refs['create-entry-modal'].open();
+
+      if (result.status) {
+        const entry = result.data;
+        this.category.entries.push(entry);
+      }
+    },
+
+    async showUpdateEntryModal(currentEntry) {
+      this.currentEntry = currentEntry;
+
+      const result = await this.$refs['update-entry-modal'].open();
+
+      if (result.status) {
+        const modifiedEntry = result.data;
+
+        this.category.entries = this.category.entries.map((entry) =>
+          entry.id === modifiedEntry.id ? modifiedEntry : entry,
+        );
+      }
+    },
+
     successUpdateCategory(name) {
       this.category.name = name;
 
@@ -258,24 +274,6 @@ export default {
         .catch((error) => {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         });
-    },
-
-    successCreateEntry(entry) {
-      this.category.entries = [...this.category.entries, entry];
-      this.showCreateEntry = false;
-    },
-
-    clickUpdateEntryBtn(entry) {
-      this.currentEntry = entry;
-      this.showUpdateEntry = true;
-    },
-
-    successUpdateEntry(modifiedEntry) {
-      this.category.entries = this.category.entries.map((entry) =>
-        entry.id === modifiedEntry.id ? modifiedEntry : entry,
-      );
-
-      this.showUpdateEntry = false;
     },
 
     clickDeleteEntryBtn(entry) {

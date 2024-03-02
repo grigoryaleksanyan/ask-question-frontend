@@ -1,11 +1,11 @@
 <template>
-  <v-form
-    ref="feedback-form"
-    v-model="valid"
-    class="ma-0 pa-0"
-    @submit.prevent="submitForm">
-    <SidebarContentWrapper>
-      <template #default>
+  <SidebarContentWrapper title="Обратная связь">
+    <template #default>
+      <v-form
+        ref="feedback-form"
+        v-model="valid"
+        class="ma-0 pa-0"
+        @submit.prevent="submitForm">
         <v-row
           no-gutters
           class="mt-2">
@@ -44,23 +44,23 @@
               outlined />
           </v-col>
         </v-row>
-      </template>
-      <template #footer>
-        <v-btn
-          type="submit"
-          class="mr-2 white--text"
-          color="main-color">
-          Отправить
-        </v-btn>
-        <v-btn
-          color="main-color"
-          outlined
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </SidebarContentWrapper>
-  </v-form>
+      </v-form>
+    </template>
+    <template #footer>
+      <v-btn
+        class="white--text"
+        color="main-color"
+        @click="submitForm">
+        Отправить
+      </v-btn>
+      <v-btn
+        color="main-color"
+        outlined
+        @click="modalClose">
+        Отмена
+      </v-btn>
+    </template>
+  </SidebarContentWrapper>
 </template>
 
 <script>
@@ -72,6 +72,18 @@ import { Create } from '../../../repositories/feedback-repository';
 
 export default {
   name: 'SidebarFeedbackContent',
+
+  props: {
+    modalConfirm: {
+      type: Function,
+      required: true,
+    },
+
+    modalClose: {
+      type: Function,
+      required: true,
+    },
+  },
 
   data() {
     return {
@@ -94,27 +106,19 @@ export default {
     ...mapMutations('alert', ['ADD_ALERT']),
     ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
 
-    validate() {
-      this.$refs['feedback-form'].validate();
-    },
-
     async submitForm() {
       if (this.$refs['feedback-form'].validate()) {
         try {
           this.ADD_LOADER();
           await Create(this.controls);
           this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Обратная связь отправлена' });
-          this.$emit('success');
+          this.modalConfirm();
         } catch (error) {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         } finally {
           this.REMOVE_LOADER();
         }
       }
-    },
-
-    cancel() {
-      this.$emit('cancel');
     },
   },
 };

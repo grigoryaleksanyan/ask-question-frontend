@@ -1,10 +1,10 @@
 <template>
-  <v-form
-    ref="create-entry"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <SidebarContentWrapper>
-      <template #default>
+  <SidebarContentWrapper title="Создать запись в FAQ">
+    <template #default>
+      <v-form
+        ref="create-entry"
+        v-model="valid"
+        @submit.prevent="submitForm">
         <v-row
           no-gutters
           class="mt-2">
@@ -20,23 +20,23 @@
             <RichEditor v-model="controls.answer" />
           </v-col>
         </v-row>
-      </template>
-      <template #footer>
-        <v-btn
-          type="submit"
-          class="mr-2 white--text"
-          color="main-color">
-          Создать
-        </v-btn>
-        <v-btn
-          color="main-color"
-          outlined
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </SidebarContentWrapper>
-  </v-form>
+      </v-form>
+    </template>
+    <template #footer>
+      <v-btn
+        class="white--text"
+        color="main-color"
+        @click="submitForm">
+        Создать
+      </v-btn>
+      <v-btn
+        color="main-color"
+        outlined
+        @click="modalClose">
+        Отмена
+      </v-btn>
+    </template>
+  </SidebarContentWrapper>
 </template>
 
 <script>
@@ -58,6 +58,16 @@ export default {
   },
 
   props: {
+    modalConfirm: {
+      type: Function,
+      required: true,
+    },
+
+    modalClose: {
+      type: Function,
+      required: true,
+    },
+
     categoryId: {
       type: String,
       required: true,
@@ -105,17 +115,13 @@ export default {
 
           this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Запись успешно создана' });
 
-          this.$emit('success', entry);
+          this.modalConfirm(entry);
         } catch (error) {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         } finally {
           this.REMOVE_LOADER();
         }
       }
-    },
-
-    cancel() {
-      this.$emit('cancel');
     },
   },
 };
