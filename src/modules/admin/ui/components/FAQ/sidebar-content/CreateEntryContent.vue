@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import xss from 'xss';
+import sanitizeHtml from '@/core/helpers/html-sanitize-helper';
 
 import { mapMutations } from 'vuex';
 
@@ -104,7 +104,7 @@ export default {
           const entry = {
             faqCategoryId: this.categoryId,
             question: this.controls.question,
-            answer: xss(this.controls.answer),
+            answer: sanitizeHtml(this.controls.answer),
             order: this.order,
           };
 
