@@ -4,15 +4,23 @@
       <div
         v-if="isOpen"
         class="modal-overlay"
-        @click="closeOnClickAway ? close() : null"></div>
+        @click="clickOnOverlay"></div>
     </transition>
     <transition name="modal">
       <div
         v-if="isOpen || forcedSlotRender"
         class="modal-wrapper"
         :class="{ 'modal-hide': forcedSlotRender && !isOpen }">
+        <transition name="preloader">
+          <div
+            v-if="showPreloader"
+            class="modal-preloader">
+            <SidebarPreloader />
+          </div>
+        </transition>
         <slot
           :is-open="isOpen"
+          :toggle-preloader="togglePreloader"
           :confirm="confirm"
           :close="close">
         </slot>
@@ -22,8 +30,14 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+
 export default {
   name: 'SidebarModal',
+
+  components: {
+    SidebarPreloader: defineAsyncComponent(() => import('./SidebarPreloader.vue')),
+  },
 
   provide() {
     return {
@@ -49,14 +63,25 @@ export default {
   data() {
     return {
       isOpen: false,
+      showPreloader: false,
     };
   },
 
   methods: {
     handleKeydown(event) {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && !this.showPreloader) {
         this.close();
       }
+    },
+
+    clickOnOverlay() {
+      if (this.closeOnClickAway && !this.showPreloader) {
+        this.close();
+      }
+    },
+
+    togglePreloader(status) {
+      this.showPreloader = status;
     },
 
     toggleScroll(value) {
@@ -109,9 +134,13 @@ export default {
 <style lang="scss" scoped>
 @import './styles/modal-variables';
 
+$overlay-z-index: 10000;
+$wrapper-z-index: $overlay-z-index + 1;
+$preloader-z-index: $overlay-z-index + 2;
+
 .modal-overlay {
   position: fixed;
-  z-index: 99;
+  z-index: $overlay-z-index;
   width: 100%;
   height: 100%;
   background-color: rgb(0 0 0 / 50%);
@@ -120,7 +149,7 @@ export default {
 
 .modal-wrapper {
   position: fixed;
-  z-index: 100;
+  z-index: $wrapper-z-index;
   top: 0;
   right: 0;
   overflow: hidden;
@@ -133,6 +162,15 @@ export default {
 
 .modal-hide {
   display: none;
+}
+
+.modal-preloader {
+  position: absolute;
+  z-index: $preloader-z-index;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 20%);
+  inset: 0;
 }
 
 .overlay-enter-active,
@@ -153,6 +191,16 @@ export default {
 .modal-enter,
 .modal-leave-to {
   transform: translateX(100%);
+}
+
+.preloader-enter-active,
+.preloader-leave-active {
+  transition: all 0.2s ease;
+}
+
+.preloader-enter,
+.preloader-leave-to {
+  opacity: 0;
 }
 
 @media (width <= $modal-width) {
