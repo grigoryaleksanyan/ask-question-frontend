@@ -10,19 +10,20 @@
 
             <v-btn
               title="Изменить"
-              class="mr-2"
               icon
-              size="small"
+              variant="flat"
+              size="x-small"
               @click="showUpdateCategory = true">
-              <v-icon>mdi-pencil-outline</v-icon>
+              <v-icon size="20">mdi-pencil-outline</v-icon>
             </v-btn>
 
             <v-btn
               title="Удалить"
               icon
-              size="small"
+              variant="flat"
+              size="x-small"
               @click="showDeleteCategory = true">
-              <v-icon>mdi-delete-outline</v-icon>
+              <v-icon size="20">mdi-delete-outline</v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -32,7 +33,6 @@
             <v-btn
               size="small"
               color="blue-grey"
-              class="text-white"
               @click="showCreateEntryModal">
               Добавить запись
               <v-icon
@@ -43,28 +43,27 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row>
-          <Draggable
-            v-model="draggableEntries"
-            v-bind="dragOptions"
-            class="col-12 pa-0"
-            handle=".handle"
-            draggable=".draggable"
-            drag-class="vuedraggable-drag"
-            ghost-class="vuedraggable-ghost">
+        <Draggable
+          v-model="draggableEntries"
+          v-bind="dragOptions"
+          class="v-row"
+          item-key="id"
+          handle=".handle"
+          draggable=".draggable"
+          drag-class="vuedraggable-drag"
+          ghost-class="vuedraggable-ghost">
+          <template #item="{ element }">
             <v-col
-              v-for="entry in category.entries"
-              :key="entry.id"
               cols="12"
               class="draggable">
               <EntryCard
-                :entry="entry"
-                @copy-link="copyLink(entry)"
-                @update="showUpdateEntryModal(entry)"
-                @delete="clickDeleteEntryBtn(entry)" />
+                :entry="element"
+                @copy-link="copyLink(element)"
+                @update="showUpdateEntryModal(element)"
+                @delete="clickDeleteEntryBtn(element)" />
             </v-col>
-          </Draggable>
-        </v-row>
+          </template>
+        </Draggable>
       </v-col>
     </v-row>
 

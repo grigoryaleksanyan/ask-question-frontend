@@ -18,7 +18,6 @@
             <v-btn
               size="small"
               color="blue-grey"
-              class="text-white"
               @click="showCreateArea = true">
               Добавить область
               <v-icon
@@ -29,28 +28,28 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row>
-          <Draggable
-            v-model="draggableAreas"
-            v-bind="dragOptions"
-            item-key="id"
-            handle=".handle"
-            draggable=".draggable"
-            drag-class="vuedraggable-drag"
-            ghost-class="vuedraggable-ghost">
-            <template #item="{ element }">
-              <v-col
-                :key="element.id"
-                cols="12"
-                class="draggable">
-                <AreaCard
-                  :area="element"
-                  @update="clickUpdateAreaBtn(element)"
-                  @delete="clickDeleteAreaBtn(element)" />
-              </v-col>
-            </template>
-          </Draggable>
-        </v-row>
+
+        <Draggable
+          v-model="draggableAreas"
+          v-bind="dragOptions"
+          class="v-row"
+          item-key="id"
+          handle=".handle"
+          draggable=".draggable"
+          drag-class="vuedraggable-drag"
+          ghost-class="vuedraggable-ghost">
+          <template #item="{ element }">
+            <v-col
+              :key="element.id"
+              cols="12"
+              class="draggable">
+              <AreaCard
+                :area="element"
+                @update="clickUpdateAreaBtn(element)"
+                @delete="clickDeleteAreaBtn(element)" />
+            </v-col>
+          </template>
+        </Draggable>
       </v-col>
     </v-row>
 

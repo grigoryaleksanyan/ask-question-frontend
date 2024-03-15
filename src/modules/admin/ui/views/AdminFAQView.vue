@@ -10,30 +10,45 @@
             <v-col cols="12">
               <h1 class="text-h6 text-sm-h5">Категории FAQ</h1>
             </v-col>
+          </v-row>
 
-            <Draggable
-              v-model="draggableCategories"
-              item-key="id"
-              style="display: flex; flex: 1 1 auto; flex-wrap: wrap"
-              v-bind="dragOptions"
-              handle=".draggable"
-              draggable=".draggable"
-              drag-class="vuedraggable-drag"
-              ghost-class="vuedraggable-ghost">
-              <template #item="{ element }">
-                <v-col
-                  :key="element.id"
-                  class="col-12 col-sm-4 col-md-4 col-lg-3 draggable">
-                  <CategoryCard :category="element" />
-                </v-col>
-              </template>
-            </Draggable>
-            <v-col class="col-12 col-sm-4 col-md-4 col-lg-3">
-              <CreateCardButton
-                title="Новая категория"
-                @click="showCreateCategory = true" />
+          <v-row>
+            <v-col cols="12">
+              <v-btn
+                size="small"
+                color="blue-grey"
+                @click="showCreateCategory = true">
+                Добавить категорию
+                <v-icon
+                  end
+                  theme="dark">
+                  mdi-plus
+                </v-icon>
+              </v-btn>
             </v-col>
           </v-row>
+
+          <Draggable
+            v-model="draggableCategories"
+            v-bind="dragOptions"
+            class="v-row"
+            item-key="id"
+            handle=".draggable"
+            draggable=".draggable"
+            drag-class="vuedraggable-drag"
+            ghost-class="vuedraggable-ghost">
+            <template #item="{ element }">
+              <v-col
+                :key="element.id"
+                cols="12"
+                sm="4"
+                md="4"
+                lg="3"
+                class="draggable">
+                <CategoryCard :category="element" />
+              </v-col>
+            </template>
+          </Draggable>
         </v-col>
       </v-row>
 
@@ -48,6 +63,7 @@
           @cancel="showCreateCategory = false" />
       </CenterModal>
     </template>
+
     <router-view></router-view>
   </v-container>
 </template>
@@ -61,7 +77,6 @@ import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 import { GetAll, SetOrder } from '@/modules/faq/repositories/faq-category-repository';
 
 import CategoryCard from '../components/FAQ/CategoryCard.vue';
-import CreateCardButton from '../components/FAQ/CreateCardButton.vue';
 
 import CreateCategory from '../components/FAQ/center-modal-content/CreateCategory.vue';
 
@@ -71,7 +86,6 @@ export default {
   components: {
     Draggable,
     CategoryCard,
-    CreateCardButton,
     CreateCategory,
   },
 
