@@ -1,10 +1,12 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+// import Vue from 'vue';
+// import VueRouter from 'vue-router';
+
+import { createRouter, createWebHistory } from 'vue-router';
 
 import AdminRoutes from '@/modules/admin/routes/index';
 import checkAuth from '@/core/middleware/auth-middleware';
 
-Vue.use(VueRouter);
+// Vue.use(VueRouter);
 
 const routes = [
   {
@@ -39,7 +41,7 @@ const routes = [
   ...AdminRoutes,
 
   {
-    path: '*',
+    path: '/:catchAll(.*)',
     component: () => import('@/core/ui/views/NotFoundView.vue'),
     meta: {
       layout: 'EmptyLayout',
@@ -47,9 +49,8 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: import.meta.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 

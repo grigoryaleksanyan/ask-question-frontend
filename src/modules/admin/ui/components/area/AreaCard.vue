@@ -5,9 +5,10 @@
     <v-row
       no-gutters
       align="center">
-      <v-col>
+      <v-col class="px-2">
         <span> {{ area.title }} </span>
       </v-col>
+
       <v-col class="d-flex justify-end align-center">
         <v-divider
           vertical
@@ -25,14 +26,14 @@
           title="Изменить"
           class="mr-1"
           icon
-          small
+          size="small"
           @click="$emit('update')">
           <v-icon size="20"> mdi-pencil-outline </v-icon>
         </v-btn>
         <v-btn
           title="Удалить"
           icon
-          small
+          size="small"
           @click="$emit('delete')">
           <v-icon size="20"> mdi-delete-outline </v-icon>
         </v-btn>

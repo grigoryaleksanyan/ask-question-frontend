@@ -13,25 +13,26 @@
 
             <Draggable
               v-model="draggableCategories"
-              class="col-12 pa-0"
-              style="display: flex; flex-wrap: wrap"
+              item-key="id"
+              style="display: flex; flex: 1 1 auto; flex-wrap: wrap"
               v-bind="dragOptions"
               handle=".draggable"
               draggable=".draggable"
               drag-class="vuedraggable-drag"
               ghost-class="vuedraggable-ghost">
-              <v-col
-                v-for="category in categories"
-                :key="category.id"
-                class="col-12 col-sm-4 col-md-4 col-lg-3 draggable">
-                <CategoryCard :category="category" />
-              </v-col>
-              <v-col class="col-12 col-sm-4 col-md-4 col-lg-3">
-                <CreateCardButton
-                  title="Новая категория"
-                  @click="showCreateCategory = true" />
-              </v-col>
+              <template #item="{ element }">
+                <v-col
+                  :key="element.id"
+                  class="col-12 col-sm-4 col-md-4 col-lg-3 draggable">
+                  <CategoryCard :category="element" />
+                </v-col>
+              </template>
             </Draggable>
+            <v-col class="col-12 col-sm-4 col-md-4 col-lg-3">
+              <CreateCardButton
+                title="Новая категория"
+                @click="showCreateCategory = true" />
+            </v-col>
           </v-row>
         </v-col>
       </v-row>

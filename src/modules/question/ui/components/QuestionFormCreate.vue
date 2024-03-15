@@ -20,10 +20,10 @@
               class="main-form-textarea"
               :rules="rules"
               rows="1"
-              row-height="1"
+              max-rows="3"
               auto-grow
-              background-color="white"
-              outlined
+              bg-color="white"
+              variant="outlined"
               hide-details
               no-resize
               placeholder="Задайте вопрос"
@@ -34,7 +34,7 @@
             style="max-width: 85px">
             <v-btn
               title="Дополнительные сведения"
-              depressed
+              variant="flat"
               elevation="1"
               color="primary"
               @click="toggleForm">
@@ -63,14 +63,14 @@
                   <v-select
                     v-model="controls.area"
                     :items="areas"
-                    item-text="title"
+                    item-title="title"
                     item-value="title"
                     label="Область*"
                     :rules="rules"
                     :menu-props="{ bottom: true, offsetY: true }" />
                 </v-col>
               </v-row>
-              <v-row class="mt-0">
+              <v-row>
                 <v-col class="pt-0">
                   <v-select
                     v-model="controls.speaker"
@@ -93,7 +93,6 @@
                   <v-btn
                     type="submit"
                     elevation="1"
-                    depressed
                     color="primary">
                     Отправить
                   </v-btn>
@@ -195,7 +194,9 @@ export default {
     },
 
     async submitForm() {
-      if (this.$refs['question-add'].validate()) {
+      const result = await this.$refs['question-add'].validate();
+
+      if (result.valid) {
         try {
           await Create(this.capctha, this.controls);
 
@@ -216,26 +217,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .main-form-textarea textarea {
-  max-height: 90px !important;
-  padding-top: 13px !important;
-  padding-bottom: 13px !important;
-  margin-top: 3px !important;
-  margin-right: 3px;
-  margin-bottom: 3px !important;
-  line-height: 1.5em !important;
-  overflow-y: auto !important;
+:deep(.main-form-textarea textarea) {
+  margin: 3px;
 }
 
-::v-deep .main-form-textarea textarea::-webkit-scrollbar {
+:deep(.main-form-textarea textarea::-webkit-scrollbar) {
   width: 5px;
 }
 
-::v-deep .main-form-textarea textarea::-webkit-scrollbar-track {
+:deep(.main-form-textarea textarea::-webkit-scrollbar-track) {
   background: transparent;
 }
 
-::v-deep .main-form-textarea textarea::-webkit-scrollbar-thumb {
+:deep(.main-form-textarea textarea::-webkit-scrollbar-thumb) {
   border-radius: 5px;
   background-color: $scrollbar-color;
 }

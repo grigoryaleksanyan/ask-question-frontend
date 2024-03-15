@@ -8,20 +8,20 @@
         <v-text-field
           v-model="name"
           :rules="rules"
-          outlined
+          variant="outlined"
           label="Название" />
       </template>
       <template #actions>
         <v-btn
           type="submit"
           color="primary"
-          class="white--text">
+          class="text-white">
           Изменить
         </v-btn>
         <v-btn
           color="blue-grey"
-          class="white--text"
-          outlined
+          class="text-white"
+          variant="outlined"
           @click="cancel">
           Отмена
         </v-btn>

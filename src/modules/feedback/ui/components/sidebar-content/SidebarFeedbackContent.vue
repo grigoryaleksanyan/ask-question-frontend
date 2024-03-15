@@ -14,16 +14,16 @@
               v-model="controls.username"
               label="Имя"
               :rules="rules"
-              dense
-              outlined />
+              density="compact"
+              variant="outlined" />
           </v-col>
           <v-col cols="12">
             <v-text-field
               v-model="controls.email"
               label="Email"
               :rules="rules"
-              dense
-              outlined />
+              density="compact"
+              variant="outlined" />
           </v-col>
           <v-col cols="12">
             <v-select
@@ -31,8 +31,7 @@
               label="Тема обращения"
               :items="themes"
               :rules="rules"
-              dense
-              outlined
+              variant="outlined"
               :menu-props="{ bottom: true, offsetY: true }" />
           </v-col>
           <v-col cols="12">
@@ -41,23 +40,29 @@
               :rules="rules"
               label="Текст обращения"
               auto-grow
-              outlined />
+              variant="outlined" />
           </v-col>
         </v-row>
       </v-form>
     </template>
     <template #footer>
       <v-btn
-        class="white--text"
-        color="main-color"
+        color="primary"
         @click="submitForm">
         Отправить
       </v-btn>
       <v-btn
-        color="main-color"
-        outlined
+        color="primary"
+        variant="outlined"
         @click="modalClose">
         Отмена
+      </v-btn>
+
+      <v-btn
+        color="primary"
+        variant="outlined"
+        @click="show">
+        preloader
       </v-btn>
     </template>
   </SidebarContentWrapper>
@@ -74,6 +79,11 @@ export default {
   name: 'SidebarFeedbackContent',
 
   props: {
+    showPreloader: {
+      type: Function,
+      required: true,
+    },
+
     modalConfirm: {
       type: Function,
       required: true,
@@ -119,6 +129,13 @@ export default {
           this.REMOVE_LOADER();
         }
       }
+    },
+
+    show() {
+      this.showPreloader(true);
+      setTimeout(() => {
+        this.showPreloader(false);
+      }, 2000);
     },
   },
 };

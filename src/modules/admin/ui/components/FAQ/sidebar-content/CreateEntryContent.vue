@@ -13,7 +13,7 @@
               v-model="controls.question"
               :rules="rules"
               label="Вопрос"
-              outlined />
+              variant="outlined" />
           </v-col>
 
           <v-col cols="12">
@@ -24,14 +24,14 @@
     </template>
     <template #footer>
       <v-btn
-        class="white--text"
+        class="text-white"
         color="main-color"
         @click="submitForm">
         Создать
       </v-btn>
       <v-btn
         color="main-color"
-        outlined
+        variant="outlined"
         @click="modalClose">
         Отмена
       </v-btn>

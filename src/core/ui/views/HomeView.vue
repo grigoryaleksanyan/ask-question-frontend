@@ -26,9 +26,9 @@
           class="d-flex justify-center mt-12">
           <v-btn
             class="btn-to-popular-question"
-            color="rgba(255, 255, 255, 0.6)"
+            color="rgba(255, 255, 255, 0.5)"
             icon
-            @click="$vuetify.goTo('#popular')">
+            @click="goTo('#popular', { offset: -headerHeight })">
             <v-icon>mdi-arrow-down-drop-circle-outline</v-icon>
           </v-btn>
         </v-col>
@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import { useGoTo } from 'vuetify';
+
 import VideoBackground from 'vue-responsive-video-background-player';
 
 import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
@@ -70,11 +72,18 @@ export default {
     QuestionCard,
   },
 
+  setup() {
+    const goTo = useGoTo();
+    return { goTo };
+  },
+
   data() {
     return {
       backgroundVideo: new URL('@/core/assets/video/background.mp4', import.meta.url).href,
       backgroundPoster: new URL('@/core/assets/img/poster.jpg', import.meta.url).href,
       questions: [],
+
+      headerHeight: 64,
     };
   },
 };

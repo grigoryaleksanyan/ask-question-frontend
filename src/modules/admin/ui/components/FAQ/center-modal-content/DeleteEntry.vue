@@ -6,14 +6,14 @@
     <template #actions>
       <v-btn
         color="error"
-        class="white--text"
+        class="text-white"
         @click="confirm">
         Удалить
       </v-btn>
       <v-btn
         color="blue-grey"
-        class="white--text"
-        outlined
+        class="text-white"
+        variant="outlined"
         @click="cancel">
         Отмена
       </v-btn>

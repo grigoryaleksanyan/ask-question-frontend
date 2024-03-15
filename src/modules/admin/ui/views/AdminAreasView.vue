@@ -16,14 +16,14 @@
         <v-row>
           <v-col cols="12">
             <v-btn
-              small
+              size="small"
               color="blue-grey"
-              class="white--text"
+              class="text-white"
               @click="showCreateArea = true">
               Добавить область
               <v-icon
-                right
-                dark>
+                end
+                theme="dark">
                 mdi-plus
               </v-icon>
             </v-btn>
@@ -33,21 +33,22 @@
           <Draggable
             v-model="draggableAreas"
             v-bind="dragOptions"
-            class="col-12 pa-0"
+            item-key="id"
             handle=".handle"
             draggable=".draggable"
             drag-class="vuedraggable-drag"
             ghost-class="vuedraggable-ghost">
-            <v-col
-              v-for="area in areas"
-              :key="area.id"
-              cols="12"
-              class="draggable">
-              <AreaCard
-                :area="area"
-                @update="clickUpdateAreaBtn(area)"
-                @delete="clickDeleteAreaBtn(area)" />
-            </v-col>
+            <template #item="{ element }">
+              <v-col
+                :key="element.id"
+                cols="12"
+                class="draggable">
+                <AreaCard
+                  :area="element"
+                  @update="clickUpdateAreaBtn(element)"
+                  @delete="clickDeleteAreaBtn(element)" />
+              </v-col>
+            </template>
           </Draggable>
         </v-row>
       </v-col>

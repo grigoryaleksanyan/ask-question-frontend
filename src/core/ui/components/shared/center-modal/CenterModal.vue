@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    :value="isOpen"
+    :model-value="isOpen"
     persistent
     max-width="600">
     <v-card>

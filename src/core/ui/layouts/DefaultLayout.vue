@@ -2,21 +2,21 @@
   <div>
     <v-navigation-drawer
       v-model="drawer"
-      app
+      theme="dark"
       temporary
-      dark
       class="drawer-navigation">
       <DrawerNavigation :nav-items="navItems" />
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      dark>
+    <v-app-bar theme="dark">
       <v-app-bar-nav-icon
         class="drawer-navigation-burger"
         @click="toggleDrawer" />
+
       <AppLogo />
+
       <v-spacer></v-spacer>
+
       <HeaderNavigation
         :nav-items="navItems"
         class="header-navigation" />
@@ -26,28 +26,29 @@
       <router-view></router-view>
     </v-main>
 
-    <v-footer dark>
+    <v-footer theme="dark">
       @{{ year }} Grigory Aleksanyan
+
       <v-spacer></v-spacer>
 
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
+      <v-tooltip
+        text="Обратная связь по порталу"
+        location="start">
+        <template #activator="{ props }">
           <v-btn
-            dark
             icon
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
             @click="showFeedbackModal">
             <v-icon size="24px">mdi-email-open</v-icon>
           </v-btn>
         </template>
-        <span>Обратная связь по порталу</span>
       </v-tooltip>
     </v-footer>
 
     <SidebarModal ref="feedback-modal">
-      <template #default="{ confirm, close }">
+      <template #default="{ togglePreloader, confirm, close }">
         <SidebarFeedbackContent
+          :show-preloader="togglePreloader"
           :modal-confirm="confirm"
           :modal-close="close" />
       </template>

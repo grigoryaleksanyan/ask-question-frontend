@@ -1,11 +1,10 @@
 <template>
   <div class="logo-wrapper">
     <v-img
-      position="left center"
       alt="logo"
-      contain
-      height="100%"
-      :src="imageUrl" />
+      width="auto"
+      :src="imageUrl">
+    </v-img>
   </div>
 </template>
 
@@ -15,7 +14,7 @@ export default {
 
   data() {
     return {
-      imageUrl: new URL('@/core/assets/logo.png', import.meta.url).href,
+      imageUrl: new URL('@/core/assets/logo.svg', import.meta.url).href,
     };
   },
 };
@@ -23,9 +22,11 @@ export default {
 
 <style lang="scss" scoped>
 .logo-wrapper {
+  display: flex;
   max-width: 140px;
   height: 100%;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 15px;
 }
 </style>

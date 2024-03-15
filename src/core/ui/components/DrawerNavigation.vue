@@ -6,15 +6,10 @@
       v-for="item in navItems"
       :key="item.title"
       :to="item.link"
+      :prepend-icon="item.icon"
+      :title="item.title"
       link
       class="mb-0 pl-4">
-      <v-list-item-icon>
-        <v-icon>{{ item.icon }}</v-icon>
-      </v-list-item-icon>
-
-      <v-list-item-content>
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item-content>
     </v-list-item>
   </v-list>
 </template>

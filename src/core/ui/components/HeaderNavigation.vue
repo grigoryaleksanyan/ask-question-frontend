@@ -3,11 +3,11 @@
     <v-btn
       v-for="(item, i) in navItems"
       :key="i"
-      text
+      variant="text"
       :to="item.link">
       <v-icon
-        left
-        dark>
+        start
+        theme="dark">
         {{ item.icon }}
       </v-icon>
       <div>{{ item.title }}</div>

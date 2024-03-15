@@ -1,16 +1,10 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import ru from 'vuetify/lib/locale/ru';
-import * as directives from 'vuetify/es5/directives';
-
 import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
-import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
-import 'tiptap-vuetify/dist/main.css';
+import { createVuetify } from 'vuetify';
+import { ru } from 'vuetify/locale';
 
-Vue.use(Vuetify, { directives });
-
-const vuetify = new Vuetify({
+export default createVuetify({
   lang: {
     locales: { ru },
     current: 'ru',
@@ -19,21 +13,10 @@ const vuetify = new Vuetify({
     iconfont: 'mdi',
   },
   theme: {
-    dark: false,
     themes: {
-      options: {
-        customProperties: true,
-      },
       light: {
         'main-color': '#7e57c2',
       },
     },
   },
 });
-
-Vue.use(TiptapVuetifyPlugin, {
-  vuetify,
-  iconsGroup: 'mdi',
-});
-
-export default vuetify;

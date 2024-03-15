@@ -2,23 +2,20 @@
   <div>
     <v-navigation-drawer
       v-model="drawer"
-      app>
+      theme="dark">
       <DrawerNavigation :nav-items="navItems" />
     </v-navigation-drawer>
 
-    <v-app-bar app>
+    <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
 
       <v-toolbar-title class="text-subtitle-1"> Панель администратора </v-toolbar-title>
 
-      <v-spacer></v-spacer>
-
-      <v-menu offset-y>
-        <template #activator="{ on, attrs }">
+      <v-menu>
+        <template #activator="{ props }">
           <v-btn
             icon
-            v-bind="attrs"
-            v-on="on">
+            v-bind="props">
             <v-icon>mdi-cog-outline</v-icon>
           </v-btn>
         </template>
@@ -26,7 +23,7 @@
         <v-list>
           <v-list-item>
             <v-btn
-              depressed
+              variant="flat"
               width="100%"
               @click="showUserProfile = true">
               Профиль
@@ -34,7 +31,7 @@
           </v-list-item>
           <v-list-item>
             <v-btn
-              depressed
+              variant="flat"
               width="100%"
               @click="logout">
               Выйти

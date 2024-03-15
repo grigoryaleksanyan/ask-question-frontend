@@ -1,6 +1,6 @@
 <template>
   <v-overlay
-    :value="SHOW_PRELOADER"
+    :model-value="SHOW_PRELOADER"
     style="z-index: 9">
     <v-progress-circular
       :size="70"

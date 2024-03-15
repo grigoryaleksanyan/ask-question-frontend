@@ -17,15 +17,15 @@
             v-model="controls.email"
             type="email"
             label="Введите Email"
-            outlined />
+            variant="outlined" />
           <v-text-field
             v-model="controls.password"
             type="password"
             label="Введите Пароль"
-            outlined />
+            variant="outlined" />
 
           <v-btn
-            depressed
+            variant="flat"
             color="primary"
             @click="onSubmit">
             Войти

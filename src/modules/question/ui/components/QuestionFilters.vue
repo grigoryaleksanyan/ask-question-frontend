@@ -4,9 +4,9 @@
       <v-col cols="6">
         <v-btn-toggle
           v-model="sortingDirection"
-          borderless>
+          density="compact">
           <v-btn
-            small
+            size="small"
             title="Сначала новые">
             <v-icon
               size="20"
@@ -16,7 +16,7 @@
           </v-btn>
 
           <v-btn
-            small
+            size="small"
             title="Сначала старые">
             <v-icon
               size="20"
@@ -31,7 +31,7 @@
         class="d-flex justify-end">
         <v-btn
           elevation="0"
-          small
+          size="small"
           title="Показать/скрыть блок фильтров"
           @click="toggleFilters">
           <span class="mr-1"> Фильтры</span>
@@ -62,10 +62,10 @@
           <v-select
             :items="speaker"
             label="Спикер"
-            outlined
+            variant="outlined"
             clearable
             hide-details
-            dense
+            density="compact"
             :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
         <v-col
@@ -74,10 +74,10 @@
           <v-select
             :items="zone"
             label="Зона ответственности"
-            outlined
+            variant="outlined"
             clearable
             hide-details
-            dense
+            density="compact"
             :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
         <v-col
@@ -86,10 +86,10 @@
           <v-select
             :items="status"
             label="Статус"
-            outlined
+            variant="outlined"
             clearable
             hide-details
-            dense
+            density="compact"
             :menu-props="{ bottom: true, offsetY: true }" />
         </v-col>
       </v-row>

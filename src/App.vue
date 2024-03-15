@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+
 import AppPreloader from '@/modules/preloader/ui/components/AppPreloader.vue';
 import AppAlert from '@/modules/alert/ui/components/AppAlert.vue';
 
@@ -21,7 +23,7 @@ export default {
   computed: {
     layout() {
       const layout = this.$route.meta.layout || 'DefaultLayout';
-      return () => import(`@/core/ui/layouts/${layout}.vue`);
+      return defineAsyncComponent(() => import(`@/core/ui/layouts/${layout}.vue`));
     },
   },
 };

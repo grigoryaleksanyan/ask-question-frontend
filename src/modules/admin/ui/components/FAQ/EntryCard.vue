@@ -55,7 +55,7 @@
               title="Скопировать ссылку на запись"
               class="mr-1"
               icon
-              small
+              size="small"
               @click="$emit('copy-link')">
               <v-icon size="20">mdi-link</v-icon>
             </v-btn>
@@ -64,14 +64,14 @@
               title="Изменить"
               class="mr-1"
               icon
-              small
+              size="small"
               @click="$emit('update')">
               <v-icon size="20">mdi-pencil-outline</v-icon>
             </v-btn>
             <v-btn
               title="Удалить"
               icon
-              small
+              size="small"
               @click="$emit('delete')">
               <v-icon size="20">mdi-delete-outline</v-icon>
             </v-btn>

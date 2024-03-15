@@ -86,8 +86,7 @@
               <v-col class="d-flex justify-end align-center">
                 <v-btn
                   icon
-                  class="mr-1"
-                  @click.prevent="setLike">
+                  class="mr-1">
                   <v-icon
                     title="Понравился"
                     size="20">
@@ -97,8 +96,7 @@
                 <span class="text-caption text-sm-body-2 mr-1">{{ replaceСounter(99) }}</span>
                 <v-btn
                   icon
-                  class="mr-1"
-                  @click.prevent="setDislike">
+                  class="mr-1">
                   <v-icon
                     title="Не понравился"
                     size="20">

@@ -25,20 +25,18 @@
           cols="12"
           sm="9">
           <v-expansion-panels
-            active-class="active-panel"
-            hover
-            flat
-            accordion>
+            selected-class="active-panel"
+            variant="accordion">
             <v-expansion-panel
               v-for="entry in category.entries"
               :id="entry.id"
               :key="entry.id">
-              <v-expansion-panel-header>
+              <v-expansion-panel-title>
                 <span class="question">{{ entry.question }}</span>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
+              </v-expansion-panel-title>
+              <v-expansion-panel-text>
                 <div v-html="entry.answer"></div>
-              </v-expansion-panel-content>
+              </v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col>

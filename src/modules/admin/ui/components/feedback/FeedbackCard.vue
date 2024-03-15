@@ -54,7 +54,7 @@
             <v-btn
               title="Удалить"
               icon
-              small
+              size="small"
               @click="$emit('delete')">
               <v-icon size="20">mdi-delete-outline</v-icon>
             </v-btn>

@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver v-slot="{ valid, handleSubmit }">
+  <VeeForm v-slot="{ meta, handleSubmit }">
     <CenterModalContentWrapper>
       <template #default>
         <template v-if="GET_USER_DATA.userRoleId == 2">
@@ -17,8 +17,8 @@
         <template v-if="!showChangePassword">
           <v-btn
             class="mt-5"
-            depressed
-            small
+            variant="flat"
+            size="small"
             @click="showChangePassword = true">
             Изменить пароль
           </v-btn>
@@ -27,60 +27,65 @@
         <div
           v-show="showChangePassword"
           class="mt-4">
-          <ValidationProvider
-            v-slot="{ errors }"
+          <VeeField
+            v-slot="{ field, errors }"
+            name="old-password"
             rules="required">
             <v-text-field
+              v-bind="field"
               v-model="controls.password"
               label="Старый пароль"
-              dense
-              outlined
+              density="compact"
+              variant="outlined"
               :error-messages="errors" />
-          </ValidationProvider>
+          </VeeField>
 
-          <ValidationProvider
-            v-slot="{ errors }"
-            rules="required"
-            vid="newPassword">
+          <VeeField
+            v-slot="{ field, errors }"
+            name="new-password"
+            rules="required">
             <v-text-field
+              v-bind="field"
               v-model="controls.newPassword"
               label="Новый пароль"
-              dense
-              outlined
+              density="compact"
+              variant="outlined"
               :error-messages="errors" />
-          </ValidationProvider>
+          </VeeField>
 
-          <ValidationProvider
-            v-slot="{ errors }"
-            rules="required|confirmed:newPassword">
+          <VeeField
+            v-slot="{ field, errors }"
+            name="new-password-confirm"
+            rules="required|confirmed:@new-password">
             <v-text-field
+              v-bind="field"
               v-model="controls.confirmPassword"
               label="Подтвердите новый пароль"
-              dense
-              outlined
+              density="compact"
+              variant="outlined"
               :error-messages="errors" />
-          </ValidationProvider>
+          </VeeField>
         </div>
       </template>
       <template #actions>
         <v-btn
           v-if="showChangePassword"
-          :disabled="!valid"
+          :disabled="!meta.valid"
           color="primary"
-          class="white--text"
+          class="text-white"
           @click="handleSubmit(onSubmit)">
           Сохранить
         </v-btn>
         <v-btn
           color="blue-grey"
-          class="white--text"
-          outlined
+          class="text-white"
+          variant="outlined"
           @click="$emit('cancel')">
           Отмена
         </v-btn>
       </template>
     </CenterModalContentWrapper>
-  </ValidationObserver>
+  </VeeForm>
 </template>
 
 <script>

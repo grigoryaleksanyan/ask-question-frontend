@@ -13,13 +13,13 @@
         <v-row>
           <v-col cols="12">
             <v-btn
-              small
+              size="small"
               color="blue-grey"
-              class="white--text">
+              class="text-white">
               Добавить спикера
               <v-icon
-                right
-                dark>
+                end
+                theme="dark">
                 mdi-plus
               </v-icon>
             </v-btn>

@@ -12,7 +12,7 @@
               title="Изменить"
               class="mr-2"
               icon
-              small
+              size="small"
               @click="showUpdateCategory = true">
               <v-icon>mdi-pencil-outline</v-icon>
             </v-btn>
@@ -20,7 +20,7 @@
             <v-btn
               title="Удалить"
               icon
-              small
+              size="small"
               @click="showDeleteCategory = true">
               <v-icon>mdi-delete-outline</v-icon>
             </v-btn>
@@ -30,14 +30,14 @@
         <v-row>
           <v-col cols="12">
             <v-btn
-              small
+              size="small"
               color="blue-grey"
-              class="white--text"
+              class="text-white"
               @click="showCreateEntryModal">
               Добавить запись
               <v-icon
-                right
-                dark>
+                end
+                theme="dark">
                 mdi-plus
               </v-icon>
             </v-btn>

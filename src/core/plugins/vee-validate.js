@@ -1,21 +1,43 @@
-import Vue from 'vue';
-import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
-import { required, email, confirmed } from 'vee-validate/dist/rules';
+import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
+// eslint-disable-next-line camelcase
+import { required, email, confirmed, max_value } from '@vee-validate/rules';
 
-extend('required', {
-  ...required,
-  message: 'Обязательное поле',
-});
+export default {
+  install: (app) => {
+    app.component('VeeForm', Form).component('VeeField', Field).component('VeeErrorMessage', ErrorMessage);
 
-extend('email', {
-  ...email,
-  message: 'Введите корректную почту',
-});
+    configure({
+      validateOnInput: true,
+    });
 
-extend('confirmed', {
-  ...confirmed,
-  message: 'Значение должно совпадать',
-});
+    // использование стандартных правил
+    defineRule('email', email);
+    defineRule('confirmed', confirmed);
+    // стандартное правило с переопределением сообщения ошибки
+    defineRule('required', (value) => {
+      if (!required(value)) {
+        return 'Обязательное поле';
+      }
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
+      return true;
+    });
+
+    // стандартное правило с отображение аргумента в сообщении
+    defineRule('max_value', (value, [max]) => {
+      if (!max_value(value, [max])) {
+        return `Максимальное значение не должно превышать: ${max}`;
+      }
+
+      return true;
+    });
+
+    // собственное правило
+    defineRule('required-date', ({ startDate, endDate }) => {
+      if (startDate === null && endDate === null) {
+        return 'Обязательное поле';
+      }
+
+      return true;
+    });
+  },
+};

@@ -5,7 +5,7 @@
     "node": true,
     "es2022": true
   },
-  "extends": ["eslint-config-airbnb-base", "plugin:vue/recommended", "prettier"],
+  "extends": ["eslint-config-airbnb-base", "plugin:vue/recommended", "plugin:vuetify/base", "prettier"],
   "parserOptions": {
     "ecmaVersion": 2022
   },

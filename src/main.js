@@ -1,22 +1,17 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
+import registerPlugins from '@/core/plugins';
+import registerGlobalComponents from '@/core/plugins/global-components';
+
 import App from './App.vue';
-import router from './router';
-import store from './store';
-import vuetify from './core/plugins/vuetify';
 import httpClient from './core/plugins/http-client';
 
 import '@/core/assets/styles/index.scss';
 
-import '@/core/plugins/global-components';
-import '@/core/plugins/vee-validate';
+const app = createApp(App);
 
-Vue.config.productionTip = false;
-Vue.prototype.httpClient = httpClient;
+registerPlugins(app);
+registerGlobalComponents(app);
 
-// eslint-disable-next-line vue/require-name-property
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: (h) => h(App),
-}).$mount('#app');
+app.config.globalProperties.$httpClient = httpClient;
+
+app.mount('#app');
