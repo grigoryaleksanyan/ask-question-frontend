@@ -134,7 +134,7 @@ export default {
 <style lang="scss" scoped>
 @import './styles/modal-variables';
 
-$overlay-z-index: 10000;
+$overlay-z-index: 1500;
 $wrapper-z-index: $overlay-z-index + 1;
 $preloader-z-index: $overlay-z-index + 2;
 
@@ -178,7 +178,7 @@ $preloader-z-index: $overlay-z-index + 2;
   transition: all 0.2s ease;
 }
 
-.overlay-enter,
+.overlay-enter-from,
 .overlay-leave-to {
   opacity: 0;
 }
@@ -188,7 +188,7 @@ $preloader-z-index: $overlay-z-index + 2;
   transition: all 0.2s ease;
 }
 
-.modal-enter,
+.modal-enter-from,
 .modal-leave-to {
   transform: translateX(100%);
 }
@@ -198,7 +198,7 @@ $preloader-z-index: $overlay-z-index + 2;
   transition: all 0.2s ease;
 }
 
-.preloader-enter,
+.preloader-enter-from,
 .preloader-leave-to {
   opacity: 0;
 }
@@ -215,7 +215,7 @@ $preloader-z-index: $overlay-z-index + 2;
     transition: all 0.2s ease;
   }
 
-  .modal-enter,
+  .modal-enter-from,
   .modal-leave-to {
     transform: translateY(100%);
   }
