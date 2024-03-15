@@ -40,7 +40,7 @@ export default {
   padding: 15px;
   border: 1px solid #d3d4db;
   border-radius: 12px;
-  background-color: #fff;
+  background-color: #e8eaf6;
   cursor: pointer;
   transition: all 0.2s linear;
 }

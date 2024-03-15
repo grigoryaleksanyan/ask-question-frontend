@@ -14,14 +14,13 @@
       <template #actions>
         <v-btn
           type="submit"
-          color="primary"
-          class="text-white">
+          variant="flat"
+          color="primary">
           Создать
         </v-btn>
         <v-btn
-          color="blue-grey"
-          class="text-white"
           variant="outlined"
+          color="blue-grey"
           @click="cancel">
           Отмена
         </v-btn>

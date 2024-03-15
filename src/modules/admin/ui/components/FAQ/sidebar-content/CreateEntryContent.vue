@@ -24,14 +24,14 @@
     </template>
     <template #footer>
       <v-btn
-        class="text-white"
-        color="main-color"
+        variant="flat"
+        color="primary"
         @click="submitForm">
         Создать
       </v-btn>
       <v-btn
-        color="main-color"
         variant="outlined"
+        color="blue-grey"
         @click="modalClose">
         Отмена
       </v-btn>

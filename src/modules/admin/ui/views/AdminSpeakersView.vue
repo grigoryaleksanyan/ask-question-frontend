@@ -14,8 +14,7 @@
           <v-col cols="12">
             <v-btn
               size="small"
-              color="blue-grey"
-              class="text-white">
+              color="blue-grey">
               Добавить спикера
               <v-icon
                 end

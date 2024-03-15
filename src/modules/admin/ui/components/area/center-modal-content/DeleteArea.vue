@@ -5,15 +5,14 @@
     </template>
     <template #actions>
       <v-btn
-        color="error"
-        class="text-white"
+        variant="flat"
+        color="primary"
         @click="confirm">
         Удалить
       </v-btn>
       <v-btn
-        color="blue-grey"
-        class="text-white"
         variant="outlined"
+        color="blue-grey"
         @click="cancel">
         Отмена
       </v-btn>

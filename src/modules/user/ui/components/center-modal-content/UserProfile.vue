@@ -72,13 +72,11 @@
           v-if="showChangePassword"
           :disabled="!meta.valid"
           color="primary"
-          class="text-white"
           @click="handleSubmit(onSubmit)">
           Сохранить
         </v-btn>
         <v-btn
           color="blue-grey"
-          class="text-white"
           variant="outlined"
           @click="$emit('cancel')">
           Отмена

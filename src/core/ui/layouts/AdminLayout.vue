@@ -2,7 +2,7 @@
   <div>
     <v-navigation-drawer
       v-model="drawer"
-      theme="dark">
+      color="blue-grey">
       <DrawerNavigation :nav-items="navItems" />
     </v-navigation-drawer>
 

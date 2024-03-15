@@ -3,7 +3,6 @@
     <template #default>
       <v-form
         ref="feedback-form"
-        v-model="valid"
         class="ma-0 pa-0"
         @submit.prevent="submitForm">
         <v-row
@@ -97,8 +96,6 @@ export default {
 
   data() {
     return {
-      valid: true,
-
       themes: ['Технические проблемы в работе сайта', 'Предложения, пожелания по работе или содержанию сайта'],
 
       controls: {
@@ -117,17 +114,21 @@ export default {
     ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
 
     async submitForm() {
-      if (this.$refs['feedback-form'].validate()) {
-        try {
-          this.ADD_LOADER();
-          await Create(this.controls);
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Обратная связь отправлена' });
-          this.modalConfirm();
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
+      const { valid } = await this.$refs['feedback-form'].validate();
+
+      if (!valid) {
+        return;
+      }
+
+      try {
+        this.ADD_LOADER();
+        await Create(this.controls);
+        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Обратная связь отправлена' });
+        this.modalConfirm();
+      } catch (error) {
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+      } finally {
+        this.REMOVE_LOADER();
       }
     },
 

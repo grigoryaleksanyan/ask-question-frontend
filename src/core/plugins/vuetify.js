@@ -12,11 +12,4 @@ export default createVuetify({
   icons: {
     iconfont: 'mdi',
   },
-  theme: {
-    themes: {
-      light: {
-        'main-color': '#7e57c2',
-      },
-    },
-  },
 });

@@ -14,25 +14,28 @@
           vertical
           class="mr-3" />
 
-        <v-icon
-          style="cursor: move"
+        <v-btn
           title="Переместить"
-          size="18"
-          class="mr-2 handle">
-          mdi-arrow-all
-        </v-icon>
+          class="handle"
+          icon
+          variant="text"
+          size="small">
+          <v-icon size="20"> mdi-arrow-all </v-icon>
+        </v-btn>
 
         <v-btn
           title="Изменить"
-          class="mr-1"
           icon
+          variant="text"
           size="small"
           @click="$emit('update')">
           <v-icon size="20"> mdi-pencil-outline </v-icon>
         </v-btn>
+
         <v-btn
           title="Удалить"
           icon
+          variant="text"
           size="small"
           @click="$emit('delete')">
           <v-icon size="20"> mdi-delete-outline </v-icon>

@@ -37,6 +37,7 @@
         <template #activator="{ props }">
           <v-btn
             icon
+            variant="flat"
             v-bind="props"
             @click="showFeedbackModal">
             <v-icon size="24px">mdi-email-open</v-icon>
