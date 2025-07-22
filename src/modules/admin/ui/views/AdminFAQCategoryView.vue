@@ -6,7 +6,9 @@
           <v-col
             cols="12"
             class="d-flex align-center">
-            <h1 class="text-h6 text-sm-h5 mr-4">Категория: {{ category.name }}</h1>
+            <h1 class="text-h6 text-sm-h5 mr-4">
+              Категория: {{ category.name }}
+            </h1>
 
             <v-btn
               title="Изменить"
@@ -198,7 +200,10 @@ export default {
           this.ADD_LOADER();
           const entryIds = newOrderEntries.map((entry) => entry.id);
           await SetOrder(entryIds);
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Сортировка применена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Сортировка применена',
+          });
         } catch (error) {
           this.category.entries = oldOrderEntries;
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
@@ -268,7 +273,10 @@ export default {
 
       copyToClipboard(link)
         .then(() => {
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Ссылка скопирована в буфер обмена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Ссылка скопирована в буфер обмена',
+          });
         })
         .catch((error) => {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
@@ -281,7 +289,9 @@ export default {
     },
 
     successDeleteEntry(id) {
-      this.category.entries = this.category.entries.filter((entry) => entry.id !== id);
+      this.category.entries = this.category.entries.filter(
+        (entry) => entry.id !== id,
+      );
       this.showDeleteEntry = false;
     },
   },

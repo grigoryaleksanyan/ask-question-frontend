@@ -28,34 +28,16 @@ import CloseIcon from './icons/CloseIcon.vue';
 
 export default {
   name: 'AppAlertItem',
-
-  components: {
-    SuccessIcon,
-    InfoIcon,
-    WarningIcon,
-    ErrorIcon,
-    CloseIcon,
-  },
-
-  props: {
-    alert: {
-      type: Object,
-      required: true,
-    },
-  },
+  components: { SuccessIcon, InfoIcon, WarningIcon, ErrorIcon, CloseIcon },
+  props: { alert: { type: Object, required: true } },
 
   computed: {
     alertClasses() {
-      return {
-        'alert-item': true,
-        [`alert-item-${this.alert.type}`]: true,
-      };
+      return { 'alert-item': true, [`alert-item-${this.alert.type}`]: true };
     },
   },
 
-  methods: {
-    ...mapMutations('alert', ['REMOVE_ALERT']),
-  },
+  methods: { ...mapMutations('alert', ['REMOVE_ALERT']) },
 };
 </script>
 
@@ -74,7 +56,7 @@ export default {
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 10px;
-  background-color: $primary-color;
+  background-color: variables.$primary-color;
   box-shadow:
     0 3px 1px -2px rgb(0 0 0 / 20%),
     0 2px 2px 0 rgb(0 0 0 / 14%),
@@ -82,19 +64,19 @@ export default {
   color: #fff;
 
   &-success {
-    background-color: $success-color;
+    background-color: variables.$success-color;
   }
 
   &-info {
-    background-color: $info-color;
+    background-color: variables.$info-color;
   }
 
   &-warning {
-    background-color: $warning-color;
+    background-color: variables.$warning-color;
   }
 
   &-error {
-    background-color: $error-color;
+    background-color: variables.$error-color;
   }
 }
 

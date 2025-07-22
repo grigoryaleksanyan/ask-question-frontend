@@ -9,7 +9,9 @@
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
 
-      <v-toolbar-title class="text-subtitle-1"> Панель администратора </v-toolbar-title>
+      <v-toolbar-title class="text-subtitle-1">
+        Панель администратора
+      </v-toolbar-title>
 
       <v-menu>
         <template #activator="{ props }">

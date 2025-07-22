@@ -41,20 +41,9 @@ export default {
   inject: ['close'],
 
   props: {
-    title: {
-      type: String,
-      default: '',
-    },
-
-    headerHeight: {
-      type: Number,
-      default: 75,
-    },
-
-    footerHeight: {
-      type: Number,
-      default: 70,
-    },
+    title: { type: String, default: '' },
+    headerHeight: { type: Number, default: 75 },
+    footerHeight: { type: Number, default: 70 },
   },
 
   computed: {
@@ -74,7 +63,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './styles/modal-variables';
+@use './styles/modal-variables';
+
+$header-paddings: modal-variables.$header-paddings;
+$content-paddings: modal-variables.$content-paddings;
+$footer-paddings: modal-variables.$footer-paddings;
+$section-mobile-paddings: modal-variables.$section-mobile-paddings;
+$modal-width: modal-variables.$modal-width;
 
 .modal-form-wrapper {
   height: 100%;

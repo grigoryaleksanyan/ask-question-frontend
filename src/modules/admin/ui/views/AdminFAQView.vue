@@ -74,7 +74,10 @@ import Draggable from 'vuedraggable';
 import { mapMutations } from 'vuex';
 
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
-import { GetAll, SetOrder } from '@/modules/faq/repositories/faq-category-repository';
+import {
+  GetAll,
+  SetOrder,
+} from '@/modules/faq/repositories/faq-category-repository';
 
 import CategoryCard from '../components/FAQ/CategoryCard.vue';
 
@@ -123,7 +126,10 @@ export default {
           this.ADD_LOADER();
           const categoryIds = newOrderCategories.map((category) => category.id);
           await SetOrder(categoryIds);
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Сортировка применена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Сортировка применена',
+          });
         } catch (error) {
           this.categories = oldOrderCategories;
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });

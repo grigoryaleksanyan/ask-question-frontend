@@ -102,7 +102,10 @@
         no-gutters
         class="my-6">
         <v-col cols="12">
-          <p style="margin: 0; color: grey; font-size: 22px; text-align: center">Вопросы отсутсвуют</p>
+          <p
+            style="margin: 0; color: grey; font-size: 22px; text-align: center">
+            Вопросы отсутсвуют
+          </p>
         </v-col>
       </v-row>
     </template>

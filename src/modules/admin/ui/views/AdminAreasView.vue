@@ -96,7 +96,10 @@ import { mapMutations } from 'vuex';
 
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
-import { GetAll, SetOrder } from '@/modules/shared/repositories/areas-repository';
+import {
+  GetAll,
+  SetOrder,
+} from '@/modules/shared/repositories/areas-repository';
 
 import AreaCard from '../components/area/AreaCard.vue';
 import CreateArea from '../components/area/center-modal-content/CreateArea.vue';
@@ -148,7 +151,10 @@ export default {
           this.ADD_LOADER();
           const areaIds = newOrderAreas.map((area) => area.id);
           await SetOrder(areaIds);
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Сортировка применена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Сортировка применена',
+          });
         } catch (error) {
           this.areas = oldOrderAreas;
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
@@ -189,7 +195,9 @@ export default {
     },
 
     successUpdateArea(modifiedArea) {
-      this.areas = this.areas.map((area) => (area.id === modifiedArea.id ? modifiedArea : area));
+      this.areas = this.areas.map((area) =>
+        area.id === modifiedArea.id ? modifiedArea : area,
+      );
 
       this.showUpdateArea = false;
     },

@@ -56,7 +56,9 @@
                 class="mr-2">
                 mdi-eye
               </v-icon>
-              <span class="text-caption text-sm-body-2">{{ replaceСounter(question.views) }}</span>
+              <span class="text-caption text-sm-body-2">
+                {{ replaceСounter(question.views) }}
+              </span>
             </v-col>
             <v-col class="d-flex justify-end align-center">
               <v-btn
@@ -69,7 +71,9 @@
                   mdi-thumb-up-outline
                 </v-icon>
               </v-btn>
-              <span class="text-caption text-sm-body-2 mr-1">{{ replaceСounter(question.likes) }}</span>
+              <span class="text-caption text-sm-body-2 mr-1">
+                {{ replaceСounter(question.likes) }}
+              </span>
               <v-btn
                 icon
                 class="mr-1"
@@ -80,7 +84,9 @@
                   mdi-thumb-down-outline
                 </v-icon>
               </v-btn>
-              <span class="text-caption text-sm-body-2"> {{ replaceСounter(question.dislikes) }}</span>
+              <span class="text-caption text-sm-body-2">
+                {{ replaceСounter(question.dislikes) }}
+              </span>
             </v-col>
           </v-row>
         </v-container>
@@ -96,17 +102,8 @@ import QuestionStatusIcon from '@/modules/question/ui/components/QuestionStatusI
 
 export default {
   name: 'QuestionCard',
-
-  components: {
-    QuestionStatusIcon,
-  },
-
-  props: {
-    question: {
-      type: Object,
-      required: true,
-    },
-  },
+  components: { QuestionStatusIcon },
+  props: { question: { type: Object, required: true } },
 
   computed: {
     color() {
@@ -147,6 +144,6 @@ export default {
 
 <style lang="scss">
 .question-card-more {
-  color: $links-color;
+  color: variables.$links-color;
 }
 </style>

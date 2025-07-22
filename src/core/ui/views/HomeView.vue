@@ -14,7 +14,9 @@
         <v-col cols="12">
           <h1 class="portal-title">Ask me</h1>
           <p class="additional-text">Ты не получаешь ответов?</p>
-          <p class="additional-text">Главная причина в том, что ты не задаешь вопросов.</p>
+          <p class="additional-text">
+            Главная причина в том, что ты не задаешь вопросов.
+          </p>
         </v-col>
         <v-col
           cols="12"
@@ -60,8 +62,11 @@ import { useGoTo } from 'vuetify';
 
 import VideoBackground from 'vue-responsive-video-background-player';
 
+import { GetPopularQuestions } from '@/modules/question/repositories/questions-repository';
+
 import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
 import QuestionFormCreate from '@/modules/question/ui/components/QuestionFormCreate.vue';
+import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
 export default {
   name: 'HomeView',
@@ -79,12 +84,30 @@ export default {
 
   data() {
     return {
-      backgroundVideo: new URL('@/core/assets/video/background.mp4', import.meta.url).href,
-      backgroundPoster: new URL('@/core/assets/img/poster.jpg', import.meta.url).href,
+      backgroundVideo: new URL(
+        '@/core/assets/video/background.mp4',
+        import.meta.url,
+      ).href,
+      backgroundPoster: new URL('@/core/assets/img/poster.jpg', import.meta.url)
+        .href,
       questions: [],
 
       headerHeight: 64,
     };
+  },
+
+  created() {
+    this.fetchData();
+  },
+
+  methods: {
+    async fetchData() {
+      try {
+        this.questions = await GetPopularQuestions();
+      } catch (error) {
+        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
+      }
+    },
   },
 };
 </script>

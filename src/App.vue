@@ -23,7 +23,9 @@ export default {
   computed: {
     layout() {
       const layout = this.$route.meta.layout || 'DefaultLayout';
-      return defineAsyncComponent(() => import(`@/core/ui/layouts/${layout}.vue`));
+      return defineAsyncComponent(
+        () => import(`@/core/ui/layouts/${layout}.vue`),
+      );
     },
   },
 };

@@ -54,7 +54,10 @@ export default {
       valid: true,
       name: null,
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -82,7 +85,10 @@ export default {
 
           await Update(category);
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Категория успешно изменена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Категория успешно изменена',
+          });
 
           this.$emit('success', category.name);
         } catch (error) {

@@ -23,7 +23,10 @@ export default {
 
   methods: {
     clickOnCard() {
-      this.$router.push({ name: 'admin-faq-category', params: { id: this.category.id } });
+      this.$router.push({
+        name: 'admin-faq-category',
+        params: { id: this.category.id },
+      });
     },
   },
 };

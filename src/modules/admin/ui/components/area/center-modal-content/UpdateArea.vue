@@ -54,7 +54,10 @@ export default {
       valid: true,
       title: null,
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -82,7 +85,10 @@ export default {
 
           await Update(area);
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Категория успешно изменена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Категория успешно изменена',
+          });
 
           this.$emit('success', { ...this.area, title: this.title });
         } catch (error) {

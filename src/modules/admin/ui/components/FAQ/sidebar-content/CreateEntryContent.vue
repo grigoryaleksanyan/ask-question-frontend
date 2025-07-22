@@ -88,7 +88,10 @@ export default {
         answer: null,
       },
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -113,7 +116,10 @@ export default {
           entry.id = id;
           entry.сreated = new Date();
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Запись успешно создана' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Запись успешно создана',
+          });
 
           this.modalConfirm(entry);
         } catch (error) {

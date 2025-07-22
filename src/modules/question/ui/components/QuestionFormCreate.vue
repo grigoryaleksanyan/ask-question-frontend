@@ -127,7 +127,10 @@
 import { mapMutations } from 'vuex';
 
 import ALERT_TYPES from '@/modules/alert/constants/alert-types';
-import { GetCapctha, Create } from '@/modules/question/repositories/questions-repository';
+import {
+  GetCapctha,
+  Create,
+} from '@/modules/question/repositories/questions-repository';
 
 import { GetAll } from '@/modules/shared/repositories/areas-repository';
 
@@ -143,14 +146,12 @@ export default {
       capcthaImg: null,
       capctha: null,
 
-      controls: {
-        text: null,
-        author: null,
-        speaker: null,
-        area: null,
-      },
+      controls: { text: null, author: null, speaker: null, area: null },
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -204,7 +205,10 @@ export default {
 
           this.$refs['question-add'].reset();
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Ваш вопрос успешно добавлен' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Ваш вопрос успешно добавлен',
+          });
         } catch (error) {
           this.getCapctha();
 
@@ -231,6 +235,6 @@ export default {
 
 :deep(.main-form-textarea textarea::-webkit-scrollbar-thumb) {
   border-radius: 5px;
-  background-color: $scrollbar-color;
+  background-color: variables.$scrollbar-color;
 }
 </style>

@@ -6,7 +6,9 @@
       <v-col
         cols="12"
         class="d-flex flex-column align-center">
-        <h1 class="text-h6 text-sm-h4 mb-8">Такой страницы не существует &#128577;</h1>
+        <h1 class="text-h6 text-sm-h4 mb-8">
+          Такой страницы не существует &#128577;
+        </h1>
         <v-btn
           variant="flat"
           @click="toBack()">

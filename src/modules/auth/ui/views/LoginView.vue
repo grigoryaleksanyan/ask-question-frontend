@@ -60,7 +60,10 @@ export default {
 
     async onSubmit() {
       try {
-        const user = await Login({ login: this.controls.email, password: this.controls.password });
+        const user = await Login({
+          login: this.controls.email,
+          password: this.controls.password,
+        });
 
         this.SET_AUTH_DATA(user);
 

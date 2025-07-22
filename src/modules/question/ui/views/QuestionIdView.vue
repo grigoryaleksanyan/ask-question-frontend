@@ -64,9 +64,10 @@
                   <p
                     style="color: grey"
                     class="pa-0 ma-0 text-sm-body-1 text-body-2">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse excepturi dolore ducimus eos eaque.
-                    Aut, explicabo. Amet, quia, vero sunt optio laudantium perspiciatis ducimus accusantium magnam
-                    dolore tempora ipsum nemo.
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Esse excepturi dolore ducimus eos eaque. Aut, explicabo.
+                    Amet, quia, vero sunt optio laudantium perspiciatis ducimus
+                    accusantium magnam dolore tempora ipsum nemo.
                   </p>
                 </v-sheet>
               </v-col>
@@ -81,29 +82,39 @@
                   class="mr-2">
                   mdi-eye
                 </v-icon>
-                <span class="text-caption text-sm-body-2">{{ replaceСounter(99) }}</span>
+                <span class="text-caption text-sm-body-2">{{
+                  replaceСounter(99)
+                }}</span>
               </v-col>
               <v-col class="d-flex justify-end align-center">
                 <v-btn
-                  icon
-                  class="mr-1">
+                  class="mr-1"
+                  variant="outlined"
+                  color="primary">
                   <v-icon
+                    class="mr-2"
                     title="Понравился"
                     size="20">
                     mdi-thumb-up-outline
                   </v-icon>
+                  <span class="text-caption text-sm-body-2 mr-1">{{
+                    replaceСounter(1)
+                  }}</span>
                 </v-btn>
-                <span class="text-caption text-sm-body-2 mr-1">{{ replaceСounter(99) }}</span>
                 <v-btn
-                  icon
-                  class="mr-1">
+                  class="mr-1"
+                  variant="outlined"
+                  color="error">
                   <v-icon
+                    class="mr-2"
                     title="Не понравился"
                     size="20">
                     mdi-thumb-down-outline
                   </v-icon>
+                  <span class="text-caption text-sm-body-2">
+                    {{ replaceСounter(99) }}</span
+                  >
                 </v-btn>
-                <span class="text-caption text-sm-body-2"> {{ replaceСounter(99) }}</span>
               </v-col>
             </v-row>
           </div>

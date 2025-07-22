@@ -43,7 +43,10 @@ export default {
       try {
         await Delete(this.id);
 
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Обратная связь успешно удалена' });
+        this.ADD_ALERT({
+          type: ALERT_TYPES.SUCCESS,
+          text: 'Обратная связь успешно удалена',
+        });
 
         this.$emit('success', this.id);
       } catch (error) {

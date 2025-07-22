@@ -9,9 +9,13 @@
         <v-col
           cols="12"
           align-self="center">
-          <span style="word-break: break-word">Имя: {{ feedback.username }}</span>
+          <span style="overflow-wrap: break-word">
+            Имя: {{ feedback.username }}
+          </span>
           <br />
-          <span style="word-break: break-word">Почта: {{ feedback.email }}</span>
+          <span style="overflow-wrap: break-word">
+            Почта: {{ feedback.email }}
+          </span>
         </v-col>
         <v-col
           class="d-flex justify-start justify-sm-end"
@@ -48,7 +52,9 @@
           no-gutters
           align="center">
           <v-col>
-            <span class="text-caption"> Создана: {{ new Date(feedback.сreated).toLocaleDateString() }} </span>
+            <span class="text-caption">
+              Создана: {{ new Date(feedback.сreated).toLocaleDateString() }}
+            </span>
           </v-col>
           <v-col class="d-flex justify-end align-center">
             <v-btn

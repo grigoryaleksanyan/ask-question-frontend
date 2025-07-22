@@ -2,7 +2,9 @@
   <CenterModalContentWrapper>
     <template #default>
       <p class="text-body-1">Вы действительно хотите удалить всю категорию?</p>
-      <p class="ma-0 text-body-2 font-weight-bold">Так же будут удалены все записи!</p>
+      <p class="ma-0 text-body-2 font-weight-bold">
+        Так же будут удалены все записи!
+      </p>
     </template>
     <template #actions>
       <v-btn
@@ -44,7 +46,10 @@ export default {
       try {
         await Delete(this.id);
 
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Категория успешно удалена' });
+        this.ADD_ALERT({
+          type: ALERT_TYPES.SUCCESS,
+          text: 'Категория успешно удалена',
+        });
 
         this.$emit('success');
       } catch (error) {

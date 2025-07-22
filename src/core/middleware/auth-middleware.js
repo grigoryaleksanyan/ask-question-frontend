@@ -12,7 +12,10 @@ export default async function checkAuth(next) {
 
       return next();
     } catch (error) {
-      store.commit('alert/ADD_ALERT', { type: ALERT_TYPES.ERROR, text: error.message });
+      store.commit('alert/ADD_ALERT', {
+        type: ALERT_TYPES.ERROR,
+        text: error.message,
+      });
 
       return next({
         name: 'login',

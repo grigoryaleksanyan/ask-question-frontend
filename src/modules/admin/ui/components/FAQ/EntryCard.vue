@@ -10,7 +10,7 @@
         <v-col
           cols="12"
           align-self="center">
-          <span style="word-break: break-word">{{ entry.question }}</span>
+          <span style="overflow-wrap: break-word">{{ entry.question }}</span>
         </v-col>
         <v-col
           class="d-flex justify-start justify-sm-end"
@@ -40,7 +40,9 @@
           no-gutters
           align="center">
           <v-col>
-            <span class="text-caption"> Создана: {{ new Date(entry.сreated).toLocaleDateString() }} </span>
+            <span class="text-caption">
+              Создана: {{ new Date(entry.сreated).toLocaleDateString() }}
+            </span>
           </v-col>
           <v-col class="d-flex justify-end align-center">
             <v-btn

@@ -4,7 +4,10 @@ import { required, email, confirmed, max_value } from '@vee-validate/rules';
 
 export default {
   install: (app) => {
-    app.component('VeeForm', Form).component('VeeField', Field).component('VeeErrorMessage', ErrorMessage);
+    app
+      .component('VeeForm', Form)
+      .component('VeeField', Field)
+      .component('VeeErrorMessage', ErrorMessage);
 
     configure({
       validateOnInput: true,

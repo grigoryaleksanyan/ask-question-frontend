@@ -24,6 +24,17 @@ export async function GetAll() {
   return result;
 }
 
+export async function GetPopularQuestions() {
+  const result = await httpClient
+    .get(`${apiRoute}/GetPopularQuestions`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка получения популярных вопросов', { cause: error });
+    });
+
+  return result;
+}
+
 export async function GetById(id) {
   const result = await httpClient
     .get(`${apiRoute}/GetById?id=${id}`)

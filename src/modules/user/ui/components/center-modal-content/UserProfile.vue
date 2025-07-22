@@ -5,14 +5,26 @@
         <template v-if="GET_USER_DATA.userRoleId == 2">
           <p><b>ФИО:</b> {{ GET_USER_DATA.userDetails.fullName }}</p>
           <p><b>Почта:</b> {{ GET_USER_DATA.userDetails.email }}</p>
-          <p><b>Доп. инфо:</b> {{ GET_USER_DATA.userDetails.additionalInfo }}</p>
+          <p>
+            <b>Доп. инфо:</b> {{ GET_USER_DATA.userDetails.additionalInfo }}
+          </p>
         </template>
 
         <p><b>Id:</b> {{ GET_USER_DATA.id }}</p>
         <p><b>Логин:</b> {{ GET_USER_DATA.login }}</p>
         <p><b>Роль:</b> {{ getUserStringRole }}</p>
-        <p><b>Создан:</b> {{ new Date(GET_USER_DATA.сreated).toLocaleDateString() }}</p>
-        <p><b>Изменен:</b> {{ GET_USER_DATA.updated ? new Date(GET_USER_DATA.updated).toLocaleDateString() : '-' }}</p>
+        <p>
+          <b>Создан:</b>
+          {{ new Date(GET_USER_DATA.сreated).toLocaleDateString() }}
+        </p>
+        <p>
+          <b>Изменен:</b>
+          {{
+            GET_USER_DATA.updated
+              ? new Date(GET_USER_DATA.updated).toLocaleDateString()
+              : '-'
+          }}
+        </p>
 
         <template v-if="!showChangePassword">
           <v-btn
@@ -93,6 +105,7 @@ import { ChangePassword } from '../../../repositories/user-repository';
 
 export default {
   name: 'UserProfile',
+  emits: ['success', 'cancel'],
 
   data() {
     return {
@@ -128,7 +141,10 @@ export default {
 
         await ChangePassword(this.controls);
 
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Пароль успешно изменен' });
+        this.ADD_ALERT({
+          type: ALERT_TYPES.SUCCESS,
+          text: 'Пароль успешно изменен',
+        });
 
         this.$emit('success');
       } catch (error) {

@@ -7,7 +7,9 @@ export async function GetAll() {
     .get(`${apiRoute}/GetAll`)
     .then((response) => response.data)
     .catch((error) => {
-      throw new Error('Ошибка получения списка обратной связи', { cause: error });
+      throw new Error('Ошибка получения списка обратной связи', {
+        cause: error,
+      });
     });
 
   return result;

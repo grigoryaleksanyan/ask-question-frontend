@@ -19,7 +19,9 @@
         <v-col
           cols="12"
           sm="3">
-          <h2 class="text-h6 text-sm-h5 mb-3 section-title">{{ category.name }}</h2>
+          <h2 class="text-h6 text-sm-h5 mb-3 section-title">
+            {{ category.name }}
+          </h2>
         </v-col>
         <v-col
           cols="12"
@@ -46,7 +48,9 @@
     <template v-else>
       <v-row>
         <v-col cols="12">
-          <p style="color: grey; font-size: 24px; text-align: center">Записи отсутсвуют</p>
+          <p style="color: grey; font-size: 24px; text-align: center">
+            Записи отсутсвуют
+          </p>
         </v-col>
       </v-row>
     </template>
@@ -64,9 +68,7 @@ export default {
   name: 'FAQView',
 
   data() {
-    return {
-      categories: [],
-    };
+    return { categories: [] };
   },
 
   created() {
@@ -81,10 +83,7 @@ export default {
         const element = document.getElementById(id);
 
         if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
           element.children[0].click();
         }
@@ -113,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 .section-title {
   padding-left: 10px;
-  border-left: 5px solid $main-color;
+  border-left: 5px solid variables.$main-color;
 }
 
 .question {
@@ -121,6 +120,6 @@ export default {
 }
 
 .active-panel .question {
-  color: $main-color;
+  color: variables.$main-color;
 }
 </style>

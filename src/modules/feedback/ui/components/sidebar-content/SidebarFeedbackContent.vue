@@ -96,7 +96,10 @@ export default {
 
   data() {
     return {
-      themes: ['Технические проблемы в работе сайта', 'Предложения, пожелания по работе или содержанию сайта'],
+      themes: [
+        'Технические проблемы в работе сайта',
+        'Предложения, пожелания по работе или содержанию сайта',
+      ],
 
       controls: {
         username: null,
@@ -105,7 +108,10 @@ export default {
         text: null,
       },
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -123,7 +129,10 @@ export default {
       try {
         this.ADD_LOADER();
         await Create(this.controls);
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Обратная связь отправлена' });
+        this.ADD_ALERT({
+          type: ALERT_TYPES.SUCCESS,
+          text: 'Обратная связь отправлена',
+        });
         this.modalConfirm();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });

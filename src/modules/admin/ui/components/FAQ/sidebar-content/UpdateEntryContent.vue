@@ -83,7 +83,10 @@ export default {
         answer: null,
       },
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -109,9 +112,16 @@ export default {
 
           await Update(entry);
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Запись успешно изменена' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Запись успешно изменена',
+          });
 
-          this.modalConfirm({ ...this.entry, question: this.controls.question, answer: this.controls.answer });
+          this.modalConfirm({
+            ...this.entry,
+            question: this.controls.question,
+            answer: this.controls.answer,
+          });
         } catch (error) {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         } finally {

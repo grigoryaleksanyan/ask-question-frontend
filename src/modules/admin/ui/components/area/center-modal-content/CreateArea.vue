@@ -54,7 +54,10 @@ export default {
       valid: true,
       title: null,
 
-      rules: [(v) => !!v || 'Обязательное поле!', (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!'],
+      rules: [
+        (v) => !!v || 'Обязательное поле!',
+        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+      ],
     };
   },
 
@@ -78,7 +81,10 @@ export default {
 
           area.id = id;
 
-          this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Область успешно создана' });
+          this.ADD_ALERT({
+            type: ALERT_TYPES.SUCCESS,
+            text: 'Область успешно создана',
+          });
 
           this.$emit('success', area);
         } catch (error) {

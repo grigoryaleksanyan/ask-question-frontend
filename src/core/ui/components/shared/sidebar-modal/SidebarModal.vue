@@ -36,35 +36,27 @@ export default {
   name: 'SidebarModal',
 
   components: {
-    SidebarPreloader: defineAsyncComponent(() => import('./SidebarPreloader.vue')),
+    SidebarPreloader: defineAsyncComponent(
+      () => import('./SidebarPreloader.vue'),
+    ),
   },
 
   provide() {
-    return {
-      close: this.close,
-    };
+    return { close: this.close };
   },
 
   props: {
-    forcedSlotRender: {
-      type: Boolean,
-      default: false,
-    },
-
-    closeOnEsc: {
-      type: Boolean,
-    },
-
-    closeOnClickAway: {
-      type: Boolean,
-    },
+    forcedSlotRender: { type: Boolean, default: false },
+    closeOnEsc: { type: Boolean },
+    closeOnClickAway: { type: Boolean },
   },
 
   data() {
-    return {
-      isOpen: false,
-      showPreloader: false,
-    };
+    return { isOpen: false, showPreloader: false };
+  },
+
+  beforeUnmount() {
+    this.toggleScroll(false);
   },
 
   methods: {
@@ -85,7 +77,9 @@ export default {
     },
 
     toggleScroll(value) {
-      document.querySelector('html').style.overflowY = value ? 'hidden' : 'auto';
+      document.querySelector('html').style.overflowY = value
+        ? 'hidden'
+        : 'auto';
     },
 
     // Используется для открытия модального окна
@@ -132,7 +126,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './styles/modal-variables';
+@use './styles/modal-variables';
+
+$modal-width: modal-variables.$modal-width;
 
 $overlay-z-index: 1500;
 $wrapper-z-index: $overlay-z-index + 1;
