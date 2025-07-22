@@ -1,40 +1,28 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+import vuetify from 'vite-plugin-vuetify';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue({
-      template: { transformAssetUrls },
-    }),
-    vuetify(),
-  ],
+  plugins: [vue(), vuetify()],
   resolve: {
     alias: [
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
       {
-        find: /^~(.*)$/,
-        replacement: '$1',
+        find: '@',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
+      { find: /^~(.*)$/, replacement: '$1' },
     ],
   },
   css: {
     preprocessorOptions: {
-      scss: {
-        additionalData: '@import "@/core/assets/styles/variables.scss";',
-      },
+      scss: { additionalData: '@use "@/core/assets/styles/variables.scss";' },
     },
   },
   server: {
-    port: 8080,
+    port: 5000,
 
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5500',
-        changeOrigin: true,
-      },
-    },
+    proxy: { '/api': { target: 'http://localhost:5500', changeOrigin: true } },
   },
 });

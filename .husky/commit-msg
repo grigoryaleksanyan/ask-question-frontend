@@ -1,4 +1,1 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 npx commitlint -g './configs/git/commitlint.cjs' --edit $1
