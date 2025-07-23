@@ -12,12 +12,11 @@ export default defineConfig({
         find: '@',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
-      { find: /^~(.*)$/, replacement: '$1' },
     ],
   },
   css: {
     preprocessorOptions: {
-      scss: { additionalData: '@use "@/core/assets/styles/variables.scss";' },
+      scss: { additionalData: '@use "@/app/styles/variables.scss";' },
     },
   },
   server: {

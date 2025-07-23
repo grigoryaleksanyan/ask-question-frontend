@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import sanitizeHtml from '@/core/helpers/html-sanitize-helper';
+import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import { mapMutations } from 'vuex';
 
@@ -48,7 +48,7 @@ import ALERT_TYPES from '@/modules/alert/constants/alert-types';
 
 import { Create } from '@/modules/faq/repositories/faq-entry-repository';
 
-import RichEditor from '@/core/ui/components/shared/RichEditor.vue';
+import RichEditor from '@/shared/ui/rich-editor';
 
 export default {
   name: 'CreateEntryContent',

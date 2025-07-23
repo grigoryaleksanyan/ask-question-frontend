@@ -1,4 +1,4 @@
-import httpClient from '@/core/plugins/http-client';
+import httpClient from '@/shared/api';
 
 const apiRoute = '/api/Auth';
 
