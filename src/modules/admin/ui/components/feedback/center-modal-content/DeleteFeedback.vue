@@ -23,7 +23,7 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 import { Delete } from '@/modules/feedback/repositories/feedback-repository';
 
 export default {

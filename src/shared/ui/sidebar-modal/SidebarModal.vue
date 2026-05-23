@@ -29,100 +29,95 @@
   </div>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup>
+import { defineAsyncComponent, onBeforeUnmount, provide, ref } from 'vue';
 
-export default {
-  name: 'SidebarModal',
+const SidebarPreloader = defineAsyncComponent(
+  () => import('./SidebarPreloader.vue'),
+);
 
-  components: {
-    SidebarPreloader: defineAsyncComponent(
-      () => import('./SidebarPreloader.vue'),
-    ),
-  },
+const {
+  forcedSlotRender = false,
+  closeOnEsc,
+  closeOnClickAway,
+} = defineProps({
+  forcedSlotRender: Boolean,
+  closeOnEsc: Boolean,
+  closeOnClickAway: Boolean,
+});
 
-  provide() {
-    return { close: this.close };
-  },
+const isOpen = ref(false);
+const showPreloader = ref(false);
 
-  props: {
-    forcedSlotRender: { type: Boolean, default: false },
-    closeOnEsc: { type: Boolean },
-    closeOnClickAway: { type: Boolean },
-  },
+function handleKeydown(event) {
+  if (event.key === 'Escape' && !showPreloader.value) {
+    close();
+  }
+}
 
-  data() {
-    return { isOpen: false, showPreloader: false };
-  },
+function clickOnOverlay() {
+  if (closeOnClickAway && !showPreloader.value) {
+    close();
+  }
+}
 
-  beforeUnmount() {
-    this.toggleScroll(false);
-  },
+function togglePreloader(status) {
+  showPreloader.value = status;
+}
 
-  methods: {
-    handleKeydown(event) {
-      if (event.key === 'Escape' && !this.showPreloader) {
-        this.close();
-      }
-    },
+function toggleScroll(value) {
+  document.querySelector('html').style.overflowY = value ? 'hidden' : 'auto';
+}
 
-    clickOnOverlay() {
-      if (this.closeOnClickAway && !this.showPreloader) {
-        this.close();
-      }
-    },
+let modalController = null;
 
-    togglePreloader(status) {
-      this.showPreloader = status;
-    },
+function open() {
+  let resolve;
+  let reject;
+  const modalPromise = new Promise((ok, fail) => {
+    resolve = ok;
+    reject = fail;
+  });
 
-    toggleScroll(value) {
-      document.querySelector('html').style.overflowY = value
-        ? 'hidden'
-        : 'auto';
-    },
+  modalController = { resolve, reject };
 
-    // Используется для открытия модального окна
-    // eslint-disable-next-line vue/no-unused-properties
-    open() {
-      let resolve;
-      let reject;
-      const modalPromise = new Promise((ok, fail) => {
-        resolve = ok;
-        reject = fail;
-      });
+  isOpen.value = true;
+  toggleScroll(true);
 
-      this.$options.modalController = { resolve, reject };
+  if (closeOnEsc) {
+    document.addEventListener('keydown', handleKeydown);
+  }
 
-      this.isOpen = true;
-      this.toggleScroll(true);
+  return modalPromise;
+}
 
-      if (this.closeOnEsc) {
-        document.addEventListener('keydown', this.handleKeydown);
-      }
+function resolveModal(status, data = null) {
+  modalController.resolve({ status, data });
+  isOpen.value = false;
+  toggleScroll(false);
 
-      return modalPromise;
-    },
+  if (closeOnEsc) {
+    document.removeEventListener('keydown', handleKeydown);
+  }
+}
 
-    resolveModal(status, data) {
-      this.$options.modalController.resolve({ status, data });
-      this.isOpen = false;
-      this.toggleScroll(false);
+function confirm(data) {
+  resolveModal(true, data);
+}
 
-      if (this.closeOnEsc) {
-        document.removeEventListener('keydown', this.handleKeydown);
-      }
-    },
+function close(data) {
+  resolveModal(false, data);
+}
 
-    confirm(data = null) {
-      this.resolveModal(true, data);
-    },
+provide('close', close);
 
-    close(data = null) {
-      this.resolveModal(false, data);
-    },
-  },
-};
+defineExpose({
+  open,
+});
+
+onBeforeUnmount(() => {
+  toggleScroll(false);
+});
 </script>
 
 <style lang="scss" scoped>

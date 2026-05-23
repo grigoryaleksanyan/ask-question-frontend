@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import AdminRoutes from '@/modules/admin/routes/index';
-import checkAuth from '@/app/routes/middleware/auth-middleware';
+import checkAuth from '@/app/router/middleware/auth-middleware';
 import ROUTES from '@/shared/routes';
 
 const routes = [

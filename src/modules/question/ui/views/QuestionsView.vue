@@ -115,7 +115,7 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 import { GetAll } from '@/modules/question/repositories/questions-repository';
 
 import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';

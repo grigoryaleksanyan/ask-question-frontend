@@ -1,6 +1,6 @@
 import store from '@/app/store/store';
 
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 import { GetUserData } from '@/modules/user/repositories/user-repository';
 
 export default async function checkAuth() {

@@ -66,7 +66,7 @@ import { GetPopularQuestions } from '@/modules/question/repositories/questions-r
 
 import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
 import QuestionFormCreate from '@/modules/question/ui/components/QuestionFormCreate.vue';
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 
 export default {
   name: 'MainPage',

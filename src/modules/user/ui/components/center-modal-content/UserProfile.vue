@@ -100,7 +100,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 import { ChangePassword } from '../../../repositories/user-repository';
 
 export default {

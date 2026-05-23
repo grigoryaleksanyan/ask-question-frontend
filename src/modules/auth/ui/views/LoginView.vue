@@ -39,7 +39,7 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import ALERT_TYPES from '@/modules/alert/constants/alert-types';
+import { ALERT_TYPES } from '@/shared/config';
 import { Login } from '../../repositories/auth-repository';
 
 export default {

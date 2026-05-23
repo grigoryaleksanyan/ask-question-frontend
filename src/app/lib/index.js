@@ -1,4 +1,4 @@
-import router from '@/app/routes';
+import router from '@/app/router';
 import store from '@/app/store/store';
 
 import vuetify from './vuetify';
