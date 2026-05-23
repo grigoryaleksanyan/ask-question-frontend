@@ -97,24 +97,22 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'QuestionFilters',
+<script setup>
+import { ref } from 'vue';
 
-  data() {
-    return {
-      showFilters: false,
-      sortingDirection: 0,
-      speaker: ['Иван', 'Петр'],
-      zone: ['Север', 'Юг'],
-      status: ['новый', 'в фокусе'],
-    };
-  },
+defineOptions({ name: 'QuestionFilters' });
 
-  methods: {
-    toggleFilters() {
-      this.showFilters = !this.showFilters;
-    },
-  },
-};
+const showFilters = ref(false);
+
+const sortingDirection = ref(0);
+
+const speaker = ['Иван', 'Петр'];
+
+const zone = ['Север', 'Юг'];
+
+const status = ['новый', 'в фокусе'];
+
+function toggleFilters() {
+  showFilters.value = !showFilters.value;
+}
 </script>
