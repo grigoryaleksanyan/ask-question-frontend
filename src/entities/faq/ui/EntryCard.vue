@@ -59,7 +59,7 @@
               icon
               variant="text"
               size="small"
-              @click="$emit('copy-link')">
+              @click="emit('copy-link')">
               <v-icon size="20">mdi-link</v-icon>
             </v-btn>
 
@@ -68,7 +68,7 @@
               icon
               variant="text"
               size="small"
-              @click="$emit('update')">
+              @click="emit('update')">
               <v-icon size="20">mdi-pencil-outline</v-icon>
             </v-btn>
 
@@ -77,7 +77,7 @@
               icon
               variant="text"
               size="small"
-              @click="$emit('delete')">
+              @click="emit('delete')">
               <v-icon size="20">mdi-delete-outline</v-icon>
             </v-btn>
           </v-col>
@@ -87,19 +87,17 @@
   </v-card>
 </template>
 
-<script>
-export default {
-  name: 'EntryCard',
+<script setup>
+defineOptions({ name: 'EntryCard' });
 
-  props: {
-    entry: {
-      type: Object,
-      required: true,
-    },
+const { entry } = defineProps({
+  entry: {
+    type: Object,
+    required: true,
   },
+});
 
-  emits: ['copy-link', 'update', 'delete'],
-};
+const emit = defineEmits(['copy-link', 'update', 'delete']);
 </script>
 
 <style lang="scss" scoped>
