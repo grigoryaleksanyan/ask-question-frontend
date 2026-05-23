@@ -9,7 +9,7 @@
 <script>
 import { defineAsyncComponent } from 'vue';
 
-import AppPreloader from '@/modules/preloader/ui/components/AppPreloader.vue';
+import { AppPreloader } from '@/features/preloader';
 import { AppAlert } from '@/entities/alert';
 
 export default {
