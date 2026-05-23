@@ -2,10 +2,8 @@
   <div class="circles"></div>
 </template>
 
-<script>
-export default {
-  name: 'SidebarPreloader',
-};
+<script setup>
+defineOptions({ name: 'SidebarPreloader' });
 </script>
 
 <style lang="scss" scoped>
