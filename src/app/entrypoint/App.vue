@@ -6,25 +6,19 @@
   </v-app>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup>
+import { computed, defineAsyncComponent } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { AppPreloader } from '@/features/preloader';
 import { AppAlert } from '@/entities/alert';
 
-export default {
-  name: 'App',
+defineOptions({ name: 'App' });
 
-  components: {
-    AppPreloader,
-    AppAlert,
-  },
+const route = useRoute();
 
-  computed: {
-    layout() {
-      const layout = this.$route.meta.layout || 'DefaultLayout';
-      return defineAsyncComponent(() => import(`@/app/layouts/${layout}.vue`));
-    },
-  },
-};
+const layout = computed(() => {
+  const layoutName = route.meta.layout || 'DefaultLayout';
+  return defineAsyncComponent(() => import(`@/app/layouts/${layoutName}.vue`));
+});
 </script>
