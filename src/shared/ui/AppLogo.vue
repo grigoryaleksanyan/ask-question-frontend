@@ -8,16 +8,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AppLogo',
+<script setup>
+import { ref } from 'vue';
 
-  data() {
-    return {
-      imageUrl: new URL('@/shared/assets/logo.svg', import.meta.url).href,
-    };
-  },
-};
+defineOptions({ name: 'AppLogo' });
+
+const imageUrl = ref(new URL('@/shared/assets/logo.svg', import.meta.url).href);
 </script>
 
 <style lang="scss" scoped>
