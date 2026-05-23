@@ -29,8 +29,6 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'AdminSpeakersPage',
-};
+<script setup>
+defineOptions({ name: 'AdminSpeakersPage' });
 </script>
