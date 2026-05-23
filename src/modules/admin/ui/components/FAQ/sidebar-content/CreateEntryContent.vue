@@ -46,7 +46,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { Create } from '@/modules/faq/repositories/faq-entry-repository';
+import { CreateEntry } from '@/entities/faq';
 
 import RichEditor from '@/shared/ui/rich-editor';
 
@@ -111,7 +111,7 @@ export default {
             order: this.order,
           };
 
-          const id = await Create(entry);
+          const id = await CreateEntry(entry);
 
           entry.id = id;
           entry.сreated = new Date();

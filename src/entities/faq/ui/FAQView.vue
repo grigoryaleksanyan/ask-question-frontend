@@ -62,7 +62,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { GetAllWithEntries } from '../../repositories/faq-category-repository';
+import { GetAllWithEntries } from '../api/faq-category-repository';
 
 export default {
   name: 'FAQView',

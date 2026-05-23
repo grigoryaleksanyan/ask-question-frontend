@@ -27,7 +27,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Delete } from '@/modules/faq/repositories/faq-category-repository';
+import { DeleteCategoryApi } from '@/entities/faq';
 
 export default {
   name: 'DeleteCategory',
@@ -44,7 +44,7 @@ export default {
 
     async confirm() {
       try {
-        await Delete(this.id);
+        await DeleteCategoryApi(this.id);
 
         this.ADD_ALERT({
           type: ALERT_TYPES.SUCCESS,

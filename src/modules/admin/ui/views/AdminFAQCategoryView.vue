@@ -132,8 +132,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { GetById } from '@/modules/faq/repositories/faq-category-repository';
-import { SetOrder } from '@/modules/faq/repositories/faq-entry-repository';
+import { GetCategoryById, SetEntryOrder } from '@/entities/faq';
 
 import { copyToClipboard } from '@/shared/lib';
 
@@ -199,7 +198,7 @@ export default {
         try {
           this.ADD_LOADER();
           const entryIds = newOrderEntries.map((entry) => entry.id);
-          await SetOrder(entryIds);
+          await SetEntryOrder(entryIds);
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,
             text: 'Сортировка применена',
@@ -225,7 +224,7 @@ export default {
     async fetchData() {
       try {
         this.ADD_LOADER();
-        this.category = await GetById(this.id);
+        this.category = await GetCategoryById(this.id);
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       } finally {

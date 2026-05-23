@@ -31,7 +31,7 @@ const routes = [
   {
     path: '/faq',
     name: 'faq',
-    component: () => import('@/modules/faq/ui/views/FAQView.vue'),
+    component: () => import('@/entities/faq/ui/FAQView.vue'),
   },
 
   ...AdminRoutes,

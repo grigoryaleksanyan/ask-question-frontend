@@ -46,7 +46,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { Update } from '@/modules/faq/repositories/faq-entry-repository';
+import { UpdateEntry } from '@/entities/faq';
 
 import RichEditor from '@/shared/ui/rich-editor';
 
@@ -110,7 +110,7 @@ export default {
             answer: sanitizeHtml(this.controls.answer),
           };
 
-          await Update(entry);
+          await UpdateEntry(entry);
 
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,

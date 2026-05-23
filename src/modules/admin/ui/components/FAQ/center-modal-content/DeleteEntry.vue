@@ -24,7 +24,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Delete } from '@/modules/faq/repositories/faq-entry-repository';
+import { DeleteEntry } from '@/entities/faq';
 
 export default {
   name: 'DeleteEntry',
@@ -41,7 +41,7 @@ export default {
 
     async confirm() {
       try {
-        await Delete(this.id);
+        await DeleteEntry(this.id);
 
         this.ADD_ALERT({
           type: ALERT_TYPES.SUCCESS,

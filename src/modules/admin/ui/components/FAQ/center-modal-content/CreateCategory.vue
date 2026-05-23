@@ -33,7 +33,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Create } from '@/modules/faq/repositories/faq-category-repository';
+import { CreateCategoryApi } from '@/entities/faq';
 
 export default {
   name: 'CreateCategory',
@@ -77,7 +77,7 @@ export default {
         try {
           const category = { name: this.name, order: this.order };
 
-          const id = await Create(category);
+          const id = await CreateCategoryApi(category);
 
           category.id = id;
 

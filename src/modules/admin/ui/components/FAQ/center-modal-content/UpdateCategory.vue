@@ -33,7 +33,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Update } from '@/modules/faq/repositories/faq-category-repository';
+import { UpdateCategoryApi } from '@/entities/faq';
 
 export default {
   name: 'UpdateCategory',
@@ -83,7 +83,7 @@ export default {
         try {
           const category = { id: this.category.id, name: this.name };
 
-          await Update(category);
+          await UpdateCategoryApi(category);
 
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,
