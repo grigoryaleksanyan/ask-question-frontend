@@ -66,7 +66,7 @@ import { mapMutations } from 'vuex';
 import { ALERT_TYPES } from '@/shared/config';
 
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
-import UserProfile from '@/modules/user/ui/components/center-modal-content/UserProfile.vue';
+import { UserProfile } from '@/entities/user';
 
 import { Logout } from '@/modules/auth/repositories/auth-repository';
 

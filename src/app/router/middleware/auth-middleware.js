@@ -1,7 +1,7 @@
 import store from '@/app/store/store';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { GetUserData } from '@/modules/user/repositories/user-repository';
+import { GetUserData } from '@/entities/user';
 
 export default async function checkAuth() {
   if (!store.getters['auth/GET_AUTH_STATUS']) {

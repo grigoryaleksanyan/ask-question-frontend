@@ -101,7 +101,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import { ALERT_TYPES } from '@/shared/config';
-import { ChangePassword } from '../../../repositories/user-repository';
+import { ChangePassword } from '../api/user-repository';
 
 export default {
   name: 'UserProfile',
