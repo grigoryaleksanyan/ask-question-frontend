@@ -24,7 +24,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Delete } from '@/modules/feedback/repositories/feedback-repository';
+import { DeleteFeedback } from '@/features/feedback';
 
 export default {
   name: 'DeleteFeedback',
@@ -41,7 +41,7 @@ export default {
 
     async confirm() {
       try {
-        await Delete(this.id);
+        await DeleteFeedback(this.id);
 
         this.ADD_ALERT({
           type: ALERT_TYPES.SUCCESS,

@@ -62,7 +62,7 @@ import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
 import AppLogo from '@/shared/ui/AppLogo.vue';
 
-import SidebarFeedbackContent from '@/modules/feedback/ui/components/sidebar-content/SidebarFeedbackContent.vue';
+import { SidebarFeedbackContent } from '@/features/feedback';
 
 export default {
   name: 'DefaultLayout',

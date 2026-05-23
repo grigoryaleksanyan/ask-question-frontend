@@ -51,7 +51,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { GetAll } from '@/modules/feedback/repositories/feedback-repository';
+import { GetAllFeedback } from '@/features/feedback';
 
 import FeedbackCard from '../components/feedback/FeedbackCard.vue';
 import DeleteFeedback from '../components/feedback/center-modal-content/DeleteFeedback.vue';
@@ -85,7 +85,7 @@ export default {
     async fetchData() {
       try {
         this.ADD_LOADER();
-        this.feedbacks = await GetAll();
+        this.feedbacks = await GetAllFeedback();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       } finally {

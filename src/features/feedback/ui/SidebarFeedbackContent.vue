@@ -72,7 +72,7 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { Create } from '../../../repositories/feedback-repository';
+import { Create } from '../api/feedback-repository';
 
 export default {
   name: 'SidebarFeedbackContent',
