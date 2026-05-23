@@ -19,7 +19,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { GetAll } from '@/modules/question/repositories/questions-repository';
+import { GetAllQuestions } from '@/entities/question';
 
 export default {
   name: 'AdminQuestionsView',
@@ -54,7 +54,7 @@ export default {
 
     async fetchData() {
       try {
-        this.questions = await GetAll();
+        this.questions = await GetAllQuestions();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }

@@ -126,13 +126,10 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import { ALERT_TYPES } from '@/shared/config';
-import {
-  GetCapctha,
-  Create,
-} from '@/modules/question/repositories/questions-repository';
-
 import { GetAll } from '@/modules/shared/repositories/areas-repository';
+
+import { ALERT_TYPES } from '@/shared/config';
+import { GetCapctha, Create } from '../api/questions-repository';
 
 export default {
   name: 'QuestionFormCreate',

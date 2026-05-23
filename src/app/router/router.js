@@ -21,12 +21,12 @@ const routes = [
   {
     path: '/questions',
     name: 'questions',
-    component: () => import('@/modules/question/ui/views/QuestionsView.vue'),
+    component: () => import('@/entities/question/ui/QuestionsView.vue'),
   },
   {
     path: '/question/:id',
     name: 'question',
-    component: () => import('@/modules/question/ui/views/QuestionIdView.vue'),
+    component: () => import('@/entities/question/ui/QuestionIdView.vue'),
   },
   {
     path: '/faq',

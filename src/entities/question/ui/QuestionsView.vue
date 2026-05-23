@@ -116,10 +116,10 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { GetAll } from '@/modules/question/repositories/questions-repository';
+import { GetAll } from '../api/questions-repository';
 
-import QuestionFilters from '@/modules/question/ui/components/QuestionFilters.vue';
-import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
+import QuestionFilters from './QuestionFilters.vue';
+import QuestionCard from './QuestionCard.vue';
 
 export default {
   name: 'QuestionsView',

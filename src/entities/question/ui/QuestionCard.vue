@@ -96,9 +96,9 @@
 </template>
 
 <script>
-import QUESTION_STATUSES from '@/modules/question/constants/question-statuses';
+import QUESTION_STATUSES from '../config/question-statuses';
 
-import QuestionStatusIcon from '@/modules/question/ui/components/QuestionStatusIcon.vue';
+import QuestionStatusIcon from './QuestionStatusIcon.vue';
 
 export default {
   name: 'QuestionCard',

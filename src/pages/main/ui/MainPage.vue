@@ -62,10 +62,11 @@ import { useGoTo } from 'vuetify';
 
 import VideoBackground from 'vue-responsive-video-background-player';
 
-import { GetPopularQuestions } from '@/modules/question/repositories/questions-repository';
-
-import QuestionCard from '@/modules/question/ui/components/QuestionCard.vue';
-import QuestionFormCreate from '@/modules/question/ui/components/QuestionFormCreate.vue';
+import {
+  GetPopularQuestions,
+  QuestionCard,
+  QuestionFormCreate,
+} from '@/entities/question';
 import { ALERT_TYPES } from '@/shared/config';
 
 export default {
