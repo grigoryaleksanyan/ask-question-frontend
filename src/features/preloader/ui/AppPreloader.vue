@@ -1,6 +1,6 @@
 <template>
   <v-overlay
-    :model-value="SHOW_PRELOADER"
+    :model-value="showPreloader"
     style="z-index: 9">
     <v-progress-circular
       :size="70"
@@ -10,14 +10,13 @@
   </v-overlay>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { storeToRefs } from 'pinia';
+import { usePreloaderStore } from '../store';
 
-export default {
-  name: 'AppPreloader',
+defineOptions({ name: 'AppPreloader' });
 
-  computed: {
-    ...mapGetters('preloader', ['SHOW_PRELOADER']),
-  },
-};
+const preloaderStore = usePreloaderStore();
+
+const { showPreloader } = storeToRefs(preloaderStore);
 </script>

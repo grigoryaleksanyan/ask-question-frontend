@@ -1,7 +1,7 @@
 <template>
   <div :class="alertClasses">
     <span class="alert-item-icon">
-      <component :is="`${alert.type}-icon`" />
+      <component :is="iconMap[`${alert.type}-icon`]" />
     </span>
 
     <p class="alert-item-text">{{ alert.text }}</p>
@@ -10,35 +10,44 @@
       type="button"
       title="Закрыть"
       class="alert-item-button"
-      @click="REMOVE_ALERT(alert.id)">
+      @click="removeAlert(alert.id)">
       <CloseIcon />
     </button>
   </div>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+
+import { useAlertStore } from '../store';
 
 import SuccessIcon from './icons/SuccessIcon.vue';
 import InfoIcon from './icons/InfoIcon.vue';
 import WarningIcon from './icons/WarningIcon.vue';
 import ErrorIcon from './icons/ErrorIcon.vue';
-
 import CloseIcon from './icons/CloseIcon.vue';
 
-export default {
-  name: 'AppAlertItem',
-  components: { SuccessIcon, InfoIcon, WarningIcon, ErrorIcon, CloseIcon },
-  props: { alert: { type: Object, required: true } },
+defineOptions({ name: 'AppAlertItem' });
 
-  computed: {
-    alertClasses() {
-      return { 'alert-item': true, [`alert-item-${this.alert.type}`]: true };
-    },
-  },
+const { alert } = defineProps({
+  alert: { type: Object, required: true },
+});
 
-  methods: { ...mapMutations('alert', ['REMOVE_ALERT']) },
+const alertStore = useAlertStore();
+
+const { removeAlert } = alertStore;
+
+const iconMap = {
+  'success-icon': SuccessIcon,
+  'info-icon': InfoIcon,
+  'warning-icon': WarningIcon,
+  'error-icon': ErrorIcon,
 };
+
+const alertClasses = computed(() => ({
+  'alert-item': true,
+  [`alert-item-${alert.type}`]: true,
+}));
 </script>
 
 <style lang="scss" scoped>

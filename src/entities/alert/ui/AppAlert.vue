@@ -2,28 +2,23 @@
   <div class="alert">
     <transition-group name="scroll-y-reverse-transition">
       <AppAlertItem
-        v-for="alert in GET_ALERTS"
+        v-for="alert in getAlerts"
         :key="alert.id"
         :alert="alert" />
     </transition-group>
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { storeToRefs } from 'pinia';
+import { useAlertStore } from '../store';
 import AppAlertItem from './AppAlertItem.vue';
 
-export default {
-  name: 'AppAlert',
+defineOptions({ name: 'AppAlert' });
 
-  components: {
-    AppAlertItem,
-  },
+const alertStore = useAlertStore();
 
-  computed: {
-    ...mapGetters('alert', ['GET_ALERTS']),
-  },
-};
+const { getAlerts } = storeToRefs(alertStore);
 </script>
 
 <style lang="scss" scoped>
