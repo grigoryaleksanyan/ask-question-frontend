@@ -124,33 +124,29 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+
 import QUESTION_STATUSES from '../config/question-statuses';
 
-export default {
-  name: 'QuestionIdView',
+defineOptions({ name: 'QuestionIdView' });
 
-  computed: {
-    color() {
-      switch (1) {
-        case QUESTION_STATUSES.NEW.STATUS_ID:
-          return QUESTION_STATUSES.NEW.COLOR;
-        case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-          return QUESTION_STATUSES.IN_FOCUS.COLOR;
-        case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
-          return QUESTION_STATUSES.WITH_COMMENT.COLOR;
-        case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-          return QUESTION_STATUSES.ANSWERED.COLOR;
-        default:
-          return QUESTION_STATUSES.ANSWERED.COLOR;
-      }
-    },
-  },
+const color = computed(() => {
+  switch (1) {
+    case QUESTION_STATUSES.NEW.STATUS_ID:
+      return QUESTION_STATUSES.NEW.COLOR;
+    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
+      return QUESTION_STATUSES.IN_FOCUS.COLOR;
+    case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
+      return QUESTION_STATUSES.WITH_COMMENT.COLOR;
+    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
+      return QUESTION_STATUSES.ANSWERED.COLOR;
+    default:
+      return QUESTION_STATUSES.ANSWERED.COLOR;
+  }
+});
 
-  methods: {
-    replaceСounter(value) {
-      return value > 999 ? '999+' : value;
-    },
-  },
-};
+function replaceСounter(value) {
+  return value > 999 ? '999+' : value;
+}
 </script>
