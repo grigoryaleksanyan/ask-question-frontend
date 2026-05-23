@@ -20,17 +20,17 @@ const routes = [
   {
     path: '/questions',
     name: 'questions',
-    component: () => import('@/entities/question/ui/QuestionsView.vue'),
+    component: () => import('@/pages/questions'),
   },
   {
     path: '/question/:id',
     name: 'question',
-    component: () => import('@/entities/question/ui/QuestionIdView.vue'),
+    component: () => import('@/pages/questions/detail'),
   },
   {
     path: '/faq',
     name: 'faq',
-    component: () => import('@/entities/faq/ui/FAQView.vue'),
+    component: () => import('@/pages/faq'),
   },
   {
     path: '/admin',
