@@ -95,51 +95,50 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+
 import QUESTION_STATUSES from '../config/question-statuses';
 
 import QuestionStatusIcon from './QuestionStatusIcon.vue';
 
-export default {
-  name: 'QuestionCard',
-  components: { QuestionStatusIcon },
-  props: { question: { type: Object, required: true } },
+defineOptions({ name: 'QuestionCard' });
 
-  computed: {
-    color() {
-      switch (this.question.status) {
-        case QUESTION_STATUSES.NEW.STATUS_ID:
-          return QUESTION_STATUSES.NEW.COLOR;
-        case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-          return QUESTION_STATUSES.IN_FOCUS.COLOR;
-        case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
-          return QUESTION_STATUSES.WITH_COMMENT.COLOR;
-        case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-          return QUESTION_STATUSES.ANSWERED.COLOR;
-        default:
-          return QUESTION_STATUSES.ANSWERED.COLOR;
-      }
-    },
-  },
+const { question } = defineProps({
+  question: { type: Object, required: true },
+});
 
-  methods: {
-    sliceText(text) {
-      const maxTextLength = 300;
+const color = computed(() => {
+  switch (question.status) {
+    case QUESTION_STATUSES.NEW.STATUS_ID:
+      return QUESTION_STATUSES.NEW.COLOR;
+    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
+      return QUESTION_STATUSES.IN_FOCUS.COLOR;
+    case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
+      return QUESTION_STATUSES.WITH_COMMENT.COLOR;
+    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
+      return QUESTION_STATUSES.ANSWERED.COLOR;
+    default:
+      return QUESTION_STATUSES.ANSWERED.COLOR;
+  }
+});
 
-      if (text.length < maxTextLength) {
-        return text;
-      }
-      return `${text.slice(0, maxTextLength)}... <b class="question-card-more">подробнее</b>`;
-    },
+function sliceText(text) {
+  const maxTextLength = 300;
 
-    replaceСounter(value) {
-      return value > 999 ? '999+' : value;
-    },
+  if (text.length < maxTextLength) {
+    return text;
+  }
+  return `${text.slice(0, maxTextLength)}... <b class="question-card-more">подробнее</b>`;
+}
 
-    setLike() {},
-    setDislike() {},
-  },
-};
+function replaceСounter(value) {
+  return value > 999 ? '999+' : value;
+}
+
+function setLike() {}
+
+function setDislike() {}
 </script>
 
 <style lang="scss">
