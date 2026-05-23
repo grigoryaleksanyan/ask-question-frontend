@@ -12,8 +12,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CenterModalContentWrapper',
-};
+<script setup>
+defineOptions({ name: 'CenterModalContentWrapper' });
 </script>
