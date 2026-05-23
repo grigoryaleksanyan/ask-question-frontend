@@ -1,4 +1,4 @@
-import generateId from '../helpers/pseudorandom-generator';
+import generateId from '../lib/pseudorandom-generator';
 
 export default {
   namespaced: true,
