@@ -1,3 +1,3 @@
-import QuestionIdPage from './ui/QuestionIdPage.vue';
+import QuestionIdPage from './QuestionIdPage.vue';
 
 export default QuestionIdPage;
