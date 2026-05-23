@@ -2,14 +2,8 @@
   <QuestionIdView />
 </template>
 
-<script>
+<script setup>
 import { QuestionIdView } from '@/entities/question';
 
-export default {
-  name: 'QuestionIdPage',
-
-  components: {
-    QuestionIdView,
-  },
-};
+defineOptions({ name: 'QuestionIdPage' });
 </script>
