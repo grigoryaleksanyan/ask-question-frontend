@@ -4,21 +4,24 @@
 
 - `npm run dev` — dev-сервер на порту 5000, прокси `/api` → `http://localhost:5500`
 - `npm run lint` — последовательно: prettier → eslint → stylelint
-- `npm run fsd:check` — валидация Feature-Sliced Design через steiger
+- `npx steiger ./src` — валидация FSD через steiger
 - `npm run commit` — интерактивный коммит через commitizen (Conventional Commits)
 - Тестов нет, тест-раннер не настроен
 
 ## Архитектура
 
-Feature-Sliced Design (FSD). Валидация через steiger — запускай `npm run fsd:check` после структурных изменений.
+Feature-Sliced Design (FSD) v2.1. Валидация через steiger — запускай `npx steiger ./src` после структурных изменений.
 
 ```
 src/
-  app/       — вход, роутер, хранилище, стили, плагины
-  modules/   — бизнес-модули (auth, question, faq, admin, …)
-  pages/     — композиции для маршрутов
-  shared/    — переиспользуемый код (api, ui, routes, assets)
+  app/       — вход, роутер, хранилище, стили, плагины, перехватчики http-client
+  pages/     — композиции для маршрутов (main, errors, faq, questions, admin/*)
+  features/  — пользовательские действия: auth, feedback, preloader
+  entities/  — бизнес-модели: alert, faq, question, user, area
+  shared/    — инфраструктура (api, config, lib, routes, ui, assets)
 ```
+
+Импорты только сверху вниз: `app → pages → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.js`) — импортируй только через него.
 
 ## Стек
 
@@ -26,7 +29,7 @@ Vue 3 + Vuetify 3 + Vuex 4 + Vue Router 4 + VeeValidate + Axios. **Options API**
 
 ## Стили
 
-- SCSS, глобальные переменные автоинжектируются: `@use "@/app/styles/variables.scss"` — не добавляй `@use` вручную в компоненты
+- SCSS, глобальные переменные автоинжектируются через Vite — не добавляй `@use "@/app/styles/variables.scss"` вручную в компоненты
 - Имена классов — **BEM**: `block__element--modifier` (строго через kebab-case). Паттерн проверяется и ESLint, и Stylelint
 - Порядок CSS-свойств — idiomatic-order (stylelint-config-idiomatic-order)
 
@@ -46,8 +49,12 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## API-клиент
 
-`@/shared/api/http-client.js` — axios с `withCredentials: true`. При 401 — редирект на `/login`. Базовый URL из `import.meta.env.BASE_URL`.
+`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 (редирект на `/login`) подключается в `@/app/lib/http-client-interceptors.js`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
 
 ## Роутинг
 
-Макет страницы задаётся через `meta.layout` (например `'EmptyLayout'`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach`.
+Макет страницы задаётся через `meta.layout` (например `'EmptyLayout'`, `'AdminLayout'`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach`.
+
+## Известные проблемы steiger
+
+`insignificant-slice` на entities и features — ложные срабатывания: steiger не видит Vuex-мутации (`store.commit('alert/ADD_ALERT')`) и динамические `import()` в роутере.
