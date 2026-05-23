@@ -114,6 +114,12 @@
     "add_exclamation_to_title": false,
   },
 
+  // better-commits на Windows пытается использовать /bin/sh, которого нет,
+  // поэтому нужно указать путь к sh.exe из Git Bash.
+  "overrides": {
+    "shell": "C:\\Program Files\\Git\\bin\\sh.exe",
+  },
+
   "confirm_with_editor": false,
   "confirm_commit": true,
   "cache_last_value": true,
