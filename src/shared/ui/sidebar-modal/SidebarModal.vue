@@ -32,10 +32,6 @@
 <script setup>
 import { defineAsyncComponent, onBeforeUnmount, provide, ref } from 'vue';
 
-const SidebarPreloader = defineAsyncComponent(
-  () => import('./SidebarPreloader.vue'),
-);
-
 const {
   forcedSlotRender = false,
   closeOnEsc,
@@ -45,6 +41,10 @@ const {
   closeOnEsc: Boolean,
   closeOnClickAway: Boolean,
 });
+
+const SidebarPreloader = defineAsyncComponent(
+  () => import('./SidebarPreloader.vue'),
+);
 
 const isOpen = ref(false);
 const showPreloader = ref(false);
@@ -111,12 +111,12 @@ function close(data) {
 
 provide('close', close);
 
-defineExpose({
-  open,
-});
-
 onBeforeUnmount(() => {
   toggleScroll(false);
+});
+
+defineExpose({
+  open,
 });
 </script>
 

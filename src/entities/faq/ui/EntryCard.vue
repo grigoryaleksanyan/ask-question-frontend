@@ -97,6 +97,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['copy-link', 'update', 'delete'],
 };
 </script>
 
