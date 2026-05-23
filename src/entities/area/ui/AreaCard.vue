@@ -28,7 +28,7 @@
           icon
           variant="text"
           size="small"
-          @click="$emit('update')">
+          @click="emit('update')">
           <v-icon size="20"> mdi-pencil-outline </v-icon>
         </v-btn>
 
@@ -37,7 +37,7 @@
           icon
           variant="text"
           size="small"
-          @click="$emit('delete')">
+          @click="emit('delete')">
           <v-icon size="20"> mdi-delete-outline </v-icon>
         </v-btn>
       </v-col>
@@ -45,19 +45,17 @@
   </v-sheet>
 </template>
 
-<script>
-export default {
-  name: 'AreaCard',
+<script setup>
+defineOptions({ name: 'AreaCard' });
 
-  props: {
-    area: {
-      type: Object,
-      required: true,
-    },
+const { area } = defineProps({
+  area: {
+    type: Object,
+    required: true,
   },
+});
 
-  emits: ['update', 'delete'],
-};
+const emit = defineEmits(['update', 'delete']);
 </script>
 
 <style lang="scss" scoped>
