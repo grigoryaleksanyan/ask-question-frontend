@@ -10,50 +10,39 @@
   </span>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+
 import QUESTION_STATUSES from '../config/question-statuses';
 
-export default {
-  name: 'QuestionStatusIcon',
+defineOptions({ name: 'QuestionStatusIcon' });
 
-  props: {
-    status: {
-      type: Number,
-      default: 0,
-    },
-  },
+const { status } = defineProps({
+  status: { type: Number, default: 0 },
+});
 
-  data() {
-    return {
-      statusList: [
-        {
-          text: QUESTION_STATUSES.NEW.TITLE,
-          color: QUESTION_STATUSES.NEW.COLOR,
-          icon: 'mdi-new-box',
-        },
-        {
-          text: QUESTION_STATUSES.IN_FOCUS.TITLE,
-          color: QUESTION_STATUSES.IN_FOCUS.COLOR,
-          icon: 'mdi-crosshairs-question',
-        },
-        {
-          text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
-          color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-          icon: 'mdi-comment-text-multiple-outline',
-        },
-        {
-          text: QUESTION_STATUSES.ANSWERED.TITLE,
-          color: QUESTION_STATUSES.ANSWERED.COLOR,
-          icon: 'mdi-bullhorn-outline',
-        },
-      ],
-    };
+const statusList = [
+  {
+    text: QUESTION_STATUSES.NEW.TITLE,
+    color: QUESTION_STATUSES.NEW.COLOR,
+    icon: 'mdi-new-box',
   },
+  {
+    text: QUESTION_STATUSES.IN_FOCUS.TITLE,
+    color: QUESTION_STATUSES.IN_FOCUS.COLOR,
+    icon: 'mdi-crosshairs-question',
+  },
+  {
+    text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
+    color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
+    icon: 'mdi-comment-text-multiple-outline',
+  },
+  {
+    text: QUESTION_STATUSES.ANSWERED.TITLE,
+    color: QUESTION_STATUSES.ANSWERED.COLOR,
+    icon: 'mdi-bullhorn-outline',
+  },
+];
 
-  computed: {
-    curentStatus() {
-      return this.statusList[this.status];
-    },
-  },
-};
+const curentStatus = computed(() => statusList[status]);
 </script>
