@@ -27,7 +27,7 @@
       <slot> </slot>
     </div>
     <div
-      v-if="$slots.footer"
+      v-if="slots.footer"
       class="modal-footer"
       :style="{ height: footer }">
       <slot name="footer"> </slot>
@@ -35,31 +35,28 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'SidebarContentWrapper',
-  inject: ['close'],
+<script setup>
+import { computed, inject, useSlots } from 'vue';
 
-  props: {
-    title: { type: String, default: '' },
-    headerHeight: { type: Number, default: 75 },
-    footerHeight: { type: Number, default: 70 },
-  },
+defineOptions({ name: 'SidebarContentWrapper' });
 
-  computed: {
-    header() {
-      return `${this.headerHeight}px`;
-    },
+const { title, headerHeight, footerHeight } = defineProps({
+  title: { type: String, default: '' },
+  headerHeight: { type: Number, default: 75 },
+  footerHeight: { type: Number, default: 70 },
+});
 
-    content() {
-      return `calc(100% - ${this.header} - ${this.footer})`;
-    },
+const close = inject('close');
 
-    footer() {
-      return `${this.$slots.footer ? this.footerHeight : 0}px`;
-    },
-  },
-};
+const slots = useSlots();
+
+const header = computed(() => `${headerHeight}px`);
+
+const footer = computed(() => `${slots.footer ? footerHeight : 0}px`);
+
+const content = computed(
+  () => `calc(100% - ${header.value} - ${footer.value})`,
+);
 </script>
 
 <style lang="scss" scoped>
