@@ -19,14 +19,14 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'NotFoundPage',
+<script setup>
+import { useRouter } from 'vue-router';
 
-  methods: {
-    toBack() {
-      this.$router.go(-1);
-    },
-  },
-};
+defineOptions({ name: 'NotFoundPage' });
+
+const router = useRouter();
+
+function toBack() {
+  router.go(-1);
+}
 </script>
