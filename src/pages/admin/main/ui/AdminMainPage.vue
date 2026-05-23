@@ -2,8 +2,6 @@
   <div>AdminMainView</div>
 </template>
 
-<script>
-export default {
-  name: 'AdminMainPage',
-};
+<script setup>
+defineOptions({ name: 'AdminMainPage' });
 </script>
