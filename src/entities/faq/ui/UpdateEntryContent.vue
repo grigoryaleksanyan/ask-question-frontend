@@ -2,7 +2,7 @@
   <SidebarContentWrapper title="Изменить запись в FAQ">
     <template #default>
       <v-form
-        ref="update-entry"
+        ref="updateEntry"
         v-model="valid"
         @submit.prevent="submitForm">
         <v-row
@@ -39,95 +39,88 @@
   </SidebarContentWrapper>
 </template>
 
-<script>
-import sanitizeHtml from '@/shared/lib/html-sanitize';
+<script setup>
+import { ref, reactive, onMounted, useTemplateRef } from 'vue';
 
-import { mapMutations } from 'vuex';
+import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import { ALERT_TYPES } from '@/shared/config';
 import RichEditor from '@/shared/ui/rich-editor';
 
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
+
 import { Update as UpdateEntry } from '../api/faq-entry-repository';
 
-export default {
-  name: 'UpdateEntryContent',
+defineOptions({ name: 'UpdateEntryContent' });
 
-  components: {
-    RichEditor,
+const { modalConfirm, modalClose, entry } = defineProps({
+  modalConfirm: {
+    type: Function,
+    required: true,
   },
 
-  props: {
-    modalConfirm: {
-      type: Function,
-      required: true,
-    },
-
-    modalClose: {
-      type: Function,
-      required: true,
-    },
-
-    entry: {
-      type: Object,
-      required: true,
-    },
+  modalClose: {
+    type: Function,
+    required: true,
   },
 
-  data() {
-    return {
-      valid: false,
-
-      controls: {
-        question: null,
-        answer: null,
-      },
-
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
+  entry: {
+    type: Object,
+    required: true,
   },
+});
 
-  mounted() {
-    this.controls.question = this.entry.question;
-    this.controls.answer = this.entry.answer;
-  },
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
+const updateEntry = useTemplateRef('updateEntry');
 
-    async submitForm() {
-      if (this.$refs['update-entry'].validate()) {
-        try {
-          this.ADD_LOADER();
+const valid = ref(false);
 
-          const entry = {
-            id: this.entry.id,
-            question: this.controls.question,
-            answer: sanitizeHtml(this.controls.answer),
-          };
+const controls = reactive({
+  question: null,
+  answer: null,
+});
 
-          await UpdateEntry(entry);
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
 
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Запись успешно изменена',
-          });
+onMounted(() => {
+  controls.question = entry.question;
+  controls.answer = entry.answer;
+});
 
-          this.modalConfirm({
-            ...this.entry,
-            question: this.controls.question,
-            answer: this.controls.answer,
-          });
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
-      }
-    },
-  },
-};
+async function submitForm() {
+  if (updateEntry.value.validate()) {
+    try {
+      preloaderStore.addLoader();
+
+      const entryData = {
+        id: entry.id,
+        question: controls.question,
+        answer: sanitizeHtml(controls.answer),
+      };
+
+      await UpdateEntry(entryData);
+
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Запись успешно изменена',
+      });
+
+      modalConfirm({
+        ...entry,
+        question: controls.question,
+        answer: controls.answer,
+      });
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    } finally {
+      preloaderStore.removeLoader();
+    }
+  }
+}
 </script>

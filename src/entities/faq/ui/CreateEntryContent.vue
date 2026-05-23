@@ -2,7 +2,7 @@
   <SidebarContentWrapper title="Создать запись в FAQ">
     <template #default>
       <v-form
-        ref="create-entry"
+        ref="createEntry"
         v-model="valid"
         @submit.prevent="submitForm">
         <v-row
@@ -39,95 +39,88 @@
   </SidebarContentWrapper>
 </template>
 
-<script>
-import sanitizeHtml from '@/shared/lib/html-sanitize';
+<script setup>
+import { ref, reactive, useTemplateRef } from 'vue';
 
-import { mapMutations } from 'vuex';
+import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import { ALERT_TYPES } from '@/shared/config';
 import RichEditor from '@/shared/ui/rich-editor';
 
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
+
 import { Create as CreateEntry } from '../api/faq-entry-repository';
 
-export default {
-  name: 'CreateEntryContent',
+defineOptions({ name: 'CreateEntryContent' });
 
-  components: {
-    RichEditor,
+const { modalConfirm, modalClose, categoryId, order } = defineProps({
+  modalConfirm: {
+    type: Function,
+    required: true,
   },
 
-  props: {
-    modalConfirm: {
-      type: Function,
-      required: true,
-    },
-
-    modalClose: {
-      type: Function,
-      required: true,
-    },
-
-    categoryId: {
-      type: String,
-      required: true,
-    },
-
-    order: {
-      type: Number,
-      required: true,
-    },
+  modalClose: {
+    type: Function,
+    required: true,
   },
 
-  data() {
-    return {
-      valid: false,
-
-      controls: {
-        question: null,
-        answer: null,
-      },
-
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
+  categoryId: {
+    type: String,
+    required: true,
   },
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
-
-    async submitForm() {
-      if (this.$refs['create-entry'].validate()) {
-        try {
-          this.ADD_LOADER();
-
-          const entry = {
-            faqCategoryId: this.categoryId,
-            question: this.controls.question,
-            answer: sanitizeHtml(this.controls.answer),
-            order: this.order,
-          };
-
-          const id = await CreateEntry(entry);
-
-          entry.id = id;
-          entry.сreated = new Date();
-
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Запись успешно создана',
-          });
-
-          this.modalConfirm(entry);
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
-      }
-    },
+  order: {
+    type: Number,
+    required: true,
   },
-};
+});
+
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+
+const createEntry = useTemplateRef('createEntry');
+
+const valid = ref(false);
+
+const controls = reactive({
+  question: null,
+  answer: null,
+});
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+async function submitForm() {
+  if (createEntry.value.validate()) {
+    try {
+      preloaderStore.addLoader();
+
+      const entry = {
+        faqCategoryId: categoryId,
+        question: controls.question,
+        answer: sanitizeHtml(controls.answer),
+        order,
+      };
+
+      const id = await CreateEntry(entry);
+
+      entry.id = id;
+      entry.сreated = new Date();
+
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Запись успешно создана',
+      });
+
+      modalConfirm(entry);
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    } finally {
+      preloaderStore.removeLoader();
+    }
+  }
+}
 </script>

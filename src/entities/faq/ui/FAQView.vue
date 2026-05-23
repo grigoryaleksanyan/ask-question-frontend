@@ -57,56 +57,53 @@
   </v-container>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { ALERT_TYPES } from '@/shared/config';
 
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
+
 import { GetAllWithEntries } from '../api/faq-category-repository';
 
-export default {
-  name: 'FAQView',
+defineOptions({ name: 'FAQView' });
 
-  data() {
-    return { categories: [] };
-  },
+const route = useRoute();
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
 
-  created() {
-    this.fetchData();
-  },
+const categories = ref([]);
 
-  mounted() {
-    const { id } = this.$route.query;
+async function fetchData() {
+  try {
+    preloaderStore.addLoader();
+    categories.value = await GetAllWithEntries();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 
-    if (id) {
-      setTimeout(() => {
-        const element = document.getElementById(id);
+onMounted(() => {
+  const { id } = route.query;
 
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (id) {
+    setTimeout(() => {
+      const element = document.getElementById(id);
 
-          element.children[0].click();
-        }
-      }, 100);
-    }
-  },
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
-
-    async fetchData() {
-      try {
-        this.ADD_LOADER();
-        this.categories = await GetAllWithEntries();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
+        element.children[0].click();
       }
-    },
-  },
-};
+    }, 100);
+  }
+});
+
+fetchData();
 </script>
 
 <style lang="scss" scoped>

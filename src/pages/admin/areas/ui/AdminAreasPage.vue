@@ -90,9 +90,9 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, reactive } from 'vue';
 import Draggable from 'vuedraggable';
-import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -104,112 +104,93 @@ import {
   UpdateArea,
   DeleteArea,
 } from '@/entities/area';
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
 
-export default {
-  name: 'AdminAreasPage',
+defineOptions({ name: 'AdminAreasPage' });
 
-  components: {
-    Draggable,
-    AreaCard,
-    CreateArea,
-    UpdateArea,
-    DeleteArea,
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+
+const areas = ref([]);
+const currentArea = ref(null);
+
+const showCreateArea = ref(false);
+const showUpdateArea = ref(false);
+const showDeleteArea = ref(false);
+
+const dragOptions = reactive({
+  animation: 150,
+  group: 'areas',
+  disabled: false,
+  forceFallback: true,
+});
+
+const draggableAreas = computed({
+  get() {
+    return areas.value;
   },
 
-  data() {
-    return {
-      areas: [],
+  async set(newOrderAreas) {
+    const oldOrderAreas = [...areas.value];
 
-      currentArea: null,
+    areas.value = newOrderAreas;
 
-      showCreateArea: false,
-      showUpdateArea: false,
-      showDeleteArea: false,
-
-      dragOptions: {
-        animation: 150,
-        group: 'areas',
-        disabled: false,
-        forceFallback: true,
-      },
-    };
+    try {
+      preloaderStore.addLoader();
+      const areaIds = newOrderAreas.map((area) => area.id);
+      await SetAreaOrder(areaIds);
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Сортировка применена',
+      });
+    } catch (error) {
+      areas.value = oldOrderAreas;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    } finally {
+      preloaderStore.removeLoader();
+    }
   },
+});
 
-  computed: {
-    draggableAreas: {
-      get() {
-        return this.areas;
-      },
+async function fetchData() {
+  try {
+    preloaderStore.addLoader();
+    areas.value = await GetAllAreas();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 
-      async set(newOrderAreas) {
-        const oldOrderAreas = [...this.areas];
+function successCreateArea(area) {
+  areas.value = [...areas.value, area];
+  showCreateArea.value = false;
+}
 
-        this.areas = newOrderAreas;
+function clickUpdateAreaBtn(area) {
+  currentArea.value = area;
+  showUpdateArea.value = true;
+}
 
-        try {
-          this.ADD_LOADER();
-          const areaIds = newOrderAreas.map((area) => area.id);
-          await SetAreaOrder(areaIds);
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Сортировка применена',
-          });
-        } catch (error) {
-          this.areas = oldOrderAreas;
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
-      },
-    },
-  },
+function successUpdateArea(modifiedArea) {
+  areas.value = areas.value.map((area) =>
+    area.id === modifiedArea.id ? modifiedArea : area,
+  );
 
-  created() {
-    this.fetchData();
-  },
+  showUpdateArea.value = false;
+}
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
+function clickDeleteAreaBtn(area) {
+  currentArea.value = area;
+  showDeleteArea.value = true;
+}
 
-    async fetchData() {
-      try {
-        this.ADD_LOADER();
-        this.areas = await GetAllAreas();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
+function successDeleteArea(areaId) {
+  areas.value = areas.value.filter((area) => area.id !== areaId);
+  showDeleteArea.value = false;
+}
 
-    successCreateArea(area) {
-      this.areas = [...this.areas, area];
-      this.showCreateArea = false;
-    },
-
-    clickUpdateAreaBtn(area) {
-      this.currentArea = area;
-      this.showUpdateArea = true;
-    },
-
-    successUpdateArea(modifiedArea) {
-      this.areas = this.areas.map((area) =>
-        area.id === modifiedArea.id ? modifiedArea : area,
-      );
-
-      this.showUpdateArea = false;
-    },
-
-    clickDeleteAreaBtn(area) {
-      this.currentArea = area;
-      this.showDeleteArea = true;
-    },
-
-    successDeleteArea(id) {
-      this.areas = this.areas.filter((area) => area.id !== id);
-      this.showDeleteArea = false;
-    },
-  },
-};
+fetchData();
 </script>

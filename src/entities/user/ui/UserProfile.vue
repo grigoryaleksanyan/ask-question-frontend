@@ -2,26 +2,24 @@
   <VeeForm v-slot="{ meta, handleSubmit }">
     <CenterModalContentWrapper>
       <template #default>
-        <template v-if="GET_USER_DATA.userRoleId == 2">
-          <p><b>ФИО:</b> {{ GET_USER_DATA.userDetails.fullName }}</p>
-          <p><b>Почта:</b> {{ GET_USER_DATA.userDetails.email }}</p>
-          <p>
-            <b>Доп. инфо:</b> {{ GET_USER_DATA.userDetails.additionalInfo }}
-          </p>
+        <template v-if="getUserData.userRoleId === 2">
+          <p><b>ФИО:</b> {{ getUserData.userDetails.fullName }}</p>
+          <p><b>Почта:</b> {{ getUserData.userDetails.email }}</p>
+          <p><b>Доп. инфо:</b> {{ getUserData.userDetails.additionalInfo }}</p>
         </template>
 
-        <p><b>Id:</b> {{ GET_USER_DATA.id }}</p>
-        <p><b>Логин:</b> {{ GET_USER_DATA.login }}</p>
+        <p><b>Id:</b> {{ getUserData.id }}</p>
+        <p><b>Логин:</b> {{ getUserData.login }}</p>
         <p><b>Роль:</b> {{ getUserStringRole }}</p>
         <p>
           <b>Создан:</b>
-          {{ new Date(GET_USER_DATA.сreated).toLocaleDateString() }}
+          {{ new Date(getUserData.сreated).toLocaleDateString() }}
         </p>
         <p>
           <b>Изменен:</b>
           {{
-            GET_USER_DATA.updated
-              ? new Date(GET_USER_DATA.updated).toLocaleDateString()
+            getUserData.updated
+              ? new Date(getUserData.updated).toLocaleDateString()
               : '-'
           }}
         </p>
@@ -90,7 +88,7 @@
         <v-btn
           color="blue-grey"
           variant="outlined"
-          @click="$emit('cancel')">
+          @click="emit('cancel')">
           Отмена
         </v-btn>
       </template>
@@ -98,63 +96,61 @@
   </VeeForm>
 </template>
 
-<script>
-import { mapGetters, mapMutations } from 'vuex';
+<script setup>
+import { ref, reactive, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
+import { useAuthStore } from '@/features/auth';
+
 import { ChangePassword } from '../api/user-repository';
 
-export default {
-  name: 'UserProfile',
-  emits: ['success', 'cancel'],
+defineOptions({ name: 'UserProfile' });
 
-  data() {
-    return {
-      controls: {
-        password: null,
-        newPassword: null,
-        confirmPassword: null,
-      },
+const emit = defineEmits(['success', 'cancel']);
 
-      showChangePassword: false,
-    };
-  },
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+const authStore = useAuthStore();
 
-  computed: {
-    ...mapGetters('auth', ['GET_USER_DATA']),
+const { getUserData } = storeToRefs(authStore);
 
-    getUserStringRole() {
-      if (this.GET_USER_DATA.userRoleId === 1) {
-        return 'Администратор';
-      }
+const showChangePassword = ref(false);
 
-      return 'Спикер';
-    },
-  },
+const controls = reactive({
+  password: null,
+  newPassword: null,
+  confirmPassword: null,
+});
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
+const getUserStringRole = computed(() => {
+  if (getUserData.value.userRoleId === 1) {
+    return 'Администратор';
+  }
 
-    async onSubmit() {
-      try {
-        this.ADD_LOADER();
+  return 'Спикер';
+});
 
-        await ChangePassword(this.controls);
+async function onSubmit() {
+  try {
+    preloaderStore.addLoader();
 
-        this.ADD_ALERT({
-          type: ALERT_TYPES.SUCCESS,
-          text: 'Пароль успешно изменен',
-        });
+    await ChangePassword(controls);
 
-        this.$emit('success');
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
-  },
-};
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Пароль успешно изменен',
+    });
+
+    emit('success');
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 </script>
 
 <style lang="scss" scoped>

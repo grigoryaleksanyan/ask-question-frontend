@@ -68,10 +68,10 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import Draggable from 'vuedraggable';
-
-import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 import {
@@ -80,89 +80,72 @@ import {
   CategoryCard,
   CreateCategory,
 } from '@/entities/faq';
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
 
-export default {
-  name: 'AdminFAQPage',
+defineOptions({ name: 'AdminFAQPage' });
 
-  components: {
-    Draggable,
-    CategoryCard,
-    CreateCategory,
+const route = useRoute();
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+
+const categories = ref([]);
+
+const showCreateCategory = ref(false);
+
+const dragOptions = reactive({
+  animation: 150,
+  group: 'categories',
+  disabled: false,
+  forceFallback: true,
+});
+
+const isMainCatalog = computed(() => route.name === 'admin-faq');
+
+const draggableCategories = computed({
+  get() {
+    return categories.value;
   },
 
-  data() {
-    return {
-      categories: [],
+  async set(newOrderCategories) {
+    const oldOrderCategories = [...categories.value];
 
-      showCreateCategory: false,
+    categories.value = newOrderCategories;
 
-      dragOptions: {
-        animation: 150,
-        group: 'categories',
-        disabled: false,
-        forceFallback: true,
-      },
-    };
-  },
-
-  computed: {
-    isMainCatalog() {
-      return this.$route.name === 'admin-faq';
-    },
-
-    draggableCategories: {
-      get() {
-        return this.categories;
-      },
-
-      async set(newOrderCategories) {
-        const oldOrderCategories = [...this.categories];
-
-        this.categories = newOrderCategories;
-
-        try {
-          this.ADD_LOADER();
-          const categoryIds = newOrderCategories.map((category) => category.id);
-          await SetCategoryOrder(categoryIds);
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Сортировка применена',
-          });
-        } catch (error) {
-          this.categories = oldOrderCategories;
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
-      },
-    },
-  },
-
-  created() {
-    if (this.isMainCatalog) {
-      this.fetchData();
+    try {
+      preloaderStore.addLoader();
+      const categoryIds = newOrderCategories.map((category) => category.id);
+      await SetCategoryOrder(categoryIds);
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Сортировка применена',
+      });
+    } catch (error) {
+      categories.value = oldOrderCategories;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    } finally {
+      preloaderStore.removeLoader();
     }
   },
+});
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
+async function fetchData() {
+  try {
+    preloaderStore.addLoader();
+    categories.value = await GetAllCategories();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 
-    async fetchData() {
-      try {
-        this.ADD_LOADER();
-        this.categories = await GetAllCategories();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
+function successCreateCategory(category) {
+  categories.value = [...categories.value, category];
+  showCreateCategory.value = false;
+}
 
-    successCreateCategory(category) {
-      this.categories = [...this.categories, category];
-      this.showCreateCategory = false;
-    },
-  },
-};
+if (route.name === 'admin-faq') {
+  fetchData();
+}
 </script>

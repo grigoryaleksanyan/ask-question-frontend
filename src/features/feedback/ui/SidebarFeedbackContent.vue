@@ -2,7 +2,7 @@
   <SidebarContentWrapper title="Обратная связь">
     <template #default>
       <v-form
-        ref="feedback-form"
+        ref="feedbackForm"
         class="ma-0 pa-0"
         @submit.prevent="submitForm">
         <v-row
@@ -67,86 +67,83 @@
   </SidebarContentWrapper>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { reactive, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
+
 import { Create } from '../api/feedback-repository';
 
-export default {
-  name: 'SidebarFeedbackContent',
+defineOptions({ name: 'SidebarFeedbackContent' });
 
-  props: {
-    showPreloader: {
-      type: Function,
-      required: true,
-    },
-
-    modalConfirm: {
-      type: Function,
-      required: true,
-    },
-
-    modalClose: {
-      type: Function,
-      required: true,
-    },
+const { showPreloader, modalConfirm, modalClose } = defineProps({
+  showPreloader: {
+    type: Function,
+    required: true,
   },
 
-  data() {
-    return {
-      themes: [
-        'Технические проблемы в работе сайта',
-        'Предложения, пожелания по работе или содержанию сайта',
-      ],
-
-      controls: {
-        username: null,
-        email: null,
-        theme: null,
-        text: null,
-      },
-
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
+  modalConfirm: {
+    type: Function,
+    required: true,
   },
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
-
-    async submitForm() {
-      const { valid } = await this.$refs['feedback-form'].validate();
-
-      if (!valid) {
-        return;
-      }
-
-      try {
-        this.ADD_LOADER();
-        await Create(this.controls);
-        this.ADD_ALERT({
-          type: ALERT_TYPES.SUCCESS,
-          text: 'Обратная связь отправлена',
-        });
-        this.modalConfirm();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
-
-    show() {
-      this.showPreloader(true);
-      setTimeout(() => {
-        this.showPreloader(false);
-      }, 2000);
-    },
+  modalClose: {
+    type: Function,
+    required: true,
   },
-};
+});
+
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+
+const feedbackForm = useTemplateRef('feedbackForm');
+
+const themes = [
+  'Технические проблемы в работе сайта',
+  'Предложения, пожелания по работе или содержанию сайта',
+];
+
+const controls = reactive({
+  username: null,
+  email: null,
+  theme: null,
+  text: null,
+});
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+async function submitForm() {
+  const { valid } = await feedbackForm.value.validate();
+
+  if (!valid) {
+    return;
+  }
+
+  try {
+    preloaderStore.addLoader();
+    await Create(controls);
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Обратная связь отправлена',
+    });
+    modalConfirm();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
+
+function show() {
+  showPreloader(true);
+  setTimeout(() => {
+    showPreloader(false);
+  }, 2000);
+}
 </script>

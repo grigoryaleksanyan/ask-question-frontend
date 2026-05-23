@@ -1,134 +1,137 @@
 <template>
-  <div v-if="category">
-    <v-row>
-      <v-col cols="12">
-        <v-row>
-          <v-col
-            cols="12"
-            class="d-flex align-center">
-            <h1 class="text-h6 text-sm-h5 mr-4">
-              Категория: {{ category.name }}
-            </h1>
-
-            <v-btn
-              title="Изменить"
-              icon
-              variant="flat"
-              size="x-small"
-              @click="showUpdateCategory = true">
-              <v-icon size="20">mdi-pencil-outline</v-icon>
-            </v-btn>
-
-            <v-btn
-              title="Удалить"
-              icon
-              variant="flat"
-              size="x-small"
-              @click="showDeleteCategory = true">
-              <v-icon size="20">mdi-delete-outline</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="12">
-            <v-btn
-              size="small"
-              color="blue-grey"
-              @click="showCreateEntryModal">
-              Добавить запись
-              <v-icon
-                end
-                theme="dark">
-                mdi-plus
-              </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <Draggable
-          v-model="draggableEntries"
-          v-bind="dragOptions"
-          class="v-row"
-          item-key="id"
-          handle=".handle"
-          draggable=".draggable"
-          drag-class="vuedraggable-drag"
-          ghost-class="vuedraggable-ghost">
-          <template #item="{ element }">
+  <div>
+    <div v-if="category">
+      <v-row>
+        <v-col cols="12">
+          <v-row>
             <v-col
               cols="12"
-              class="draggable">
-              <EntryCard
-                :entry="element"
-                @copy-link="copyLink(element)"
-                @update="showUpdateEntryModal(element)"
-                @delete="clickDeleteEntryBtn(element)" />
+              class="d-flex align-center">
+              <h1 class="text-h6 text-sm-h5 mr-4">
+                Категория: {{ category.name }}
+              </h1>
+
+              <v-btn
+                title="Изменить"
+                icon
+                variant="flat"
+                size="x-small"
+                @click="showUpdateCategory = true">
+                <v-icon size="20">mdi-pencil-outline</v-icon>
+              </v-btn>
+
+              <v-btn
+                title="Удалить"
+                icon
+                variant="flat"
+                size="x-small"
+                @click="showDeleteCategory = true">
+                <v-icon size="20">mdi-delete-outline</v-icon>
+              </v-btn>
             </v-col>
-          </template>
-        </Draggable>
-      </v-col>
-    </v-row>
+          </v-row>
 
-    <CenterModal
-      title="Изменить категорию "
-      :is-open="showUpdateCategory"
-      @close="showUpdateCategory = false">
-      <UpdateCategory
-        v-if="showUpdateCategory"
-        :category="category"
+          <v-row>
+            <v-col cols="12">
+              <v-btn
+                size="small"
+                color="blue-grey"
+                @click="showCreateEntryModal">
+                Добавить запись
+                <v-icon
+                  end
+                  theme="dark">
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <Draggable
+            v-model="draggableEntries"
+            v-bind="dragOptions"
+            class="v-row"
+            item-key="id"
+            handle=".handle"
+            draggable=".draggable"
+            drag-class="vuedraggable-drag"
+            ghost-class="vuedraggable-ghost">
+            <template #item="{ element }">
+              <v-col
+                cols="12"
+                class="draggable">
+                <EntryCard
+                  :entry="element"
+                  @copy-link="copyLink(element)"
+                  @update="showUpdateEntryModal(element)"
+                  @delete="clickDeleteEntryBtn(element)" />
+              </v-col>
+            </template>
+          </Draggable>
+        </v-col>
+      </v-row>
+
+      <CenterModal
+        title="Изменить категорию "
         :is-open="showUpdateCategory"
-        @success="successUpdateCategory"
-        @cancel="showUpdateCategory = false" />
-    </CenterModal>
+        @close="showUpdateCategory = false">
+        <UpdateCategory
+          v-if="showUpdateCategory"
+          :category="category"
+          :is-open="showUpdateCategory"
+          @success="successUpdateCategory"
+          @cancel="showUpdateCategory = false" />
+      </CenterModal>
 
-    <CenterModal
-      title="Удалить категорию "
-      :is-open="showDeleteCategory"
-      @close="showDeleteCategory = false">
-      <DeleteCategory
-        v-if="showDeleteCategory"
-        :id="id"
+      <CenterModal
+        title="Удалить категорию "
         :is-open="showDeleteCategory"
-        @success="successDeleteCategory"
-        @cancel="showDeleteCategory = false" />
-    </CenterModal>
+        @close="showDeleteCategory = false">
+        <DeleteCategory
+          v-if="showDeleteCategory"
+          :id="id"
+          :is-open="showDeleteCategory"
+          @success="successDeleteCategory"
+          @cancel="showDeleteCategory = false" />
+      </CenterModal>
 
-    <SidebarModal ref="create-entry-modal">
-      <template #default="{ confirm, close }">
-        <CreateEntryContent
-          :modal-confirm="confirm"
-          :modal-close="close"
-          :category-id="category.id"
-          :order="category.entries.length" />
-      </template>
-    </SidebarModal>
+      <SidebarModal ref="createEntryModal">
+        <template #default="{ confirm, close }">
+          <CreateEntryContent
+            :modal-confirm="confirm"
+            :modal-close="close"
+            :category-id="category.id"
+            :order="category.entries.length" />
+        </template>
+      </SidebarModal>
 
-    <SidebarModal ref="update-entry-modal">
-      <template #default="{ confirm, close }">
-        <UpdateEntryContent
-          :modal-confirm="confirm"
-          :modal-close="close"
-          :entry="currentEntry" />
-      </template>
-    </SidebarModal>
+      <SidebarModal ref="updateEntryModal">
+        <template #default="{ confirm, close }">
+          <UpdateEntryContent
+            :modal-confirm="confirm"
+            :modal-close="close"
+            :entry="currentEntry" />
+        </template>
+      </SidebarModal>
 
-    <CenterModal
-      title="Удалить запись "
-      :is-open="showDeleteEntry"
-      @close="showDeleteEntry = false">
-      <DeleteEntryModal
-        v-if="showDeleteEntry"
-        :id="currentEntry.id"
+      <CenterModal
+        title="Удалить запись "
         :is-open="showDeleteEntry"
-        @success="successDeleteEntry"
-        @cancel="showDeleteEntry = false" />
-    </CenterModal>
+        @close="showDeleteEntry = false">
+        <DeleteEntryModal
+          v-if="showDeleteEntry"
+          :id="currentEntry.id"
+          :is-open="showDeleteEntry"
+          @success="successDeleteEntry"
+          @cancel="showDeleteEntry = false" />
+      </CenterModal>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, reactive, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 import Draggable from 'vuedraggable';
-import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -144,155 +147,138 @@ import {
 } from '@/entities/faq';
 
 import { copyToClipboard } from '@/shared/lib';
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
 
-export default {
-  name: 'AdminFAQCategoryPage',
+defineOptions({ name: 'AdminFAQCategoryPage' });
 
-  components: {
-    Draggable,
-    UpdateCategory,
-    DeleteCategory,
-    EntryCard,
-    CreateEntryContent,
-    UpdateEntryContent,
-    DeleteEntryModal,
+const { id } = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+});
+
+const router = useRouter();
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
+
+const category = ref(null);
+const currentEntry = ref(null);
+
+const showUpdateCategory = ref(false);
+const showDeleteCategory = ref(false);
+const showDeleteEntry = ref(false);
+
+const dragOptions = reactive({
+  animation: 150,
+  group: 'entries',
+  disabled: false,
+  forceFallback: true,
+});
+
+const createEntryModal = useTemplateRef('createEntryModal');
+const updateEntryModal = useTemplateRef('updateEntryModal');
+
+const draggableEntries = computed({
+  get() {
+    return category.value.entries;
   },
 
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
+  async set(newOrderEntries) {
+    const oldOrderEntries = [...category.value.entries];
+
+    category.value.entries = newOrderEntries;
+
+    try {
+      preloaderStore.addLoader();
+      const entryIds = newOrderEntries.map((entry) => entry.id);
+      await SetEntryOrder(entryIds);
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Сортировка применена',
+      });
+    } catch (error) {
+      category.value.entries = oldOrderEntries;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    } finally {
+      preloaderStore.removeLoader();
+    }
   },
+});
 
-  data() {
-    return {
-      category: null,
-      currentEntry: null,
+async function fetchData() {
+  try {
+    preloaderStore.addLoader();
+    category.value = await GetCategoryById(id);
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 
-      showUpdateCategory: false,
-      showDeleteCategory: false,
+async function showCreateEntryModal() {
+  const result = await createEntryModal.value.open();
 
-      showDeleteEntry: false,
+  if (result.status) {
+    const entry = result.data;
+    category.value.entries.push(entry);
+  }
+}
 
-      dragOptions: {
-        animation: 150,
-        group: 'entries',
-        disabled: false,
-        forceFallback: true,
-      },
-    };
-  },
+async function showUpdateEntryModal(entry) {
+  currentEntry.value = entry;
 
-  computed: {
-    draggableEntries: {
-      get() {
-        return this.category.entries;
-      },
+  const result = await updateEntryModal.value.open();
 
-      async set(newOrderEntries) {
-        const oldOrderEntries = [...this.category.entries];
+  if (result.status) {
+    const modifiedEntry = result.data;
 
-        this.category.entries = newOrderEntries;
+    category.value.entries = category.value.entries.map((e) =>
+      e.id === modifiedEntry.id ? modifiedEntry : e,
+    );
+  }
+}
 
-        try {
-          this.ADD_LOADER();
-          const entryIds = newOrderEntries.map((entry) => entry.id);
-          await SetEntryOrder(entryIds);
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Сортировка применена',
-          });
-        } catch (error) {
-          this.category.entries = oldOrderEntries;
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        } finally {
-          this.REMOVE_LOADER();
-        }
-      },
-    },
-  },
+function successUpdateCategory(name) {
+  category.value.name = name;
 
-  created() {
-    this.fetchData();
-  },
+  showUpdateCategory.value = false;
+}
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
+function successDeleteCategory() {
+  showDeleteCategory.value = false;
 
-    async fetchData() {
-      try {
-        this.ADD_LOADER();
-        this.category = await GetCategoryById(this.id);
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
+  router.push({ name: 'admin-faq' });
+}
 
-    async showCreateEntryModal() {
-      const result = await this.$refs['create-entry-modal'].open();
+function copyLink(entry) {
+  const link = `${window.location.protocol}//${window.location.host}/faq?id=${entry.id}`;
 
-      if (result.status) {
-        const entry = result.data;
-        this.category.entries.push(entry);
-      }
-    },
+  copyToClipboard(link)
+    .then(() => {
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Ссылка скопирована в буфер обмена',
+      });
+    })
+    .catch((error) => {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    });
+}
 
-    async showUpdateEntryModal(currentEntry) {
-      this.currentEntry = currentEntry;
+function clickDeleteEntryBtn(entry) {
+  currentEntry.value = entry;
+  showDeleteEntry.value = true;
+}
 
-      const result = await this.$refs['update-entry-modal'].open();
+function successDeleteEntry(entryId) {
+  category.value.entries = category.value.entries.filter(
+    (e) => e.id !== entryId,
+  );
+  showDeleteEntry.value = false;
+}
 
-      if (result.status) {
-        const modifiedEntry = result.data;
-
-        this.category.entries = this.category.entries.map((entry) =>
-          entry.id === modifiedEntry.id ? modifiedEntry : entry,
-        );
-      }
-    },
-
-    successUpdateCategory(name) {
-      this.category.name = name;
-
-      this.showUpdateCategory = false;
-    },
-
-    successDeleteCategory() {
-      this.showDeleteCategory = false;
-
-      this.$router.push({ name: 'admin-faq' });
-    },
-
-    copyLink(entry) {
-      const link = `${window.location.protocol}//${window.location.host}/faq?id=${entry.id}`;
-
-      copyToClipboard(link)
-        .then(() => {
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Ссылка скопирована в буфер обмена',
-          });
-        })
-        .catch((error) => {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        });
-    },
-
-    clickDeleteEntryBtn(entry) {
-      this.currentEntry = entry;
-      this.showDeleteEntry = true;
-    },
-
-    successDeleteEntry(id) {
-      this.category.entries = this.category.entries.filter(
-        (entry) => entry.id !== id,
-      );
-      this.showDeleteEntry = false;
-    },
-  },
-};
+fetchData();
 </script>

@@ -46,8 +46,8 @@
   </v-container>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -56,53 +56,40 @@ import {
   FeedbackCard,
   DeleteFeedbackModal,
 } from '@/features/feedback';
+import { useAlertStore } from '@/entities/alert';
+import { usePreloaderStore } from '@/features/preloader';
 
-export default {
-  name: 'AdminFeedbackPage',
+defineOptions({ name: 'AdminFeedbackPage' });
 
-  components: {
-    FeedbackCard,
-    DeleteFeedbackModal,
-  },
+const alertStore = useAlertStore();
+const preloaderStore = usePreloaderStore();
 
-  data() {
-    return {
-      feedbacks: [],
+const feedbacks = ref([]);
+const currentFeedback = ref(null);
+const showDeleteFeedback = ref(false);
 
-      currentFeedback: null,
+async function fetchData() {
+  try {
+    preloaderStore.addLoader();
+    feedbacks.value = await GetAllFeedback();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  } finally {
+    preloaderStore.removeLoader();
+  }
+}
 
-      showDeleteFeedback: false,
-    };
-  },
+function clickDeleteFeedbackBtn(feedback) {
+  currentFeedback.value = feedback;
+  showDeleteFeedback.value = true;
+}
 
-  created() {
-    this.fetchData();
-  },
+function successDeleteFeedback(feedbackId) {
+  feedbacks.value = feedbacks.value.filter(
+    (feedback) => feedback.id !== feedbackId,
+  );
+  showDeleteFeedback.value = false;
+}
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
-
-    async fetchData() {
-      try {
-        this.ADD_LOADER();
-        this.feedbacks = await GetAllFeedback();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      } finally {
-        this.REMOVE_LOADER();
-      }
-    },
-
-    clickDeleteFeedbackBtn(feedback) {
-      this.currentFeedback = feedback;
-      this.showDeleteFeedback = true;
-    },
-
-    successDeleteFeedback(id) {
-      this.feedbacks = this.feedbacks.filter((feedback) => feedback.id !== id);
-      this.showDeleteFeedback = false;
-    },
-  },
-};
+fetchData();
 </script>
