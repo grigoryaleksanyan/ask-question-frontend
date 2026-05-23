@@ -40,7 +40,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Login } from '../../repositories/auth-repository';
+import { Login } from '../api/auth-repository';
 
 export default {
   name: 'LoginView',

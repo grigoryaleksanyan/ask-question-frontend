@@ -68,7 +68,7 @@ import { ALERT_TYPES } from '@/shared/config';
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import { UserProfile } from '@/entities/user';
 
-import { Logout } from '@/modules/auth/repositories/auth-repository';
+import { Logout } from '@/features/auth';
 
 export default {
   name: 'AdminLayout',

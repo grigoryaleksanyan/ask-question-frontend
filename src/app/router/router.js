@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/modules/auth/ui/views/LoginView.vue'),
+    component: () => import('@/features/auth/ui/LoginView.vue'),
     meta: {
       layout: 'EmptyLayout',
     },
