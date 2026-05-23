@@ -2,8 +2,6 @@
   <div></div>
 </template>
 
-<script>
-export default {
-  name: 'RichEditor',
-};
+<script setup>
+defineOptions({ name: 'RichEditor' });
 </script>
