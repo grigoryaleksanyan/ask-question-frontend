@@ -135,7 +135,7 @@ import { ALERT_TYPES } from '@/shared/config';
 import { GetById } from '@/modules/faq/repositories/faq-category-repository';
 import { SetOrder } from '@/modules/faq/repositories/faq-entry-repository';
 
-import copyToClipboard from '../../helpers/copy-to-clipboard';
+import { copyToClipboard } from '@/shared/lib';
 
 import UpdateCategory from '../components/FAQ/center-modal-content/UpdateCategory.vue';
 import DeleteCategory from '../components/FAQ/center-modal-content/DeleteCategory.vue';
