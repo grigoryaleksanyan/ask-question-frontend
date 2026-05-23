@@ -19,7 +19,7 @@
     "lint": "npm run prettier:check && npm run eslint:check && npm run stylelint:check",
     "fsd:check": "steiger ./src",
     "husky:prepare": "husky || true",
-    "commit": "git-cz"
+    "commit": "better-commits"
   },
   "dependencies": {
     "@vee-validate/rules": "^4.15.1",
@@ -38,8 +38,7 @@
     "@feature-sliced/steiger-plugin": "^0.5.8",
     "@mdi/font": "^7.4.47",
     "@vitejs/plugin-vue": "^6.0.7",
-    "commitizen": "^4.3.1",
-    "cz-customizable": "^7.5.4",
+    "better-commits": "^1.23.1",
     "eslint": "^9.39.4",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -61,14 +60,6 @@
     "stylelint-order": "^8.1.1",
     "vite": "^8.0.14",
     "vite-plugin-vuetify": "^2.1.3"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-customizable"
-    },
-    "cz-customizable": {
-      "config": "./configs/git/commitizen.cjs"
-    }
   },
   "lint-staged": {
     "src/**/*.js": [

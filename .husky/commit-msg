@@ -1,1 +1,1 @@
-npx commitlint -g './configs/git/commitlint.cjs' --edit $1
+npx commitlint --edit $1

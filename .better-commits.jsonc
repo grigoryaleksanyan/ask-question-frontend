@@ -1,0 +1,121 @@
+{
+  "check_status": true,
+  "check_status_autocomplete": true,
+
+  "commit_type": {
+    "enable": true,
+    "initial_value": "feat",
+    "max_items": 20,
+    "infer_type_from_branch": true,
+    "append_emoji_to_label": false,
+    "append_emoji_to_commit": false,
+    "emoji_commit_position": "Start",
+    "autocomplete": true,
+    "options": [
+      {
+        "value": "build",
+        "label": "build",
+        "hint": "Общие правки проекта или изменения внешних зависимостей",
+      },
+      {
+        "value": "ci",
+        "label": "ci",
+        "hint": "Настройка CI и работа со скриптами",
+      },
+      {
+        "value": "docs",
+        "label": "docs",
+        "hint": "Обновление документации",
+      },
+      {
+        "value": "feat",
+        "label": "feat",
+        "hint": "Добавление нового функционала",
+      },
+      {
+        "value": "fix",
+        "label": "fix",
+        "hint": "Исправление ошибок",
+      },
+      {
+        "value": "perf",
+        "label": "perf",
+        "hint": "Изменения направленные на улучшение производительности",
+      },
+      {
+        "value": "refactor",
+        "label": "refactor",
+        "hint": "Правки кода без исправления ошибок или добавления новых функций",
+      },
+      {
+        "value": "revert",
+        "label": "revert",
+        "hint": "Откат на предыдущие коммиты",
+      },
+      {
+        "value": "style",
+        "label": "style",
+        "hint": "Правки по кодстайлу (табы, отступы, точки, запятые и т.д.)",
+      },
+      {
+        "value": "test",
+        "label": "test",
+        "hint": "Добавление тестов",
+      },
+      {
+        "value": "chore",
+        "label": "chore",
+        "hint": "Общие правки проекта или изменения внешних зависимостей",
+      },
+    ],
+  },
+
+  "commit_scope": {
+    "enable": true,
+    "custom_scope": true,
+    "initial_value": "general",
+    "infer_scope_from_branch": true,
+    "max_items": 20,
+    "autocomplete": true,
+    "options": [
+      { "value": "general", "label": "general" },
+      { "value": "client", "label": "client" },
+      { "value": "server", "label": "server" },
+      { "value": "", "label": "none" },
+    ],
+  },
+
+  "check_ticket": {
+    "infer_ticket": true,
+    "confirm_ticket": true,
+    "add_to_title": false,
+    "prepend_hashtag": "Never",
+    "surround": "",
+    "title_position": "start",
+  },
+
+  "commit_title": {
+    "max_size": 72,
+  },
+
+  "commit_body": {
+    "enable": true,
+    "required": false,
+    "split_by_period": false,
+  },
+
+  "commit_footer": {
+    "enable": true,
+    "initial_value": [],
+    "options": ["closes", "trailer", "deprecated", "custom"],
+  },
+
+  "breaking_change": {
+    "add_exclamation_to_title": false,
+  },
+
+  "confirm_with_editor": false,
+  "confirm_commit": true,
+  "cache_last_value": true,
+  "print_commit_output": true,
+}
