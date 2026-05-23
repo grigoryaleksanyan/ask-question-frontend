@@ -2,14 +2,8 @@
   <FAQView />
 </template>
 
-<script>
+<script setup>
 import { FAQView } from '@/entities/faq';
 
-export default {
-  name: 'FAQPage',
-
-  components: {
-    FAQView,
-  },
-};
+defineOptions({ name: 'FAQPage' });
 </script>
