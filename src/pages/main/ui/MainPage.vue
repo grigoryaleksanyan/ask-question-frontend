@@ -57,7 +57,8 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { useGoTo } from 'vuetify';
 
 import VideoBackground from 'vue-responsive-video-background-player';
@@ -67,52 +68,32 @@ import {
   QuestionCard,
   QuestionFormCreate,
 } from '@/entities/question';
+import { useAlertStore } from '@/entities/alert';
 import { ALERT_TYPES } from '@/shared/config';
 
-export default {
-  name: 'MainPage',
+defineOptions({ name: 'MainPage' });
 
-  components: {
-    VideoBackground,
-    QuestionFormCreate,
-    QuestionCard,
-  },
+const goTo = useGoTo();
+const alertStore = useAlertStore();
 
-  setup() {
-    const goTo = useGoTo();
-    return { goTo };
-  },
+const backgroundVideo = ref(
+  new URL('@/shared/assets/video/background.mp4', import.meta.url).href,
+);
+const backgroundPoster = ref(
+  new URL('@/shared/assets/img/poster.jpg', import.meta.url).href,
+);
+const questions = ref([]);
+const headerHeight = ref(64);
 
-  data() {
-    return {
-      backgroundVideo: new URL(
-        '@/shared/assets/video/background.mp4',
-        import.meta.url,
-      ).href,
-      backgroundPoster: new URL(
-        '@/shared/assets/img/poster.jpg',
-        import.meta.url,
-      ).href,
-      questions: [],
+async function fetchData() {
+  try {
+    questions.value = await GetPopularQuestions();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 
-      headerHeight: 64,
-    };
-  },
-
-  created() {
-    this.fetchData();
-  },
-
-  methods: {
-    async fetchData() {
-      try {
-        this.questions = await GetPopularQuestions();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
-  },
-};
+fetchData();
 </script>
 
 <style lang="scss" scoped>
