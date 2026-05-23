@@ -57,63 +57,48 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, ref, useTemplateRef } from 'vue';
+
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
 import AppLogo from '@/shared/ui/AppLogo.vue';
 
 import { SidebarFeedbackContent } from '@/features/feedback';
 
-export default {
-  name: 'DefaultLayout',
+defineOptions({ name: 'DefaultLayout' });
 
-  components: {
-    DrawerNavigation,
-    HeaderNavigation,
-    AppLogo,
-    SidebarFeedbackContent,
+const drawer = ref(false);
+
+const feedbackModal = useTemplateRef('feedback-modal');
+
+const navItems = [
+  {
+    title: 'Главная',
+    icon: 'mdi-home',
+    link: '/',
   },
-
-  data() {
-    return {
-      drawer: false,
-      navItems: [
-        {
-          title: 'Главная',
-          icon: 'mdi-home',
-          link: '/',
-        },
-        {
-          title: 'Все вопросы',
-          icon: 'mdi-account-question',
-          link: '/questions',
-        },
-        {
-          title: 'FAQ',
-          icon: 'mdi-frequently-asked-questions',
-          link: '/faq',
-        },
-      ],
-    };
+  {
+    title: 'Все вопросы',
+    icon: 'mdi-account-question',
+    link: '/questions',
   },
-
-  computed: {
-    year() {
-      const now = new Date();
-      return now.getFullYear();
-    },
+  {
+    title: 'FAQ',
+    icon: 'mdi-frequently-asked-questions',
+    link: '/faq',
   },
+];
 
-  methods: {
-    async showFeedbackModal() {
-      await this.$refs['feedback-modal'].open();
-    },
+const year = computed(() => new Date().getFullYear());
 
-    toggleDrawer() {
-      this.drawer = !this.drawer;
-    },
-  },
-};
+async function showFeedbackModal() {
+  await feedbackModal.value.open();
+}
+
+function toggleDrawer() {
+  drawer.value = !drawer.value;
+}
 </script>
 
 <style lang="scss" scoped>
