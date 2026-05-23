@@ -10,26 +10,26 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CategoryCard',
+<script setup>
+import { useRouter } from 'vue-router';
 
-  props: {
-    category: {
-      type: Object,
-      required: true,
-    },
-  },
+defineOptions({ name: 'CategoryCard' });
 
-  methods: {
-    clickOnCard() {
-      this.$router.push({
-        name: 'admin-faq-category',
-        params: { id: this.category.id },
-      });
-    },
+const { category } = defineProps({
+  category: {
+    type: Object,
+    required: true,
   },
-};
+});
+
+const router = useRouter();
+
+function clickOnCard() {
+  router.push({
+    name: 'admin-faq-category',
+    params: { id: category.id },
+  });
+}
 </script>
 
 <style lang="scss" scoped>
