@@ -1,6 +1,6 @@
 <template>
   <v-form
-    ref="update-category"
+    ref="updateCategory"
     v-model="valid"
     @submit.prevent="submitForm">
     <CenterModalContentWrapper>
@@ -29,77 +29,68 @@
   </v-form>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, watch, onMounted, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Update as UpdateCategoryApi } from '../api/faq-category-repository';
 
-export default {
-  name: 'UpdateCategory',
+defineOptions({ name: 'UpdateCategory' });
 
-  props: {
-    category: {
-      type: Object,
-      required: true,
-    },
+const { category, isOpen } = defineProps({
+  category: { type: Object, required: true },
+  isOpen: { type: Boolean },
+});
 
-    isOpen: {
-      type: Boolean,
-    },
+const emit = defineEmits(['success', 'cancel']);
+
+const alertStore = useAlertStore();
+
+const valid = ref(true);
+const name = ref(null);
+const updateCategory = useTemplateRef('updateCategory');
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+watch(
+  () => isOpen,
+  (newValue) => {
+    if (!newValue) {
+      updateCategory.value.reset();
+    } else {
+      name.value = category.name;
+    }
   },
+);
 
-  data() {
-    return {
-      valid: true,
-      name: null,
+onMounted(() => {
+  name.value = category.name;
+});
 
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
-  },
+async function submitForm() {
+  if (updateCategory.value.validate()) {
+    try {
+      const updatedCategory = { id: category.id, name: name.value };
 
-  watch: {
-    isOpen(newValue) {
-      if (!newValue) {
-        this.$refs['update-category'].reset();
-      } else {
-        this.name = this.category.name;
-      }
-    },
-  },
+      await UpdateCategoryApi(updatedCategory);
 
-  mounted() {
-    this.name = this.category.name;
-  },
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Категория успешно изменена',
+      });
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+      emit('success', updatedCategory.name);
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    }
+  }
+}
 
-    async submitForm() {
-      if (this.$refs['update-category'].validate()) {
-        try {
-          const category = { id: this.category.id, name: this.name };
-
-          await UpdateCategoryApi(category);
-
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Категория успешно изменена',
-          });
-
-          this.$emit('success', category.name);
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        }
-      }
-    },
-
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+function cancel() {
+  emit('cancel');
+}
 </script>

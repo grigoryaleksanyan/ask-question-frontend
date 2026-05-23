@@ -4,7 +4,7 @@
     color="#E8EAF6"
     width="600">
     <v-form
-      ref="question-add"
+      ref="questionAdd"
       v-model="valid"
       @submit.prevent="submitForm">
       <v-container
@@ -123,98 +123,94 @@
   </v-card>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, reactive, useTemplateRef } from 'vue';
 
 import { GetAllAreas } from '@/entities/area';
-
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { GetCapctha, Create } from '../api/questions-repository';
 
-export default {
-  name: 'QuestionFormCreate',
+defineOptions({ name: 'QuestionFormCreate' });
 
-  data() {
-    return {
-      valid: true,
-      details: false,
+const alertStore = useAlertStore();
 
-      areas: [],
-      capcthaImg: null,
-      capctha: null,
+const valid = ref(true);
+const details = ref(false);
+const areas = ref([]);
+const capcthaImg = ref(null);
+const capctha = ref(null);
 
-      controls: { text: null, author: null, speaker: null, area: null },
+const controls = reactive({
+  text: null,
+  author: null,
+  speaker: null,
+  area: null,
+});
 
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
-  },
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
 
-  created() {
-    this.GetAllAreas();
-  },
+const questionAdd = useTemplateRef('questionAdd');
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+function toggleForm() {
+  if (!details.value) {
+    getCapctha();
+  }
 
-    toggleForm() {
-      if (!this.details) {
-        this.getCapctha();
-      }
+  details.value = !details.value;
+}
 
-      this.details = !this.details;
-    },
+function showDetails() {
+  if (!details.value) {
+    toggleForm();
+  }
+}
 
-    showDetails() {
-      if (!this.details) {
-        this.toggleForm();
-      }
-    },
+async function getCapctha() {
+  capcthaImg.value = null;
 
-    async getCapctha() {
-      this.capcthaImg = null;
+  try {
+    capcthaImg.value = await GetCapctha();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 
-      try {
-        this.capcthaImg = await GetCapctha();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
+async function fetchAllAreas() {
+  try {
+    areas.value = await GetAllAreas();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 
-    async GetAllAreas() {
-      try {
-        this.areas = await GetAllAreas();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
+async function submitForm() {
+  const result = await questionAdd.value.validate();
 
-    async submitForm() {
-      const result = await this.$refs['question-add'].validate();
+  if (result.valid) {
+    try {
+      await Create(capctha.value, controls);
 
-      if (result.valid) {
-        try {
-          await Create(this.capctha, this.controls);
+      toggleForm();
 
-          this.toggleForm();
+      questionAdd.value.reset();
 
-          this.$refs['question-add'].reset();
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Ваш вопрос успешно добавлен',
+      });
+    } catch (error) {
+      getCapctha();
 
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Ваш вопрос успешно добавлен',
-          });
-        } catch (error) {
-          this.getCapctha();
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    }
+  }
+}
 
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        }
-      }
-    },
-  },
-};
+fetchAllAreas();
 </script>
 
 <style lang="scss" scoped>

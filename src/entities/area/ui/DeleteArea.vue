@@ -20,43 +20,37 @@
   </CenterModalContentWrapper>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
-
+<script setup>
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Delete } from '../api/areas-repository';
 
-export default {
-  name: 'DeleteArea',
+defineOptions({ name: 'DeleteArea' });
 
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
+const { id } = defineProps({
+  id: { type: String, required: true },
+});
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+const emit = defineEmits(['success', 'cancel']);
 
-    async confirm() {
-      try {
-        await Delete(this.id);
+const alertStore = useAlertStore();
 
-        this.ADD_ALERT({
-          type: ALERT_TYPES.SUCCESS,
-          text: 'Область успешно удалена',
-        });
+async function confirm() {
+  try {
+    await Delete(id);
 
-        this.$emit('success', this.id);
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Область успешно удалена',
+    });
 
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+    emit('success', id);
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
+
+function cancel() {
+  emit('cancel');
+}
 </script>

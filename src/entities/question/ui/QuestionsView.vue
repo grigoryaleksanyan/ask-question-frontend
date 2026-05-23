@@ -34,7 +34,7 @@
         class="mb-4">
         <v-tabs
           v-model="model"
-          :show-arrows="$vuetify.display.mobile"
+          :show-arrows="mobile"
           align-tabs="center">
           <v-tab
             value="#tab-1"
@@ -112,46 +112,34 @@
   </v-container>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { GetAll } from '../api/questions-repository';
 
 import QuestionFilters from './QuestionFilters.vue';
 import QuestionCard from './QuestionCard.vue';
 
-export default {
-  name: 'QuestionsView',
+defineOptions({ name: 'QuestionsView' });
 
-  components: {
-    QuestionFilters,
-    QuestionCard,
-  },
+const { mobile } = useDisplay();
 
-  data() {
-    return {
-      model: 'tab-1',
-      page: 1,
+const alertStore = useAlertStore();
 
-      questions: [],
-    };
-  },
+const model = ref('tab-1');
+const page = ref(1);
+const questions = ref([]);
 
-  created() {
-    this.fetchData();
-  },
+async function fetchData() {
+  try {
+    questions.value = await GetAll();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-
-    async fetchData() {
-      try {
-        this.questions = await GetAll();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
-  },
-};
+fetchData();
 </script>

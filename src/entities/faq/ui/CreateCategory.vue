@@ -1,6 +1,6 @@
 <template>
   <v-form
-    ref="create-category"
+    ref="createCategory"
     v-model="valid"
     @submit.prevent="submitForm">
     <CenterModalContentWrapper>
@@ -29,73 +29,64 @@
   </v-form>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, watch, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
-export default {
-  name: 'CreateCategory',
+defineOptions({ name: 'CreateCategory' });
 
-  props: {
-    order: {
-      type: Number,
-      required: true,
-    },
+const { order, isOpen } = defineProps({
+  order: { type: Number, required: true },
+  isOpen: { type: Boolean },
+});
 
-    isOpen: {
-      type: Boolean,
-    },
+const emit = defineEmits(['success', 'cancel']);
+
+const alertStore = useAlertStore();
+
+const valid = ref(true);
+const name = ref(null);
+const createCategory = useTemplateRef('createCategory');
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+watch(
+  () => isOpen,
+  (newValue) => {
+    if (!newValue) {
+      createCategory.value.reset();
+    }
   },
+);
 
-  data() {
-    return {
-      valid: true,
-      name: null,
+async function submitForm() {
+  if (createCategory.value.validate()) {
+    try {
+      const category = { name: name.value, order };
 
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
-  },
+      const id = await CreateCategoryApi(category);
 
-  watch: {
-    isOpen(newValue) {
-      if (!newValue) {
-        this.$refs['create-category'].reset();
-      }
-    },
-  },
+      category.id = id;
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Категория успешно создана',
+      });
 
-    async submitForm() {
-      if (this.$refs['create-category'].validate()) {
-        try {
-          const category = { name: this.name, order: this.order };
+      emit('success', category);
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    }
+  }
+}
 
-          const id = await CreateCategoryApi(category);
-
-          category.id = id;
-
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Категория успешно создана',
-          });
-
-          this.$emit('success', category);
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        }
-      }
-    },
-
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+function cancel() {
+  emit('cancel');
+}
 </script>

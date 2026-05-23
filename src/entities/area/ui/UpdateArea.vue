@@ -1,6 +1,6 @@
 <template>
   <v-form
-    ref="update-area"
+    ref="updateArea"
     v-model="valid"
     @submit.prevent="submitForm">
     <CenterModalContentWrapper>
@@ -29,77 +29,68 @@
   </v-form>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, watch, onMounted, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Update } from '../api/areas-repository';
 
-export default {
-  name: 'UpdateArea',
+defineOptions({ name: 'UpdateArea' });
 
-  props: {
-    area: {
-      type: Object,
-      required: true,
-    },
+const { area, isOpen } = defineProps({
+  area: { type: Object, required: true },
+  isOpen: { type: Boolean },
+});
 
-    isOpen: {
-      type: Boolean,
-    },
+const emit = defineEmits(['success', 'cancel']);
+
+const alertStore = useAlertStore();
+
+const valid = ref(true);
+const title = ref(null);
+const updateArea = useTemplateRef('updateArea');
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+watch(
+  () => isOpen,
+  (newValue) => {
+    if (!newValue) {
+      updateArea.value.reset();
+    } else {
+      title.value = area.title;
+    }
   },
+);
 
-  data() {
-    return {
-      valid: true,
-      title: null,
+onMounted(() => {
+  title.value = area.title;
+});
 
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
-  },
+async function submitForm() {
+  if (updateArea.value.validate()) {
+    try {
+      const updatedArea = { id: area.id, title: title.value };
 
-  watch: {
-    isOpen(newValue) {
-      if (!newValue) {
-        this.$refs['update-area'].reset();
-      } else {
-        this.title = this.area.title;
-      }
-    },
-  },
+      await Update(updatedArea);
 
-  mounted() {
-    this.title = this.area.title;
-  },
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Категория успешно изменена',
+      });
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+      emit('success', { ...area, title: title.value });
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    }
+  }
+}
 
-    async submitForm() {
-      if (this.$refs['update-area'].validate()) {
-        try {
-          const area = { id: this.area.id, title: this.title };
-
-          await Update(area);
-
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Категория успешно изменена',
-          });
-
-          this.$emit('success', { ...this.area, title: this.title });
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        }
-      }
-    },
-
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+function cancel() {
+  emit('cancel');
+}
 </script>

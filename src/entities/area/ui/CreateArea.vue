@@ -1,6 +1,6 @@
 <template>
   <v-form
-    ref="create-area"
+    ref="createArea"
     v-model="valid"
     @submit.prevent="submitForm">
     <CenterModalContentWrapper>
@@ -29,73 +29,64 @@
   </v-form>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref, watch, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Create } from '../api/areas-repository';
 
-export default {
-  name: 'CreateArea',
+defineOptions({ name: 'CreateArea' });
 
-  props: {
-    order: {
-      type: Number,
-      required: true,
-    },
+const { order, isOpen } = defineProps({
+  order: { type: Number, required: true },
+  isOpen: { type: Boolean },
+});
 
-    isOpen: {
-      type: Boolean,
-    },
+const emit = defineEmits(['success', 'cancel']);
+
+const alertStore = useAlertStore();
+
+const valid = ref(true);
+const title = ref(null);
+const createArea = useTemplateRef('createArea');
+
+const rules = [
+  (v) => !!v || 'Обязательное поле!',
+  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+];
+
+watch(
+  () => isOpen,
+  (newValue) => {
+    if (!newValue) {
+      createArea.value.reset();
+    }
   },
+);
 
-  data() {
-    return {
-      valid: true,
-      title: null,
+async function submitForm() {
+  if (createArea.value.validate()) {
+    try {
+      const area = { title: title.value, order };
 
-      rules: [
-        (v) => !!v || 'Обязательное поле!',
-        (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
-      ],
-    };
-  },
+      const id = await Create(area);
 
-  watch: {
-    isOpen(newValue) {
-      if (!newValue) {
-        this.$refs['create-area'].reset();
-      }
-    },
-  },
+      area.id = id;
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+      alertStore.addAlert({
+        type: ALERT_TYPES.SUCCESS,
+        text: 'Область успешно создана',
+      });
 
-    async submitForm() {
-      if (this.$refs['create-area'].validate()) {
-        try {
-          const area = { title: this.title, order: this.order };
+      emit('success', area);
+    } catch (error) {
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    }
+  }
+}
 
-          const id = await Create(area);
-
-          area.id = id;
-
-          this.ADD_ALERT({
-            type: ALERT_TYPES.SUCCESS,
-            text: 'Область успешно создана',
-          });
-
-          this.$emit('success', area);
-        } catch (error) {
-          this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-        }
-      }
-    },
-
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+function cancel() {
+  emit('cancel');
+}
 </script>

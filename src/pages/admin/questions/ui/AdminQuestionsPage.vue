@@ -15,50 +15,40 @@
   </v-container>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { GetAllQuestions } from '@/entities/question';
+import { useAlertStore } from '@/entities/alert';
 
-export default {
-  name: 'AdminQuestionsPage',
+defineOptions({ name: 'AdminQuestionsPage' });
 
-  data() {
-    return {
-      questions: [],
+const alertStore = useAlertStore();
 
-      selected: [],
+const questions = ref([]);
+const selected = ref([]);
 
-      headers: [
-        { title: 'Имя', key: 'author' },
-        { title: 'Зона ответственности', key: 'zone' },
-        { title: 'Спикер', key: 'speaker' },
-        { title: 'Вопрос', key: 'text' },
-        { title: 'Лайки', key: 'likes' },
-        { title: 'Дизлайки', key: 'dislikes' },
-        { title: 'Просмотры', key: 'views' },
-        { title: 'Статус', key: 'status' },
-        { title: 'Дата создания', key: 'сreated' },
-        { title: 'Дата ответа', key: 'iron' },
-      ],
-    };
-  },
+const headers = [
+  { title: 'Имя', key: 'author' },
+  { title: 'Зона ответственности', key: 'zone' },
+  { title: 'Спикер', key: 'speaker' },
+  { title: 'Вопрос', key: 'text' },
+  { title: 'Лайки', key: 'likes' },
+  { title: 'Дизлайки', key: 'dislikes' },
+  { title: 'Просмотры', key: 'views' },
+  { title: 'Статус', key: 'status' },
+  { title: 'Дата создания', key: 'сreated' },
+  { title: 'Дата ответа', key: 'iron' },
+];
 
-  created() {
-    this.fetchData();
-  },
+async function fetchData() {
+  try {
+    questions.value = await GetAllQuestions();
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-
-    async fetchData() {
-      try {
-        this.questions = await GetAllQuestions();
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
-  },
-};
+fetchData();
 </script>

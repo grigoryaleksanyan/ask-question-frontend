@@ -23,43 +23,37 @@
   </CenterModalContentWrapper>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
-
+<script setup>
 import { ALERT_TYPES } from '@/shared/config';
+import { useAlertStore } from '@/entities/alert';
 import { Delete as DeleteCategoryApi } from '../api/faq-category-repository';
 
-export default {
-  name: 'DeleteCategory',
+defineOptions({ name: 'DeleteCategory' });
 
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
+const { id } = defineProps({
+  id: { type: String, required: true },
+});
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
+const emit = defineEmits(['success', 'cancel']);
 
-    async confirm() {
-      try {
-        await DeleteCategoryApi(this.id);
+const alertStore = useAlertStore();
 
-        this.ADD_ALERT({
-          type: ALERT_TYPES.SUCCESS,
-          text: 'Категория успешно удалена',
-        });
+async function confirm() {
+  try {
+    await DeleteCategoryApi(id);
 
-        this.$emit('success');
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Категория успешно удалена',
+    });
 
-    cancel() {
-      this.$emit('cancel');
-    },
-  },
-};
+    emit('success');
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
+
+function cancel() {
+  emit('cancel');
+}
 </script>
