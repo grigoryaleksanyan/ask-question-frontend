@@ -1,6 +1,6 @@
 <template>
   <v-form
-    ref="update-category"
+    ref="create-category"
     v-model="valid"
     @submit.prevent="submitForm">
     <CenterModalContentWrapper>
@@ -16,7 +16,7 @@
           type="submit"
           variant="flat"
           color="primary">
-          Изменить
+          Создать
         </v-btn>
         <v-btn
           variant="outlined"
@@ -33,14 +33,14 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { UpdateCategoryApi } from '@/entities/faq';
+import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
 export default {
-  name: 'UpdateCategory',
+  name: 'CreateCategory',
 
   props: {
-    category: {
-      type: Object,
+    order: {
+      type: Number,
       required: true,
     },
 
@@ -64,33 +64,29 @@ export default {
   watch: {
     isOpen(newValue) {
       if (!newValue) {
-        this.$refs['update-category'].reset();
-      } else {
-        this.name = this.category.name;
+        this.$refs['create-category'].reset();
       }
     },
-  },
-
-  mounted() {
-    this.name = this.category.name;
   },
 
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
 
     async submitForm() {
-      if (this.$refs['update-category'].validate()) {
+      if (this.$refs['create-category'].validate()) {
         try {
-          const category = { id: this.category.id, name: this.name };
+          const category = { name: this.name, order: this.order };
 
-          await UpdateCategoryApi(category);
+          const id = await CreateCategoryApi(category);
+
+          category.id = id;
 
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,
-            text: 'Категория успешно изменена',
+            text: 'Категория успешно создана',
           });
 
-          this.$emit('success', category.name);
+          this.$emit('success', category);
         } catch (error) {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         }

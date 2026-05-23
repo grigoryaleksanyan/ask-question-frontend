@@ -1,7 +1,10 @@
 <template>
   <CenterModalContentWrapper>
     <template #default>
-      <p class="text-body-1">Вы действительно хотите удалить обратную связь?</p>
+      <p class="text-body-1">Вы действительно хотите удалить всю категорию?</p>
+      <p class="ma-0 text-body-2 font-weight-bold">
+        Так же будут удалены все записи!
+      </p>
     </template>
     <template #actions>
       <v-btn
@@ -24,10 +27,10 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { DeleteFeedback } from '@/features/feedback';
+import { Delete as DeleteCategoryApi } from '../api/faq-category-repository';
 
 export default {
-  name: 'DeleteFeedback',
+  name: 'DeleteCategory',
 
   props: {
     id: {
@@ -41,14 +44,14 @@ export default {
 
     async confirm() {
       try {
-        await DeleteFeedback(this.id);
+        await DeleteCategoryApi(this.id);
 
         this.ADD_ALERT({
           type: ALERT_TYPES.SUCCESS,
-          text: 'Обратная связь успешно удалена',
+          text: 'Категория успешно удалена',
         });
 
-        this.$emit('success', this.id);
+        this.$emit('success');
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }

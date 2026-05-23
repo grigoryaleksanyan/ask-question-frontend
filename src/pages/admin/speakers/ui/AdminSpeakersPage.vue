@@ -31,6 +31,6 @@
 
 <script>
 export default {
-  name: 'AdminSpeakersView',
+  name: 'AdminSpeakersPage',
 };
 </script>

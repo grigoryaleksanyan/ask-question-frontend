@@ -37,7 +37,7 @@
       title="Удалить обратную связь"
       :is-open="showDeleteFeedback"
       @close="showDeleteFeedback = false">
-      <DeleteFeedback
+      <DeleteFeedbackModal
         v-if="showDeleteFeedback"
         :id="currentFeedback.id"
         @success="successDeleteFeedback"
@@ -51,17 +51,18 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { GetAllFeedback } from '@/features/feedback';
-
-import FeedbackCard from '../components/feedback/FeedbackCard.vue';
-import DeleteFeedback from '../components/feedback/center-modal-content/DeleteFeedback.vue';
+import {
+  GetAllFeedback,
+  FeedbackCard,
+  DeleteFeedbackModal,
+} from '@/features/feedback';
 
 export default {
-  name: 'AdminFeedbackView',
+  name: 'AdminFeedbackPage',
 
   components: {
     FeedbackCard,
-    DeleteFeedback,
+    DeleteFeedbackModal,
   },
 
   data() {

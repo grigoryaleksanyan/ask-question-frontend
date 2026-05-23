@@ -1,7 +1,7 @@
 <template>
   <CenterModalContentWrapper>
     <template #default>
-      <p class="text-body-1">Вы действительно хотите удалить запись?</p>
+      <p class="text-body-1">Вы действительно хотите удалить обратную связь?</p>
     </template>
     <template #actions>
       <v-btn
@@ -24,10 +24,10 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { DeleteEntry } from '@/entities/faq';
+import { Delete as DeleteFeedbackApi } from '../api/feedback-repository';
 
 export default {
-  name: 'DeleteEntry',
+  name: 'DeleteFeedbackModal',
 
   props: {
     id: {
@@ -41,11 +41,11 @@ export default {
 
     async confirm() {
       try {
-        await DeleteEntry(this.id);
+        await DeleteFeedbackApi(this.id);
 
         this.ADD_ALERT({
           type: ALERT_TYPES.SUCCESS,
-          text: 'Запись успешно удалена',
+          text: 'Обратная связь успешно удалена',
         });
 
         this.$emit('success', this.id);

@@ -74,14 +74,15 @@ import Draggable from 'vuedraggable';
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { GetAllCategories, SetCategoryOrder } from '@/entities/faq';
-
-import CategoryCard from '../components/FAQ/CategoryCard.vue';
-
-import CreateCategory from '../components/FAQ/center-modal-content/CreateCategory.vue';
+import {
+  GetAllCategories,
+  SetCategoryOrder,
+  CategoryCard,
+  CreateCategory,
+} from '@/entities/faq';
 
 export default {
-  name: 'AdminFAQView',
+  name: 'AdminFAQPage',
 
   components: {
     Draggable,

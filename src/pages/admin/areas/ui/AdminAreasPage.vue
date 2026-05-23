@@ -106,7 +106,7 @@ import {
 } from '@/entities/area';
 
 export default {
-  name: 'AdminAreasView',
+  name: 'AdminAreasPage',
 
   components: {
     Draggable,

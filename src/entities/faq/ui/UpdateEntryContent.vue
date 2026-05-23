@@ -1,8 +1,8 @@
 <template>
-  <SidebarContentWrapper title="Создать запись в FAQ">
+  <SidebarContentWrapper title="Изменить запись в FAQ">
     <template #default>
       <v-form
-        ref="create-entry"
+        ref="update-entry"
         v-model="valid"
         @submit.prevent="submitForm">
         <v-row
@@ -27,7 +27,7 @@
         variant="flat"
         color="primary"
         @click="submitForm">
-        Создать
+        Изменить
       </v-btn>
       <v-btn
         variant="outlined"
@@ -45,13 +45,12 @@ import sanitizeHtml from '@/shared/lib/html-sanitize';
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-
-import { CreateEntry } from '@/entities/faq';
-
 import RichEditor from '@/shared/ui/rich-editor';
 
+import { Update as UpdateEntry } from '../api/faq-entry-repository';
+
 export default {
-  name: 'CreateEntryContent',
+  name: 'UpdateEntryContent',
 
   components: {
     RichEditor,
@@ -68,13 +67,8 @@ export default {
       required: true,
     },
 
-    categoryId: {
-      type: String,
-      required: true,
-    },
-
-    order: {
-      type: Number,
+    entry: {
+      type: Object,
       required: true,
     },
   },
@@ -95,33 +89,38 @@ export default {
     };
   },
 
+  mounted() {
+    this.controls.question = this.entry.question;
+    this.controls.answer = this.entry.answer;
+  },
+
   methods: {
     ...mapMutations('alert', ['ADD_ALERT']),
     ...mapMutations('preloader', ['ADD_LOADER', 'REMOVE_LOADER']),
 
     async submitForm() {
-      if (this.$refs['create-entry'].validate()) {
+      if (this.$refs['update-entry'].validate()) {
         try {
           this.ADD_LOADER();
 
           const entry = {
-            faqCategoryId: this.categoryId,
+            id: this.entry.id,
             question: this.controls.question,
             answer: sanitizeHtml(this.controls.answer),
-            order: this.order,
           };
 
-          const id = await CreateEntry(entry);
-
-          entry.id = id;
-          entry.сreated = new Date();
+          await UpdateEntry(entry);
 
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,
-            text: 'Запись успешно создана',
+            text: 'Запись успешно изменена',
           });
 
-          this.modalConfirm(entry);
+          this.modalConfirm({
+            ...this.entry,
+            question: this.controls.question,
+            answer: this.controls.answer,
+          });
         } catch (error) {
           this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
         } finally {

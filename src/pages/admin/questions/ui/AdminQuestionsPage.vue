@@ -22,7 +22,7 @@ import { ALERT_TYPES } from '@/shared/config';
 import { GetAllQuestions } from '@/entities/question';
 
 export default {
-  name: 'AdminQuestionsView',
+  name: 'AdminQuestionsPage',
 
   data() {
     return {

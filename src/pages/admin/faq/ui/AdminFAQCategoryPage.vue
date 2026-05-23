@@ -116,7 +116,7 @@
       title="Удалить запись "
       :is-open="showDeleteEntry"
       @close="showDeleteEntry = false">
-      <DeleteEntry
+      <DeleteEntryModal
         v-if="showDeleteEntry"
         :id="currentEntry.id"
         :is-open="showDeleteEntry"
@@ -132,21 +132,21 @@ import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
 
-import { GetCategoryById, SetEntryOrder } from '@/entities/faq';
+import {
+  GetCategoryById,
+  SetEntryOrder,
+  EntryCard,
+  UpdateCategory,
+  DeleteCategory,
+  DeleteEntryModal,
+  CreateEntryContent,
+  UpdateEntryContent,
+} from '@/entities/faq';
 
 import { copyToClipboard } from '@/shared/lib';
 
-import UpdateCategory from '../components/FAQ/center-modal-content/UpdateCategory.vue';
-import DeleteCategory from '../components/FAQ/center-modal-content/DeleteCategory.vue';
-
-import EntryCard from '../components/FAQ/EntryCard.vue';
-
-import CreateEntryContent from '../components/FAQ/sidebar-content/CreateEntryContent.vue';
-import UpdateEntryContent from '../components/FAQ/sidebar-content/UpdateEntryContent.vue';
-import DeleteEntry from '../components/FAQ/center-modal-content/DeleteEntry.vue';
-
 export default {
-  name: 'AdminFAQCategoryView',
+  name: 'AdminFAQCategoryPage',
 
   components: {
     Draggable,
@@ -155,7 +155,7 @@ export default {
     EntryCard,
     CreateEntryContent,
     UpdateEntryContent,
-    DeleteEntry,
+    DeleteEntryModal,
   },
 
   props: {
