@@ -2,14 +2,8 @@
   <QuestionsView />
 </template>
 
-<script>
+<script setup>
 import { QuestionsView } from '@/entities/question';
 
-export default {
-  name: 'QuestionsPage',
-
-  components: {
-    QuestionsView,
-  },
-};
+defineOptions({ name: 'QuestionsPage' });
 </script>
