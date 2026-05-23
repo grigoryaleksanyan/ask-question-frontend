@@ -15,15 +15,13 @@
   </v-toolbar-items>
 </template>
 
-<script>
-export default {
-  name: 'HeaderNavigation',
+<script setup>
+defineOptions({ name: 'HeaderNavigation' });
 
-  props: {
-    navItems: {
-      type: Array,
-      required: true,
-    },
+const { navItems } = defineProps({
+  navItems: {
+    type: Array,
+    required: true,
   },
-};
+});
 </script>
