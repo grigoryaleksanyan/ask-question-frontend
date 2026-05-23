@@ -33,7 +33,7 @@
 import { mapMutations } from 'vuex';
 
 import { ALERT_TYPES } from '@/shared/config';
-import { Update } from '@/modules/shared/repositories/areas-repository';
+import { Update } from '../api/areas-repository';
 
 export default {
   name: 'UpdateArea',

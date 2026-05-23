@@ -97,14 +97,13 @@ import { mapMutations } from 'vuex';
 import { ALERT_TYPES } from '@/shared/config';
 
 import {
-  GetAll,
-  SetOrder,
-} from '@/modules/shared/repositories/areas-repository';
-
-import AreaCard from '../components/area/AreaCard.vue';
-import CreateArea from '../components/area/center-modal-content/CreateArea.vue';
-import UpdateArea from '../components/area/center-modal-content/UpdateArea.vue';
-import DeleteArea from '../components/area/center-modal-content/DeleteArea.vue';
+  GetAllAreas,
+  SetAreaOrder,
+  AreaCard,
+  CreateArea,
+  UpdateArea,
+  DeleteArea,
+} from '@/entities/area';
 
 export default {
   name: 'AdminAreasView',
@@ -150,7 +149,7 @@ export default {
         try {
           this.ADD_LOADER();
           const areaIds = newOrderAreas.map((area) => area.id);
-          await SetOrder(areaIds);
+          await SetAreaOrder(areaIds);
           this.ADD_ALERT({
             type: ALERT_TYPES.SUCCESS,
             text: 'Сортировка применена',
@@ -176,7 +175,7 @@ export default {
     async fetchData() {
       try {
         this.ADD_LOADER();
-        this.areas = await GetAll();
+        this.areas = await GetAllAreas();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       } finally {

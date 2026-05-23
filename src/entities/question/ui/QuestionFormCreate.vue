@@ -126,7 +126,7 @@
 <script>
 import { mapMutations } from 'vuex';
 
-import { GetAll } from '@/modules/shared/repositories/areas-repository';
+import { GetAllAreas } from '@/entities/area';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { GetCapctha, Create } from '../api/questions-repository';
@@ -185,7 +185,7 @@ export default {
 
     async GetAllAreas() {
       try {
-        this.areas = await GetAll();
+        this.areas = await GetAllAreas();
       } catch (error) {
         this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
       }
