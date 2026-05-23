@@ -62,7 +62,7 @@
               icon
               variant="text"
               size="small"
-              @click="$emit('delete')">
+              @click="emit('delete')">
               <v-icon size="20">mdi-delete-outline</v-icon>
             </v-btn>
           </v-col>
@@ -72,17 +72,15 @@
   </v-card>
 </template>
 
-<script>
-export default {
-  name: 'FeedbackCard',
+<script setup>
+defineOptions({ name: 'FeedbackCard' });
 
-  props: {
-    feedback: {
-      type: Object,
-      required: true,
-    },
+const { feedback } = defineProps({
+  feedback: {
+    type: Object,
+    required: true,
   },
+});
 
-  emits: ['delete'],
-};
+const emit = defineEmits(['delete']);
 </script>
