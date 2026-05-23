@@ -10,7 +10,7 @@
 import { defineAsyncComponent } from 'vue';
 
 import AppPreloader from '@/modules/preloader/ui/components/AppPreloader.vue';
-import AppAlert from '@/modules/alert/ui/components/AppAlert.vue';
+import { AppAlert } from '@/entities/alert';
 
 export default {
   name: 'App',
