@@ -60,82 +60,71 @@
   </div>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+import { useAuthStore, Logout } from '@/features/auth';
+import { useAlertStore } from '@/entities/alert';
 import { ALERT_TYPES } from '@/shared/config';
 
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import { UserProfile } from '@/entities/user';
 
-import { Logout } from '@/features/auth';
+defineOptions({ name: 'AdminLayout' });
 
-export default {
-  name: 'AdminLayout',
+const router = useRouter();
 
-  components: {
-    DrawerNavigation,
-    UserProfile,
+const authStore = useAuthStore();
+const alertStore = useAlertStore();
+
+const drawer = ref(false);
+const showUserProfile = ref(false);
+
+const navItems = [
+  {
+    title: 'Сводка',
+    icon: 'mdi-chart-line',
+    link: '/admin',
   },
-
-  data() {
-    return {
-      drawer: false,
-
-      showUserProfile: false,
-
-      navItems: [
-        {
-          title: 'Сводка',
-          icon: 'mdi-chart-line',
-          link: '/admin',
-        },
-        {
-          title: 'Вопросы',
-          icon: 'mdi-account-question',
-          link: '/admin-questions',
-        },
-        {
-          title: 'Записи в FAQ',
-          icon: 'mdi-frequently-asked-questions',
-          link: '/admin-faq',
-        },
-        {
-          title: 'Спикеры',
-          icon: 'mdi-account-tie-voice',
-          link: '/admin-speakers',
-        },
-        {
-          title: 'Области',
-          icon: 'mdi-arrow-decision-outline',
-          link: '/admin-areas',
-        },
-        {
-          title: 'Обратная связь',
-          icon: 'mdi-email-open-multiple-outline',
-          link: '/admin-feedback',
-        },
-      ],
-    };
+  {
+    title: 'Вопросы',
+    icon: 'mdi-account-question',
+    link: '/admin-questions',
   },
-
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('auth', ['REMOVE_AUTH_DATA']),
-
-    async logout() {
-      try {
-        await Logout();
-
-        this.REMOVE_AUTH_DATA();
-
-        this.$router.push('/');
-
-        this.ADD_ALERT({ type: ALERT_TYPES.SUCCESS, text: 'Успешный выход' });
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
+  {
+    title: 'Записи в FAQ',
+    icon: 'mdi-frequently-asked-questions',
+    link: '/admin-faq',
   },
-};
+  {
+    title: 'Спикеры',
+    icon: 'mdi-account-tie-voice',
+    link: '/admin-speakers',
+  },
+  {
+    title: 'Области',
+    icon: 'mdi-arrow-decision-outline',
+    link: '/admin-areas',
+  },
+  {
+    title: 'Обратная связь',
+    icon: 'mdi-email-open-multiple-outline',
+    link: '/admin-feedback',
+  },
+];
+
+async function logout() {
+  try {
+    await Logout();
+
+    authStore.removeAuthData();
+
+    router.push('/');
+
+    alertStore.addAlert({ type: ALERT_TYPES.SUCCESS, text: 'Успешный выход' });
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 </script>

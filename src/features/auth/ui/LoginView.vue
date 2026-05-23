@@ -36,42 +36,39 @@
   </v-container>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
+import { useAlertStore } from '@/entities/alert';
 import { ALERT_TYPES } from '@/shared/config';
+import { useAuthStore } from '../store';
 import { Login } from '../api/auth-repository';
 
-export default {
-  name: 'LoginView',
+defineOptions({ name: 'LoginView' });
 
-  data() {
-    return {
-      controls: {
-        email: null,
-        password: null,
-      },
-    };
-  },
+const router = useRouter();
 
-  methods: {
-    ...mapMutations('alert', ['ADD_ALERT']),
-    ...mapMutations('auth', ['SET_AUTH_DATA']),
+const authStore = useAuthStore();
+const alertStore = useAlertStore();
 
-    async onSubmit() {
-      try {
-        const user = await Login({
-          login: this.controls.email,
-          password: this.controls.password,
-        });
+const controls = reactive({
+  email: null,
+  password: null,
+});
 
-        this.SET_AUTH_DATA(user);
+async function onSubmit() {
+  try {
+    const user = await Login({
+      login: controls.email,
+      password: controls.password,
+    });
 
-        this.$router.go(-1);
-      } catch (error) {
-        this.ADD_ALERT({ type: ALERT_TYPES.ERROR, text: error.message });
-      }
-    },
-  },
-};
+    authStore.setAuthData(user);
+
+    router.go(-1);
+  } catch (error) {
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+  }
+}
 </script>

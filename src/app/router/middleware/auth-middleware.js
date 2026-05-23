@@ -1,18 +1,23 @@
-import store from '@/app/store/store';
+import { useAuthStore } from '@/features/auth';
+import { useAlertStore } from '@/entities/alert';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { GetUserData } from '@/entities/user';
 
 export default async function checkAuth() {
-  if (!store.getters['auth/GET_AUTH_STATUS']) {
+  const authStore = useAuthStore();
+
+  if (!authStore.getAuthStatus) {
     try {
       const user = await GetUserData();
 
-      store.commit('auth/SET_AUTH_DATA', user);
+      authStore.setAuthData(user);
 
       return true;
     } catch (error) {
-      store.commit('alert/ADD_ALERT', {
+      const alertStore = useAlertStore();
+
+      alertStore.addAlert({
         type: ALERT_TYPES.ERROR,
         text: error.message,
       });
