@@ -4,8 +4,6 @@
   </v-main>
 </template>
 
-<script>
-export default {
-  name: 'EmptyLayout',
-};
+<script setup>
+defineOptions({ name: 'EmptyLayout' });
 </script>
