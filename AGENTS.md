@@ -14,7 +14,7 @@ Feature-Sliced Design (FSD) v2.1. Валидация через steiger — за
 
 ```
 src/
-  app/       — вход, роутер, хранилище, стили, плагины, перехватчики http-client
+  app/       — вход, роутер, стили, плагины, перехватчики http-client
   pages/     — композиции для маршрутов (main, errors, faq, questions, admin/*)
   features/  — пользовательские действия: auth, feedback, preloader
   entities/  — бизнес-модели: alert, faq, question, user, area
@@ -23,9 +23,11 @@ src/
 
 Импорты только сверху вниз: `app → pages → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.js`) — импортируй только через него.
 
+Хранилища — Pinia Composition Stores: `features/preloader/store`, `entities/alert/store`, `features/auth/store`. Экспортируются через public API каждого слайса.
+
 ## Стек
 
-Vue 3 + Vuetify 3 + Vuex 4 + Vue Router 4 + VeeValidate + Axios. **Options API**, без Composition API и `<script setup>`. Без TypeScript. Хранилище — **Vuex**, не Pinia.
+Vue 3 + Vuetify 3 + Pinia + Vue Router 4 + VeeValidate + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex.
 
 ## Стили
 
@@ -38,10 +40,11 @@ Vue 3 + Vuetify 3 + Vuex 4 + Vue Router 4 + VeeValidate + Axios. **Options API**
 - Максимум 40 строк на функцию (`max-lines-per-function`)
 - Порядок блоков в SFC: `<template>` → `<script>` → `<style>`
 - Имена компонентов — PascalCase, кастомные события — kebab-case
-- `vue/padding-lines-in-component-definition` — пустые строки между секциями опций
+- `vue/require-name-property` — требует `defineOptions({ name: 'ComponentName' })` в `<script setup>`
+- `vue/prefer-use-template-ref` — используй `useTemplateRef()` вместо `ref()` для template refs
+- `vue/no-empty-component-block` — пустые `<script>` или `<style>` блоки запрещены
 - `vue/padding-line-between-blocks` — пустая строка между блоками SFC
-- `vue/no-empty-component-block` — пустые блоки запрещены
-- `no-param-reassign` — warn, но `state` в Vuex-мутациях разрешён
+- `no-param-reassign` — warn
 
 ## Коммиты
 
@@ -53,8 +56,8 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## Роутинг
 
-Макет страницы задаётся через `meta.layout` (например `'EmptyLayout'`, `'AdminLayout'`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach`.
+Макет страницы задаётся через `meta.layout` (например `'EmptyLayout'`, `'AdminLayout'`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach`. В навигационных хранниках можно использовать Pinia-хранилища напрямую (после `app.use(pinia)`).
 
 ## Известные проблемы steiger
 
-`insignificant-slice` на entities и features — ложные срабатывания: steiger не видит Vuex-мутации (`store.commit('alert/ADD_ALERT')`) и динамические `import()` в роутере.
+`insignificant-slice` на entities и features — ложные срабатывания: steiger не видит Pinia-хранилища и динамические `import()` в роутере.

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
@@ -18,27 +19,3 @@ export const usePreloaderStore = defineStore('preloader', () => {
 
   return { loadings, showPreloader, addLoader, removeLoader };
 });
-
-export default {
-  namespaced: true,
-
-  state: () => ({
-    loadings: 0,
-  }),
-
-  mutations: {
-    ADD_LOADER(state) {
-      state.loadings += 1;
-    },
-
-    REMOVE_LOADER(state) {
-      if (state.loadings > 0) {
-        state.loadings -= 1;
-      }
-    },
-  },
-
-  getters: {
-    SHOW_PRELOADER: (state) => !!state.loadings,
-  },
-};

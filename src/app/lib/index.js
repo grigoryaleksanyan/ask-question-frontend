@@ -1,5 +1,4 @@
 import router from '@/app/router';
-import store from '@/app/store/store';
 import { createPinia } from 'pinia';
 
 import vuetify from './vuetify';
@@ -9,7 +8,7 @@ import setupHttpClientInterceptors from './http-client-interceptors';
 export default function registerPlugins(app) {
   const pinia = createPinia();
 
-  app.use(router).use(pinia).use(store).use(vuetify).use(veeValidate);
+  app.use(router).use(pinia).use(vuetify).use(veeValidate);
 
   setupHttpClientInterceptors();
 }

@@ -31,8 +31,7 @@
     "vue-responsive-video-background-player": "^2.4.1",
     "vue-router": "^5.0.7",
     "vuedraggable": "^4.1.0",
-    "vuetify": "^4.0.7",
-    "vuex": "^4.1.0"
+    "vuetify": "^4.0.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
