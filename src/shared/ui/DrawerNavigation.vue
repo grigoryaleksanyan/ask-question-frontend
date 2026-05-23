@@ -14,15 +14,13 @@
   </v-list>
 </template>
 
-<script>
-export default {
-  name: 'DrawerNavigation',
+<script setup>
+defineOptions({ name: 'DrawerNavigation' });
 
-  props: {
-    navItems: {
-      type: Array,
-      required: true,
-    },
+const { navItems } = defineProps({
+  navItems: {
+    type: Array,
+    required: true,
   },
-};
+});
 </script>
