@@ -28,28 +28,24 @@
   </v-dialog>
 </template>
 
-<script>
-export default {
-  name: 'CenterModal',
+<script setup>
+defineOptions({ name: 'CenterModal' });
 
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-
-    title: {
-      type: String,
-      required: true,
-    },
+const { isOpen, title } = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
   },
 
-  emits: ['close'],
-
-  methods: {
-    close() {
-      this.$emit('close');
-    },
+  title: {
+    type: String,
+    required: true,
   },
-};
+});
+
+const emit = defineEmits(['close']);
+
+function close() {
+  emit('close');
+}
 </script>
