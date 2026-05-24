@@ -22,6 +22,7 @@
     "commit": "better-commits"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@vee-validate/rules": "^4.15.1",
     "axios": "^1.16.1",
     "dompurify": "^3.4.5",
@@ -37,7 +38,6 @@
     "@commitlint/cli": "^21.0.1",
     "@eslint/js": "^10.0.1",
     "@feature-sliced/steiger-plugin": "^0.5.8",
-    "@mdi/font": "^7.4.47",
     "@vitejs/plugin-vue": "^6.0.7",
     "better-commits": "^1.23.1",
     "eslint": "^10.4.0",

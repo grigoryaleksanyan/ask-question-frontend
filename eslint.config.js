@@ -281,7 +281,13 @@ export default [
       'import-x/no-relative-packages': 'error',
       'import-x/no-extraneous-dependencies': [
         'error',
-        { devDependencies: true },
+        {
+          devDependencies: [
+            'eslint.config.js',
+            'vite.config.js',
+            '.commitlintrc.cjs',
+          ],
+        },
       ],
 
       // ---- проектные переопределения ----
