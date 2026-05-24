@@ -115,7 +115,3 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 - QuestionFilters — хардкод фильтров (speaker, zone)
 - `GetCapctha` — опечатка в имени функции и URL (должно быть `GetCaptcha`)
 - SidebarFeedbackContent содержит debug-кнопку для тестирования прелоадера
-
-## Миграция компонентов
-
-Часть компонентов ещё на Options API (EmptyLayout, AppLogo, HeaderNavigation, DrawerNavigation, CenterModal, CenterModalContentWrapper, SidebarContentWrapper, QuestionFilters, QuestionStatusIcon, FeedbackCard, CategoryCard, EntryCard, AreaCard, NotFoundPage, AdminMainPage, AdminSpeakersPage). Новые компоненты писать **только на Composition API** (`<script setup>`).
