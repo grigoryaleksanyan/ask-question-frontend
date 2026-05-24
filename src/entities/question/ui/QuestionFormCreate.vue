@@ -1,6 +1,6 @@
 <template>
   <v-card
-    elevation="6"
+    elevation="5"
     color="#E8EAF6"
     width="600">
     <v-form
@@ -11,8 +11,8 @@
         fluid
         class="pa-2">
         <v-row
-          no-gutters
-          align="center">
+          class="align-center"
+          no-gutters>
           <v-col
             cols="9"
             sm="10">
@@ -88,8 +88,7 @@
               <v-row class="mt-0">
                 <v-col
                   cols="6"
-                  class="d-flex justify-center"
-                  align-self="center">
+                  class="d-flex justify-center align-self-center">
                   <v-btn
                     type="submit"
                     elevation="1"

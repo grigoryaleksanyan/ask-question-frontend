@@ -1,8 +1,10 @@
 <template>
   <CenterModalContentWrapper>
     <template #default>
-      <p class="text-body-1">Вы действительно хотите удалить всю категорию?</p>
-      <p class="ma-0 text-body-2 font-weight-bold">
+      <p class="text-body-large">
+        Вы действительно хотите удалить всю категорию?
+      </p>
+      <p class="ma-0 text-body-medium font-weight-bold">
         Так же будут удалены все записи!
       </p>
     </template>

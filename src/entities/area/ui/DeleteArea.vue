@@ -1,7 +1,7 @@
 <template>
   <CenterModalContentWrapper>
     <template #default>
-      <p class="text-body-1">Вы действительно хотите удалить область?</p>
+      <p class="text-body-large">Вы действительно хотите удалить область?</p>
     </template>
     <template #actions>
       <v-btn

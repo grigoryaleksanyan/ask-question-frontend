@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row justify="space-between">
+    <v-row class="justify-space-between">
       <v-col cols="6">
         <v-btn-toggle
           v-model="sortingDirection"
@@ -54,8 +54,7 @@
     <v-expand-transition>
       <v-row
         v-show="showFilters"
-        justify="center"
-        class="mt-6">
+        class="mt-6 justify-center">
         <v-col
           cols="12"
           class="col-sm-4">

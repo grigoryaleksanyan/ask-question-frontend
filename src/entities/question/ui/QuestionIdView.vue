@@ -6,7 +6,9 @@
       <v-col
         cols="12"
         class="my-8">
-        <h1 class="text-h4 text-sm-h3 text-center">Вопрос</h1>
+        <h1 class="text-headline-large text-sm-display-small text-center">
+          Вопрос
+        </h1>
       </v-col>
     </v-row>
 
@@ -19,8 +21,7 @@
           width="100%">
           <v-row
             no-gutters
-            class="py-5 px-2 px-sm-5"
-            align="center"
+            class="py-5 px-2 px-sm-5 align-center"
             style="height: 100%">
             <v-col cols="1">
               <v-btn
@@ -63,7 +64,7 @@
                   class="pa-3">
                   <p
                     style="color: grey"
-                    class="pa-0 ma-0 text-sm-body-1 text-body-2">
+                    class="pa-0 ma-0 text-sm-body-large text-body-medium">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Esse excepturi dolore ducimus eos eaque. Aut, explicabo.
                     Amet, quia, vero sunt optio laudantium perspiciatis ducimus
@@ -73,16 +74,16 @@
               </v-col>
             </v-row>
             <v-row
-              no-gutters
-              align="center">
-              <v-col align-self="center">
+              class="align-center"
+              no-gutters>
+              <v-col class="align-self-center">
                 <v-icon
                   title="Количество просмотров"
                   size="20"
                   class="mr-2">
                   mdi-eye
                 </v-icon>
-                <span class="text-caption text-sm-body-2">{{
+                <span class="text-body-small text-sm-body-medium">{{
                   replaceСounter(99)
                 }}</span>
               </v-col>
@@ -97,7 +98,7 @@
                     size="20">
                     mdi-thumb-up-outline
                   </v-icon>
-                  <span class="text-caption text-sm-body-2 mr-1">{{
+                  <span class="text-body-small text-sm-body-medium mr-1">{{
                     replaceСounter(1)
                   }}</span>
                 </v-btn>
@@ -111,7 +112,7 @@
                     size="20">
                     mdi-thumb-down-outline
                   </v-icon>
-                  <span class="text-caption text-sm-body-2">
+                  <span class="text-body-small text-sm-body-medium">
                     {{ replaceСounter(99) }}</span
                   >
                 </v-btn>

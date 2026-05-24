@@ -7,7 +7,7 @@
       <v-col cols="12">
         <v-row>
           <v-col cols="12">
-            <h1 class="text-h6 text-sm-h5">Спикеры</h1>
+            <h1 class="text-headline-small text-sm-headline-medium">Спикеры</h1>
           </v-col>
         </v-row>
         <v-row>

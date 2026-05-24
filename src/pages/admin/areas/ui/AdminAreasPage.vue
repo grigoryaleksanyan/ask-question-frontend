@@ -9,7 +9,9 @@
           <v-col
             cols="12"
             class="d-flex align-center">
-            <h1 class="text-h6 text-sm-h5 mr-4">Области</h1>
+            <h1 class="text-headline-small text-sm-headline-medium mr-4">
+              Области
+            </h1>
           </v-col>
         </v-row>
 

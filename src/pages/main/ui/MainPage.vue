@@ -8,8 +8,7 @@
       :poster="backgroundPoster"
       overlay="linear-gradient(0deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5))">
       <v-row
-        align-content="center"
-        class="pa-3"
+        class="pa-3 align-content-center"
         style="height: 100vh">
         <v-col cols="12">
           <h1 class="portal-title">Ask me</h1>
@@ -43,7 +42,9 @@
       <v-col cols="12">
         <v-row>
           <v-col cols="12">
-            <h3 class="text-h4 text-sm-h3 text-center">Популярные вопросы</h3>
+            <h3 class="text-headline-large text-sm-display-small text-center">
+              Популярные вопросы
+            </h3>
           </v-col>
           <v-col cols="12">
             <QuestionCard

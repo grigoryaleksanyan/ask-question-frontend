@@ -6,7 +6,9 @@
       <v-col
         cols="12"
         class="my-8">
-        <h1 class="text-h4 text-sm-h3 text-center">Часто задаваемые вопросы</h1>
+        <h1 class="text-headline-large text-sm-display-small text-center">
+          Часто задаваемые вопросы
+        </h1>
       </v-col>
     </v-row>
 
@@ -14,12 +16,12 @@
       <v-row
         v-for="category in categories"
         :key="category.id"
-        justify="center"
-        class="mb-8">
+        class="mb-8 justify-center">
         <v-col
           cols="12"
           sm="3">
-          <h2 class="text-h6 text-sm-h5 mb-3 section-title">
+          <h2
+            class="text-headline-small text-sm-headline-medium mb-3 section-title">
             {{ category.name }}
           </h2>
         </v-col>

@@ -7,11 +7,11 @@
       <v-card-title class="py-2">
         <v-row
           no-gutters
-          class="text-caption text-sm-body-2">
+          class="text-body-small text-sm-body-medium">
           <v-col
+            class="align-self-center"
             cols="12"
-            sm="6"
-            align-self="center">
+            sm="6">
             <span>кому: {{ question.speaker }}</span>
           </v-col>
           <v-col
@@ -36,7 +36,7 @@
             class="pa-3">
             <p
               style="color: grey"
-              class="pa-0 ma-0 text-sm-body-1 text-body-2"
+              class="pa-0 ma-0 text-sm-body-large text-body-medium"
               v-html="sliceText(question.text)"></p>
           </v-sheet>
         </div>
@@ -47,16 +47,16 @@
           fluid
           class="py-0">
           <v-row
-            no-gutters
-            align="center">
-            <v-col align-self="center">
+            class="align-center"
+            no-gutters>
+            <v-col class="align-self-center">
               <v-icon
                 title="Количество просмотров"
                 size="20"
                 class="mr-2">
                 mdi-eye
               </v-icon>
-              <span class="text-caption text-sm-body-2">
+              <span class="text-body-small text-sm-body-medium">
                 {{ replaceСounter(question.views) }}
               </span>
             </v-col>
@@ -71,7 +71,7 @@
                   mdi-thumb-up-outline
                 </v-icon>
               </v-btn>
-              <span class="text-caption text-sm-body-2 mr-1">
+              <span class="text-body-small text-sm-body-medium mr-1">
                 {{ replaceСounter(question.likes) }}
               </span>
               <v-btn
@@ -84,7 +84,7 @@
                   mdi-thumb-down-outline
                 </v-icon>
               </v-btn>
-              <span class="text-caption text-sm-body-2">
+              <span class="text-body-small text-sm-body-medium">
                 {{ replaceСounter(question.dislikes) }}
               </span>
             </v-col>

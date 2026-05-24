@@ -1,7 +1,9 @@
 <template>
   <CenterModalContentWrapper>
     <template #default>
-      <p class="text-body-1">Вы действительно хотите удалить обратную связь?</p>
+      <p class="text-body-large">
+        Вы действительно хотите удалить обратную связь?
+      </p>
     </template>
     <template #actions>
       <v-btn

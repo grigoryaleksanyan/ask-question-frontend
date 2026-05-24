@@ -7,7 +7,7 @@
             <v-col
               cols="12"
               class="d-flex align-center">
-              <h1 class="text-h6 text-sm-h5 mr-4">
+              <h1 class="text-headline-small text-sm-headline-medium mr-4">
                 Категория: {{ category.name }}
               </h1>
 

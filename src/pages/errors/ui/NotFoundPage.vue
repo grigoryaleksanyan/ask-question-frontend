@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
     <v-row
-      align="center"
+      class="align-center"
       style="height: 100vh">
       <v-col
         cols="12"
         class="d-flex flex-column align-center">
-        <h1 class="text-h6 text-sm-h4 mb-8">
+        <h1 class="text-headline-small text-sm-headline-large mb-8">
           Такой страницы не существует &#128577;
         </h1>
         <v-btn

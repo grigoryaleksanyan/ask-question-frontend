@@ -6,14 +6,15 @@
       <v-col
         cols="12"
         class="my-8">
-        <h1 class="text-h4 text-sm-h3 text-center">Все вопросы</h1>
+        <h1 class="text-headline-large text-sm-display-small text-center">
+          Все вопросы
+        </h1>
       </v-col>
     </v-row>
 
     <v-row
       no-gutters
-      justify="center"
-      class="mb-8">
+      class="mb-8 justify-center">
       <v-col
         cols="12"
         sm="8">

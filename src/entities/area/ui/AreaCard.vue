@@ -3,8 +3,8 @@
     class="area-card pa-3 rounded-lg"
     color="#E8EAF6">
     <v-row
-      no-gutters
-      align="center">
+      class="align-center"
+      no-gutters>
       <v-col class="px-2">
         <span> {{ area.title }} </span>
       </v-col>

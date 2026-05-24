@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import pluginVue from 'eslint-plugin-vue';
 import pluginUnicorn from 'eslint-plugin-unicorn';
+import pluginVuetify from 'eslint-plugin-vuetify';
 import pluginImportX from 'eslint-plugin-import-x';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import viteConfig from './vite.config.js';
@@ -14,6 +15,7 @@ export default [
   js.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   pluginUnicorn.configs['flat/recommended'],
+  ...pluginVuetify.configs['flat/recommended-v4'],
 
   {
     languageOptions: {

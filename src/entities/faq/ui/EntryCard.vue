@@ -6,10 +6,10 @@
     <v-card-title class="py-2">
       <v-row
         no-gutters
-        class="text-body-1">
+        class="text-body-large">
         <v-col
-          cols="12"
-          align-self="center">
+          class="align-self-center"
+          cols="12">
           <span style="overflow-wrap: break-word">{{ entry.question }}</span>
         </v-col>
         <v-col
@@ -37,10 +37,10 @@
         fluid
         class="py-0">
         <v-row
-          no-gutters
-          align="center">
+          class="align-center"
+          no-gutters>
           <v-col>
-            <span class="text-caption">
+            <span class="text-body-small">
               Создана: {{ new Date(entry.сreated).toLocaleDateString() }}
             </span>
           </v-col>
