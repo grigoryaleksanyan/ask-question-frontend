@@ -336,8 +336,7 @@ export default [
       'vue/no-unused-properties': [
         'error',
         {
-          groups: ['props', 'data', 'computed', 'methods', 'setup'],
-          deepData: true,
+          groups: ['props', 'setup'],
         },
       ],
       'vue/no-unused-emit-declarations': 'error',
@@ -367,7 +366,7 @@ export default [
       'vue/no-multiple-objects-in-class': 'error',
       'vue/no-root-v-if': 'error',
       'vue/no-template-target-blank': 'error',
-      'vue/no-this-in-before-route-enter': 'error',
+      'vue/component-api-style': ['error', ['script-setup']],
       'vue/prefer-define-options': 'error',
       'vue/prefer-use-template-ref': 'error',
       'vue/slot-name-casing': ['error', 'kebab-case'],
