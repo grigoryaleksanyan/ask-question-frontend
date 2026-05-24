@@ -4,6 +4,7 @@ import pluginVue from 'eslint-plugin-vue';
 import pluginUnicorn from 'eslint-plugin-unicorn';
 import pluginImportX from 'eslint-plugin-import-x';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import viteConfig from './vite.config.js';
 
 export default [
   {
@@ -32,11 +33,8 @@ export default [
 
     settings: {
       'import-x/resolver': {
-        typescript: {
-          alwaysTryTypes: false,
-          paths: {
-            '@': ['./src'],
-          },
+        vite: {
+          viteConfig,
         },
       },
     },
