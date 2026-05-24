@@ -35,7 +35,7 @@ src/
 
 ## Стек
 
-Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config, без `@eslint/eslintrc`), плагины: `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолвер алиасов: `eslint-import-resolver-typescript`.
+Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config, без `@eslint/eslintrc`), плагины: `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`, `eslint-plugin-vuetify`. Резолвер алиасов: `eslint-import-resolver-vite`.
 
 ## Стили
 
@@ -50,8 +50,13 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 ## ESLint-правила (неочевидные)
 
 - ESLint 10 flat config, без `@eslint/eslintrc`/FlatCompat
-- Основные плагины: `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`
+- Основные плагины: `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`, `vuetify` (`flat/recommended-v4`)
 - Отключённые unicorn-правила: `prevent-abbreviations`, `no-null`, `no-array-reduce`, `prefer-top-level-await`, `switch-case-braces`, `prefer-global-this`, `no-negated-condition`, `filename-case`
+- `import-x/no-unresolved: error` — проверка резолва импортов через vite-резолвер. Исключения: vuetify subpath-exports (`vuetify/styles`, `vuetify/locale`) — inline disable
+- `import-x/no-extraneous-dependencies: error` — devDependencies доступны только из конфигов (`eslint.config.js`, `vite.config.js`, `.commitlintrc.cjs`), не из `src/`
+- `no-throw-literal: error` — только `throw new Error()`, нельзя `throw "string"`
+- `no-shadow: [error, { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }]`
+- Отключённые airbnb-правила: `class-methods-use-this`, `guard-for-in` (дублирует `no-restricted-syntax`), `consistent-return`
 - `max-lines-per-function: [warn, 60]` (skipBlankLines + skipComments)
 - `max-depth: [warn, 3]`, `complexity: [warn, 7]`
 - `no-param-reassign: [warn, { props: true, ignorePropertyModificationsFor: ['state'] }]` — мутировать `state` в Pinia stores можно
@@ -76,7 +81,7 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 
 ## Коммиты
 
-Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase, заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged, commit-msg: commitlint. Breaking changes отключены.
+Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase, заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged (автофикс: `prettier --write`, `eslint --fix`, `stylelint --fix`), commit-msg: commitlint. Breaking changes отключены.
 
 ## API-клиент
 
