@@ -9,7 +9,7 @@
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
 
-      <v-toolbar-title class="text-subtitle-1">
+      <v-toolbar-title class="text-body-large">
         Панель администратора
       </v-toolbar-title>
 
