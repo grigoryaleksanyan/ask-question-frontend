@@ -1,3 +1,1 @@
-import RichEditor from './RichEditor.vue';
-
-export default RichEditor;
+export { default } from './RichEditor.vue';

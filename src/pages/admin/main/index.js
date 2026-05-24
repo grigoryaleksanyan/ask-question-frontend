@@ -1,3 +1,1 @@
-import AdminMainPage from './ui/AdminMainPage.vue';
-
-export default AdminMainPage;
+export { default } from './ui/AdminMainPage.vue';

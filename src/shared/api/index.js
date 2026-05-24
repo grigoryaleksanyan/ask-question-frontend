@@ -1,3 +1,1 @@
-import httpClient from './http-client';
-
-export default httpClient;
+export { default } from './http-client';

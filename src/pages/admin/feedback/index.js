@@ -1,3 +1,1 @@
-import AdminFeedbackPage from './ui/AdminFeedbackPage.vue';
-
-export default AdminFeedbackPage;
+export { default } from './ui/AdminFeedbackPage.vue';

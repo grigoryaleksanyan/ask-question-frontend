@@ -66,7 +66,7 @@
       </v-col>
     </v-row>
 
-    <template v-if="questions.length">
+    <template v-if="questions.length > 0">
       <v-row
         no-gutters
         class="mb-5">

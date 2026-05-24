@@ -4,7 +4,7 @@ export default function generateId() {
   let id = '';
 
   for (let i = 0; i < 12; i += 1) {
-    id += sym[parseInt(Math.random() * sym.length, 10)];
+    id += sym[Number.parseInt(Math.random() * sym.length, 10)];
   }
 
   return id;

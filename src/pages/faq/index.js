@@ -1,3 +1,1 @@
-import FAQPage from './ui/FAQPage.vue';
-
-export default FAQPage;
+export { default } from './ui/FAQPage.vue';

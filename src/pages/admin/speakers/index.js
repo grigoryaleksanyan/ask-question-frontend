@@ -1,3 +1,1 @@
-import AdminSpeakersPage from './ui/AdminSpeakersPage.vue';
-
-export default AdminSpeakersPage;
+export { default } from './ui/AdminSpeakersPage.vue';

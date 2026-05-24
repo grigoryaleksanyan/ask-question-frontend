@@ -53,7 +53,7 @@ const updateCategory = useTemplateRef('updateCategory');
 
 const rules = [
   (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length !== 0) || 'Поле не должно быть пустым!',
+  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 watch(

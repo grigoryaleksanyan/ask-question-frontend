@@ -1,4 +1,2 @@
-import CenterModal from './CenterModal.vue';
-import CenterModalContentWrapper from './CenterModalContentWrapper.vue';
-
-export { CenterModal, CenterModalContentWrapper };
+export { default as CenterModal } from './CenterModal.vue';
+export { default as CenterModalContentWrapper } from './CenterModalContentWrapper.vue';

@@ -1,3 +1,1 @@
-import AdminFAQPage from './ui/AdminFAQPage.vue';
-
-export default AdminFAQPage;
+export { default } from './ui/AdminFAQPage.vue';

@@ -14,14 +14,14 @@ export default function copyToClipboard(textToCopy) {
     textArea.style.left = '0';
     textArea.style.position = 'fixed';
 
-    document.body.appendChild(textArea);
+    document.body.append(textArea);
 
     textArea.focus();
     textArea.select();
 
     try {
       document.execCommand('copy');
-      document.body.removeChild(textArea);
+      textArea.remove();
       resolve();
     } catch {
       reject();

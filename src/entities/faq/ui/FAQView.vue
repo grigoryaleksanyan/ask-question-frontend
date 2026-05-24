@@ -10,7 +10,7 @@
       </v-col>
     </v-row>
 
-    <template v-if="categories.length">
+    <template v-if="categories.length > 0">
       <v-row
         v-for="category in categories"
         :key="category.id"
@@ -92,7 +92,7 @@ onMounted(() => {
 
   if (id) {
     setTimeout(() => {
-      const element = document.getElementById(id);
+      const element = document.querySelector(`#${id}`);
 
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });

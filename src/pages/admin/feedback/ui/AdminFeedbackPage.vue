@@ -11,7 +11,7 @@
           </v-col>
         </v-row>
 
-        <template v-if="feedbacks.length">
+        <template v-if="feedbacks.length > 0">
           <v-row>
             <v-col
               v-for="feedback in feedbacks"

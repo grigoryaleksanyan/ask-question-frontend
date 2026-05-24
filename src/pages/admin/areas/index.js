@@ -1,3 +1,1 @@
-import AdminAreasPage from './ui/AdminAreasPage.vue';
-
-export default AdminAreasPage;
+export { default } from './ui/AdminAreasPage.vue';
