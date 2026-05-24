@@ -19,7 +19,7 @@ export default [
 
   {
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
         ...globals.browser,
@@ -113,7 +113,7 @@ export default [
       'no-return-assign': ['error', 'always'],
       'no-script-url': 'error',
       'no-sequences': 'error',
-      'no-throw-literal': 'off',
+      'no-throw-literal': 'error',
       'no-unused-expressions': [
         'error',
         {
