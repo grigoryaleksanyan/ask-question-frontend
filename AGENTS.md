@@ -35,7 +35,7 @@ src/
 
 ## Стек
 
-Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8.
+Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config, без `@eslint/eslintrc`), плагины: `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолвер алиасов: `eslint-import-resolver-typescript`.
 
 ## Стили
 
@@ -49,6 +49,9 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 
 ## ESLint-правила (неочевидные)
 
+- ESLint 10 flat config, без `@eslint/eslintrc`/FlatCompat
+- Основные плагины: `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`
+- Отключённые unicorn-правила: `prevent-abbreviations`, `no-null`, `no-array-reduce`, `prefer-top-level-await`, `switch-case-braces`, `prefer-global-this`, `no-negated-condition`, `filename-case`
 - `max-lines-per-function: [warn, 60]` (skipBlankLines + skipComments)
 - `max-depth: [warn, 3]`, `complexity: [warn, 7]`
 - `no-param-reassign: [warn, { props: true, ignorePropertyModificationsFor: ['state'] }]` — мутировать `state` в Pinia stores можно
@@ -115,4 +118,4 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## Миграция компонентов
 
-Часть компонентов ещё на Options API (DefaultLayout, EmptyLayout, App.vue, AppLogo, HeaderNavigation, DrawerNavigation, CenterModal, CenterModalContentWrapper, SidebarContentWrapper, QuestionCard, QuestionFilters, QuestionStatusIcon, FeedbackCard, CategoryCard, EntryCard, AreaCard, NotFoundPage, AdminMainPage, AdminSpeakersPage, MainPage). Новые компоненты писать **только на Composition API** (`<script setup>`).
+Часть компонентов ещё на Options API (EmptyLayout, AppLogo, HeaderNavigation, DrawerNavigation, CenterModal, CenterModalContentWrapper, SidebarContentWrapper, QuestionFilters, QuestionStatusIcon, FeedbackCard, CategoryCard, EntryCard, AreaCard, NotFoundPage, AdminMainPage, AdminSpeakersPage). Новые компоненты писать **только на Composition API** (`<script setup>`).
