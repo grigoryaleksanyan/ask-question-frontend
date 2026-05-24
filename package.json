@@ -64,17 +64,17 @@
   },
   "lint-staged": {
     "src/**/*.js": [
-      "prettier --check",
-      "eslint"
+      "prettier --write",
+      "eslint --fix"
     ],
     "src/**/*.vue": [
-      "prettier --check",
-      "eslint",
-      "stylelint"
+      "prettier --write",
+      "eslint --fix",
+      "stylelint --fix"
     ],
     "src/**/*.{css,scss}": [
-      "prettier --check",
-      "stylelint"
+      "prettier --write",
+      "stylelint --fix"
     ]
   }
 }
