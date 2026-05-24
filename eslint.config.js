@@ -57,15 +57,15 @@ export default [
       // ---- airbnb-base: best-practices ----
       'array-callback-return': ['error', { allowImplicit: true }],
       'block-scoped-var': 'error',
-      'class-methods-use-this': ['error', { exceptMethods: [] }],
-      'consistent-return': 'error',
+      'class-methods-use-this': 'off',
+      'consistent-return': 'off',
       'default-case': ['error', { commentPattern: '^no default$' }],
       'default-case-last': 'error',
       'default-param-last': 'error',
       'dot-notation': ['error', { allowKeywords: true }],
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       'grouped-accessor-pairs': 'error',
-      'guard-for-in': 'error',
+      'guard-for-in': 'off',
       'max-classes-per-file': ['error', 1],
       'no-alert': 'warn',
       'no-caller': 'error',
@@ -133,7 +133,7 @@ export default [
       yoda: 'error',
 
       // ---- airbnb-base: variables ----
-      'no-shadow': 'error',
+      'no-shadow': ['error', { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }],
       'no-undef-init': 'error',
       'no-unused-vars': [
         'error',
