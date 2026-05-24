@@ -254,7 +254,7 @@ export default [
       strict: ['error', 'never'],
 
       // ---- import-x plugin ----
-      'import-x/no-unresolved': 'off',
+      'import-x/no-unresolved': 'error',
       'import-x/named': 'error',
       'import-x/export': 'error',
       'import-x/no-named-as-default': 'error',
