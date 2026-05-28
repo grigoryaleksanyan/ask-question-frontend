@@ -30,7 +30,9 @@ export async function GetById(id: string): Promise<FaqEntryResponse> {
   return result;
 }
 
-export async function Create(entry: FaqEntryCreateRequest): Promise<FaqEntryResponse> {
+export async function Create(
+  entry: FaqEntryCreateRequest,
+): Promise<FaqEntryResponse> {
   const result = await httpClient
     .post<FaqEntryResponse>(`${apiRoute}/Create`, entry)
     .then((response) => response.data)
@@ -41,7 +43,9 @@ export async function Create(entry: FaqEntryCreateRequest): Promise<FaqEntryResp
   return result;
 }
 
-export async function Update(entry: FaqEntryUpdateRequest): Promise<FaqEntryResponse> {
+export async function Update(
+  entry: FaqEntryUpdateRequest,
+): Promise<FaqEntryResponse> {
   const result = await httpClient
     .put<FaqEntryResponse>(`${apiRoute}/Update`, entry)
     .then((response) => response.data)

@@ -15,7 +15,9 @@ export async function GetUserData(): Promise<UserResponse> {
   return result;
 }
 
-export async function ChangePassword(userUpdateModel: ChangePasswordRequest): Promise<void> {
+export async function ChangePassword(
+  userUpdateModel: ChangePasswordRequest,
+): Promise<void> {
   await httpClient
     .put(`${apiRoute}/ChangePassword`, userUpdateModel)
     .then((response) => response.data)

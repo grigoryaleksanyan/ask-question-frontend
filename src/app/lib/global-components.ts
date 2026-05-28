@@ -1,7 +1,10 @@
 import type { App } from 'vue';
 
 import { SidebarModal, SidebarContentWrapper } from '@/shared/ui/sidebar-modal';
-import { CenterModal, CenterModalContentWrapper } from '@/shared/ui/center-modal';
+import {
+  CenterModal,
+  CenterModalContentWrapper,
+} from '@/shared/ui/center-modal';
 
 export default function registerGlobalComponents(app: App) {
   app.component('SidebarModal', SidebarModal);

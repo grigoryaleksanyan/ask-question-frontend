@@ -65,9 +65,7 @@ export async function Create(
     });
 }
 
-export async function Update(
-  question: QuestionUpdateRequest,
-): Promise<void> {
+export async function Update(question: QuestionUpdateRequest): Promise<void> {
   await httpClient
     .put(`${apiRoute}/Update/${question.id}`, question)
     .then((response) => response.data)

@@ -5,7 +5,9 @@ import { required, email, confirmed, max_value } from '@vee-validate/rules';
 import type { DateRangeValue } from '@/shared/types';
 
 export default {
-  install: (app: { component: (name: string, component: unknown) => unknown }) => {
+  install: (app: {
+    component: (name: string, component: unknown) => unknown;
+  }) => {
     app
       .component('VeeForm', Form)
       .component('VeeField', Field)

@@ -20,7 +20,9 @@ export async function GetAll(): Promise<FaqCategoryResponse[]> {
   return result;
 }
 
-export async function GetAllWithEntries(): Promise<FaqCategoryWithEntriesResponse[]> {
+export async function GetAllWithEntries(): Promise<
+  FaqCategoryWithEntriesResponse[]
+> {
   const result = await httpClient
     .get<FaqCategoryWithEntriesResponse[]>(`${apiRoute}/GetAllWithEntries`)
     .then((response) => response.data)
@@ -31,7 +33,9 @@ export async function GetAllWithEntries(): Promise<FaqCategoryWithEntriesRespons
   return result;
 }
 
-export async function GetById(id: string): Promise<FaqCategoryWithEntriesResponse> {
+export async function GetById(
+  id: string,
+): Promise<FaqCategoryWithEntriesResponse> {
   const result = await httpClient
     .get<FaqCategoryWithEntriesResponse>(`${apiRoute}/GetById?id=${id}`)
     .then((response) => response.data)
@@ -42,7 +46,9 @@ export async function GetById(id: string): Promise<FaqCategoryWithEntriesRespons
   return result;
 }
 
-export async function Create(category: FaqCategoryCreateRequest): Promise<FaqCategoryResponse> {
+export async function Create(
+  category: FaqCategoryCreateRequest,
+): Promise<FaqCategoryResponse> {
   const result = await httpClient
     .post<FaqCategoryResponse>(`${apiRoute}/Create`, category)
     .then((response) => response.data)
@@ -53,7 +59,9 @@ export async function Create(category: FaqCategoryCreateRequest): Promise<FaqCat
   return result;
 }
 
-export async function Update(category: FaqCategoryUpdateRequest): Promise<FaqCategoryResponse> {
+export async function Update(
+  category: FaqCategoryUpdateRequest,
+): Promise<FaqCategoryResponse> {
   const result = await httpClient
     .put<FaqCategoryResponse>(`${apiRoute}/Update`, category)
     .then((response) => response.data)
