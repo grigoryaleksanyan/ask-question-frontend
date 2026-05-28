@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
+import type { UserResponse } from '@/shared/types';
+
 export const useAuthStore = defineStore('auth', () => {
   const isAuthorized = ref(false);
-  const userData = ref(null);
+  const userData = ref<UserResponse | null>(null);
 
   const getAuthStatus = computed(() => isAuthorized.value);
   const getUserData = computed(() => userData.value);
 
-  function setAuthData(user) {
+  function setAuthData(user: UserResponse) {
     userData.value = user;
     isAuthorized.value = true;
   }

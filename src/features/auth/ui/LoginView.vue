@@ -36,7 +36,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -53,8 +53,8 @@ const authStore = useAuthStore();
 const alertStore = useAlertStore();
 
 const controls = reactive({
-  email: null,
-  password: null,
+  email: null as string | null,
+  password: null as string | null,
 });
 
 async function onSubmit() {
