@@ -1,9 +1,9 @@
 import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
+
 import vue from '@vitejs/plugin-vue';
 import vuetify from 'vite-plugin-vuetify';
+import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), vuetify()],
   resolve: {
@@ -21,7 +21,6 @@ export default defineConfig({
   },
   server: {
     port: 5000,
-
     proxy: { '/api': { target: 'http://localhost:5500', changeOrigin: true } },
   },
 });
