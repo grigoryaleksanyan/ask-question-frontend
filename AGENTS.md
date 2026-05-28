@@ -7,7 +7,8 @@
 - `npm run lint` — последовательно: prettier → eslint → stylelint
 - `npm run fsd:check` (или `npx steiger ./src`) — валидация FSD через steiger
 - `npm run commit` — интерактивный коммит через better-commits (Conventional Commits)
-- Тестов нет, тест-раннер не настроен
+- `npm run test` — Vitest (однократный запуск), `npm run test:watch` — watch-режим
+- Тесты: `tests/` (вне `src/`), environment: jsdom, setup: `tests/setup.js` (сброс Pinia через `beforeEach`)
 
 Node >= 22.17.0, npm >= 10.9.2
 

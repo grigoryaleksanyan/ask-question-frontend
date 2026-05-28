@@ -1,4 +1,4 @@
-import type { UserRoleId } from './models';
+import type { UserRoleId, QuestionStatusId } from './models';
 
 export interface UserDetailsResponse {
   id: string;
@@ -20,6 +20,7 @@ export interface UserResponse {
 
 export interface QuestionResponse {
   id: string;
+  status: QuestionStatusId;
   text: string;
   author: string | null;
   area: string | null;

@@ -65,7 +65,7 @@
       {
         "value": "chore",
         "label": "chore",
-        "hint": "Рутинные задачи, не влияющие на продакшен-код",
+        "hint": "Общие правки проекта или изменения внешних зависимостей",
       },
     ],
   },
@@ -78,10 +78,10 @@
     "max_items": 20,
     "autocomplete": true,
     "options": [
+      { "value": "", "label": "none" },
       { "value": "general", "label": "general" },
       { "value": "client", "label": "client" },
       { "value": "server", "label": "server" },
-      { "value": "", "label": "none" },
     ],
   },
 
@@ -117,7 +117,7 @@
   // better-commits на Windows пытается использовать /bin/sh, которого нет,
   // поэтому нужно указать путь к sh.exe из Git Bash.
   "overrides": {
-    "shell": "C:\\Program Files\\Git\\bin\\sh.exe",
+    "shell": "C:/Program Files/Git/bin/bash.exe",
   },
 
   "confirm_with_editor": false,

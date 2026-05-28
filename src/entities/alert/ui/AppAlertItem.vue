@@ -16,28 +16,30 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { computed, type Component } from 'vue';
+
+import type { AlertItem } from '@/shared/types';
+
+import CloseIcon from './icons/CloseIcon.vue';
+import ErrorIcon from './icons/ErrorIcon.vue';
+import InfoIcon from './icons/InfoIcon.vue';
+import SuccessIcon from './icons/SuccessIcon.vue';
+import WarningIcon from './icons/WarningIcon.vue';
 
 import { useAlertStore } from '../store';
 
-import SuccessIcon from './icons/SuccessIcon.vue';
-import InfoIcon from './icons/InfoIcon.vue';
-import WarningIcon from './icons/WarningIcon.vue';
-import ErrorIcon from './icons/ErrorIcon.vue';
-import CloseIcon from './icons/CloseIcon.vue';
-
 defineOptions({ name: 'AppAlertItem' });
 
-const { alert } = defineProps({
-  alert: { type: Object, required: true },
-});
+const { alert } = defineProps<{
+  alert: AlertItem;
+}>();
 
 const alertStore = useAlertStore();
 
 const { removeAlert } = alertStore;
 
-const iconMap = {
+const iconMap: Record<string, Component> = {
   'success-icon': SuccessIcon,
   'info-icon': InfoIcon,
   'warning-icon': WarningIcon,

@@ -9,15 +9,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia';
+
 import { useAlertStore } from '../store';
-import AppAlertItem from './AppAlertItem.vue';
 
 defineOptions({ name: 'AppAlert' });
 
 const alertStore = useAlertStore();
-
 const { getAlerts } = storeToRefs(alertStore);
 </script>
 
