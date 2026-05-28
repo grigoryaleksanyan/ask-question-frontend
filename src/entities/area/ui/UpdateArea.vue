@@ -29,8 +29,10 @@
   </v-form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, useTemplateRef } from 'vue';
+
+import type { AreaResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -38,29 +40,32 @@ import { Update } from '../api/areas-repository';
 
 defineOptions({ name: 'UpdateArea' });
 
-const { area, isOpen } = defineProps({
-  area: { type: Object, required: true },
-  isOpen: { type: Boolean },
-});
+const { area, isOpen } = defineProps<{
+  area: AreaResponse;
+  isOpen?: boolean;
+}>();
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 
 const valid = ref(true);
-const title = ref(null);
+const title = ref(null as string | null);
 const updateArea = useTemplateRef('updateArea');
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      updateArea.value.reset();
+      updateArea.value!.reset();
     } else {
       title.value = area.title;
     }
@@ -72,7 +77,7 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateArea.value.validate()) {
+  if (updateArea.value!.validate()) {
     try {
       const updatedArea = { id: area.id, title: title.value };
 
@@ -85,7 +90,8 @@ async function submitForm() {
 
       emit('success', { ...area, title: title.value });
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     }
   }
 }

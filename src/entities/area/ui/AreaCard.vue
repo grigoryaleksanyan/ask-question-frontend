@@ -45,17 +45,19 @@
   </v-sheet>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { AreaResponse } from '@/shared/types';
+
 defineOptions({ name: 'AreaCard' });
 
-const { area } = defineProps({
-  area: {
-    type: Object,
-    required: true,
-  },
-});
+const { area } = defineProps<{
+  area: AreaResponse;
+}>();
 
-const emit = defineEmits(['update', 'delete']);
+const emit = defineEmits<{
+  update: [];
+  delete: [];
+}>();
 </script>
 
 <style lang="scss" scoped>

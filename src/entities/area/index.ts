@@ -5,6 +5,7 @@ export {
   Delete as DeleteAreaApi,
   SetOrder as SetAreaOrder,
 } from './api/areas-repository';
+
 export { default as AreaCard } from './ui/AreaCard.vue';
 export { default as CreateArea } from './ui/CreateArea.vue';
 export { default as UpdateArea } from './ui/UpdateArea.vue';

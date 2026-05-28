@@ -29,7 +29,7 @@
   </v-form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
@@ -38,35 +38,38 @@ import { Create } from '../api/areas-repository';
 
 defineOptions({ name: 'CreateArea' });
 
-const { order, isOpen } = defineProps({
-  order: { type: Number, required: true },
-  isOpen: { type: Boolean },
-});
+const { order, isOpen } = defineProps<{
+  order: number;
+  isOpen?: boolean;
+}>();
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 
 const valid = ref(true);
-const title = ref(null);
+const title = ref(null as string | null);
 const createArea = useTemplateRef('createArea');
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      createArea.value.reset();
+      createArea.value!.reset();
     }
   },
 );
 
 async function submitForm() {
-  if (createArea.value.validate()) {
+  if (createArea.value!.validate()) {
     try {
       const area = { title: title.value, order };
 
@@ -81,7 +84,8 @@ async function submitForm() {
 
       emit('success', area);
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     }
   }
 }
