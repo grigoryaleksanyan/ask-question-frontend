@@ -5,16 +5,16 @@ import pluginUnicorn from 'eslint-plugin-unicorn';
 import pluginVuetify from 'eslint-plugin-vuetify';
 import pluginImportX from 'eslint-plugin-import-x';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tseslint from 'typescript-eslint';
 import viteConfig from './vite.config.ts';
 
-export default [
+export default tseslint.config(
   {
     ignores: ['**/dist/**', '**/node_modules/**', '**/build/**'],
   },
 
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   pluginUnicorn.configs.recommended,
   ...pluginVuetify.configs['flat/recommended-v4'],
@@ -34,7 +34,7 @@ export default [
     files: ['**/*.vue'],
     languageOptions: {
       parserOptions: {
-        parser: tsParser,
+        parser: tseslint.parser,
       },
     },
   },
@@ -42,7 +42,7 @@ export default [
   {
     files: ['**/*.ts'],
     languageOptions: {
-      parser: tsParser,
+      parser: tseslint.parser,
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -60,13 +60,13 @@ export default [
         vite: {
           viteConfig,
         },
+        typescript: true,
       },
     },
   },
 
   {
     rules: {
-      // ---- unicorn: отключение конфликтующих/избыточных правил ----
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-null': 'off',
       'unicorn/no-array-reduce': 'off',
@@ -76,7 +76,6 @@ export default [
       'unicorn/no-negated-condition': 'off',
       'unicorn/filename-case': 'off',
 
-      // ---- airbnb-base: best-practices ----
       'array-callback-return': ['error', { allowImplicit: true }],
       'block-scoped-var': 'error',
       'class-methods-use-this': 'off',
@@ -135,8 +134,7 @@ export default [
       'no-return-assign': ['error', 'always'],
       'no-script-url': 'error',
       'no-sequences': 'error',
-      'no-throw-literal': 'error',
-      'no-unused-expressions': [
+      'no-throw-literal': 'error',      'no-unused-expressions': [
         'error',
         {
           allowShortCircuit: false,
@@ -154,13 +152,14 @@ export default [
       'wrap-iife': ['error', 'outside', { functionPrototypeMethods: false }],
       yoda: 'error',
 
-      // ---- airbnb-base: variables ----
-      'no-shadow': [
+      'no-shadow': 'off',
+      '@typescript-eslint/no-shadow': [
         'error',
         { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] },
       ],
       'no-undef-init': 'error',
-      'no-unused-vars': [
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           vars: 'all',
@@ -173,7 +172,6 @@ export default [
         { functions: false, classes: false, variables: true },
       ],
 
-      // ---- airbnb-base: es6 ----
       'arrow-body-style': [
         'error',
         'as-needed',
@@ -184,7 +182,8 @@ export default [
       'no-duplicate-imports': 'off',
       'no-restricted-exports': ['error', { restrictedNamedExports: ['then'] }],
       'no-useless-computed-key': 'error',
-      'no-useless-constructor': 'error',
+      'no-useless-constructor': 'off',
+      '@typescript-eslint/no-useless-constructor': 'error',
       'no-useless-rename': [
         'error',
         {
@@ -224,7 +223,6 @@ export default [
       'symbol-description': 'error',
       'template-curly-spacing': 'error',
 
-      // ---- airbnb-base: style (не-форматирование) ----
       camelcase: ['error', { properties: 'never' }],
       'new-cap': [
         'error',
@@ -271,16 +269,13 @@ export default [
       'prefer-exponentiation-operator': 'error',
       'prefer-object-spread': 'error',
 
-      // ---- airbnb-base: node ----
       'global-require': 'off',
       'no-buffer-constructor': 'error',
       'no-new-require': 'error',
       'no-path-concat': 'error',
 
-      // ---- airbnb-base: strict ----
       strict: ['error', 'never'],
 
-      // ---- import-x plugin ----
       'import-x/no-unresolved': 'error',
       'import-x/named': 'error',
       'import-x/export': 'error',
@@ -308,7 +303,7 @@ export default [
         'error',
         {
           devDependencies: [
-            'eslint.config.js',
+            'eslint.config.ts',
             'vite.config.ts',
             'vitest.config.ts',
             'tests/**',
@@ -317,7 +312,6 @@ export default [
         },
       ],
 
-      // ---- проектные переопределения ----
       'no-console': 'warn',
       'no-debugger': 'error',
       curly: ['error', 'all'],
@@ -341,7 +335,12 @@ export default [
       'lines-between-class-members': 'off',
       'no-return-await': 'off',
 
-      // ---- Vue правила ----
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports' },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+
       'vue/camelcase': ['error', { properties: 'always' }],
       'vue/require-name-property': 'error',
       'vue/component-options-name-casing': ['error', 'PascalCase'],
@@ -409,24 +408,6 @@ export default [
   eslintConfigPrettier,
 
   {
-    files: ['**/*.{ts,vue}'],
-    plugins: {
-      '@typescript-eslint': tsPlugin,
-    },
-    rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          vars: 'all',
-          args: 'after-used',
-          ignoreRestSiblings: true,
-        },
-      ],
-    },
-  },
-
-  {
     files: ['tests/**'],
     languageOptions: {
       globals: {
@@ -436,4 +417,4 @@ export default [
       },
     },
   },
-];
+);
