@@ -28,22 +28,19 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
+interface Props {
+  isOpen: boolean;
+  title: string;
+}
+
 defineOptions({ name: 'CenterModal' });
 
-const { isOpen, title } = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
+const { isOpen, title } = defineProps<Props>();
 
-  title: {
-    type: String,
-    required: true,
-  },
-});
-
-const emit = defineEmits(['close']);
+const emit = defineEmits<{
+  close: [];
+}>();
 
 function close() {
   emit('close');
