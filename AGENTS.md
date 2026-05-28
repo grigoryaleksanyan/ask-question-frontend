@@ -8,7 +8,8 @@
 - `npm run fsd:check` (или `npx steiger ./src`) — валидация FSD через steiger
 - `npm run commit` — интерактивный коммит через better-commits (Conventional Commits)
 - `npm run test` — Vitest (однократный запуск), `npm run test:watch` — watch-режим
-- Тесты: `tests/` (вне `src/`), environment: jsdom, setup: `tests/setup.js` (сброс Pinia через `beforeEach`)
+- `npm run typecheck` — проверка типов через vue-tsc
+- Тесты: `tests/` (вне `src/`), environment: jsdom, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`)
 
 Node >= 22.17.0, npm >= 10.9.2
 
@@ -19,7 +20,7 @@ Feature-Sliced Design (FSD) v2.1. Валидация через steiger — за
 ```
 src/
   app/       — вход, роутер, стили, плагины, перехватчики http-client
-    entrypoint/  — main.js, App.vue
+    entrypoint/  — main.ts, App.vue
     router/      — маршруты, beforeEach-guard, auth-middleware
     layouts/     — DefaultLayout, EmptyLayout, AdminLayout
     lib/         — registerPlugins, vuetify, vee-validate, global-components, http-client-interceptors
@@ -30,13 +31,13 @@ src/
   shared/    — инфраструктура (api, config, lib, routes, ui, assets)
 ```
 
-Импорты только сверху вниз: `app → pages → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.js`) — импортируй только через него.
+Импорты только сверху вниз: `app → pages → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.ts`) — импортируй только через него.
 
 Хранилища — Pinia Composition Stores: `features/preloader/store`, `entities/alert/store`, `features/auth/store`. Экспортируются через public API каждого слайса.
 
 ## Стек
 
-Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios. **Composition API** (`<script setup>`), без Options API. Без TypeScript. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config, без `@eslint/eslintrc`), плагины: `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`, `eslint-plugin-vuetify`. Резолвер алиасов: `eslint-import-resolver-vite`.
+Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`, `eslint-plugin-vuetify`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
 
 ## Стили
 
@@ -50,13 +51,17 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 
 ## ESLint-правила (неочевидные)
 
-- ESLint 10 flat config, без `@eslint/eslintrc`/FlatCompat
-- Основные плагины: `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`, `vuetify` (`flat/recommended-v4`)
+- ESLint 10 flat config через `typescript-eslint`, без `@eslint/eslintrc`/FlatCompat
+- Основные плагины: `typescript-eslint` (recommended), `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`, `vuetify` (`flat/recommended-v4`)
 - Отключённые unicorn-правила: `prevent-abbreviations`, `no-null`, `no-array-reduce`, `prefer-top-level-await`, `switch-case-braces`, `prefer-global-this`, `no-negated-condition`, `filename-case`
 - `import-x/no-unresolved: error` — проверка резолва импортов через vite-резолвер. Исключения: vuetify subpath-exports (`vuetify/styles`, `vuetify/locale`) — inline disable
-- `import-x/no-extraneous-dependencies: error` — devDependencies доступны только из конфигов (`eslint.config.js`, `vite.config.js`, `.commitlintrc.cjs`), не из `src/`
+- `import-x/no-extraneous-dependencies: error` — devDependencies доступны только из конфигов (`eslint.config.ts`, `vite.config.ts`, `vitest.config.ts`, `.commitlintrc.cjs`, `tests/**`), не из `src/`
 - `no-throw-literal: error` — только `throw new Error()`, нельзя `throw "string"`
-- `no-shadow: [error, { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }]`
+- `@typescript-eslint/no-shadow: [error, { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }]` (заменяет `no-shadow`, который отключён)
+- `@typescript-eslint/consistent-type-imports: [error, { prefer: 'type-imports' }]` — используй `import type` для типов
+- `@typescript-eslint/no-explicit-any: warn` — избегай `any`, предупреждение
+- `@typescript-eslint/no-unused-vars: [error, { vars: 'all', args: 'after-used', ignoreRestSiblings: true }]` (заменяет `no-unused-vars`, который отключён)
+- `@typescript-eslint/no-useless-constructor: error` (заменяет `no-useless-constructor`, который отключён)
 - Отключённые airbnb-правила: `class-methods-use-this`, `guard-for-in` (дублирует `no-restricted-syntax`), `consistent-return`
 - `max-lines-per-function: [warn, 60]` (skipBlankLines + skipComments)
 - `max-depth: [warn, 3]`, `complexity: [warn, 7]`
@@ -86,21 +91,21 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## API-клиент
 
-`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 (hard redirect через `window.location.href = '/login'`) подключается в `@/app/lib/http-client-interceptors.js`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
+`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 (hard redirect через `window.location.href = '/login'`) подключается в `@/app/lib/http-client-interceptors.ts`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
 
 ## Роутинг
 
-Макет страницы задаётся через `meta.layout` (default: `DefaultLayout`, также `EmptyLayout`, `AdminLayout`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach` через `auth-middleware.js`. В навигационных хранниках можно использовать Pinia-хранилища напрямую (после `app.use(pinia)`).
+Макет страницы задаётся через `meta.layout` (default: `DefaultLayout`, также `EmptyLayout`, `AdminLayout`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach` через `auth-middleware.ts`. В навигационных хранниках можно использовать Pinia-хранилища напрямую (после `app.use(pinia)`).
 
 Маршруты: `/` (main), `/login` (EmptyLayout), `/questions`, `/question/:id`, `/faq`, `/admin`, `/admin-questions`, `/admin-faq`, `/admin-faq/:id`, `/admin-speakers`, `/admin-areas`, `/admin-feedback` (все admin — AdminLayout + isProtected), `/:catchAll(.*)` (404, EmptyLayout).
 
 ## Глобальные компоненты
 
-Регистрируются в `@/app/lib/global-components.js`: SidebarModal, SidebarContentWrapper, CenterModal, CenterModalContentWrapper. Используй их напрямую в шаблонах без импорта.
+Регистрируются в `@/app/lib/global-components.ts`: SidebarModal, SidebarContentWrapper, CenterModal, CenterModalContentWrapper. Используй их напрямую в шаблонах без импорта.
 
 ## VeeValidate
 
-Плагин подключается в `@/app/lib/vee-validate.js`. Зарегистрированы правила: required, email, confirmed, max_value, required-date. Компоненты: VeeForm, VeeField, VeeErrorMessage.
+Плагин подключается в `@/app/lib/vee-validate.ts`. Зарегистрированы правила: required, email, confirmed, max_value, required-date. Компоненты: VeeForm, VeeField, VeeErrorMessage.
 
 ## Shared UI
 
