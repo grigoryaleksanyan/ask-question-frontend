@@ -10,7 +10,7 @@
   </v-overlay>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { usePreloaderStore } from '../store';
 

@@ -4,7 +4,7 @@ import { ref, computed } from 'vue';
 export const usePreloaderStore = defineStore('preloader', () => {
   const loadings = ref(0);
 
-  const showPreloader = computed(() => !!loadings.value);
+  const showPreloader = computed(() => loadings.value > 0);
 
   function addLoader() {
     loadings.value += 1;
