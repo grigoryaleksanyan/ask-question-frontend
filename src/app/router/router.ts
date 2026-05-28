@@ -3,6 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 import checkAuth from '@/app/router/middleware/auth-middleware';
 import ROUTES from '@/shared/routes';
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    layout?: string;
+    isProtected?: boolean;
+  }
+}
+
 const routes = [
   {
     path: '/',
@@ -53,7 +60,9 @@ const routes = [
       {
         path: ':id',
         name: 'admin-faq-category',
-        props: (route) => ({ id: route.params.id }),
+        props: (route: { params: { id: string } }) => ({
+          id: route.params.id,
+        }),
         meta: { layout: 'AdminLayout', isProtected: true },
         component: () =>
           import('@/pages/admin/faq/ui/AdminFAQCategoryPage.vue'),

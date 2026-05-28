@@ -4,7 +4,9 @@ import { useAlertStore } from '@/entities/alert';
 import { ALERT_TYPES } from '@/shared/config';
 import { GetUserData } from '@/entities/user';
 
-export default async function checkAuth() {
+export default async function checkAuth():
+  | Promise<true>
+  | Promise<{ name: string }> {
   const authStore = useAuthStore();
 
   if (!authStore.getAuthStatus) {
@@ -16,15 +18,14 @@ export default async function checkAuth() {
       return true;
     } catch (error) {
       const alertStore = useAlertStore();
+      const err = error as Error;
 
       alertStore.addAlert({
         type: ALERT_TYPES.ERROR,
-        text: error.message,
+        text: err.message,
       });
 
-      return {
-        name: 'login',
-      };
+      return { name: 'login' };
     }
   }
 
