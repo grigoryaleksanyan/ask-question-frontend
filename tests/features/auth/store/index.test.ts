@@ -18,7 +18,14 @@ describe('useAuthStore', () => {
   describe('setAuthData', () => {
     it('устанавливает userData', () => {
       const store = useAuthStore();
-      const user = { id: 1, name: 'Admin' };
+      const user = {
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any;
 
       store.setAuthData(user);
 
@@ -28,7 +35,14 @@ describe('useAuthStore', () => {
     it('isAuthorized = true', () => {
       const store = useAuthStore();
 
-      store.setAuthData({ id: 1, name: 'Admin' });
+      store.setAuthData({
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any);
 
       expect(store.isAuthorized).toBe(true);
     });
@@ -38,7 +52,14 @@ describe('useAuthStore', () => {
     it('сбрасывает userData в null', () => {
       const store = useAuthStore();
 
-      store.setAuthData({ id: 1, name: 'Admin' });
+      store.setAuthData({
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any);
       store.removeAuthData();
 
       expect(store.userData).toBeNull();
@@ -47,7 +68,14 @@ describe('useAuthStore', () => {
     it('isAuthorized = false', () => {
       const store = useAuthStore();
 
-      store.setAuthData({ id: 1, name: 'Admin' });
+      store.setAuthData({
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any);
       store.removeAuthData();
 
       expect(store.isAuthorized).toBe(false);
@@ -60,14 +88,28 @@ describe('useAuthStore', () => {
 
       expect(store.getAuthStatus).toBe(false);
 
-      store.setAuthData({ id: 1 });
+      store.setAuthData({
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any);
 
       expect(store.getAuthStatus).toBe(true);
     });
 
     it('getUserData возвращает userData', () => {
       const store = useAuthStore();
-      const user = { id: 1, name: 'Admin' };
+      const user = {
+        id: '1',
+        login: 'admin',
+        userRoleId: 1,
+        created: '',
+        updated: null,
+        userDetails: null,
+      } as any;
 
       expect(store.getUserData).toBeNull();
 
