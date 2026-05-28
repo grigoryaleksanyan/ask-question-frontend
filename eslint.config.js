@@ -5,7 +5,9 @@ import pluginUnicorn from 'eslint-plugin-unicorn';
 import pluginVuetify from 'eslint-plugin-vuetify';
 import pluginImportX from 'eslint-plugin-import-x';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import viteConfig from './vite.config.js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import viteConfig from './vite.config.ts';
 
 export default [
   {
@@ -24,6 +26,26 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+      },
+    },
+  },
+
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: {
+        parser: tsParser,
+      },
+    },
+  },
+
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
       },
     },
   },
@@ -271,7 +293,7 @@ export default [
       'import-x/extensions': [
         'error',
         'ignorePackages',
-        { js: 'never', mjs: 'never', jsx: 'never' },
+        { js: 'never', mjs: 'never', jsx: 'never', ts: 'never' },
       ],
       'import-x/newline-after-import': ['error', { count: 1 }],
       'import-x/prefer-default-export': 'off',
@@ -287,8 +309,8 @@ export default [
         {
           devDependencies: [
             'eslint.config.js',
-            'vite.config.js',
-            'vitest.config.js',
+            'vite.config.ts',
+            'vitest.config.ts',
             'tests/**',
             '.commitlintrc.cjs',
           ],
@@ -385,6 +407,24 @@ export default [
   },
 
   eslintConfigPrettier,
+
+  {
+    files: ['**/*.{ts,vue}'],
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
 
   {
     files: ['tests/**'],
