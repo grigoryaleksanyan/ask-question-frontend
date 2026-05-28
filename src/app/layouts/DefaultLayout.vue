@@ -57,8 +57,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, useTemplateRef } from 'vue';
+
+import type { NavItem } from '@/shared/types';
 
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
@@ -72,7 +74,7 @@ const drawer = ref(false);
 
 const feedbackModal = useTemplateRef('feedback-modal');
 
-const navItems = [
+const navItems: NavItem[] = [
   {
     title: 'Главная',
     icon: 'mdi-home',

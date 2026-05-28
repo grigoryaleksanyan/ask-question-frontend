@@ -60,9 +60,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+
+import type { NavItem } from '@/shared/types';
 
 import { useAuthStore, Logout } from '@/features/auth';
 import { useAlertStore } from '@/entities/alert';
@@ -81,7 +83,7 @@ const alertStore = useAlertStore();
 const drawer = ref(false);
 const showUserProfile = ref(false);
 
-const navItems = [
+const navItems: NavItem[] = [
   {
     title: 'Сводка',
     icon: 'mdi-chart-line',
