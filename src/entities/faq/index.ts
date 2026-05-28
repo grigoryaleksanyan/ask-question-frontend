@@ -1,10 +1,10 @@
 export {
-  GetAll,
+  GetAll as GetAllCategories,
   GetAllWithEntries,
-  GetById,
-  Create as CreateCategory,
-  Update as UpdateCategory,
-  Delete as DeleteCategory,
+  GetById as GetCategoryById,
+  Create as CreateCategoryApi,
+  Update as UpdateCategoryApi,
+  Delete as DeleteCategoryApi,
   SetOrder as SetCategoryOrder,
 } from './api/faq-category-repository';
 
@@ -13,7 +13,7 @@ export {
   GetById as GetEntryById,
   Create as CreateEntry,
   Update as UpdateEntry,
-  Delete as DeleteEntry,
+  Delete as DeleteEntryApi,
   SetOrder as SetEntryOrder,
 } from './api/faq-entry-repository';
 
@@ -25,4 +25,4 @@ export { default as UpdateCategory } from './ui/UpdateCategory.vue';
 export { default as DeleteCategory } from './ui/DeleteCategory.vue';
 export { default as CreateEntryContent } from './ui/CreateEntryContent.vue';
 export { default as UpdateEntryContent } from './ui/UpdateEntryContent.vue';
-export { default as DeleteEntry } from './ui/DeleteEntry.vue';
+export { default as DeleteEntryModal } from './ui/DeleteEntry.vue';

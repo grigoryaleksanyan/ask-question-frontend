@@ -27,8 +27,8 @@ export type {
 export {
   UserRoleId,
   QuestionStatusId,
-  AlertType,
   type QuestionStatus,
+  type AlertType,
   type AlertItem,
   type NavItem,
   type SidebarModalResult,
