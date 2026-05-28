@@ -35,18 +35,24 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, inject, useSlots } from 'vue';
+
+interface Props {
+  title?: string;
+  headerHeight?: number;
+  footerHeight?: number;
+}
 
 defineOptions({ name: 'SidebarContentWrapper' });
 
-const { title, headerHeight, footerHeight } = defineProps({
-  title: { type: String, default: '' },
-  headerHeight: { type: Number, default: 75 },
-  footerHeight: { type: Number, default: 70 },
-});
+const {
+  title = '',
+  headerHeight = 75,
+  footerHeight = 70,
+} = defineProps<Props>();
 
-const close = inject('close');
+const close = inject<(data?: unknown) => void>('close');
 
 const slots = useSlots();
 

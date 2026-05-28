@@ -29,18 +29,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineAsyncComponent, onBeforeUnmount, provide, ref } from 'vue';
+
+import type { SidebarModalResult } from '@/shared/types';
+
+interface Props {
+  forcedSlotRender?: boolean;
+  closeOnEsc?: boolean;
+  closeOnClickAway?: boolean;
+}
 
 const {
   forcedSlotRender = false,
   closeOnEsc,
   closeOnClickAway,
-} = defineProps({
-  forcedSlotRender: Boolean,
-  closeOnEsc: Boolean,
-  closeOnClickAway: Boolean,
-});
+} = defineProps<Props>();
 
 const SidebarPreloader = defineAsyncComponent(
   () => import('./SidebarPreloader.vue'),
@@ -49,7 +53,7 @@ const SidebarPreloader = defineAsyncComponent(
 const isOpen = ref(false);
 const showPreloader = ref(false);
 
-function handleKeydown(event) {
+function handleKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape' && !showPreloader.value) {
     close();
   }
@@ -61,20 +65,23 @@ function clickOnOverlay() {
   }
 }
 
-function togglePreloader(status) {
+function togglePreloader(status: boolean) {
   showPreloader.value = status;
 }
 
-function toggleScroll(value) {
-  document.querySelector('html').style.overflowY = value ? 'hidden' : 'auto';
+function toggleScroll(value: boolean) {
+  document.querySelector('html')!.style.overflowY = value ? 'hidden' : 'auto';
 }
 
-let modalController = null;
+let modalController: {
+  resolve: (value: SidebarModalResult) => void;
+  reject: (reason?: unknown) => void;
+} | null = null;
 
-function open() {
-  let resolve;
-  let reject;
-  const modalPromise = new Promise((ok, fail) => {
+function open(): Promise<SidebarModalResult> {
+  let resolve!: (value: SidebarModalResult) => void;
+  let reject!: (reason?: unknown) => void;
+  const modalPromise = new Promise<SidebarModalResult>((ok, fail) => {
     resolve = ok;
     reject = fail;
   });
@@ -91,8 +98,8 @@ function open() {
   return modalPromise;
 }
 
-function resolveModal(status, data = null) {
-  modalController.resolve({ status, data });
+function resolveModal(status: boolean, data: unknown = null) {
+  modalController!.resolve({ status, data });
   isOpen.value = false;
   toggleScroll(false);
 
@@ -101,11 +108,11 @@ function resolveModal(status, data = null) {
   }
 }
 
-function confirm(data) {
+function confirm(data: unknown = null) {
   resolveModal(true, data);
 }
 
-function close(data) {
+function close(data: unknown = null) {
   resolveModal(false, data);
 }
 
