@@ -14,13 +14,12 @@
   </v-list>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { NavItem } from '@/shared/types';
+
 defineOptions({ name: 'DrawerNavigation' });
 
-const { navItems } = defineProps({
-  navItems: {
-    type: Array,
-    required: true,
-  },
-});
+const { navItems } = defineProps<{
+  navItems: NavItem[];
+}>();
 </script>

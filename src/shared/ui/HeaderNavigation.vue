@@ -15,13 +15,12 @@
   </v-toolbar-items>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { NavItem } from '@/shared/types';
+
 defineOptions({ name: 'HeaderNavigation' });
 
-const { navItems } = defineProps({
-  navItems: {
-    type: Array,
-    required: true,
-  },
-});
+const { navItems } = defineProps<{
+  navItems: NavItem[];
+}>();
 </script>

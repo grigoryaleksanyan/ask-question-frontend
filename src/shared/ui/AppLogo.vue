@@ -8,12 +8,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
+
+import logoUrl from '@/shared/assets';
 
 defineOptions({ name: 'AppLogo' });
 
-const imageUrl = ref(new URL('@/shared/assets/logo.svg', import.meta.url).href);
+const imageUrl = ref(logoUrl);
 </script>
 
 <style lang="scss" scoped>
