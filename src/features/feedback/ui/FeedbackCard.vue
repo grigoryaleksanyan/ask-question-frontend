@@ -53,7 +53,7 @@
           no-gutters>
           <v-col>
             <span class="text-body-small">
-              Создана: {{ new Date(feedback.сreated).toLocaleDateString() }}
+              Создана: {{ new Date(feedback.created).toLocaleDateString() }}
             </span>
           </v-col>
           <v-col class="d-flex justify-end align-center">
@@ -72,15 +72,16 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { FeedbackResponse } from '@/shared/types';
+
 defineOptions({ name: 'FeedbackCard' });
 
-const { feedback } = defineProps({
-  feedback: {
-    type: Object,
-    required: true,
-  },
-});
+const { feedback } = defineProps<{
+  feedback: FeedbackResponse;
+}>();
 
-const emit = defineEmits(['delete']);
+const emit = defineEmits<{
+  delete: [];
+}>();
 </script>

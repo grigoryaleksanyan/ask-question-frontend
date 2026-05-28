@@ -22,18 +22,21 @@
   </CenterModalContentWrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
 import { Delete as DeleteFeedbackApi } from '../api/feedback-repository';
 
 defineOptions({ name: 'DeleteFeedbackModal' });
 
-const { id } = defineProps({
-  id: { type: String, required: true },
-});
+const { id } = defineProps<{
+  id: string;
+}>();
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [id: string];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 

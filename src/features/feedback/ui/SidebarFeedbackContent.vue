@@ -67,7 +67,7 @@
   </SidebarContentWrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
@@ -79,22 +79,11 @@ import { Create } from '../api/feedback-repository';
 
 defineOptions({ name: 'SidebarFeedbackContent' });
 
-const { showPreloader, modalConfirm, modalClose } = defineProps({
-  showPreloader: {
-    type: Function,
-    required: true,
-  },
-
-  modalConfirm: {
-    type: Function,
-    required: true,
-  },
-
-  modalClose: {
-    type: Function,
-    required: true,
-  },
-});
+const { showPreloader, modalConfirm, modalClose } = defineProps<{
+  showPreloader: (show: boolean) => void;
+  modalConfirm: () => Promise<void>;
+  modalClose: () => void;
+}>();
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();

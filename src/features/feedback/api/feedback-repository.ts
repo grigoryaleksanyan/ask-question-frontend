@@ -1,10 +1,12 @@
 import httpClient from '@/shared/api';
 
+import type { FeedbackResponse, FeedbackCreateRequest } from '@/shared/types';
+
 const apiRoute = '/api/Feedback';
 
-export async function GetAll() {
+export async function GetAll(): Promise<FeedbackResponse[]> {
   const result = await httpClient
-    .get(`${apiRoute}/GetAll`)
+    .get<FeedbackResponse[]>(`${apiRoute}/GetAll`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения списка обратной связи', {
@@ -15,9 +17,11 @@ export async function GetAll() {
   return result;
 }
 
-export async function Create(feedback) {
+export async function Create(
+  feedback: FeedbackCreateRequest,
+): Promise<FeedbackResponse> {
   const result = await httpClient
-    .post(`${apiRoute}/Create`, feedback)
+    .post<FeedbackResponse>(`${apiRoute}/Create`, feedback)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка создания обратной связи', { cause: error });
@@ -26,13 +30,11 @@ export async function Create(feedback) {
   return result;
 }
 
-export async function Delete(id) {
-  const result = await httpClient
+export async function Delete(id: string): Promise<void> {
+  await httpClient
     .delete(`${apiRoute}/Delete?id=${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка удаления обратной связи', { cause: error });
     });
-
-  return result;
 }
