@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prettier:check": "prettier ./src --check",
-    "eslint:check": "eslint ./src/**/*.{vue,js}",
+    "eslint:check": "eslint ./src/**/*.{vue,js,ts}",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json",
     "stylelint:check": "stylelint ./src/**/*.{vue,scss,css}",
     "lint": "npm run prettier:check && npm run eslint:check && npm run stylelint:check",
     "fsd:check": "steiger ./src",
@@ -75,6 +76,10 @@
     "vue-tsc": "^3.3.2"
   },
   "lint-staged": {
+    "src/**/*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ],
     "src/**/*.js": [
       "prettier --write",
       "eslint --fix"
