@@ -2,22 +2,21 @@ import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
 // eslint-disable-next-line camelcase
 import { required, email, confirmed, max_value } from '@vee-validate/rules';
 
+import type { DateRangeValue } from '@/shared/types';
+
 export default {
-  install: (app) => {
+  install: (app: { component: (name: string, component: unknown) => unknown }) => {
     app
       .component('VeeForm', Form)
       .component('VeeField', Field)
       .component('VeeErrorMessage', ErrorMessage);
 
-    configure({
-      validateOnInput: true,
-    });
+    configure({ validateOnInput: true });
 
-    // использование стандартных правил
     defineRule('email', email);
     defineRule('confirmed', confirmed);
-    // стандартное правило с переопределением сообщения ошибки
-    defineRule('required', (value) => {
+
+    defineRule('required', (value: unknown) => {
       if (!required(value)) {
         return 'Обязательное поле';
       }
@@ -25,8 +24,7 @@ export default {
       return true;
     });
 
-    // стандартное правило с отображение аргумента в сообщении
-    defineRule('max_value', (value, [max]) => {
+    defineRule('max_value', (value: unknown, [max]: [number]) => {
       if (!max_value(value, [max])) {
         return `Максимальное значение не должно превышать: ${max}`;
       }
@@ -34,9 +32,8 @@ export default {
       return true;
     });
 
-    // собственное правило
-    defineRule('required-date', ({ startDate, endDate }) => {
-      if (startDate === null && endDate === null) {
+    defineRule('required-date', (value: DateRangeValue) => {
+      if (value.startDate === null && value.endDate === null) {
         return 'Обязательное поле';
       }
 
