@@ -1,10 +1,17 @@
 import httpClient from '@/shared/api';
 
+import type {
+  FaqCategoryResponse,
+  FaqCategoryWithEntriesResponse,
+  FaqCategoryCreateRequest,
+  FaqCategoryUpdateRequest,
+} from '@/shared/types';
+
 const apiRoute = '/api/FaqCategory';
 
-export async function GetAll() {
+export async function GetAll(): Promise<FaqCategoryResponse[]> {
   const result = await httpClient
-    .get(`${apiRoute}/GetAll`)
+    .get<FaqCategoryResponse[]>(`${apiRoute}/GetAll`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения списка категорий', { cause: error });
@@ -13,9 +20,9 @@ export async function GetAll() {
   return result;
 }
 
-export async function GetAllWithEntries() {
+export async function GetAllWithEntries(): Promise<FaqCategoryWithEntriesResponse[]> {
   const result = await httpClient
-    .get(`${apiRoute}/GetAllWithEntries`)
+    .get<FaqCategoryWithEntriesResponse[]>(`${apiRoute}/GetAllWithEntries`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения списка категорий', { cause: error });
@@ -24,9 +31,9 @@ export async function GetAllWithEntries() {
   return result;
 }
 
-export async function GetById(id) {
+export async function GetById(id: string): Promise<FaqCategoryWithEntriesResponse> {
   const result = await httpClient
-    .get(`${apiRoute}/GetById?id=${id}`)
+    .get<FaqCategoryWithEntriesResponse>(`${apiRoute}/GetById?id=${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения данных категории', { cause: error });
@@ -35,9 +42,9 @@ export async function GetById(id) {
   return result;
 }
 
-export async function Create(category) {
+export async function Create(category: FaqCategoryCreateRequest): Promise<FaqCategoryResponse> {
   const result = await httpClient
-    .post(`${apiRoute}/Create`, category)
+    .post<FaqCategoryResponse>(`${apiRoute}/Create`, category)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка создания категории', { cause: error });
@@ -46,9 +53,9 @@ export async function Create(category) {
   return result;
 }
 
-export async function Update(category) {
+export async function Update(category: FaqCategoryUpdateRequest): Promise<FaqCategoryResponse> {
   const result = await httpClient
-    .put(`${apiRoute}/Update`, category)
+    .put<FaqCategoryResponse>(`${apiRoute}/Update`, category)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка изменения категории', { cause: error });
@@ -57,24 +64,20 @@ export async function Update(category) {
   return result;
 }
 
-export async function Delete(id) {
-  const result = await httpClient
+export async function Delete(id: string): Promise<void> {
+  await httpClient
     .delete(`${apiRoute}/Delete?id=${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка удаления категории', { cause: error });
     });
-
-  return result;
 }
 
-export async function SetOrder(categoryIds) {
-  const result = await httpClient
+export async function SetOrder(categoryIds: string[]): Promise<void> {
+  await httpClient
     .put(`${apiRoute}/SetOrder`, categoryIds)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка сортировки категорий', { cause: error });
     });
-
-  return result;
 }

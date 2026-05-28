@@ -10,17 +10,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
+
+import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
 
 defineOptions({ name: 'CategoryCard' });
 
-const { category } = defineProps({
-  category: {
-    type: Object,
-    required: true,
-  },
-});
+const { category } = defineProps<{
+  category: FaqCategoryWithEntriesResponse;
+}>();
 
 const router = useRouter();
 

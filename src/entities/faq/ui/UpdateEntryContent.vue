@@ -39,10 +39,12 @@
   </SidebarContentWrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, onMounted, useTemplateRef } from 'vue';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
+
+import type { FaqEntryResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 import RichEditor from '@/shared/ui/rich-editor';
@@ -54,22 +56,11 @@ import { Update as UpdateEntry } from '../api/faq-entry-repository';
 
 defineOptions({ name: 'UpdateEntryContent' });
 
-const { modalConfirm, modalClose, entry } = defineProps({
-  modalConfirm: {
-    type: Function,
-    required: true,
-  },
-
-  modalClose: {
-    type: Function,
-    required: true,
-  },
-
-  entry: {
-    type: Object,
-    required: true,
-  },
-});
+const { modalConfirm, modalClose, entry } = defineProps<{
+  modalConfirm: () => Promise<void>;
+  modalClose: () => void;
+  entry: FaqEntryResponse;
+}>();
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
@@ -79,13 +70,13 @@ const updateEntry = useTemplateRef('updateEntry');
 const valid = ref(false);
 
 const controls = reactive({
-  question: null,
-  answer: null,
+  question: null as string | null,
+  answer: null as string | null,
 });
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 onMounted(() => {
@@ -94,7 +85,7 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateEntry.value.validate()) {
+  if (updateEntry.value!.validate()) {
     try {
       preloaderStore.addLoader();
 
@@ -111,13 +102,10 @@ async function submitForm() {
         text: 'Запись успешно изменена',
       });
 
-      modalConfirm({
-        ...entry,
-        question: controls.question,
-        answer: controls.answer,
-      });
+      modalConfirm();
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     } finally {
       preloaderStore.removeLoader();
     }

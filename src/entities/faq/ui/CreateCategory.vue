@@ -29,7 +29,7 @@
   </v-form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, useTemplateRef } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
@@ -38,35 +38,38 @@ import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'CreateCategory' });
 
-const { order, isOpen } = defineProps({
-  order: { type: Number, required: true },
-  isOpen: { type: Boolean },
-});
+const { order, isOpen } = defineProps<{
+  order: number;
+  isOpen?: boolean;
+}>();
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 
 const valid = ref(true);
-const name = ref(null);
+const name = ref(null as string | null);
 const createCategory = useTemplateRef('createCategory');
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      createCategory.value.reset();
+      createCategory.value!.reset();
     }
   },
 );
 
 async function submitForm() {
-  if (createCategory.value.validate()) {
+  if (createCategory.value!.validate()) {
     try {
       const category = { name: name.value, order };
 
@@ -81,7 +84,8 @@ async function submitForm() {
 
       emit('success', category);
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     }
   }
 }

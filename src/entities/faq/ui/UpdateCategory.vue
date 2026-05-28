@@ -29,8 +29,10 @@
   </v-form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, useTemplateRef } from 'vue';
+
+import type { FaqCategoryResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -38,29 +40,32 @@ import { Update as UpdateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'UpdateCategory' });
 
-const { category, isOpen } = defineProps({
-  category: { type: Object, required: true },
-  isOpen: { type: Boolean },
-});
+const { category, isOpen } = defineProps<{
+  category: FaqCategoryResponse;
+  isOpen?: boolean;
+}>();
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 
 const valid = ref(true);
-const name = ref(null);
+const name = ref(null as string | null);
 const updateCategory = useTemplateRef('updateCategory');
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      updateCategory.value.reset();
+      updateCategory.value!.reset();
     } else {
       name.value = category.name;
     }
@@ -72,7 +77,7 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateCategory.value.validate()) {
+  if (updateCategory.value!.validate()) {
     try {
       const updatedCategory = { id: category.id, name: name.value };
 
@@ -85,7 +90,8 @@ async function submitForm() {
 
       emit('success', updatedCategory.name);
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     }
   }
 }

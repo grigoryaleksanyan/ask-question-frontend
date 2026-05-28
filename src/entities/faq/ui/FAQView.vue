@@ -59,9 +59,11 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+
+import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -76,14 +78,15 @@ const route = useRoute();
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
 
-const categories = ref([]);
+const categories = ref<FaqCategoryWithEntriesResponse[]>([]);
 
 async function fetchData() {
   try {
     preloaderStore.addLoader();
     categories.value = await GetAllWithEntries();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }

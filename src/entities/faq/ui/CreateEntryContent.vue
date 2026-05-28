@@ -39,7 +39,7 @@
   </SidebarContentWrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
@@ -54,27 +54,12 @@ import { Create as CreateEntry } from '../api/faq-entry-repository';
 
 defineOptions({ name: 'CreateEntryContent' });
 
-const { modalConfirm, modalClose, categoryId, order } = defineProps({
-  modalConfirm: {
-    type: Function,
-    required: true,
-  },
-
-  modalClose: {
-    type: Function,
-    required: true,
-  },
-
-  categoryId: {
-    type: String,
-    required: true,
-  },
-
-  order: {
-    type: Number,
-    required: true,
-  },
-});
+const { modalConfirm, modalClose, categoryId, order } = defineProps<{
+  modalConfirm: () => Promise<void>;
+  modalClose: () => void;
+  categoryId: string;
+  order: number;
+}>();
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
@@ -84,17 +69,17 @@ const createEntry = useTemplateRef('createEntry');
 const valid = ref(false);
 
 const controls = reactive({
-  question: null,
-  answer: null,
+  question: null as string | null,
+  answer: null as string | null,
 });
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 async function submitForm() {
-  if (createEntry.value.validate()) {
+  if (createEntry.value!.validate()) {
     try {
       preloaderStore.addLoader();
 
@@ -108,16 +93,17 @@ async function submitForm() {
       const id = await CreateEntry(entry);
 
       entry.id = id;
-      entry.сreated = new Date();
+      entry.created = new Date();
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Запись успешно создана',
       });
 
-      modalConfirm(entry);
+      modalConfirm();
     } catch (error) {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     } finally {
       preloaderStore.removeLoader();
     }

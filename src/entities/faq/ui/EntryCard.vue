@@ -41,7 +41,7 @@
           no-gutters>
           <v-col>
             <span class="text-body-small">
-              Создана: {{ new Date(entry.сreated).toLocaleDateString() }}
+              Создана: {{ new Date(entry.created).toLocaleDateString() }}
             </span>
           </v-col>
           <v-col class="d-flex justify-end align-center">
@@ -87,17 +87,20 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { FaqEntryResponse } from '@/shared/types';
+
 defineOptions({ name: 'EntryCard' });
 
-const { entry } = defineProps({
-  entry: {
-    type: Object,
-    required: true,
-  },
-});
+const { entry } = defineProps<{
+  entry: FaqEntryResponse;
+}>();
 
-const emit = defineEmits(['copy-link', 'update', 'delete']);
+const emit = defineEmits<{
+  'copy-link': [];
+  update: [];
+  delete: [];
+}>();
 </script>
 
 <style lang="scss" scoped>
