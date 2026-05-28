@@ -64,6 +64,8 @@ import { useGoTo } from 'vuetify';
 
 import VideoBackground from 'vue-responsive-video-background-player';
 
+import type { QuestionResponse } from '@/shared/types';
+
 import {
   GetPopularQuestions,
   QuestionCard,
@@ -83,14 +85,15 @@ const backgroundVideo = ref(
 const backgroundPoster = ref(
   new URL('@/shared/assets/img/poster.jpg', import.meta.url).href,
 );
-const questions = ref([]);
+const questions = ref<QuestionResponse[]>([]);
 const headerHeight = ref(64);
 
 async function fetchData() {
   try {
     questions.value = await GetPopularQuestions();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

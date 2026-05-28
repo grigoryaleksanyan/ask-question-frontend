@@ -71,7 +71,7 @@
       :is-open="showUpdateArea"
       @close="showUpdateArea = false">
       <UpdateArea
-        v-if="showUpdateArea"
+        v-if="showUpdateArea && currentArea"
         :area="currentArea"
         :is-open="showUpdateArea"
         @success="successUpdateArea"
@@ -83,7 +83,7 @@
       :is-open="showDeleteArea"
       @close="showDeleteArea = false">
       <DeleteArea
-        v-if="showDeleteArea"
+        v-if="showDeleteArea && currentArea"
         :id="currentArea.id"
         :is-open="showDeleteArea"
         @success="successDeleteArea"
@@ -95,6 +95,8 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue';
 import Draggable from 'vuedraggable';
+
+import type { AreaResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -114,8 +116,8 @@ defineOptions({ name: 'AdminAreasPage' });
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
 
-const areas = ref([]);
-const currentArea = ref(null);
+const areas = ref<AreaResponse[]>([]);
+const currentArea = ref<AreaResponse | null>(null);
 
 const showCreateArea = ref(false);
 const showUpdateArea = ref(false);
@@ -133,14 +135,14 @@ const draggableAreas = computed({
     return areas.value;
   },
 
-  async set(newOrderAreas) {
+  async set(newOrderAreas: AreaResponse[]) {
     const oldOrderAreas = [...areas.value];
 
     areas.value = newOrderAreas;
 
     try {
       preloaderStore.addLoader();
-      const areaIds = newOrderAreas.map((area) => area.id);
+      const areaIds = newOrderAreas.map((area: AreaResponse) => area.id);
       await SetAreaOrder(areaIds);
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
@@ -148,7 +150,8 @@ const draggableAreas = computed({
       });
     } catch (error) {
       areas.value = oldOrderAreas;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     } finally {
       preloaderStore.removeLoader();
     }
@@ -160,23 +163,24 @@ async function fetchData() {
     preloaderStore.addLoader();
     areas.value = await GetAllAreas();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }
 }
 
-function successCreateArea(area) {
+function successCreateArea(area: AreaResponse) {
   areas.value = [...areas.value, area];
   showCreateArea.value = false;
 }
 
-function clickUpdateAreaBtn(area) {
+function clickUpdateAreaBtn(area: AreaResponse) {
   currentArea.value = area;
   showUpdateArea.value = true;
 }
 
-function successUpdateArea(modifiedArea) {
+function successUpdateArea(modifiedArea: AreaResponse) {
   areas.value = areas.value.map((area) =>
     area.id === modifiedArea.id ? modifiedArea : area,
   );
@@ -184,12 +188,12 @@ function successUpdateArea(modifiedArea) {
   showUpdateArea.value = false;
 }
 
-function clickDeleteAreaBtn(area) {
+function clickDeleteAreaBtn(area: AreaResponse) {
   currentArea.value = area;
   showDeleteArea.value = true;
 }
 
-function successDeleteArea(areaId) {
+function successDeleteArea(areaId: string) {
   areas.value = areas.value.filter((area) => area.id !== areaId);
   showDeleteArea.value = false;
 }

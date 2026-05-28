@@ -65,7 +65,7 @@
             clearable
             hide-details
             density="compact"
-            :menu-props="{ bottom: true, offsetY: true }" />
+            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
         </v-col>
         <v-col
           cols="12"
@@ -77,7 +77,7 @@
             clearable
             hide-details
             density="compact"
-            :menu-props="{ bottom: true, offsetY: true }" />
+            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
         </v-col>
         <v-col
           cols="12"
@@ -89,7 +89,7 @@
             clearable
             hide-details
             density="compact"
-            :menu-props="{ bottom: true, offsetY: true }" />
+            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
         </v-col>
       </v-row>
     </v-expand-transition>

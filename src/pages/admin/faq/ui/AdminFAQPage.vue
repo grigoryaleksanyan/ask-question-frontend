@@ -75,6 +75,8 @@ import { ref, computed, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import Draggable from 'vuedraggable';
 
+import type { FaqCategoryResponse } from '@/shared/types';
+
 import { ALERT_TYPES } from '@/shared/config';
 import {
   GetAllCategories,
@@ -91,7 +93,7 @@ const route = useRoute();
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
 
-const categories = ref([]);
+const categories = ref<FaqCategoryResponse[]>([]);
 
 const showCreateCategory = ref(false);
 
@@ -109,14 +111,16 @@ const draggableCategories = computed({
     return categories.value;
   },
 
-  async set(newOrderCategories) {
+  async set(newOrderCategories: FaqCategoryResponse[]) {
     const oldOrderCategories = [...categories.value];
 
     categories.value = newOrderCategories;
 
     try {
       preloaderStore.addLoader();
-      const categoryIds = newOrderCategories.map((category) => category.id);
+      const categoryIds = newOrderCategories.map(
+        (category: FaqCategoryResponse) => category.id,
+      );
       await SetCategoryOrder(categoryIds);
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
@@ -124,7 +128,8 @@ const draggableCategories = computed({
       });
     } catch (error) {
       categories.value = oldOrderCategories;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     } finally {
       preloaderStore.removeLoader();
     }
@@ -136,13 +141,14 @@ async function fetchData() {
     preloaderStore.addLoader();
     categories.value = await GetAllCategories();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }
 }
 
-function successCreateCategory(category) {
+function successCreateCategory(category: FaqCategoryResponse) {
   categories.value = [...categories.value, category];
   showCreateCategory.value = false;
 }

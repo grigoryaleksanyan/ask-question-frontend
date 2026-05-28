@@ -46,7 +46,7 @@ const { category, isOpen } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  success: [];
+  success: [name: string];
   cancel: [];
 }>();
 
@@ -77,18 +77,18 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateCategory.value!.validate()) {
-    try {
-      const updatedCategory = { id: category.id, name: name.value };
+  const { valid: isValid } = await updateCategory.value!.validate();
 
-      await UpdateCategoryApi(updatedCategory);
+  if (isValid) {
+    try {
+      await UpdateCategoryApi({ id: category.id, name: name.value! });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Категория успешно изменена',
       });
 
-      emit('success', updatedCategory.name);
+      emit('success', name.value!);
     } catch (error) {
       const err = error as Error;
       alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });

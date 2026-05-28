@@ -32,7 +32,7 @@ const { id } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  success: [];
+  success: [id: string];
   cancel: [];
 }>();
 

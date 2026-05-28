@@ -85,17 +85,17 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateEntry.value!.validate()) {
+  const { valid: isValid } = await updateEntry.value!.validate();
+
+  if (isValid) {
     try {
       preloaderStore.addLoader();
 
-      const entryData = {
+      await UpdateEntry({
         id: entry.id,
-        question: controls.question,
-        answer: sanitizeHtml(controls.answer),
-      };
-
-      await UpdateEntry(entryData);
+        question: controls.question!,
+        answer: sanitizeHtml(controls.answer!),
+      });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,

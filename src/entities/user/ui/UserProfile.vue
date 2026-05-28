@@ -2,23 +2,29 @@
   <VeeForm v-slot="{ meta, handleSubmit }">
     <CenterModalContentWrapper>
       <template #default>
-        <template v-if="getUserData.userRoleId === 2">
-          <p><b>ФИО:</b> {{ getUserData.userDetails.fullName }}</p>
-          <p><b>Почта:</b> {{ getUserData.userDetails.email }}</p>
-          <p><b>Доп. инфо:</b> {{ getUserData.userDetails.additionalInfo }}</p>
+        <template v-if="getUserData?.userRoleId === 2">
+          <p><b>ФИО:</b> {{ getUserData?.userDetails?.fullName }}</p>
+          <p><b>Почта:</b> {{ getUserData?.userDetails?.email }}</p>
+          <p>
+            <b>Доп. инфо:</b> {{ getUserData?.userDetails?.additionalInfo }}
+          </p>
         </template>
 
-        <p><b>Id:</b> {{ getUserData.id }}</p>
-        <p><b>Логин:</b> {{ getUserData.login }}</p>
+        <p><b>Id:</b> {{ getUserData?.id }}</p>
+        <p><b>Логин:</b> {{ getUserData?.login }}</p>
         <p><b>Роль:</b> {{ getUserStringRole }}</p>
         <p>
           <b>Создан:</b>
-          {{ new Date(getUserData.created).toLocaleDateString() }}
+          {{
+            getUserData?.created
+              ? new Date(getUserData.created).toLocaleDateString()
+              : ''
+          }}
         </p>
         <p>
           <b>Изменен:</b>
           {{
-            getUserData.updated
+            getUserData?.updated
               ? new Date(getUserData.updated).toLocaleDateString()
               : '-'
           }}
@@ -131,7 +137,7 @@ const controls = reactive<ChangePasswordRequest>({
 });
 
 const getUserStringRole = computed(() => {
-  if (getUserData.value.userRoleId === 1) {
+  if (getUserData.value?.userRoleId === 1) {
     return 'Администратор';
   }
 

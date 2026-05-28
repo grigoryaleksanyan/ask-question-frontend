@@ -79,21 +79,18 @@ const rules = [
 ];
 
 async function submitForm() {
-  if (createEntry.value!.validate()) {
+  const { valid: isValid } = await createEntry.value!.validate();
+
+  if (isValid) {
     try {
       preloaderStore.addLoader();
 
-      const entry = {
+      await CreateEntry({
         faqCategoryId: categoryId,
-        question: controls.question,
-        answer: sanitizeHtml(controls.answer),
+        question: controls.question!,
+        answer: sanitizeHtml(controls.answer!),
         order,
-      };
-
-      const id = await CreateEntry(entry);
-
-      entry.id = id;
-      entry.created = new Date();
+      });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,

@@ -102,7 +102,7 @@ onMounted(() => {
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        element.children[0].click();
+        ((element as HTMLElement).children[0] as HTMLElement).click();
       }
     }, 100);
   }

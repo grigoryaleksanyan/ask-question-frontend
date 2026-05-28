@@ -1,3 +1,5 @@
+import type { App } from 'vue';
+
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
 // eslint-disable-next-line camelcase
 import { required, email, confirmed, max_value } from '@vee-validate/rules';
@@ -5,9 +7,7 @@ import { required, email, confirmed, max_value } from '@vee-validate/rules';
 import type { DateRangeValue } from '@/shared/types';
 
 export default {
-  install: (app: {
-    component: (name: string, component: unknown) => unknown;
-  }) => {
+  install: (app: App) => {
     app
       .component('VeeForm', Form)
       .component('VeeField', Field)

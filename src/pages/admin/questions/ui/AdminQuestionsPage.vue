@@ -47,7 +47,8 @@ async function fetchData() {
   try {
     questions.value = await GetAllQuestions();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

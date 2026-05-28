@@ -31,7 +31,7 @@
               :items="themes"
               :rules="rules"
               variant="outlined"
-              :menu-props="{ bottom: true, offsetY: true }" />
+              :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
           </v-col>
           <v-col cols="12">
             <v-textarea
@@ -96,19 +96,19 @@ const themes = [
 ];
 
 const controls = reactive({
-  username: null,
-  email: null,
-  theme: null,
-  text: null,
+  username: null as string | null,
+  email: null as string | null,
+  theme: null as string | null,
+  text: null as string | null,
 });
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 async function submitForm() {
-  const { valid } = await feedbackForm.value.validate();
+  const { valid } = await feedbackForm.value!.validate();
 
   if (!valid) {
     return;
@@ -116,14 +116,20 @@ async function submitForm() {
 
   try {
     preloaderStore.addLoader();
-    await Create(controls);
+    await Create({
+      username: controls.username!,
+      email: controls.email!,
+      theme: controls.theme!,
+      text: controls.text!,
+    });
     alertStore.addAlert({
       type: ALERT_TYPES.SUCCESS,
       text: 'Обратная связь отправлена',
     });
     modalConfirm();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }

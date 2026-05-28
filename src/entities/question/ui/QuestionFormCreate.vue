@@ -67,7 +67,9 @@
                     item-value="title"
                     label="Область*"
                     :rules="rules"
-                    :menu-props="{ bottom: true, offsetY: true }" />
+                    :menu-props="
+                      { location: 'bottom' } as Record<string, unknown>
+                    " />
                 </v-col>
               </v-row>
               <v-row>
@@ -76,7 +78,9 @@
                     v-model="controls.speaker"
                     label="Спикер*"
                     :rules="rules"
-                    :menu-props="{ bottom: true, offsetY: true }" />
+                    :menu-props="
+                      { location: 'bottom' } as Record<string, unknown>
+                    " />
                 </v-col>
                 <v-col class="pt-0">
                   <v-text-field
@@ -99,9 +103,9 @@
                 <v-col
                   cols="6"
                   class="d-flex justify-center">
-                  <template v-if="captchaImg">
+                  <template v-if="captchaData?.captchaImage">
                     <v-img
-                      :src="captchaImg"
+                      :src="captchaData.captchaImage"
                       style="width: 100%; max-width: 160px; height: 48px"
                       alt="captcha" />
                   </template>
@@ -125,6 +129,8 @@
 <script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
 
+import type { AreaResponse, CaptchaResponse } from '@/shared/types';
+
 import { GetAllAreas } from '@/entities/area';
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -136,15 +142,15 @@ const alertStore = useAlertStore();
 
 const valid = ref(true);
 const details = ref(false);
-const areas = ref([]);
-const captchaImg = ref(null as string | null);
+const areas = ref<AreaResponse[]>([]);
+const captchaData = ref<CaptchaResponse | null>(null);
 const captcha = ref(null as string | null);
 
 const controls = reactive({
   text: null as string | null,
   author: null as string | null,
   speaker: null as string | null,
-  area: null as string | null,
+  area: undefined as string | undefined,
 });
 
 const rules = [
@@ -169,10 +175,10 @@ function showDetails() {
 }
 
 async function getCaptcha() {
-  captchaImg.value = null;
+  captchaData.value = null;
 
   try {
-    captchaImg.value = await GetCaptcha();
+    captchaData.value = await GetCaptcha();
   } catch (error) {
     const err = error as Error;
     alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
@@ -193,7 +199,12 @@ async function submitForm() {
 
   if (result.valid) {
     try {
-      await Create(captcha.value!, controls);
+      await Create(captchaData.value!.id, {
+        text: controls.text!,
+        author: controls.author!,
+        area: controls.area ?? null,
+        speaker: controls.speaker!,
+      });
 
       toggleForm();
 

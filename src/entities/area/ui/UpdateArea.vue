@@ -46,7 +46,7 @@ const { area, isOpen } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  success: [];
+  success: [area: AreaResponse];
   cancel: [];
 }>();
 
@@ -77,18 +77,18 @@ onMounted(() => {
 });
 
 async function submitForm() {
-  if (updateArea.value!.validate()) {
-    try {
-      const updatedArea = { id: area.id, title: title.value };
+  const { valid: isValid } = await updateArea.value!.validate();
 
-      await Update(updatedArea);
+  if (isValid) {
+    try {
+      const updatedArea = await Update({ id: area.id, title: title.value! });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Категория успешно изменена',
       });
 
-      emit('success', { ...area, title: title.value });
+      emit('success', updatedArea);
     } catch (error) {
       const err = error as Error;
       alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });

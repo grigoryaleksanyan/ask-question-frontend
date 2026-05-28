@@ -109,7 +109,7 @@
           <UpdateEntryContent
             :modal-confirm="confirm"
             :modal-close="close"
-            :entry="currentEntry" />
+            :entry="currentEntry!" />
         </template>
       </SidebarModal>
 
@@ -118,7 +118,7 @@
         :is-open="showDeleteEntry"
         @close="showDeleteEntry = false">
         <DeleteEntryModal
-          v-if="showDeleteEntry"
+          v-if="showDeleteEntry && currentEntry"
           :id="currentEntry.id"
           :is-open="showDeleteEntry"
           @success="successDeleteEntry"
@@ -132,6 +132,11 @@
 import { ref, computed, reactive, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 import Draggable from 'vuedraggable';
+
+import type {
+  FaqCategoryWithEntriesResponse,
+  FaqEntryResponse,
+} from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -160,8 +165,8 @@ const router = useRouter();
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
 
-const category = ref(null);
-const currentEntry = ref(null);
+const category = ref<FaqCategoryWithEntriesResponse | null>(null);
+const currentEntry = ref<FaqEntryResponse | null>(null);
 
 const showUpdateCategory = ref(false);
 const showDeleteCategory = ref(false);
@@ -179,25 +184,32 @@ const updateEntryModal = useTemplateRef('updateEntryModal');
 
 const draggableEntries = computed({
   get() {
-    return category.value.entries;
+    return category.value?.entries ?? [];
   },
 
-  async set(newOrderEntries) {
+  async set(newOrderEntries: FaqEntryResponse[]) {
+    if (!category.value) return;
+
     const oldOrderEntries = [...category.value.entries];
 
     category.value.entries = newOrderEntries;
 
     try {
       preloaderStore.addLoader();
-      const entryIds = newOrderEntries.map((entry) => entry.id);
+      const entryIds = newOrderEntries.map(
+        (entry: FaqEntryResponse) => entry.id,
+      );
       await SetEntryOrder(entryIds);
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Сортировка применена',
       });
     } catch (error) {
-      category.value.entries = oldOrderEntries;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      if (category.value) {
+        category.value.entries = oldOrderEntries;
+      }
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     } finally {
       preloaderStore.removeLoader();
     }
@@ -209,7 +221,8 @@ async function fetchData() {
     preloaderStore.addLoader();
     category.value = await GetCategoryById(id);
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }
@@ -219,27 +232,32 @@ async function showCreateEntryModal() {
   const result = await createEntryModal.value.open();
 
   if (result.status) {
-    const entry = result.data;
-    category.value.entries.push(entry);
+    const entry = result.data as FaqEntryResponse;
+    category.value?.entries.push(entry);
   }
 }
 
-async function showUpdateEntryModal(entry) {
+async function showUpdateEntryModal(entry: FaqEntryResponse) {
   currentEntry.value = entry;
 
   const result = await updateEntryModal.value.open();
 
   if (result.status) {
-    const modifiedEntry = result.data;
+    const modifiedEntry = result.data as FaqEntryResponse;
 
-    category.value.entries = category.value.entries.map((e) =>
-      e.id === modifiedEntry.id ? modifiedEntry : e,
-    );
+    if (category.value) {
+      category.value.entries = category.value.entries.map(
+        (e: FaqEntryResponse) =>
+          e.id === modifiedEntry.id ? modifiedEntry : e,
+      );
+    }
   }
 }
 
-function successUpdateCategory(name) {
-  category.value.name = name;
+function successUpdateCategory(name: string) {
+  if (category.value) {
+    category.value.name = name;
+  }
 
   showUpdateCategory.value = false;
 }
@@ -250,7 +268,7 @@ function successDeleteCategory() {
   router.push({ name: 'admin-faq' });
 }
 
-function copyLink(entry) {
+function copyLink(entry: FaqEntryResponse) {
   const link = `${window.location.protocol}//${window.location.host}/faq?id=${entry.id}`;
 
   copyToClipboard(link)
@@ -260,20 +278,23 @@ function copyLink(entry) {
         text: 'Ссылка скопирована в буфер обмена',
       });
     })
-    .catch((error) => {
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    .catch((error: unknown) => {
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     });
 }
 
-function clickDeleteEntryBtn(entry) {
+function clickDeleteEntryBtn(entry: FaqEntryResponse) {
   currentEntry.value = entry;
   showDeleteEntry.value = true;
 }
 
-function successDeleteEntry(entryId) {
-  category.value.entries = category.value.entries.filter(
-    (e) => e.id !== entryId,
-  );
+function successDeleteEntry(entryId: string) {
+  if (category.value) {
+    category.value.entries = category.value.entries.filter(
+      (e: FaqEntryResponse) => e.id !== entryId,
+    );
+  }
   showDeleteEntry.value = false;
 }
 

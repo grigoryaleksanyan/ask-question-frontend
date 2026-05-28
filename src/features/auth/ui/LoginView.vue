@@ -60,15 +60,16 @@ const controls = reactive({
 async function onSubmit() {
   try {
     const user = await Login({
-      login: controls.email,
-      password: controls.password,
+      login: controls.email!,
+      password: controls.password!,
     });
 
     authStore.setAuthData(user);
 
     router.go(-1);
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 </script>

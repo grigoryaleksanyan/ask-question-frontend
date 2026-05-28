@@ -40,7 +40,7 @@
       :is-open="showDeleteFeedback"
       @close="showDeleteFeedback = false">
       <DeleteFeedbackModal
-        v-if="showDeleteFeedback"
+        v-if="showDeleteFeedback && currentFeedback"
         :id="currentFeedback.id"
         @success="successDeleteFeedback"
         @cancel="showDeleteFeedback = false" />
@@ -50,6 +50,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+
+import type { FeedbackResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -66,8 +68,8 @@ defineOptions({ name: 'AdminFeedbackPage' });
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
 
-const feedbacks = ref([]);
-const currentFeedback = ref(null);
+const feedbacks = ref<FeedbackResponse[]>([]);
+const currentFeedback = ref<FeedbackResponse | null>(null);
 const showDeleteFeedback = ref(false);
 
 async function fetchData() {
@@ -75,18 +77,19 @@ async function fetchData() {
     preloaderStore.addLoader();
     feedbacks.value = await GetAllFeedback();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }
 }
 
-function clickDeleteFeedbackBtn(feedback) {
+function clickDeleteFeedbackBtn(feedback: FeedbackResponse) {
   currentFeedback.value = feedback;
   showDeleteFeedback.value = true;
 }
 
-function successDeleteFeedback(feedbackId) {
+function successDeleteFeedback(feedbackId: string) {
   feedbacks.value = feedbacks.value.filter(
     (feedback) => feedback.id !== feedbackId,
   );

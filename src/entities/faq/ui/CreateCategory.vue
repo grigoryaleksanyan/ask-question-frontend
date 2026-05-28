@@ -32,6 +32,8 @@
 <script setup lang="ts">
 import { ref, watch, useTemplateRef } from 'vue';
 
+import type { FaqCategoryResponse } from '@/shared/types';
+
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
 import { Create as CreateCategoryApi } from '../api/faq-category-repository';
@@ -44,7 +46,7 @@ const { order, isOpen } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  success: [];
+  success: [category: FaqCategoryResponse];
   cancel: [];
 }>();
 
@@ -69,20 +71,21 @@ watch(
 );
 
 async function submitForm() {
-  if (createCategory.value!.validate()) {
+  const { valid: isValid } = await createCategory.value!.validate();
+
+  if (isValid) {
     try {
-      const category = { name: name.value, order };
-
-      const id = await CreateCategoryApi(category);
-
-      category.id = id;
+      const createdCategory = await CreateCategoryApi({
+        name: name.value!,
+        order,
+      });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Категория успешно создана',
       });
 
-      emit('success', category);
+      emit('success', createdCategory);
     } catch (error) {
       const err = error as Error;
       alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });

@@ -126,7 +126,8 @@ async function logout() {
 
     alertStore.addAlert({ type: ALERT_TYPES.SUCCESS, text: 'Успешный выход' });
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 </script>

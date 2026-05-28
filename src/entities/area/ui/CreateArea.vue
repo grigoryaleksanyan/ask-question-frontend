@@ -32,6 +32,8 @@
 <script setup lang="ts">
 import { ref, watch, useTemplateRef } from 'vue';
 
+import type { AreaResponse } from '@/shared/types';
+
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
 import { Create } from '../api/areas-repository';
@@ -44,7 +46,7 @@ const { order, isOpen } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  success: [];
+  success: [area: AreaResponse];
   cancel: [];
 }>();
 
@@ -69,20 +71,18 @@ watch(
 );
 
 async function submitForm() {
-  if (createArea.value!.validate()) {
+  const { valid: isValid } = await createArea.value!.validate();
+
+  if (isValid) {
     try {
-      const area = { title: title.value, order };
-
-      const id = await Create(area);
-
-      area.id = id;
+      const createdArea = await Create({ title: title.value!, order });
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Область успешно создана',
       });
 
-      emit('success', area);
+      emit('success', createdArea);
     } catch (error) {
       const err = error as Error;
       alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
