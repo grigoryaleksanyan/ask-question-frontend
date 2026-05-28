@@ -84,7 +84,7 @@
                   mdi-eye
                 </v-icon>
                 <span class="text-body-small text-sm-body-medium">{{
-                  replaceСounter(99)
+                  replaceCounter(99)
                 }}</span>
               </v-col>
               <v-col class="d-flex justify-end align-center">
@@ -99,7 +99,7 @@
                     mdi-thumb-up-outline
                   </v-icon>
                   <span class="text-body-small text-sm-body-medium mr-1">{{
-                    replaceСounter(1)
+                    replaceCounter(1)
                   }}</span>
                 </v-btn>
                 <v-btn
@@ -113,7 +113,7 @@
                     mdi-thumb-down-outline
                   </v-icon>
                   <span class="text-body-small text-sm-body-medium">
-                    {{ replaceСounter(99) }}</span
+                    {{ replaceCounter(99) }}</span
                   >
                 </v-btn>
               </v-col>
@@ -125,7 +125,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 
 import QUESTION_STATUSES from '../config/question-statuses';
@@ -147,7 +147,7 @@ const color = computed(() => {
   }
 });
 
-function replaceСounter(value) {
+function replaceCounter(value: number) {
   return value > 999 ? '999+' : value;
 }
 </script>

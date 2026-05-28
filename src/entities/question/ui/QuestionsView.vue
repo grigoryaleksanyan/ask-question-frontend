@@ -113,9 +113,11 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useDisplay } from 'vuetify';
+
+import type { QuestionResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -132,13 +134,14 @@ const alertStore = useAlertStore();
 
 const model = ref('tab-1');
 const page = ref(1);
-const questions = ref([]);
+const questions = ref<QuestionResponse[]>([]);
 
 async function fetchData() {
   try {
     questions.value = await GetAll();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

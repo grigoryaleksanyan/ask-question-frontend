@@ -80,7 +80,7 @@
                 </v-col>
                 <v-col class="pt-0">
                   <v-text-field
-                    v-model="capctha"
+                    v-model="captcha"
                     label="Код*"
                     :rules="rules" />
                 </v-col>
@@ -99,9 +99,9 @@
                 <v-col
                   cols="6"
                   class="d-flex justify-center">
-                  <template v-if="capcthaImg">
+                  <template v-if="captchaImg">
                     <v-img
-                      :src="capcthaImg"
+                      :src="captchaImg"
                       style="width: 100%; max-width: 160px; height: 48px"
                       alt="captcha" />
                   </template>
@@ -122,13 +122,13 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
 
 import { GetAllAreas } from '@/entities/area';
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
-import { GetCapctha, Create } from '../api/questions-repository';
+import { GetCaptcha, Create } from '../api/questions-repository';
 
 defineOptions({ name: 'QuestionFormCreate' });
 
@@ -137,26 +137,26 @@ const alertStore = useAlertStore();
 const valid = ref(true);
 const details = ref(false);
 const areas = ref([]);
-const capcthaImg = ref(null);
-const capctha = ref(null);
+const captchaImg = ref(null as string | null);
+const captcha = ref(null as string | null);
 
 const controls = reactive({
-  text: null,
-  author: null,
-  speaker: null,
-  area: null,
+  text: null as string | null,
+  author: null as string | null,
+  speaker: null as string | null,
+  area: null as string | null,
 });
 
 const rules = [
-  (v) => !!v || 'Обязательное поле!',
-  (v) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
+  (v: string) => !!v || 'Обязательное поле!',
+  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
 ];
 
 const questionAdd = useTemplateRef('questionAdd');
 
 function toggleForm() {
   if (!details.value) {
-    getCapctha();
+    getCaptcha();
   }
 
   details.value = !details.value;
@@ -168,13 +168,14 @@ function showDetails() {
   }
 }
 
-async function getCapctha() {
-  capcthaImg.value = null;
+async function getCaptcha() {
+  captchaImg.value = null;
 
   try {
-    capcthaImg.value = await GetCapctha();
+    captchaImg.value = await GetCaptcha();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 
@@ -182,29 +183,31 @@ async function fetchAllAreas() {
   try {
     areas.value = await GetAllAreas();
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 
 async function submitForm() {
-  const result = await questionAdd.value.validate();
+  const result = await questionAdd.value!.validate();
 
   if (result.valid) {
     try {
-      await Create(capctha.value, controls);
+      await Create(captcha.value!, controls);
 
       toggleForm();
 
-      questionAdd.value.reset();
+      questionAdd.value!.reset();
 
       alertStore.addAlert({
         type: ALERT_TYPES.SUCCESS,
         text: 'Ваш вопрос успешно добавлен',
       });
     } catch (error) {
-      getCapctha();
+      getCaptcha();
 
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+      const err = error as Error;
+      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
     }
   }
 }

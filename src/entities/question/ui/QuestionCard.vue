@@ -57,7 +57,7 @@
                 mdi-eye
               </v-icon>
               <span class="text-body-small text-sm-body-medium">
-                {{ replaceСounter(question.views) }}
+                {{ replaceCounter(question.views) }}
               </span>
             </v-col>
             <v-col class="d-flex justify-end align-center">
@@ -72,7 +72,7 @@
                 </v-icon>
               </v-btn>
               <span class="text-body-small text-sm-body-medium mr-1">
-                {{ replaceСounter(question.likes) }}
+                {{ replaceCounter(question.likes) }}
               </span>
               <v-btn
                 icon
@@ -85,7 +85,7 @@
                 </v-icon>
               </v-btn>
               <span class="text-body-small text-sm-body-medium">
-                {{ replaceСounter(question.dislikes) }}
+                {{ replaceCounter(question.dislikes) }}
               </span>
             </v-col>
           </v-row>
@@ -95,8 +95,10 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+
+import type { QuestionResponse } from '@/shared/types';
 
 import QUESTION_STATUSES from '../config/question-statuses';
 
@@ -104,9 +106,9 @@ import QuestionStatusIcon from './QuestionStatusIcon.vue';
 
 defineOptions({ name: 'QuestionCard' });
 
-const { question } = defineProps({
-  question: { type: Object, required: true },
-});
+const { question } = defineProps<{
+  question: QuestionResponse;
+}>();
 
 const color = computed(() => {
   switch (question.status) {
@@ -123,16 +125,17 @@ const color = computed(() => {
   }
 });
 
-function sliceText(text) {
+function sliceText(text: string) {
   const maxTextLength = 300;
 
   if (text.length < maxTextLength) {
     return text;
   }
+
   return `${text.slice(0, maxTextLength)}... <b class="question-card-more">подробнее</b>`;
 }
 
-function replaceСounter(value) {
+function replaceCounter(value: number) {
   return value > 999 ? '999+' : value;
 }
 

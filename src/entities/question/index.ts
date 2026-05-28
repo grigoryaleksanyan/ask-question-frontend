@@ -1,13 +1,15 @@
 export {
-  GetCapctha,
+  GetCaptcha,
   GetAll as GetAllQuestions,
   GetPopularQuestions,
-  GetById as GetQuestionById,
+  GetById,
   Create as CreateQuestion,
   Update as UpdateQuestion,
   Delete as DeleteQuestion,
 } from './api/questions-repository';
+
 export { default as QUESTION_STATUSES } from './config/question-statuses';
+
 export { default as QuestionCard } from './ui/QuestionCard.vue';
 export { default as QuestionStatusIcon } from './ui/QuestionStatusIcon.vue';
 export { default as QuestionFilters } from './ui/QuestionFilters.vue';

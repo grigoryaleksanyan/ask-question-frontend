@@ -10,37 +10,39 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+
+import { QuestionStatusId } from '@/shared/types';
 
 import QUESTION_STATUSES from '../config/question-statuses';
 
 defineOptions({ name: 'QuestionStatusIcon' });
 
-const { status } = defineProps({
-  status: { type: Number, default: 0 },
-});
+const { status = QuestionStatusId.New } = defineProps<{
+  status?: QuestionStatusId;
+}>();
 
 const statusList = [
   {
     text: QUESTION_STATUSES.NEW.TITLE,
     color: QUESTION_STATUSES.NEW.COLOR,
-    icon: 'mdi-new-box',
+    icon: 'mdi-help-circle-outline',
   },
   {
     text: QUESTION_STATUSES.IN_FOCUS.TITLE,
     color: QUESTION_STATUSES.IN_FOCUS.COLOR,
-    icon: 'mdi-crosshairs-question',
+    icon: 'mdi-eye-outline',
   },
   {
     text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
     color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-    icon: 'mdi-comment-text-multiple-outline',
+    icon: 'mdi-comment-text-outline',
   },
   {
     text: QUESTION_STATUSES.ANSWERED.TITLE,
     color: QUESTION_STATUSES.ANSWERED.COLOR,
-    icon: 'mdi-bullhorn-outline',
+    icon: 'mdi-check-circle-outline',
   },
 ];
 
