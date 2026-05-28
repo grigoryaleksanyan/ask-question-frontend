@@ -13,7 +13,7 @@
         <p><b>Роль:</b> {{ getUserStringRole }}</p>
         <p>
           <b>Создан:</b>
-          {{ new Date(getUserData.сreated).toLocaleDateString() }}
+          {{ new Date(getUserData.created).toLocaleDateString() }}
         </p>
         <p>
           <b>Изменен:</b>
@@ -96,9 +96,11 @@
   </VeeForm>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { storeToRefs } from 'pinia';
+
+import type { ChangePasswordRequest } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -109,7 +111,10 @@ import { ChangePassword } from '../api/user-repository';
 
 defineOptions({ name: 'UserProfile' });
 
-const emit = defineEmits(['success', 'cancel']);
+const emit = defineEmits<{
+  success: [];
+  cancel: [];
+}>();
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
@@ -119,7 +124,7 @@ const { getUserData } = storeToRefs(authStore);
 
 const showChangePassword = ref(false);
 
-const controls = reactive({
+const controls = reactive<ChangePasswordRequest>({
   password: null,
   newPassword: null,
   confirmPassword: null,
@@ -146,7 +151,8 @@ async function onSubmit() {
 
     emit('success');
   } catch (error) {
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: error.message });
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   } finally {
     preloaderStore.removeLoader();
   }
