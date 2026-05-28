@@ -19,7 +19,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 defineOptions({ name: 'NotFoundPage' });

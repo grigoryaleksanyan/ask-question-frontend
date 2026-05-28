@@ -15,9 +15,10 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 
+import type { QuestionResponse } from '@/shared/types';
 import { ALERT_TYPES } from '@/shared/config';
 import { GetAllQuestions } from '@/entities/question';
 import { useAlertStore } from '@/entities/alert';
@@ -26,8 +27,8 @@ defineOptions({ name: 'AdminQuestionsPage' });
 
 const alertStore = useAlertStore();
 
-const questions = ref([]);
-const selected = ref([]);
+const questions = ref<QuestionResponse[]>([]);
+const selected = ref<QuestionResponse[]>([]);
 
 const headers = [
   { title: 'Имя', key: 'author' },
@@ -38,8 +39,8 @@ const headers = [
   { title: 'Дизлайки', key: 'dislikes' },
   { title: 'Просмотры', key: 'views' },
   { title: 'Статус', key: 'status' },
-  { title: 'Дата создания', key: 'сreated' },
-  { title: 'Дата ответа', key: 'iron' },
+  { title: 'Дата создания', key: 'created' },
+  { title: 'Дата ответа', key: 'answered' },
 ];
 
 async function fetchData() {

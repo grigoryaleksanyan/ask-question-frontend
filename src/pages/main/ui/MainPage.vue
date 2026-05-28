@@ -58,7 +58,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useGoTo } from 'vuetify';
 

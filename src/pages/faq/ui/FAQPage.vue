@@ -2,7 +2,7 @@
   <FAQView />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { FAQView } from '@/entities/faq';
 
 defineOptions({ name: 'FAQPage' });

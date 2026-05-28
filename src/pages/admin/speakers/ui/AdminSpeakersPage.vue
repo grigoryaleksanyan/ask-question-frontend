@@ -29,6 +29,6 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineOptions({ name: 'AdminSpeakersPage' });
 </script>

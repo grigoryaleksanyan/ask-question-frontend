@@ -128,7 +128,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, reactive, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 import Draggable from 'vuedraggable';
@@ -152,12 +152,9 @@ import { usePreloaderStore } from '@/features/preloader';
 
 defineOptions({ name: 'AdminFAQCategoryPage' });
 
-const { id } = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-});
+const { id } = defineProps<{
+  id: string;
+}>();
 
 const router = useRouter();
 const alertStore = useAlertStore();
