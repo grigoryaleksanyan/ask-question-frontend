@@ -14,12 +14,12 @@ export default [
 
   js.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
-  pluginUnicorn.configs['flat/recommended'],
+  pluginUnicorn.configs.recommended,
   ...pluginVuetify.configs['flat/recommended-v4'],
 
   {
     languageOptions: {
-      ecmaVersion: 'latest',
+      ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
         ...globals.browser,
@@ -133,7 +133,10 @@ export default [
       yoda: 'error',
 
       // ---- airbnb-base: variables ----
-      'no-shadow': ['error', { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }],
+      'no-shadow': [
+        'error',
+        { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] },
+      ],
       'no-undef-init': 'error',
       'no-unused-vars': [
         'error',
@@ -285,6 +288,8 @@ export default [
           devDependencies: [
             'eslint.config.js',
             'vite.config.js',
+            'vitest.config.js',
+            'tests/**',
             '.commitlintrc.cjs',
           ],
         },
@@ -380,4 +385,15 @@ export default [
   },
 
   eslintConfigPrettier,
+
+  {
+    files: ['tests/**'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.vitest,
+      },
+    },
+  },
 ];
