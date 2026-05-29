@@ -79,7 +79,7 @@ export async function GetPopularQuestions(): Promise<QuestionResponse[]> {
 
 export async function GetById(id: string): Promise<QuestionResponse> {
   const result = await httpClient
-    .get<QuestionResponse>(`${apiRoute}/GetById?id=${id}`)
+    .get<QuestionResponse>(`${apiRoute}/GetById/${id}`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения вопроса', { cause: error });
