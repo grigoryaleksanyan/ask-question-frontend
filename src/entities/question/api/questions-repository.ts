@@ -7,6 +7,7 @@ import type {
   CaptchaResponse,
   PaginatedResponse,
   SpeakerResponse,
+  VoteResultResponse,
 } from '@/shared/types';
 
 const apiRoute = '/api/Question';
@@ -123,6 +124,28 @@ export async function GetSpeakers(): Promise<SpeakerResponse[]> {
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения списка спикеров', { cause: error });
+    });
+
+  return result;
+}
+
+export async function LikeQuestion(id: string): Promise<VoteResultResponse> {
+  const result = await httpClient
+    .post<VoteResultResponse>(`${apiRoute}/${id}/like`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка при установке лайка', { cause: error });
+    });
+
+  return result;
+}
+
+export async function DislikeQuestion(id: string): Promise<VoteResultResponse> {
+  const result = await httpClient
+    .post<VoteResultResponse>(`${apiRoute}/${id}/dislike`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка при установке дизлайка', { cause: error });
     });
 
   return result;

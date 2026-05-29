@@ -7,6 +7,8 @@ export {
   Update as UpdateQuestion,
   Delete as DeleteQuestion,
   GetSpeakers,
+  LikeQuestion,
+  DislikeQuestion,
 } from './api/questions-repository';
 
 export type { QuestionListParams } from './api/questions-repository';

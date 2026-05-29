@@ -18,6 +18,14 @@ export interface UserResponse {
   updated: string | null;
 }
 
+export type VoteType = 'Like' | 'Dislike';
+
+export interface VoteResultResponse {
+  likes: number;
+  dislikes: number;
+  userVote: VoteType | null;
+}
+
 export interface QuestionResponse {
   id: string;
   status: QuestionStatusId;
@@ -28,6 +36,7 @@ export interface QuestionResponse {
   views: number;
   likes: number;
   dislikes: number;
+  userVote: VoteType | null;
   created: string;
   answered: string | null;
 }

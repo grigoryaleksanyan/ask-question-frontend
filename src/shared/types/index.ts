@@ -1,6 +1,8 @@
 export type {
   UserDetailsResponse,
   UserResponse,
+  VoteResultResponse,
+  VoteType,
   QuestionResponse,
   FaqCategoryResponse,
   FaqCategoryWithEntriesResponse,
