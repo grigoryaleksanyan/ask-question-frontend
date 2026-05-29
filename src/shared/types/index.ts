@@ -12,6 +12,12 @@ export type {
   CaptchaResponse,
   PaginatedResponse,
   SpeakerResponse,
+  DashboardSummaryResponse,
+  StatusDistributionResponse,
+  TimelinePointResponse,
+  AreaDistributionResponse,
+  SpeakerStatsResponse,
+  VotesSummaryResponse,
 } from './api-responses';
 
 export type {

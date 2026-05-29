@@ -96,3 +96,41 @@ export interface SpeakerResponse {
   id: string;
   fullName: string;
 }
+
+export interface DashboardSummaryResponse {
+  totalQuestions: number;
+  answeredQuestions: number;
+  totalFeedback: number;
+  totalAreas: number;
+  byStatus: StatusDistributionResponse[];
+  timeline: TimelinePointResponse[];
+  byArea: AreaDistributionResponse[];
+  topSpeakers: SpeakerStatsResponse[];
+  votes: VotesSummaryResponse;
+}
+
+export interface StatusDistributionResponse {
+  status: number;
+  count: number;
+}
+
+export interface TimelinePointResponse {
+  date: string;
+  newCount: number;
+  answeredCount: number;
+}
+
+export interface AreaDistributionResponse {
+  areaTitle: string;
+  count: number;
+}
+
+export interface SpeakerStatsResponse {
+  speakerName: string;
+  answeredCount: number;
+}
+
+export interface VotesSummaryResponse {
+  totalLikes: number;
+  totalDislikes: number;
+}
