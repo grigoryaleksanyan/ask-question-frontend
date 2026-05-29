@@ -75,3 +75,15 @@ export interface CaptchaResponse {
   id: string;
   captchaImage: string;
 }
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface SpeakerResponse {
+  id: string;
+  fullName: string;
+}

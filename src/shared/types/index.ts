@@ -8,6 +8,8 @@ export type {
   AreaResponse,
   FeedbackResponse,
   CaptchaResponse,
+  PaginatedResponse,
+  SpeakerResponse,
 } from './api-responses';
 
 export type {
