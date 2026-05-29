@@ -138,7 +138,8 @@ const questions = ref<QuestionResponse[]>([]);
 
 async function fetchData() {
   try {
-    questions.value = await GetAll();
+    const response = await GetAll();
+    questions.value = response.items;
   } catch (error) {
     const err = error as Error;
     alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });

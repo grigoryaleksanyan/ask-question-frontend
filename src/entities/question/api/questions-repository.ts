@@ -5,9 +5,22 @@ import type {
   QuestionCreateRequest,
   QuestionUpdateRequest,
   CaptchaResponse,
+  PaginatedResponse,
+  SpeakerResponse,
 } from '@/shared/types';
 
 const apiRoute = '/api/Question';
+const userApiRoute = '/api/User';
+
+export interface QuestionListParams {
+  page?: number;
+  pageSize?: number;
+  status?: number;
+  speaker?: string;
+  area?: string;
+  search?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 
 export async function GetCaptcha(): Promise<CaptchaResponse> {
   const result = await httpClient
@@ -20,9 +33,30 @@ export async function GetCaptcha(): Promise<CaptchaResponse> {
   return result;
 }
 
-export async function GetAll(): Promise<QuestionResponse[]> {
+export async function GetAll(
+  params?: QuestionListParams,
+): Promise<PaginatedResponse<QuestionResponse>> {
+  const queryParams: Record<string, string> = {};
+
+  if (params?.page) queryParams.page = String(params.page);
+  if (params?.pageSize) queryParams.pageSize = String(params.pageSize);
+  if (params?.status !== undefined && params?.status !== null)
+    queryParams.status = String(params.status);
+  if (params?.speaker) queryParams.speaker = params.speaker;
+  if (params?.area) queryParams.area = params.area;
+  if (params?.search) queryParams.search = params.search;
+  if (params?.sortOrder) queryParams.sortOrder = params.sortOrder;
+
+  const queryString = Object.entries(queryParams)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+    .join('&');
+
+  const url = queryString
+    ? `${apiRoute}/GetAll?${queryString}`
+    : `${apiRoute}/GetAll`;
+
   const result = await httpClient
-    .get<QuestionResponse[]>(`${apiRoute}/GetAll`)
+    .get<PaginatedResponse<QuestionResponse>>(url)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения списка вопросов', { cause: error });
@@ -81,4 +115,15 @@ export async function Delete(id: string): Promise<void> {
     .catch((error) => {
       throw new Error('Ошибка удаления вопроса', { cause: error });
     });
+}
+
+export async function GetSpeakers(): Promise<SpeakerResponse[]> {
+  const result = await httpClient
+    .get<SpeakerResponse[]>(`${userApiRoute}/GetSpeakers`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка получения списка спикеров', { cause: error });
+    });
+
+  return result;
 }

@@ -6,7 +6,10 @@ export {
   Create as CreateQuestion,
   Update as UpdateQuestion,
   Delete as DeleteQuestion,
+  GetSpeakers,
 } from './api/questions-repository';
+
+export type { QuestionListParams } from './api/questions-repository';
 
 export { default as QUESTION_STATUSES } from './config/question-statuses';
 

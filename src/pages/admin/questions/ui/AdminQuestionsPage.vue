@@ -45,7 +45,8 @@ const headers = [
 
 async function fetchData() {
   try {
-    questions.value = await GetAllQuestions();
+    const response = await GetAllQuestions();
+    questions.value = response.items;
   } catch (error) {
     const err = error as Error;
     alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
