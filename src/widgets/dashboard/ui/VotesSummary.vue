@@ -21,7 +21,9 @@
             style="color: #ef5350">
             {{ votes.totalDislikes.toLocaleString() }}
           </div>
-          <div class="text-body-small text-medium-emphasis mt-1">👎 Дизлайки</div>
+          <div class="text-body-small text-medium-emphasis mt-1">
+            👎 Дизлайки
+          </div>
         </div>
       </div>
       <div
