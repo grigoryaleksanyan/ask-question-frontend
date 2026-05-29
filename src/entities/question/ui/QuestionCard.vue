@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card
-      to="/question/123"
+      :to="'/question/' + question.id"
       elevation="2"
       color="#E8EAF6">
       <v-card-title class="py-2">
@@ -57,35 +57,45 @@
                 mdi-eye
               </v-icon>
               <span class="text-body-small text-sm-body-medium">
-                {{ replaceCounter(question.views) }}
+                {{ replaceCounter(localViews) }}
               </span>
             </v-col>
             <v-col class="d-flex justify-end align-center">
               <v-btn
                 icon
                 class="mr-1"
-                @click.prevent="setLike">
+                color="primary"
+                @click.prevent="handleLike">
                 <v-icon
                   title="Понравился"
                   size="20">
-                  mdi-thumb-up-outline
+                  {{
+                    localUserVote === 'Like'
+                      ? 'mdi-thumb-up'
+                      : 'mdi-thumb-up-outline'
+                  }}
                 </v-icon>
               </v-btn>
               <span class="text-body-small text-sm-body-medium mr-1">
-                {{ replaceCounter(question.likes) }}
+                {{ replaceCounter(localLikes) }}
               </span>
               <v-btn
                 icon
                 class="mr-1"
-                @click.prevent="setDislike">
+                color="error"
+                @click.prevent="handleDislike">
                 <v-icon
                   title="Не понравился"
                   size="20">
-                  mdi-thumb-down-outline
+                  {{
+                    localUserVote === 'Dislike'
+                      ? 'mdi-thumb-down'
+                      : 'mdi-thumb-down-outline'
+                  }}
                 </v-icon>
               </v-btn>
               <span class="text-body-small text-sm-body-medium">
-                {{ replaceCounter(question.dislikes) }}
+                {{ replaceCounter(localDislikes) }}
               </span>
             </v-col>
           </v-row>
@@ -96,10 +106,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 
-import type { QuestionResponse } from '@/shared/types';
+import type { QuestionResponse, VoteType } from '@/shared/types';
 
+import { LikeQuestion, DislikeQuestion } from '../api/questions-repository';
 import QUESTION_STATUSES from '../config/question-statuses';
 
 import QuestionStatusIcon from './QuestionStatusIcon.vue';
@@ -109,6 +120,11 @@ defineOptions({ name: 'QuestionCard' });
 const { question } = defineProps<{
   question: QuestionResponse;
 }>();
+
+const localLikes = ref(question.likes);
+const localDislikes = ref(question.dislikes);
+const localViews = ref(question.views);
+const localUserVote = ref<VoteType | null>(question.userVote ?? null);
 
 const color = computed(() => {
   switch (question.status) {
@@ -139,9 +155,27 @@ function replaceCounter(value: number) {
   return value > 999 ? '999+' : value;
 }
 
-function setLike() {}
+async function handleLike() {
+  try {
+    const result = await LikeQuestion(question.id);
+    localLikes.value = result.likes;
+    localDislikes.value = result.dislikes;
+    localUserVote.value = result.userVote;
+  } catch {
+    // Error handled at API level
+  }
+}
 
-function setDislike() {}
+async function handleDislike() {
+  try {
+    const result = await DislikeQuestion(question.id);
+    localLikes.value = result.likes;
+    localDislikes.value = result.dislikes;
+    localUserVote.value = result.userVote;
+  } catch {
+    // Error handled at API level
+  }
+}
 </script>
 
 <style lang="scss">
