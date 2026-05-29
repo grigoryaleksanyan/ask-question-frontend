@@ -3,11 +3,13 @@
     <v-row class="justify-space-between">
       <v-col cols="6">
         <v-btn-toggle
-          v-model="sortingDirection"
-          density="compact">
+          v-model="sortOrder"
+          density="compact"
+          @update:model-value="onFilterChange">
           <v-btn
             size="small"
-            title="Сначала новые">
+            title="Сначала новые"
+            value="desc">
             <v-icon
               size="20"
               color="#717171">
@@ -17,7 +19,8 @@
 
           <v-btn
             size="small"
-            title="Сначала старые">
+            title="Сначала старые"
+            value="asc">
             <v-icon
               size="20"
               color="#717171">
@@ -57,39 +60,35 @@
         class="mt-6 justify-center">
         <v-col
           cols="12"
-          class="col-sm-4">
+          class="col-sm-6">
           <v-select
-            :items="speaker"
+            v-model="selectedSpeaker"
+            :items="speakerItems"
+            item-title="fullName"
+            item-value="fullName"
             label="Спикер"
             variant="outlined"
             clearable
             hide-details
             density="compact"
-            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
+            :menu-props="{ location: 'bottom' } as Record<string, unknown>"
+            @update:model-value="onFilterChange" />
         </v-col>
         <v-col
           cols="12"
-          class="col-sm-4">
+          class="col-sm-6">
           <v-select
-            :items="zone"
+            v-model="selectedArea"
+            :items="areaItems"
+            item-title="title"
+            item-value="title"
             label="Зона ответственности"
             variant="outlined"
             clearable
             hide-details
             density="compact"
-            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
-        </v-col>
-        <v-col
-          cols="12"
-          class="col-sm-4">
-          <v-select
-            :items="status"
-            label="Статус"
-            variant="outlined"
-            clearable
-            hide-details
-            density="compact"
-            :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
+            :menu-props="{ location: 'bottom' } as Record<string, unknown>"
+            @update:model-value="onFilterChange" />
         </v-col>
       </v-row>
     </v-expand-transition>
@@ -97,21 +96,48 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
+import type { SpeakerResponse, AreaResponse } from '@/shared/types';
+
+import { GetSpeakers } from '../api/questions-repository';
+import { GetAllAreas } from '@/entities/area';
 
 defineOptions({ name: 'QuestionFilters' });
 
+const emit = defineEmits<{
+  (
+    e: 'change',
+    filters: {
+      speaker?: string;
+      area?: string;
+      sortOrder: 'asc' | 'desc';
+    },
+  ): void;
+}>();
+
 const showFilters = ref(false);
-
-const sortingDirection = ref(0);
-
-const speaker = ['Иван', 'Петр'];
-
-const zone = ['Север', 'Юг'];
-
-const status = ['новый', 'в фокусе'];
+const sortOrder = ref<'asc' | 'desc'>('desc');
+const selectedSpeaker = ref<string | null>(null);
+const selectedArea = ref<string | null>(null);
+const speakerItems = ref<SpeakerResponse[]>([]);
+const areaItems = ref<AreaResponse[]>([]);
 
 function toggleFilters() {
   showFilters.value = !showFilters.value;
 }
+
+function onFilterChange() {
+  emit('change', {
+    speaker: selectedSpeaker.value ?? undefined,
+    area: selectedArea.value ?? undefined,
+    sortOrder: sortOrder.value,
+  });
+}
+
+onMounted(async () => {
+  const [speakers, areas] = await Promise.all([GetSpeakers(), GetAllAreas()]);
+  speakerItems.value = speakers;
+  areaItems.value = areas;
+});
 </script>
