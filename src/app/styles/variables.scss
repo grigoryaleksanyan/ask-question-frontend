@@ -1,31 +1,44 @@
-$main-color: #5c7cfa;
-$scrollbar-color: #bac8ff;
-$links-color: #4263eb;
-$primary-color: #78909c;
-$success-color: #4caf50;
-$info-color: #2196f3;
-$warning-color: #fb8c00;
-$error-color: #ff5252;
+$main-color: #4f6af6;
+$scrollbar-color: #c5cbdb;
+$links-color: #4f6af6;
+$primary-color: #4f6af6;
+$success-color: #45bf8a;
+$info-color: #4f6af6;
+$warning-color: #e5a44f;
+$error-color: #e5484f;
 
-$card-bg: #e8eaf6;
+$surface-bg: #f7f8fa;
+$surface-card: #fff;
+$surface-dark: #1a1d23;
+$surface-dark-elevated: #1f2227;
+$surface-dark-border: #2a2d35;
+
+$text-primary: #1a1d23;
+$text-primary-dark: #e5e7eb;
+$text-secondary: #5f6577;
+$text-muted: #9ba1b0;
+$border-light: #e5e7eb;
+$border-default: #d1d5db;
+$border-dark: #2a2d35;
+
+$link-hover: #3d56cc;
+
+$card-bg: #fff;
 $card-content-bg: #fff;
-$toolbar-bg: #1f2937;
-$sidebar-bg: #37474f;
-$heading-dark-bg: #2b2b2b;
-$text-muted: #717171;
-$text-secondary: rgb(0 0 0 / 60%);
-$border-light: #d3d4db;
-$link-hover: #2b82e6;
+$toolbar-bg: #fff;
+$toolbar-dark-bg: #1f2227;
+$sidebar-bg: #14161a;
+$heading-dark-bg: #1a1d23;
 
-$status-new: #5c6bc0;
-$status-in-focus: #26a69a;
-$status-with-comment: #ffb74d;
-$status-answered: #4ecca3;
+$status-new: #6b7cf6;
+$status-in-focus: #2aa89a;
+$status-with-comment: #e5a44f;
+$status-answered: #45bf8a;
 
-$chart-assigned: #5c6bc0;
-$chart-answered: #4ecca3;
-$chart-unanswered: #ef5350;
-$chart-warning: #ffb74d;
+$chart-assigned: #6b7cf6;
+$chart-answered: #45bf8a;
+$chart-unanswered: #e5484f;
+$chart-warning: #e5a44f;
 
-$font-display: roboto, arial, sans-serif;
-$font-body: roboto, arial, sans-serif;
+$font-display: 'IBM Plex Sans', sans-serif;
+$font-body: 'IBM Plex Sans', sans-serif;

@@ -2,25 +2,26 @@
 
 @font-face {
   font-display: swap;
-  font-family: Roboto;
+  font-family: 'IBM Plex Sans';
   font-style: normal;
   font-weight: 400;
-  src:
-    local('Roboto'),
-    local('Roboto-Regular'),
-    url('../../shared/assets/fonts/Roboto.woff2') format('woff2'),
-    url('../../shared/assets/fonts/Roboto.woff') format('woff');
+  src: url('../../shared/assets/fonts/IBMPlexSans-Regular.woff2')
+    format('woff2');
 }
 
 @font-face {
-  font-family: Roboto;
+  font-family: 'IBM Plex Sans';
   font-style: normal;
-  font-weight: 700;
-  src:
-    local('Roboto Bold'),
-    local('Roboto-Bold'),
-    url('../../shared/assets/fonts/Roboto-Bold.woff2') format('woff2'),
-    url('../../shared/assets/fonts/Roboto-Bold.woff') format('woff');
+  font-weight: 500;
+  src: url('../../shared/assets/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../../shared/assets/fonts/IBMPlexSans-SemiBold.woff2')
+    format('woff2');
 }
 
 * {
@@ -37,7 +38,9 @@ body {
 
 html,
 body {
-  font-family: Roboto, Arial, sans-serif;
+  background-color: variables.$surface-bg;
+  color: variables.$text-primary;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 *::-webkit-scrollbar {
@@ -54,7 +57,7 @@ body {
 
 blockquote {
   padding-left: 1em;
-  border-left: 0.25em solid #dfe2e5;
+  border-left: 0.25em solid variables.$border-light;
   margin: 20px 0 !important;
-  color: #6a737d;
+  color: variables.$text-secondary;
 }
