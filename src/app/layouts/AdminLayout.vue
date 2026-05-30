@@ -24,11 +24,6 @@
         <div class="admin-topbar__actions">
           <span class="admin-topbar__cmdk">⌘K</span>
           <span class="admin-topbar__user">{{ userName }}</span>
-          <button
-            class="admin-topbar__settings-btn"
-            @click="toggleSettingsMenu">
-            <i class="pi pi-ellipsis-v"></i>
-          </button>
         </div>
       </header>
       <div class="admin-content">
@@ -273,18 +268,6 @@ async function logout() {
 .admin-topbar__user {
   color: variables.$text-primary-dark;
   font-size: 13px;
-}
-
-.admin-topbar__settings-btn {
-  padding: 4px;
-  border: none;
-  background: none;
-  color: variables.$text-secondary;
-  cursor: pointer;
-}
-
-.admin-topbar__settings-btn:hover {
-  color: variables.$text-primary-dark;
 }
 
 .admin-content {
