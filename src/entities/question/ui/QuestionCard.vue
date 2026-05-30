@@ -1,70 +1,26 @@
 <template>
-  <div class="mb-3">
-    <Card
-      class="shadow-2 cursor-pointer question-card"
-      @click="navigateToQuestion">
-      <template #title>
-        <div class="grid grid-nogutter py-2">
-          <div class="col-12 question-card__speaker-col align-self-center">
-            <span class="typography__body--small typography__body--medium--sm"
-              >кому: {{ question.speakerName }}</span
-            >
-          </div>
-          <div
-            class="col-12 question-card__status-col flex justify-content-start">
-            <QuestionStatusIcon :status="question.status" />
-          </div>
-        </div>
-      </template>
-      <template #content>
-        <div class="flex">
-          <div
-            class="question-card__status-bar"
-            :style="{ backgroundColor: color }"></div>
-          <div class="question-card__body p-3">
-            <p
-              class="question-card__text m-0 typography__body--medium typography__body--large--sm"
-              v-html="sliceText(question.text)"></p>
-          </div>
-        </div>
-      </template>
-      <template #footer>
-        <Divider />
-        <div class="flex align-items-center py-1">
-          <div class="flex align-items-center">
-            <i
-              class="pi pi-eye mr-2"
-              title="Количество просмотров"
-              style="font-size: 20px"></i>
-            <span
-              class="typography__body--small typography__body--medium--sm"
-              >{{ replaceCounter(localViews) }}</span
-            >
-          </div>
-          <div class="flex justify-content-end align-items-center flex-1">
-            <Button
-              icon="pi pi-thumbs-up"
-              :outlined="localUserVote !== 'Like'"
-              class="mr-1"
-              @click.stop.prevent="handleLike" />
-            <span
-              class="typography__body--small typography__body--medium--sm mr-1"
-              >{{ replaceCounter(localLikes) }}</span
-            >
-            <Button
-              icon="pi pi-thumbs-down"
-              :outlined="localUserVote !== 'Dislike'"
-              severity="danger"
-              class="mr-1"
-              @click.stop.prevent="handleDislike" />
-            <span
-              class="typography__body--small typography__body--medium--sm"
-              >{{ replaceCounter(localDislikes) }}</span
-            >
-          </div>
-        </div>
-      </template>
-    </Card>
+  <div
+    class="question-card"
+    @click="navigateToQuestion">
+    <StatusDot
+      :color="statusColor"
+      class="question-card__status" />
+
+    <div class="question-card__body">
+      <p
+        class="question-card__text"
+        v-html="sliceText(question.text)"></p>
+
+      <div class="question-card__meta">
+        {{ metaText }}
+      </div>
+    </div>
+
+    <div class="question-card__votes">
+      <span class="question-card__vote">▲ {{ localLikes }}</span>
+      <span class="question-card__vote">▽ {{ localDislikes }}</span>
+      <span class="question-card__vote">◎ {{ localViews }}</span>
+    </div>
   </div>
 </template>
 
@@ -72,15 +28,11 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { QuestionResponse, VoteType } from '@/shared/types';
+import type { QuestionResponse } from '@/shared/types';
 
-import { LikeQuestion, DislikeQuestion } from '../api/questions-repository';
+import { StatusDot } from '@/shared/ui/status-dot';
+
 import QUESTION_STATUSES from '../config/question-statuses';
-import QuestionStatusIcon from './QuestionStatusIcon.vue';
-
-import Card from 'primevue/card';
-import Divider from 'primevue/divider';
-import Button from 'primevue/button';
 
 defineOptions({ name: 'QuestionCard' });
 
@@ -93,9 +45,8 @@ const router = useRouter();
 const localLikes = ref(question.likes);
 const localDislikes = ref(question.dislikes);
 const localViews = ref(question.views);
-const localUserVote = ref<VoteType | null>(question.userVote ?? null);
 
-const color = computed(() => {
+const statusColor = computed(() => {
   switch (question.status) {
     case QUESTION_STATUSES.NEW.STATUS_ID:
       return QUESTION_STATUSES.NEW.COLOR;
@@ -108,6 +59,13 @@ const color = computed(() => {
     default:
       return QUESTION_STATUSES.ANSWERED.COLOR;
   }
+});
+
+const metaText = computed(() => {
+  const parts: string[] = [];
+  if (question.speakerName) parts.push(question.speakerName);
+  if (question.areaTitle) parts.push(question.areaTitle);
+  return parts.join(' · ');
 });
 
 function navigateToQuestion() {
@@ -123,32 +81,6 @@ function sliceText(text: string) {
 
   return `${text.slice(0, maxTextLength)}... <b class="question-card-more">подробнее</b>`;
 }
-
-function replaceCounter(value: number) {
-  return value > 999 ? '999+' : value;
-}
-
-async function handleLike() {
-  try {
-    const result = await LikeQuestion(question.id);
-    localLikes.value = result.likes;
-    localDislikes.value = result.dislikes;
-    localUserVote.value = result.userVote;
-  } catch {
-    // intentionally empty - error handled at API level
-  }
-}
-
-async function handleDislike() {
-  try {
-    const result = await DislikeQuestion(question.id);
-    localLikes.value = result.likes;
-    localDislikes.value = result.dislikes;
-    localUserVote.value = result.userVote;
-  } catch {
-    // intentionally empty - error handled at API level
-  }
-}
 </script>
 
 <style lang="scss">
@@ -159,38 +91,57 @@ async function handleDislike() {
 
 <style lang="scss" scoped>
 .question-card {
-  background-color: variables.$card-bg;
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid variables.$border-light;
+  border-radius: 8px;
+  background: variables.$surface-card;
+  cursor: pointer;
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
 .question-card:hover {
-  box-shadow: 0 4px 20px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
   transform: translateY(-1px);
 }
 
-.question-card__status-bar {
-  width: 7px;
+.question-card__status {
+  flex-shrink: 0;
+  margin-right: 12px;
 }
 
 .question-card__body {
+  min-width: 0;
   flex: 1;
-  background-color: variables.$card-content-bg;
 }
 
 .question-card__text {
-  color: variables.$text-muted;
+  margin: 0;
+  color: variables.$text-primary;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
-@media (width >= 600px) {
-  .question-card__speaker-col {
-    width: 50%;
-  }
+.question-card__meta {
+  margin-top: 4px;
+  color: variables.$text-muted;
+  font-size: 12px;
+}
 
-  .question-card__status-col {
-    width: 50%;
-    justify-content: end;
-  }
+.question-card__votes {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-end;
+  margin-left: 12px;
+}
+
+.question-card__vote {
+  color: variables.$text-muted;
+  font-size: 12px;
+  line-height: 1.5;
 }
 </style>

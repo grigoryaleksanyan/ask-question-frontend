@@ -1,52 +1,20 @@
 <template>
-  <div class="pa-0">
-    <VideoBackground
-      style="height: 100vh"
-      :src="backgroundVideo"
-      :poster="backgroundPoster"
-      overlay="linear-gradient(0deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5))">
-      <div
-        class="grid p-3 align-content-center"
-        style="height: 100vh">
-        <div class="col-12">
-          <h1 class="main-page__title typography__display--large--sm">
-            Ask me
-          </h1>
-          <p class="main-page__subtitle">Ты не получаешь ответов?</p>
-          <p class="main-page__subtitle main-page__subtitle--accent">
-            Главная причина в том, что ты не задаешь вопросов.
-          </p>
-        </div>
-        <div class="col-12 flex justify-content-center">
-          <QuestionFormCreate />
-        </div>
-        <div class="col-12 flex justify-content-center mt-12">
-          <Button
-            class="main-page__scroll-btn"
-            icon="pi pi-angle-down"
-            rounded
-            @click="scrollToPopular" />
-        </div>
-      </div>
-    </VideoBackground>
-    <div
-      id="popular"
-      class="grid my-5 mx-auto main-page__popular">
-      <div class="col-12">
-        <div class="grid">
-          <div class="col-12">
-            <h3
-              class="typography__headline--large text-center main-page__section-title">
-              Популярные вопросы
-            </h3>
-          </div>
-          <div class="col-12">
-            <QuestionCard
-              v-for="question in questions"
-              :key="question.id"
-              :question="question" />
-          </div>
-        </div>
+  <div class="main-page">
+    <div class="main-page__hero">
+      <h1 class="main-page__title">Задайте вопрос</h1>
+      <p class="main-page__subtitle">
+        Платформа для сбора вопросов спикерам вашей организации
+      </p>
+      <QuestionFormCreate />
+    </div>
+
+    <div class="main-page__popular">
+      <div class="main-page__section-label">Популярные вопросы</div>
+      <div class="main-page__questions">
+        <QuestionCard
+          v-for="question in questions"
+          :key="question.id"
+          :question="question" />
       </div>
     </div>
   </div>
@@ -55,11 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import VideoBackground from 'vue-responsive-video-background-player';
-
 import type { QuestionResponse } from '@/shared/types';
-
-import Button from 'primevue/button';
 
 import {
   GetPopularQuestions,
@@ -74,17 +38,7 @@ const { execute: executeFetch } = useApiCall(GetPopularQuestions, {
   showPreloader: false,
 });
 
-const backgroundVideo = ref(
-  new URL('@/shared/assets/video/background.mp4', import.meta.url).href,
-);
-const backgroundPoster = ref(
-  new URL('@/shared/assets/img/poster.jpg', import.meta.url).href,
-);
 const questions = ref<QuestionResponse[]>([]);
-
-function scrollToPopular() {
-  document.querySelector('#popular')?.scrollIntoView({ behavior: 'smooth' });
-}
 
 async function fetchData() {
   const result = await executeFetch();
@@ -97,67 +51,59 @@ fetchData();
 </script>
 
 <style lang="scss" scoped>
-.main-page__title {
-  color: white;
-  font-family: variables.$font-display;
-  font-size: 4.5rem;
+.main-page__hero {
+  max-width: 640px;
+  padding: 80px 24px 48px;
+  margin: 0 auto;
   text-align: center;
-  white-space: nowrap;
+}
+
+.main-page__title {
+  margin-bottom: 12px;
+  color: variables.$text-primary;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
 }
 
 .main-page__subtitle {
-  margin-bottom: 5px !important;
-  color: white;
-  font-size: 1.25rem;
-  line-height: 1;
-  text-align: center;
-}
-
-.main-page__subtitle--accent {
-  font-family: variables.$font-display;
-  font-size: 1.5rem;
-  font-style: italic;
-}
-
-.main-page__scroll-btn {
-  animation: pulsation 3s infinite;
+  margin-bottom: 40px;
+  color: variables.$text-secondary;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .main-page__popular {
-  max-width: 800px;
-  min-height: 100vh;
+  max-width: 640px;
+  padding: 0 24px 48px;
+  margin: 0 auto;
 }
 
-.main-page__section-title {
-  font-family: variables.$font-display;
-  font-weight: 400;
+.main-page__section-label {
+  margin-bottom: 16px;
+  color: variables.$text-muted;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-@keyframes pulsation {
-  0% {
-    transform: scale(1.2, 1.2);
-  }
-
-  50% {
-    transform: scale(0.9, 0.9);
-  }
-
-  100% {
-    transform: scale(1.2, 1.2);
-  }
+.main-page__questions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 @media (width <= 600px) {
+  .main-page__hero {
+    padding: 40px 16px;
+  }
+
   .main-page__title {
-    font-size: 3rem;
+    font-size: 24px;
   }
 
   .main-page__subtitle {
-    font-size: 1rem;
-  }
-
-  .main-page__subtitle--accent {
-    font-size: 1.125rem;
+    font-size: 14px;
   }
 }
 </style>
