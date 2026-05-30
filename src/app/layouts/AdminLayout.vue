@@ -198,7 +198,7 @@ async function logout() {
   height: 36px;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$main-color;
   color: #fff;
   font-size: 15px;
@@ -214,7 +214,7 @@ async function logout() {
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   margin-top: auto;
   margin-bottom: 16px;
   background: none;
@@ -224,7 +224,7 @@ async function logout() {
 }
 
 .admin-sidebar__settings:hover {
-  background: rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 6%);
 }
 
 .admin-main {
