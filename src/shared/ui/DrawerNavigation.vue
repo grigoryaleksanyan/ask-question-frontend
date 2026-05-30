@@ -1,12 +1,17 @@
 <template>
-  <nav class="drawer-nav">
+  <nav
+    class="drawer-nav"
+    :class="{ 'drawer-nav--dark': dark }">
     <router-link
       v-for="item in navItems"
       :key="item.title"
       v-tooltip.right="collapsed ? item.title : undefined"
       :to="item.link"
       class="drawer-nav-link"
-      :class="{ 'drawer-nav-link--collapsed': collapsed }">
+      :class="{
+        'drawer-nav-link--collapsed': collapsed,
+        'drawer-nav-link--dark': dark,
+      }">
       <i
         :class="item.icon"
         class="drawer-nav-link__icon"></i>
@@ -24,9 +29,14 @@ import type { NavItem } from '@/shared/types';
 
 defineOptions({ name: 'DrawerNavigation' });
 
-const { navItems, collapsed = false } = defineProps<{
+const {
+  navItems,
+  collapsed = false,
+  dark = false,
+} = defineProps<{
   navItems: NavItem[];
   collapsed?: boolean;
+  dark?: boolean;
 }>();
 </script>
 
@@ -36,7 +46,8 @@ const { navItems, collapsed = false } = defineProps<{
   align-items: center;
   padding: 8px 16px;
   border-radius: 4px;
-  color: white;
+  color: variables.$text-secondary;
+  font-size: 14px;
   gap: 8px;
   text-decoration: none;
   transition: background-color 0.2s;
@@ -44,7 +55,24 @@ const { navItems, collapsed = false } = defineProps<{
 }
 
 .drawer-nav-link:hover {
+  background-color: variables.$surface-bg;
+}
+
+.drawer-nav-link.router-link-active {
+  color: variables.$main-color;
+  font-weight: 500;
+}
+
+.drawer-nav-link--dark {
+  color: variables.$text-primary-dark;
+}
+
+.drawer-nav-link--dark:hover {
   background-color: rgb(255 255 255 / 10%);
+}
+
+.drawer-nav-link--dark.router-link-active {
+  color: variables.$main-color;
 }
 
 .drawer-nav-link--collapsed {

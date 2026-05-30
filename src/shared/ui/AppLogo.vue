@@ -1,9 +1,13 @@
 <template>
   <div class="logo-wrapper">
-    <img
-      alt="logo"
-      :src="imageUrl"
-      style="width: auto; max-width: 100%" />
+    <router-link
+      to="/"
+      class="logo-wrapper__link">
+      <img
+        alt="logo"
+        :src="imageUrl"
+        class="logo-wrapper__img" />
+    </router-link>
   </div>
 </template>
 
@@ -25,5 +29,17 @@ const imageUrl = ref(logoUrl);
   align-items: center;
   justify-content: center;
   padding: 5px 15px;
+}
+
+.logo-wrapper__link {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.logo-wrapper__img {
+  width: auto;
+  max-width: 100%;
+  height: 32px;
 }
 </style>

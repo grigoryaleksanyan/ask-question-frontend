@@ -13,7 +13,8 @@
       </div>
       <DrawerNavigation
         :nav-items="navItems"
-        :collapsed="sidebarCollapsed" />
+        :collapsed="sidebarCollapsed"
+        dark />
     </aside>
 
     <div class="admin-main">

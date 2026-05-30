@@ -8,6 +8,11 @@
       <i :class="item.icon"></i>
       <span>{{ item.title }}</span>
     </router-link>
+    <router-link
+      to="/login"
+      class="header-nav-login">
+      Войти
+    </router-link>
   </div>
 </template>
 
@@ -23,9 +28,29 @@ const { navItems } = defineProps<{
 
 <style lang="scss" scoped>
 .header-nav-link {
-  color: white;
+  color: variables.$text-secondary;
   font-size: 14px;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.header-nav-link.router-link-active {
+  color: variables.$main-color;
+  font-weight: 500;
+}
+
+.header-nav-login {
+  padding: 4px 12px;
+  border: 1px solid variables.$border-light;
+  border-radius: 6px;
+  color: variables.$text-secondary;
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header-nav-login:hover {
+  border-color: variables.$main-color;
+  color: variables.$main-color;
 }
 </style>

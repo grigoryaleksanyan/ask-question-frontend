@@ -35,6 +35,7 @@
         v-tooltip:left="'Обратная связь по порталу'"
         icon="pi pi-envelope"
         text
+        class="app-footer__feedback-btn"
         @click="showFeedbackModal" />
     </footer>
 
@@ -108,16 +109,32 @@ async function showFeedbackModal() {
 
 <style lang="scss" scoped>
 .app-toolbar {
+  border-bottom: 1px solid variables.$border-light;
   background-color: variables.$toolbar-bg;
-  color: white;
+  color: variables.$text-primary;
 }
 
 .app-footer {
   display: flex;
   align-items: center;
   padding: 8px 16px;
+  border-top: 1px solid variables.$border-light;
   background-color: variables.$toolbar-bg;
-  color: white;
+  color: variables.$text-muted;
+}
+
+.app-footer__feedback-btn {
+  color: variables.$text-secondary;
+}
+
+.drawer-navigation {
+  :deep(.p-drawer-content) {
+    background-color: variables.$toolbar-bg;
+  }
+}
+
+.drawer-navigation-burger {
+  color: variables.$text-primary !important;
 }
 
 @media (width <= 600px) {
