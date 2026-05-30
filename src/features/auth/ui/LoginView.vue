@@ -72,7 +72,7 @@ async function onSubmit() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-view {
   max-width: 320px;
   padding: 80px 16px;
@@ -81,7 +81,7 @@ async function onSubmit() {
 
 .login-view__title {
   margin-bottom: 4px;
-  color: $text-primary;
+  color: variables.$text-primary;
   font-size: 20px;
   font-weight: 500;
   text-align: center;
@@ -89,7 +89,7 @@ async function onSubmit() {
 
 .login-view__subtitle {
   margin-bottom: 24px;
-  color: $text-muted;
+  color: variables.$text-muted;
   font-size: 14px;
   text-align: center;
 }
@@ -101,16 +101,16 @@ async function onSubmit() {
 .login-view__label {
   display: block;
   margin-bottom: 4px;
-  color: $text-secondary;
+  color: variables.$text-secondary;
   font-size: 12px;
 }
 
 .login-view__input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid $border-light;
+  border: 1px solid variables.$border-light;
   border-radius: 6px;
-  background: $surface-card;
+  background: variables.$surface-card;
   font-size: 14px;
 }
 
@@ -127,7 +127,7 @@ async function onSubmit() {
 
 .login-view__error {
   margin-top: 8px;
-  color: $error-color;
+  color: variables.$error-color;
   font-size: 13px;
 }
 </style>

@@ -59,7 +59,7 @@ defineEmits<{
   }
 
   &--active-down {
-    color: variables.$warning;
+    color: variables.$warning-color;
   }
 }
 
