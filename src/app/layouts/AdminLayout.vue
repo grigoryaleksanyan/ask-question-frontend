@@ -188,45 +188,45 @@ async function logout() {
 
 .admin-sidebar {
   display: flex;
-  width: 48px;
+  width: 64px;
   flex-direction: column;
   flex-shrink: 0;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 16px;
   background: variables.$sidebar-bg;
   color: variables.$text-primary-dark;
-  gap: 16px;
+  gap: 20px;
 }
 
 .admin-sidebar__logo {
   display: flex;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 8px;
   background: variables.$main-color;
   color: #fff;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 600;
   text-decoration: none;
 }
 
 .admin-sidebar__settings {
   display: flex;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-top: auto;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   background: none;
   color: variables.$text-primary-dark;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .admin-sidebar__settings:hover {

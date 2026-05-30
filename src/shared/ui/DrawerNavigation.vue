@@ -90,17 +90,17 @@ const {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .drawer-nav-link--icon-only {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 4px;
-  font-size: 12px;
+  border-radius: 6px;
+  font-size: 16px;
   gap: 0;
 }
 
@@ -132,7 +132,7 @@ const {
 }
 
 .drawer-nav-link__icon--icon-only {
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .drawer-nav-link__text {
