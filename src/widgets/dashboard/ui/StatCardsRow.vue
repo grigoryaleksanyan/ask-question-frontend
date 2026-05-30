@@ -86,6 +86,7 @@ const cards = computed(() => [
   font-size: 11px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .stat-cards-row__value {
