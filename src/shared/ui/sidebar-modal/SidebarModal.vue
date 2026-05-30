@@ -89,3 +89,18 @@ defineExpose({
   open,
 });
 </script>
+
+<style lang="scss" scoped>
+:global(.p-dark) :deep(.p-drawer) {
+  background: variables.$surface-dark-elevated;
+  color: variables.$text-primary-dark;
+}
+
+:global(.p-dark) :deep(.p-drawer-header) {
+  color: variables.$text-primary-dark;
+}
+
+:global(.p-dark) :deep(.p-drawer-footer) {
+  color: variables.$text-primary-dark;
+}
+</style>

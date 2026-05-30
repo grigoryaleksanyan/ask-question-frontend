@@ -89,11 +89,11 @@ const settingsMenu = useTemplateRef('settingsMenu');
 const userProfileSlideOver = useTemplateRef('userProfileSlideOver');
 
 onMounted(() => {
-  document.body.classList.add('p-dark');
+  document.documentElement.classList.add('p-dark');
 });
 
 onUnmounted(() => {
-  document.body.classList.remove('p-dark');
+  document.documentElement.classList.remove('p-dark');
 });
 
 const navItems: NavItem[] = [

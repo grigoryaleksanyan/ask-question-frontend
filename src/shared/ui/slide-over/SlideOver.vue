@@ -65,4 +65,19 @@ defineExpose({ open, confirm, close });
     padding: 16px;
   }
 }
+
+:global(.p-dark) .slide-over {
+  :deep(.p-drawer) {
+    background: variables.$surface-dark-elevated;
+    color: variables.$text-primary-dark;
+  }
+
+  :deep(.p-drawer-header) {
+    color: variables.$text-primary-dark;
+  }
+
+  :deep(.p-drawer-footer) {
+    color: variables.$text-primary-dark;
+  }
+}
 </style>
