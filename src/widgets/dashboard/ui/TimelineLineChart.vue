@@ -1,19 +1,11 @@
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Динамика вопросов
-      </span>
-    </template>
-    <template #content>
-      <Line
-        :data="chartData"
-        :options="chartOptions"
-        style="height: 200px" />
-    </template>
-  </Card>
+  <div class="timeline-line-chart">
+    <div class="timeline-line-chart__title">Динамика вопросов</div>
+    <Line
+      :data="chartData"
+      :options="chartOptions"
+      style="height: 200px" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,10 +23,6 @@ import {
 
 import type { TimelinePointResponse } from '@/shared/types';
 
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
-
 defineOptions({ name: 'TimelineLineChart' });
 
 const { timeline } = defineProps<{
@@ -50,8 +38,8 @@ ChartJS.register(
   Tooltip,
 );
 
-const newColor = QUESTION_STATUSES.NEW.COLOR;
-const answeredColor = QUESTION_STATUSES.ANSWERED.COLOR;
+const newColor = '#6B7CF6';
+const answeredColor = '#45BF8A';
 
 const chartData = computed(() => ({
   labels: timeline.map((p) => {
@@ -84,14 +72,41 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    x: { grid: { display: false } },
-    y: { beginAtZero: true, ticks: { stepSize: 1 } },
+    x: {
+      grid: { display: false },
+      ticks: { color: '#9BA1B0' },
+    },
+    y: {
+      beginAtZero: true,
+      ticks: { stepSize: 1, color: '#9BA1B0' },
+      grid: { color: '#2A2D35' },
+    },
   },
   plugins: {
     legend: {
       position: 'bottom' as const,
-      labels: { usePointStyle: true, pointStyleWidth: 8 },
+      labels: {
+        usePointStyle: true,
+        pointStyleWidth: 8,
+        color: '#9BA1B0',
+      },
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.timeline-line-chart {
+  height: 100%;
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.timeline-line-chart__title {
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+</style>

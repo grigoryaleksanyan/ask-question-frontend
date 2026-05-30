@@ -4,31 +4,22 @@
       v-for="card in cards"
       :key="card.label"
       class="col-6 sm:col-3 md:col-4 lg:col">
-      <Card>
-        <template #content>
-          <div class="text-center p-4">
-            <div
-              class="typography__body--small text-uppercase stat-cards-row__label">
-              {{ card.label }}
-            </div>
-            <div
-              class="typography__headline--large mt-1"
-              :style="{ color: card.color, fontWeight: 'bold' }">
-              {{ card.value }}
-            </div>
-          </div>
-        </template>
-      </Card>
+      <div class="stat-cards-row__card">
+        <div class="stat-cards-row__label">
+          {{ card.label }}
+        </div>
+        <div
+          class="stat-cards-row__value"
+          :style="{ color: card.color }">
+          {{ card.value }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
 
 defineOptions({ name: 'StatCardsRow' });
 
@@ -59,34 +50,47 @@ function formatHours(hours: number): string {
 }
 
 const cards = computed(() => [
-  { label: 'Всего вопросов', value: totalQuestions, color: 'inherit' },
+  { label: 'Всего вопросов', value: totalQuestions, color: '#E5E7EB' },
   {
     label: 'Отвечено',
     value: answeredQuestions,
-    color: QUESTION_STATUSES.ANSWERED.COLOR,
+    color: '#45BF8A',
   },
-  { label: 'Неотвечено', value: unansweredQuestions, color: '#ef5350' },
+  { label: 'Неотвечено', value: unansweredQuestions, color: '#E5484F' },
   {
     label: 'Ср. время ответа',
     value: formatHours(averageResponseTimeHours),
-    color: QUESTION_STATUSES.NEW.COLOR,
+    color: '#6B7CF6',
   },
-  { label: 'Обратная связь', value: totalFeedback, color: 'inherit' },
-  { label: 'Областей', value: totalAreas, color: 'inherit' },
+  { label: 'Обратная связь', value: totalFeedback, color: '#E5E7EB' },
+  { label: 'Областей', value: totalAreas, color: '#E5E7EB' },
   {
     label: 'Без спикера',
     value: questionsWithoutSpeaker,
-    color:
-      questionsWithoutSpeaker > 0
-        ? QUESTION_STATUSES.WITH_COMMENT.COLOR
-        : 'inherit',
+    color: questionsWithoutSpeaker > 0 ? '#E5A44F' : '#E5E7EB',
   },
 ]);
 </script>
 
 <style lang="scss" scoped>
+.stat-cards-row__card {
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
 .stat-cards-row__label {
-  color: variables.$text-secondary;
-  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: variables.$text-muted;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.stat-cards-row__value {
+  color: variables.$text-primary-dark;
+  font-size: 24px;
+  font-weight: 600;
 }
 </style>

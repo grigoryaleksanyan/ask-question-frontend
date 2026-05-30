@@ -1,19 +1,11 @@
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Области спикеров
-      </span>
-    </template>
-    <template #content>
-      <Bar
-        :data="chartData"
-        :options="chartOptions"
-        style="height: 220px" />
-    </template>
-  </Card>
+  <div class="speaker-areas-chart">
+    <div class="speaker-areas-chart__title">Области спикеров</div>
+    <Bar
+      :data="chartData"
+      :options="chartOptions"
+      style="height: 220px" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,10 +21,6 @@ import {
 } from 'chart.js';
 
 import type { SpeakerAreaResponse } from '@/shared/types';
-
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
 
 defineOptions({ name: 'SpeakerAreasChart' });
 
@@ -51,14 +39,14 @@ const areaTitles = computed(() => [
 ]);
 
 const AREA_COLORS = [
-  QUESTION_STATUSES.NEW.COLOR,
-  QUESTION_STATUSES.IN_FOCUS.COLOR,
-  QUESTION_STATUSES.WITH_COMMENT.COLOR,
-  '#ef5350',
-  '#66bb6a',
-  '#ab47bc',
-  '#29b6f6',
-  '#8d6e63',
+  '#6B7CF6',
+  '#2AA89A',
+  '#E5A44F',
+  '#E5484F',
+  '#45BF8A',
+  '#AB47BC',
+  '#29B6F6',
+  '#8D6E63',
 ];
 
 const chartData = computed(() => ({
@@ -84,15 +72,40 @@ const chartOptions = {
     x: {
       stacked: true,
       beginAtZero: true,
-      ticks: { stepSize: 1 },
+      ticks: { stepSize: 1, color: '#9BA1B0' },
+      grid: { color: '#2A2D35' },
     },
-    y: { stacked: true, grid: { display: false } },
+    y: {
+      stacked: true,
+      grid: { display: false },
+      ticks: { color: '#9BA1B0' },
+    },
   },
   plugins: {
     legend: {
       position: 'bottom' as const,
-      labels: { usePointStyle: true, pointStyleWidth: 8 },
+      labels: {
+        usePointStyle: true,
+        pointStyleWidth: 8,
+        color: '#9BA1B0',
+      },
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.speaker-areas-chart {
+  height: 100%;
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.speaker-areas-chart__title {
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+</style>

@@ -1,23 +1,26 @@
 <template>
-  <div class="flex align-items-center">
-    <div class="col-auto">
-      <SelectButton
-        v-model="selectedPeriod"
-        :options="periodOptions"
-        option-label="label"
-        option-value="value"
-        size="small" />
+  <div class="flex align-items-center gap-3">
+    <div class="dashboard-filters__period-tabs">
+      <button
+        v-for="option in periodOptions"
+        :key="option.value"
+        class="dashboard-filters__period-tab"
+        :class="{
+          'dashboard-filters__period-tab--active':
+            selectedPeriod === option.value,
+        }"
+        @click="selectedPeriod = option.value">
+        {{ option.label }}
+      </button>
     </div>
-    <div class="col-auto">
-      <Select
-        v-model="selectedSpeakerId"
-        :options="speakerItems"
-        option-label="title"
-        option-value="value"
-        placeholder="Спикер"
-        show-clear
-        style="min-width: 200px" />
-    </div>
+    <Select
+      v-model="selectedSpeakerId"
+      :options="speakerItems"
+      option-label="title"
+      option-value="value"
+      placeholder="Спикер"
+      show-clear
+      style="min-width: 200px" />
   </div>
 </template>
 
@@ -26,7 +29,6 @@ import { ref, onMounted } from 'vue';
 
 import type { SpeakerResponse } from '@/shared/types';
 
-import SelectButton from 'primevue/selectbutton';
 import Select from 'primevue/select';
 
 import { GetAllSpeakers } from '@/entities/user';
@@ -64,3 +66,33 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style lang="scss" scoped>
+.dashboard-filters__period-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.dashboard-filters__period-tab {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  background: variables.$surface-dark-border;
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 12px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    color: variables.$text-primary-dark;
+  }
+
+  &--active {
+    background: rgba(variables.$main-color, 0.15);
+    color: variables.$main-color;
+    font-weight: 500;
+  }
+}
+</style>

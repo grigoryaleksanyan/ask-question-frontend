@@ -1,49 +1,37 @@
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Лайки / Дизлайки
-      </span>
-    </template>
-    <template #content>
-      <div class="flex flex-column align-items-center pt-4">
-        <div class="flex gap-8">
-          <div class="text-center">
-            <div class="typography__headline--large votes-summary__likes">
-              {{ votes.totalLikes.toLocaleString() }}
-            </div>
-            <div class="typography__body--small mt-1 votes-summary__label">
-              👍 Лайки
-            </div>
+  <div class="votes-summary">
+    <div class="votes-summary__title">Лайки / Дизлайки</div>
+    <div class="flex flex-column align-items-center pt-4">
+      <div class="flex gap-8">
+        <div class="text-center">
+          <div class="votes-summary__likes">
+            {{ votes.totalLikes.toLocaleString() }}
           </div>
-          <div class="text-center">
-            <div class="typography__headline--large votes-summary__dislikes">
-              {{ votes.totalDislikes.toLocaleString() }}
-            </div>
-            <div class="typography__body--small mt-1 votes-summary__label">
-              👎 Дизлайки
-            </div>
-          </div>
+          <div class="votes-summary__label mt-1">Лайки</div>
         </div>
-        <div
-          class="flex align-items-center gap-2 mt-4 w-full votes-summary__progress">
-          <span class="typography__body--small votes-summary__likes">
-            {{ likesPercent }}%
-          </span>
-          <ProgressBar
-            :value="likesPercent"
-            :show-value="false"
-            style="height: 10px"
-            class="flex-grow-1" />
-          <span class="typography__body--small votes-summary__dislikes">
-            {{ dislikesPercent }}%
-          </span>
+        <div class="text-center">
+          <div class="votes-summary__dislikes">
+            {{ votes.totalDislikes.toLocaleString() }}
+          </div>
+          <div class="votes-summary__label mt-1">Дизлайки</div>
         </div>
       </div>
-    </template>
-  </Card>
+      <div
+        class="flex align-items-center gap-2 mt-4 w-full votes-summary__progress">
+        <span class="votes-summary__likes votes-summary__percent">
+          {{ likesPercent }}%
+        </span>
+        <ProgressBar
+          :value="likesPercent"
+          :show-value="false"
+          style="height: 10px"
+          class="flex-grow-1" />
+        <span class="votes-summary__dislikes votes-summary__percent">
+          {{ dislikesPercent }}%
+        </span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -51,7 +39,6 @@ import { computed } from 'vue';
 
 import type { VotesSummaryResponse } from '@/shared/types';
 
-import Card from 'primevue/card';
 import ProgressBar from 'primevue/progressbar';
 
 defineOptions({ name: 'VotesSummary' });
@@ -78,18 +65,39 @@ const dislikesPercent = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+.votes-summary {
+  height: 100%;
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.votes-summary__title {
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+
 .votes-summary__likes {
   color: variables.$chart-answered;
+  font-size: 24px;
   font-weight: bold;
 }
 
 .votes-summary__dislikes {
   color: variables.$chart-unanswered;
+  font-size: 24px;
   font-weight: bold;
 }
 
+.votes-summary__percent {
+  font-size: 11px;
+}
+
 .votes-summary__label {
-  color: variables.$text-secondary;
+  color: variables.$text-muted;
+  font-size: 12px;
 }
 
 .votes-summary__progress {

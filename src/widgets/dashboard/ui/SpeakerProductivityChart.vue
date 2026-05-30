@@ -1,90 +1,109 @@
 <template>
-  <Card>
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Продуктивность спикеров
-      </span>
-    </template>
-    <template #content>
-      <Bar
-        :data="chartData"
-        :options="chartOptions"
-        style="height: 220px" />
-    </template>
-  </Card>
+  <div class="speaker-productivity-chart">
+    <div class="speaker-productivity-chart__title">Продуктивность спикеров</div>
+    <div class="speaker-productivity-chart__list">
+      <div
+        v-for="speaker in topSpeakers"
+        :key="speaker.speakerName"
+        class="speaker-productivity-chart__item">
+        <div class="speaker-productivity-chart__item-header">
+          <span class="speaker-productivity-chart__name">
+            {{ speaker.speakerName }}
+          </span>
+          <span class="speaker-productivity-chart__percent">
+            {{ speaker.answerRate }}%
+          </span>
+        </div>
+        <div class="speaker-productivity-chart__bar">
+          <div
+            class="speaker-productivity-chart__bar-fill"
+            :class="{
+              'speaker-productivity-chart__bar-fill--warning':
+                speaker.answerRate < 60,
+            }"
+            :style="{ width: `${speaker.answerRate}%` }" />
+        </div>
+        <div class="speaker-productivity-chart__meta">
+          <span>{{ speaker.assignedQuestions }} назн.</span>
+          <span>{{ speaker.answeredQuestions }} отв.</span>
+          <span>~{{ speaker.averageResponseHours }}ч</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { Bar } from 'vue-chartjs';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
 import type { SpeakerProductivityResponse } from '@/shared/types';
-
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
 
 defineOptions({ name: 'SpeakerProductivityChart' });
 
 const { topSpeakers } = defineProps<{
   topSpeakers: SpeakerProductivityResponse[];
 }>();
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
-
-const chartData = computed(() => ({
-  labels: topSpeakers.map((s) => s.speakerName),
-  datasets: [
-    {
-      label: 'Назначено',
-      data: topSpeakers.map((s) => s.assignedQuestions),
-      backgroundColor: QUESTION_STATUSES.NEW.COLOR,
-      borderRadius: 4,
-      barThickness: 18,
-    },
-    {
-      label: 'Отвечено',
-      data: topSpeakers.map((s) => s.answeredQuestions),
-      backgroundColor: QUESTION_STATUSES.ANSWERED.COLOR,
-      borderRadius: 4,
-      barThickness: 18,
-    },
-  ],
-}));
-
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  indexAxis: 'y' as const,
-  scales: {
-    x: { beginAtZero: true, ticks: { stepSize: 1 } },
-    y: { grid: { display: false } },
-  },
-  plugins: {
-    legend: {
-      position: 'bottom' as const,
-      labels: { usePointStyle: true, pointStyleWidth: 8 },
-    },
-    tooltip: {
-      callbacks: {
-        afterBody: (items: { label: string }[]) => {
-          const idx = items[0]?.label;
-          const speaker = topSpeakers.find((s) => s.speakerName === idx);
-          if (!speaker) return '';
-          return `Ответов: ${speaker.answerRate}% | Ср. время: ${speaker.averageResponseHours}ч`;
-        },
-      },
-    },
-  },
-};
 </script>
+
+<style lang="scss" scoped>
+.speaker-productivity-chart {
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.speaker-productivity-chart__title {
+  margin-bottom: 14px;
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.speaker-productivity-chart__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.speaker-productivity-chart__item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.speaker-productivity-chart__name {
+  color: variables.$text-muted;
+  font-size: 12px;
+}
+
+.speaker-productivity-chart__percent {
+  color: variables.$text-secondary;
+  font-size: 11px;
+}
+
+.speaker-productivity-chart__bar {
+  overflow: hidden;
+  height: 6px;
+  border-radius: 4px;
+  background: variables.$border-dark;
+}
+
+.speaker-productivity-chart__bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: variables.$main-color;
+  transition: width 0.3s;
+
+  &--warning {
+    background: variables.$warning-color;
+  }
+}
+
+.speaker-productivity-chart__meta {
+  display: flex;
+  margin-top: 4px;
+  color: variables.$text-secondary;
+  font-size: 11px;
+  gap: 12px;
+}
+</style>

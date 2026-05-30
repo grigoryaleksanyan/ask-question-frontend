@@ -1,19 +1,11 @@
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Вопросы по областям
-      </span>
-    </template>
-    <template #content>
-      <Bar
-        :data="chartData"
-        :options="chartOptions"
-        style="height: 200px" />
-    </template>
-  </Card>
+  <div class="area-bar-chart">
+    <div class="area-bar-chart__title">Вопросы по областям</div>
+    <Bar
+      :data="chartData"
+      :options="chartOptions"
+      style="height: 200px" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,10 +21,6 @@ import {
 
 import type { AreaDistributionResponse } from '@/shared/types';
 
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
-
 defineOptions({ name: 'AreaBarChart' });
 
 const { byArea } = defineProps<{
@@ -46,7 +34,7 @@ const chartData = computed(() => ({
   datasets: [
     {
       data: byArea.map((a) => a.count),
-      backgroundColor: QUESTION_STATUSES.NEW.COLOR,
+      backgroundColor: '#6B7CF6',
       borderRadius: 4,
       barThickness: 18,
     },
@@ -58,9 +46,32 @@ const chartOptions = {
   maintainAspectRatio: false,
   indexAxis: 'y' as const,
   scales: {
-    x: { beginAtZero: true, ticks: { stepSize: 1 } },
-    y: { grid: { display: false } },
+    x: {
+      beginAtZero: true,
+      ticks: { stepSize: 1, color: '#9BA1B0' },
+      grid: { color: '#2A2D35' },
+    },
+    y: {
+      grid: { display: false },
+      ticks: { color: '#9BA1B0' },
+    },
   },
   plugins: { legend: { display: false } },
 };
 </script>
+
+<style lang="scss" scoped>
+.area-bar-chart {
+  height: 100%;
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.area-bar-chart__title {
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+</style>

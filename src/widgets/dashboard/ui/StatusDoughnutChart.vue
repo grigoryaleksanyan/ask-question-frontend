@@ -1,21 +1,13 @@
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span
-        class="typography__body--large"
-        style="font-weight: bold">
-        Вопросы по статусам
-      </span>
-    </template>
-    <template #content>
-      <div class="flex flex-column align-items-center pt-2">
-        <Doughnut
-          :data="chartData"
-          :options="chartOptions"
-          style="max-height: 220px" />
-      </div>
-    </template>
-  </Card>
+  <div class="status-doughnut-chart">
+    <div class="status-doughnut-chart__title">Вопросы по статусам</div>
+    <div class="flex flex-column align-items-center pt-2">
+      <Doughnut
+        :data="chartData"
+        :options="chartOptions"
+        style="max-height: 220px" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,10 +17,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 import type { StatusDistributionResponse } from '@/shared/types';
 import { QuestionStatusId } from '@/shared/types';
-
-import Card from 'primevue/card';
-
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
 
 defineOptions({ name: 'StatusDoughnutChart' });
 
@@ -46,10 +34,10 @@ const STATUS_LABELS: Record<number, string> = {
 };
 
 const STATUS_COLORS: Record<number, string> = {
-  [QuestionStatusId.New]: QUESTION_STATUSES.NEW.COLOR,
-  [QuestionStatusId.InFocus]: QUESTION_STATUSES.IN_FOCUS.COLOR,
-  [QuestionStatusId.WithComment]: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-  [QuestionStatusId.Answered]: QUESTION_STATUSES.ANSWERED.COLOR,
+  [QuestionStatusId.New]: '#6B7CF6',
+  [QuestionStatusId.InFocus]: '#2AA89A',
+  [QuestionStatusId.WithComment]: '#E5A44F',
+  [QuestionStatusId.Answered]: '#45BF8A',
 };
 
 const chartData = computed(() => ({
@@ -70,8 +58,29 @@ const chartOptions = {
   plugins: {
     legend: {
       position: 'bottom' as const,
-      labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8 },
+      labels: {
+        padding: 16,
+        usePointStyle: true,
+        pointStyleWidth: 8,
+        color: '#9BA1B0',
+      },
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.status-doughnut-chart {
+  height: 100%;
+  padding: 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.status-doughnut-chart__title {
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+</style>

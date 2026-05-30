@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dashboard-widget">
     <div v-if="data">
       <DashboardFilters
         v-model:period-days="periodDays"
@@ -94,3 +94,9 @@ watch([periodDays, speakerId], () => {
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.dashboard-widget {
+  color: variables.$text-primary-dark;
+}
+</style>
