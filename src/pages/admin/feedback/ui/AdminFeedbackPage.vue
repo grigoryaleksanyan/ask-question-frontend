@@ -69,20 +69,17 @@ import Button from 'primevue/button';
 
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 
 import {
   GetAllFeedback,
   FeedbackCard,
   DeleteFeedbackModal,
 } from '@/features/feedback';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 defineOptions({ name: 'AdminFeedbackPage' });
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeFetchFeedbacks } = useApiCall(GetAllFeedback);
 
 const feedbacks = ref<FeedbackResponse[]>([]);
 const currentFeedback = ref<FeedbackResponse | null>(null);
@@ -91,14 +88,9 @@ const showDeleteFeedback = ref(false);
 const deleteFeedbackRef = useTemplateRef('delete-feedback');
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    feedbacks.value = await GetAllFeedback();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetchFeedbacks();
+  if (result) {
+    feedbacks.value = result;
   }
 }
 

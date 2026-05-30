@@ -66,12 +66,13 @@ import {
   QuestionCard,
   QuestionFormCreate,
 } from '@/entities/question';
-import { useAlertStore } from '@/entities/alert';
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 
 defineOptions({ name: 'MainPage' });
 
-const alertStore = useAlertStore();
+const { execute: executeFetch } = useApiCall(GetPopularQuestions, {
+  showPreloader: false,
+});
 
 const backgroundVideo = ref(
   new URL('@/shared/assets/video/background.mp4', import.meta.url).href,
@@ -86,11 +87,9 @@ function scrollToPopular() {
 }
 
 async function fetchData() {
-  try {
-    questions.value = await GetPopularQuestions();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  const result = await executeFetch();
+  if (result) {
+    questions.value = result;
   }
 }
 

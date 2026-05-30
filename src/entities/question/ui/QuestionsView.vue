@@ -93,8 +93,7 @@ import { ref, computed, watch } from 'vue';
 import type { QuestionResponse } from '@/shared/types';
 
 import { QuestionStatusId } from '@/shared/types';
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { GetAll, type QuestionListParams } from '../api/questions-repository';
 
 import QuestionFilters from './QuestionFilters.vue';
@@ -109,10 +108,11 @@ import Paginator from 'primevue/paginator';
 
 defineOptions({ name: 'QuestionsView' });
 
-const alertStore = useAlertStore();
+const { execute: executeFetch, isLoading } = useApiCall(GetAll, {
+  showPreloader: false,
+});
 
 const questions = ref<QuestionResponse[]>([]);
-const isLoading = ref(false);
 const totalCount = ref(0);
 const currentPage = ref(1);
 const pageSize = 10;
@@ -175,16 +175,10 @@ function onFiltersChange(filters: {
 }
 
 async function fetchData() {
-  isLoading.value = true;
-  try {
-    const result = await GetAll(params.value);
+  const result = await executeFetch(params.value);
+  if (result) {
     questions.value = result.items;
     totalCount.value = result.totalCount;
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    isLoading.value = false;
   }
 }
 

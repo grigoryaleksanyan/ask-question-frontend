@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Delete as DeleteEntry } from '../api/faq-entry-repository';
 
 defineOptions({ name: 'DeleteEntry' });
@@ -18,22 +17,16 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeDelete } = useApiCall(DeleteEntry, {
+  successMessage: 'Запись успешно удалена',
+  showPreloader: false,
+  onSuccess: () => {
+    emit('success', id);
+  },
+});
 
 async function confirm() {
-  try {
-    await DeleteEntry(id);
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Запись успешно удалена',
-    });
-
-    emit('success', id);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeDelete(id);
 }
 
 function cancel() {

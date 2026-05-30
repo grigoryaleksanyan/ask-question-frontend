@@ -57,13 +57,10 @@ import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import type { FaqEntryResponse } from '@/shared/types';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
-
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 import { Update as UpdateEntry } from '../api/faq-entry-repository';
 
@@ -75,8 +72,13 @@ const { modalConfirm, modalClose, entry } = defineProps<{
   entry: FaqEntryResponse;
 }>();
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeUpdateEntry } = useApiCall(UpdateEntry, {
+  successMessage: 'Запись успешно изменена',
+  onSuccess: () => {
+    modalConfirm();
+  },
+});
+
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -96,27 +98,11 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    preloaderStore.addLoader();
-
-    await UpdateEntry({
-      id: entry.id,
-      question: values.question as string,
-      answer: sanitizeHtml(values.answer as string),
-    });
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Запись успешно изменена',
-    });
-
-    modalConfirm();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
-  }
+  await executeUpdateEntry({
+    id: entry.id,
+    question: values.question as string,
+    answer: sanitizeHtml(values.answer as string),
+  });
 }
 
 function submitForm() {

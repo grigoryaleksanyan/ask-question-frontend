@@ -154,7 +154,8 @@ import Button from 'primevue/button';
 
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
+import { useToast } from 'primevue/usetoast';
 import {
   GetAllSpeakers,
   SpeakerCard,
@@ -162,13 +163,11 @@ import {
   UpdateSpeaker,
   DeleteSpeaker,
 } from '@/entities/user';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 defineOptions({ name: 'AdminSpeakersPage' });
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeFetch } = useApiCall(GetAllSpeakers);
+const toast = useToast();
 
 const speakers = ref<SpeakerResponse[]>([]);
 const currentSpeaker = ref<SpeakerResponse | null>(null);
@@ -185,14 +184,9 @@ const updateSpeakerRef = useTemplateRef('update-speaker');
 const deleteSpeakerRef = useTemplateRef('delete-speaker');
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    speakers.value = await GetAllSpeakers();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetch();
+  if (result) {
+    speakers.value = result;
   }
 }
 
@@ -230,14 +224,18 @@ function successDeleteSpeaker(speakerId: string) {
 async function copyToClipboard(text: string) {
   try {
     await navigator.clipboard.writeText(text);
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Скопировано в буфер обмена',
+    toast.add({
+      severity: 'success',
+      detail: 'Скопировано в буфер обмена',
+      group: 'api',
+      life: 3000,
     });
   } catch {
-    alertStore.addAlert({
-      type: ALERT_TYPES.ERROR,
-      text: 'Не удалось скопировать',
+    toast.add({
+      severity: 'error',
+      detail: 'Не удалось скопировать',
+      group: 'api',
+      life: undefined,
     });
   }
 }

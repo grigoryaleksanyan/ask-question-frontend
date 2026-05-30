@@ -34,8 +34,7 @@ import type { AreaResponse } from '@/shared/types';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Create } from '../api/areas-repository';
 
 defineOptions({ name: 'CreateArea' });
@@ -50,7 +49,13 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeCreate } = useApiCall(Create, {
+  successMessage: 'Область успешно создана',
+  onSuccess: (data) => {
+    emit('success', data);
+  },
+});
+
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -68,19 +73,7 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    const createdArea = await Create({ title: values.title as string, order });
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Область успешно создана',
-    });
-
-    emit('success', createdArea);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeCreate({ title: values.title as string, order });
 }
 
 watch(

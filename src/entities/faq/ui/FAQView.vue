@@ -52,35 +52,27 @@ import { useRoute } from 'vue-router';
 
 import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
-
 import { GetAllWithEntries } from '../api/faq-category-repository';
 
 defineOptions({ name: 'FAQView' });
 
 const route = useRoute();
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+
+const { execute: executeFetchCategories } = useApiCall(GetAllWithEntries);
 
 const categories = ref<FaqCategoryWithEntriesResponse[]>([]);
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    categories.value = await GetAllWithEntries();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetchCategories();
+  if (result) {
+    categories.value = result;
   }
 }
 

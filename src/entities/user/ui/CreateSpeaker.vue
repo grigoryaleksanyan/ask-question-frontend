@@ -86,8 +86,7 @@ import type { CreateSpeakerResponse } from '@/shared/types';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Create } from '../api/speakers-repository';
 
 defineOptions({ name: 'CreateSpeaker' });
@@ -101,7 +100,13 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeCreate } = useApiCall(Create, {
+  successMessage: 'Спикер успешно создан',
+  onSuccess: (data) => {
+    emit('success', data);
+  },
+});
+
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -126,25 +131,13 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    const createdSpeaker = await Create({
-      firstName: values.firstName as string,
-      lastName: values.lastName as string,
-      patronymic: (values.patronymic as string) || null,
-      position: (values.position as string) || null,
-      email: values.email as string,
-    });
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Спикер успешно создан',
-    });
-
-    emit('success', createdSpeaker);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeCreate({
+    firstName: values.firstName as string,
+    lastName: values.lastName as string,
+    patronymic: (values.patronymic as string) || null,
+    position: (values.position as string) || null,
+    email: values.email as string,
+  });
 }
 
 watch(

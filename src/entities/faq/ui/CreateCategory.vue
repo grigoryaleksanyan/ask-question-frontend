@@ -34,8 +34,7 @@ import type { FaqCategoryResponse } from '@/shared/types';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'CreateCategory' });
@@ -50,7 +49,10 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeCreate } = useApiCall(CreateCategoryApi, {
+  successMessage: 'Категория успешно создана',
+  showPreloader: false,
+});
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -68,21 +70,13 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    const createdCategory = await CreateCategoryApi({
-      name: values.name as string,
-      order,
-    });
+  const createdCategory = await executeCreate({
+    name: values.name as string,
+    order,
+  });
 
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Категория успешно создана',
-    });
-
+  if (createdCategory) {
     emit('success', createdCategory);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

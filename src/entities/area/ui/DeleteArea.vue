@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Delete } from '../api/areas-repository';
 
 defineOptions({ name: 'DeleteArea' });
@@ -18,22 +17,16 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeDelete } = useApiCall(Delete, {
+  successMessage: 'Область успешно удалена',
+  showPreloader: false,
+  onSuccess: () => {
+    emit('success', id);
+  },
+});
 
 async function confirm() {
-  try {
-    await Delete(id);
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Область успешно удалена',
-    });
-
-    emit('success', id);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeDelete(id);
 }
 
 function cancel() {

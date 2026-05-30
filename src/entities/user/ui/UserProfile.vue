@@ -131,9 +131,7 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
+import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '@/features/auth';
 
 import { ChangePassword } from '../api/user-repository';
@@ -145,8 +143,13 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeChangePassword } = useApiCall(ChangePassword, {
+  successMessage: 'Пароль успешно изменен',
+  onSuccess: () => {
+    emit('success');
+  },
+});
+
 const authStore = useAuthStore();
 
 const { getUserData } = storeToRefs(authStore);
@@ -183,27 +186,11 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    preloaderStore.addLoader();
-
-    await ChangePassword({
-      password: values.password as string,
-      newPassword: values.newPassword as string,
-      confirmPassword: values.confirmPassword as string,
-    });
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Пароль успешно изменен',
-    });
-
-    emit('success');
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
-  }
+  await executeChangePassword({
+    password: values.password as string,
+    newPassword: values.newPassword as string,
+    confirmPassword: values.confirmPassword as string,
+  });
 }
 </script>
 

@@ -193,7 +193,8 @@ import Button from 'primevue/button';
 
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall, copyToClipboard } from '@/shared/lib';
+import { useToast } from 'primevue/usetoast';
 
 import {
   GetCategoryById,
@@ -206,10 +207,6 @@ import {
   UpdateEntryContent,
 } from '@/entities/faq';
 
-import { copyToClipboard } from '@/shared/lib';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
-
 defineOptions({ name: 'AdminFAQCategoryPage' });
 
 const { id } = defineProps<{
@@ -217,10 +214,18 @@ const { id } = defineProps<{
 }>();
 
 const router = useRouter();
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
-
 const category = ref<FaqCategoryWithEntriesResponse | null>(null);
+let oldOrderEntries: FaqEntryResponse[] = [];
+const { execute: executeSetOrder } = useApiCall(SetEntryOrder, {
+  successMessage: 'Сортировка применена',
+  onError: () => {
+    if (category.value) {
+      category.value.entries = oldOrderEntries;
+    }
+  },
+});
+const { execute: executeFetch } = useApiCall(() => GetCategoryById(id));
+const toast = useToast();
 const currentEntry = ref<FaqEntryResponse | null>(null);
 
 const showUpdateCategory = ref(false);
@@ -250,41 +255,17 @@ const draggableEntries = computed({
   async set(newOrderEntries: FaqEntryResponse[]) {
     if (!category.value) return;
 
-    const oldOrderEntries = [...category.value.entries];
-
+    oldOrderEntries = [...category.value.entries];
     category.value.entries = newOrderEntries;
-
-    try {
-      preloaderStore.addLoader();
-      const entryIds = newOrderEntries.map(
-        (entry: FaqEntryResponse) => entry.id,
-      );
-      await SetEntryOrder(entryIds);
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Сортировка применена',
-      });
-    } catch (error) {
-      if (category.value) {
-        category.value.entries = oldOrderEntries;
-      }
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    } finally {
-      preloaderStore.removeLoader();
-    }
+    const entryIds = newOrderEntries.map((entry: FaqEntryResponse) => entry.id);
+    await executeSetOrder(entryIds);
   },
 });
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    category.value = await GetCategoryById(id);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetch();
+  if (result) {
+    category.value = result;
   }
 }
 
@@ -333,14 +314,21 @@ function copyLink(entry: FaqEntryResponse) {
 
   copyToClipboard(link)
     .then(() => {
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Ссылка скопирована в буфер обмена',
+      toast.add({
+        severity: 'success',
+        detail: 'Ссылка скопирована в буфер обмена',
+        group: 'api',
+        life: 3000,
       });
     })
     .catch((error: unknown) => {
       const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+      toast.add({
+        severity: 'error',
+        detail: err.message,
+        group: 'api',
+        life: undefined,
+      });
     });
 }
 

@@ -30,8 +30,7 @@ import SelectButton from 'primevue/selectbutton';
 import Select from 'primevue/select';
 
 import { GetAllSpeakers } from '@/entities/user';
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 
 defineOptions({ name: 'DashboardFilters' });
 
@@ -40,7 +39,9 @@ const selectedSpeakerId = defineModel<string | null>('speakerId', {
   default: null,
 });
 
-const alertStore = useAlertStore();
+const { execute: executeFetchSpeakers } = useApiCall(GetAllSpeakers, {
+  showPreloader: false,
+});
 
 const periodOptions = [
   { label: '7 дн', value: 7 },
@@ -51,8 +52,8 @@ const periodOptions = [
 const speakerItems = ref<{ title: string; value: string | null }[]>([]);
 
 onMounted(async () => {
-  try {
-    const speakers: SpeakerResponse[] = await GetAllSpeakers();
+  const speakers: SpeakerResponse[] | undefined = await executeFetchSpeakers();
+  if (speakers) {
     speakerItems.value = [
       { title: 'Все спикеры', value: null },
       ...speakers.map((s) => ({
@@ -60,9 +61,6 @@ onMounted(async () => {
         value: s.id,
       })),
     ];
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 });
 </script>

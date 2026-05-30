@@ -16,14 +16,6 @@ export interface QuestionStatus {
   COLOR: string;
 }
 
-export interface AlertItem {
-  id: string;
-  type: AlertType;
-  text: string;
-}
-
-export type AlertType = 'success' | 'info' | 'warning' | 'error';
-
 export interface NavItem {
   title: string;
   icon: string;

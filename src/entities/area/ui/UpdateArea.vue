@@ -35,8 +35,7 @@ import type { AreaResponse } from '@/shared/types';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Update } from '../api/areas-repository';
 
 defineOptions({ name: 'UpdateArea' });
@@ -51,7 +50,10 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeUpdate } = useApiCall(Update, {
+  successMessage: 'Категория успешно изменена',
+  showPreloader: false,
+});
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -70,21 +72,13 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    const updatedArea = await Update({
-      id: area.id,
-      title: values.title as string,
-    });
+  const updatedArea = await executeUpdate({
+    id: area.id,
+    title: values.title as string,
+  });
 
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Категория успешно изменена',
-    });
-
+  if (updatedArea) {
     emit('success', updatedArea);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

@@ -41,8 +41,6 @@ export {
   UserRoleId,
   QuestionStatusId,
   type QuestionStatus,
-  type AlertType,
-  type AlertItem,
   type NavItem,
   type SidebarModalResult,
   type DateRangeValue,

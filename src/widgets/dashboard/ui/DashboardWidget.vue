@@ -60,10 +60,9 @@ import type { DashboardSummaryResponse } from '@/shared/types';
 
 import ProgressSpinner from 'primevue/progressspinner';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
+
 import { GetDashboardSummary } from '@/entities/dashboard';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 import DashboardFilters from './DashboardFilters.vue';
 import StatCardsRow from './StatCardsRow.vue';
@@ -76,22 +75,16 @@ import VotesSummary from './VotesSummary.vue';
 
 defineOptions({ name: 'DashboardWidget' });
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeFetchDashboard } = useApiCall(GetDashboardSummary);
 
 const data = ref<DashboardSummaryResponse | null>(null);
 const periodDays = ref(30);
 const speakerId = ref<string | null>(null);
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    data.value = await GetDashboardSummary(periodDays.value, speakerId.value);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetchDashboard(periodDays.value, speakerId.value);
+  if (result) {
+    data.value = result;
   }
 }
 

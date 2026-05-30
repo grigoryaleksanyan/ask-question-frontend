@@ -84,23 +84,26 @@ import Button from 'primevue/button';
 
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 import {
   GetAllCategories,
   SetCategoryOrder,
   CategoryCard,
   CreateCategory,
 } from '@/entities/faq';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 defineOptions({ name: 'AdminFAQPage' });
 
 const route = useRoute();
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
-
 const categories = ref<FaqCategoryResponse[]>([]);
+let oldOrderCategories: FaqCategoryResponse[] = [];
+const { execute: executeSetOrder } = useApiCall(SetCategoryOrder, {
+  successMessage: 'Сортировка применена',
+  onError: () => {
+    categories.value = oldOrderCategories;
+  },
+});
+const { execute: executeFetch } = useApiCall(GetAllCategories);
 
 const showCreateCategory = ref(false);
 
@@ -121,39 +124,19 @@ const draggableCategories = computed({
   },
 
   async set(newOrderCategories: FaqCategoryResponse[]) {
-    const oldOrderCategories = [...categories.value];
-
+    oldOrderCategories = [...categories.value];
     categories.value = newOrderCategories;
-
-    try {
-      preloaderStore.addLoader();
-      const categoryIds = newOrderCategories.map(
-        (category: FaqCategoryResponse) => category.id,
-      );
-      await SetCategoryOrder(categoryIds);
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Сортировка применена',
-      });
-    } catch (error) {
-      categories.value = oldOrderCategories;
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    } finally {
-      preloaderStore.removeLoader();
-    }
+    const categoryIds = newOrderCategories.map(
+      (category: FaqCategoryResponse) => category.id,
+    );
+    await executeSetOrder(categoryIds);
   },
 });
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    categories.value = await GetAllCategories();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetch();
+  if (result) {
+    categories.value = result;
   }
 }
 

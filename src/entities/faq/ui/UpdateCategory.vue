@@ -35,8 +35,7 @@ import type { FaqCategoryResponse } from '@/shared/types';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Update as UpdateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'UpdateCategory' });
@@ -51,7 +50,10 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeUpdate } = useApiCall(UpdateCategoryApi, {
+  successMessage: 'Категория успешно изменена',
+  showPreloader: false,
+});
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -70,18 +72,11 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    await UpdateCategoryApi({ id: category.id, name: values.name as string });
+  const name = values.name as string;
+  const result = await executeUpdate({ id: category.id, name });
 
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Категория успешно изменена',
-    });
-
-    emit('success', values.name as string);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  if (result) {
+    emit('success', name);
   }
 }
 

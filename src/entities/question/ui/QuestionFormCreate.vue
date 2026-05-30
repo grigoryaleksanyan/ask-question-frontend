@@ -102,8 +102,7 @@ import type { AreaResponse, SpeakerResponse } from '@/shared/types';
 
 import { GetAllAreas } from '@/entities/area';
 import { GetAllSpeakers } from '@/entities/user';
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { GetCaptcha, Create } from '../api/questions-repository';
 
 import Card from 'primevue/card';
@@ -115,7 +114,26 @@ import Divider from 'primevue/divider';
 
 defineOptions({ name: 'QuestionFormCreate' });
 
-const alertStore = useAlertStore();
+const { execute: executeGetCaptcha } = useApiCall(GetCaptcha, {
+  showPreloader: false,
+});
+const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
+  showPreloader: false,
+});
+const { execute: executeFetchSpeakers } = useApiCall(GetAllSpeakers, {
+  showPreloader: false,
+});
+const { execute: executeSubmit } = useApiCall(Create, {
+  successMessage: 'Ваш вопрос успешно добавлен',
+  showPreloader: false,
+  onSuccess() {
+    toggleForm();
+    resetForm();
+  },
+  onError() {
+    executeGetCaptcha();
+  },
+});
 
 const details = ref(false);
 const areas = ref<AreaResponse[]>([]);
@@ -146,30 +164,23 @@ function showDetails() {
 
 async function getCaptcha() {
   captchaData.value = null;
-
-  try {
-    captchaData.value = await GetCaptcha();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  const result = await executeGetCaptcha();
+  if (result) {
+    captchaData.value = result;
   }
 }
 
 async function fetchAllAreas() {
-  try {
-    areas.value = await GetAllAreas();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  const result = await executeFetchAreas();
+  if (result) {
+    areas.value = result;
   }
 }
 
 async function fetchAllSpeakers() {
-  try {
-    speakers.value = await GetAllSpeakers();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  const result = await executeFetchSpeakers();
+  if (result) {
+    speakers.value = result;
   }
 }
 
@@ -193,28 +204,12 @@ function resetForm() {
 async function submitForm() {
   if (!validate()) return;
 
-  try {
-    await Create(captcha.value!, {
-      text: controls.text!,
-      author: controls.author!,
-      areaId: controls.areaId ?? null,
-      speakerId: controls.speakerId ?? null,
-    });
-
-    toggleForm();
-
-    resetForm();
-
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Ваш вопрос успешно добавлен',
-    });
-  } catch (error) {
-    getCaptcha();
-
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeSubmit(captcha.value!, {
+    text: controls.text!,
+    author: controls.author!,
+    areaId: controls.areaId ?? null,
+    speakerId: controls.speakerId ?? null,
+  });
 }
 
 fetchAllAreas();

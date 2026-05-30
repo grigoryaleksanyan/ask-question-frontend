@@ -49,24 +49,22 @@ import type { QuestionResponse } from '@/shared/types';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import { ALERT_TYPES } from '@/shared/config';
 import { GetAllQuestions } from '@/entities/question';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 
 defineOptions({ name: 'AdminQuestionsPage' });
 
-const alertStore = useAlertStore();
+const { execute: executeFetch } = useApiCall(GetAllQuestions, {
+  showPreloader: false,
+});
 
 const questions = ref<QuestionResponse[]>([]);
 const selected = ref<QuestionResponse[]>([]);
 
 async function fetchData() {
-  try {
-    const response = await GetAllQuestions();
-    questions.value = response.items;
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  const result = await executeFetch();
+  if (result) {
+    questions.value = result.items;
   }
 }
 

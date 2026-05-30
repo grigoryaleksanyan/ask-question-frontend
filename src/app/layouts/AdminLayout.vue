@@ -62,8 +62,7 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import { useAuthStore, Logout } from '@/features/auth';
-import { useAlertStore } from '@/entities/alert';
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
@@ -74,7 +73,15 @@ defineOptions({ name: 'AdminLayout' });
 const router = useRouter();
 
 const authStore = useAuthStore();
-const alertStore = useAlertStore();
+
+const { execute: executeLogout } = useApiCall(Logout, {
+  successMessage: 'Успешный выход',
+  showPreloader: false,
+  onSuccess() {
+    authStore.removeAuthData();
+    router.push('/');
+  },
+});
 
 const showUserProfile = ref(false);
 const sidebarCollapsed = ref(false);
@@ -136,18 +143,7 @@ function toggleSettingsMenu(event: Event) {
 }
 
 async function logout() {
-  try {
-    await Logout();
-
-    authStore.removeAuthData();
-
-    router.push('/');
-
-    alertStore.addAlert({ type: ALERT_TYPES.SUCCESS, text: 'Успешный выход' });
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeLogout();
 }
 </script>
 

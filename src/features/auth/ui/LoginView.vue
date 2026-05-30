@@ -38,8 +38,7 @@
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { useAlertStore } from '@/entities/alert';
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '../store';
 import { Login } from '../api/auth-repository';
 
@@ -53,7 +52,14 @@ defineOptions({ name: 'LoginView' });
 const router = useRouter();
 
 const authStore = useAuthStore();
-const alertStore = useAlertStore();
+
+const { execute: executeLogin } = useApiCall(Login, {
+  showPreloader: false,
+  onSuccess(user) {
+    authStore.setAuthData(user);
+    router.go(-1);
+  },
+});
 
 const controls = reactive({
   email: null as string | null,
@@ -61,18 +67,9 @@ const controls = reactive({
 });
 
 async function onSubmit() {
-  try {
-    const user = await Login({
-      login: controls.email!,
-      password: controls.password!,
-    });
-
-    authStore.setAuthData(user);
-
-    router.go(-1);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  }
+  await executeLogin({
+    login: controls.email!,
+    password: controls.password!,
+  });
 }
 </script>

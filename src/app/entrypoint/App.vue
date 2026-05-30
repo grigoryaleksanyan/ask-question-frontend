@@ -2,7 +2,7 @@
   <div>
     <component :is="layout" />
     <AppPreloader />
-    <AppAlert />
+    <AppToast />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import { computed, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { AppPreloader } from '@/features/preloader';
-import { AppAlert } from '@/entities/alert';
+import AppToast from '@/shared/ui/toast/AppToast.vue';
 
 defineOptions({ name: 'App' });
 

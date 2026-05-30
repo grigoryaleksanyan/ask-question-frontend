@@ -34,10 +34,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 
-import { ALERT_TYPES } from '@/shared/config';
-
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
+import { useApiCall } from '@/shared/lib';
 
 import { Create } from '../api/feedback-repository';
 
@@ -52,8 +49,12 @@ const { modalConfirm, modalClose } = defineProps<{
   modalClose: () => void;
 }>();
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
+const { execute: executeCreate } = useApiCall(Create, {
+  successMessage: 'Обратная связь отправлена',
+  onSuccess: () => {
+    modalConfirm();
+  },
+});
 
 const themes = [
   'Технические проблемы в работе сайта',
@@ -81,25 +82,12 @@ async function submitForm() {
     return;
   }
 
-  try {
-    preloaderStore.addLoader();
-    await Create({
-      username: controls.username!,
-      email: controls.email!,
-      theme: controls.theme!,
-      text: controls.text!,
-    });
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Обратная связь отправлена',
-    });
-    modalConfirm();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
-  }
+  await executeCreate({
+    username: controls.username!,
+    email: controls.email!,
+    theme: controls.theme!,
+    text: controls.text!,
+  });
 }
 
 defineExpose({

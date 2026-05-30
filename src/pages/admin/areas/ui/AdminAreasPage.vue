@@ -129,7 +129,7 @@ import Button from 'primevue/button';
 
 import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
-import { ALERT_TYPES } from '@/shared/config';
+import { useApiCall } from '@/shared/lib';
 
 import {
   GetAllAreas,
@@ -139,15 +139,18 @@ import {
   UpdateArea,
   DeleteArea,
 } from '@/entities/area';
-import { useAlertStore } from '@/entities/alert';
-import { usePreloaderStore } from '@/features/preloader';
 
 defineOptions({ name: 'AdminAreasPage' });
 
-const alertStore = useAlertStore();
-const preloaderStore = usePreloaderStore();
-
 const areas = ref<AreaResponse[]>([]);
+let oldOrderAreas: AreaResponse[] = [];
+const { execute: executeSetOrder } = useApiCall(SetAreaOrder, {
+  successMessage: 'Сортировка применена',
+  onError: () => {
+    areas.value = oldOrderAreas;
+  },
+});
+const { execute: executeFetch } = useApiCall(GetAllAreas);
 const currentArea = ref<AreaResponse | null>(null);
 
 const showCreateArea = ref(false);
@@ -171,37 +174,17 @@ const draggableAreas = computed({
   },
 
   async set(newOrderAreas: AreaResponse[]) {
-    const oldOrderAreas = [...areas.value];
-
+    oldOrderAreas = [...areas.value];
     areas.value = newOrderAreas;
-
-    try {
-      preloaderStore.addLoader();
-      const areaIds = newOrderAreas.map((area: AreaResponse) => area.id);
-      await SetAreaOrder(areaIds);
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Сортировка применена',
-      });
-    } catch (error) {
-      areas.value = oldOrderAreas;
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    } finally {
-      preloaderStore.removeLoader();
-    }
+    const areaIds = newOrderAreas.map((area: AreaResponse) => area.id);
+    await executeSetOrder(areaIds);
   },
 });
 
 async function fetchData() {
-  try {
-    preloaderStore.addLoader();
-    areas.value = await GetAllAreas();
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-  } finally {
-    preloaderStore.removeLoader();
+  const result = await executeFetch();
+  if (result) {
+    areas.value = result;
   }
 }
 

@@ -97,8 +97,7 @@ import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
 
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Update } from '../api/speakers-repository';
 
 defineOptions({ name: 'UpdateSpeaker' });
@@ -113,7 +112,10 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeUpdate, error: updateError } = useApiCall(Update, {
+  successMessage: 'Спикер успешно изменён',
+});
+
 const formRef = useTemplateRef('form');
 
 const schema = z.object({
@@ -158,20 +160,12 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  try {
-    const mapped = mapFormValues(values);
+  const mapped = mapFormValues(values);
 
-    await Update({ id: speaker.id, ...mapped });
+  await executeUpdate({ id: speaker.id, ...mapped });
 
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Спикер успешно изменён',
-    });
-
+  if (!updateError.value) {
     emit('success', { ...speaker, ...mapped });
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 

@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ALERT_TYPES } from '@/shared/config';
-import { useAlertStore } from '@/entities/alert';
+import { useApiCall } from '@/shared/lib';
 import { Delete } from '../api/speakers-repository';
 
 defineOptions({ name: 'DeleteSpeaker' });
@@ -18,21 +17,15 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const alertStore = useAlertStore();
+const { execute: executeDelete, error: deleteError } = useApiCall(Delete, {
+  successMessage: 'Спикер успешно удалён',
+});
 
 async function confirm() {
-  try {
-    await Delete(id);
+  await executeDelete(id);
 
-    alertStore.addAlert({
-      type: ALERT_TYPES.SUCCESS,
-      text: 'Спикер успешно удалён',
-    });
-
+  if (!deleteError.value) {
     emit('success', id);
-  } catch (error) {
-    const err = error as Error;
-    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
   }
 }
 
