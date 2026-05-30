@@ -3,38 +3,34 @@
 </template>
 
 <script setup lang="ts">
-import { useApiCall } from '@/shared/lib';
+import { useDeleteConfirm } from '@/shared/lib';
 import { Delete as DeleteFeedbackApi } from '../api/feedback-repository';
 
-defineOptions({ name: 'DeleteFeedbackModal' });
+defineOptions({ name: 'DeleteFeedback' });
 
-const { id } = defineProps<{
-  id: string;
-}>();
+const { id } = defineProps<{ id: string }>();
 
 const emit = defineEmits<{
   success: [id: string];
   cancel: [];
 }>();
 
-const { execute: executeDelete } = useApiCall(DeleteFeedbackApi, {
+const { confirm: doConfirm } = useDeleteConfirm({
+  apiFn: DeleteFeedbackApi,
   successMessage: 'Обратная связь успешно удалена',
   showPreloader: false,
-  onSuccess: () => {
-    emit('success', id);
-  },
 });
 
 async function confirm() {
-  await executeDelete(id);
+  const ok = await doConfirm(id);
+  if (ok) {
+    emit('success', id);
+  }
 }
 
 function cancel() {
   emit('cancel');
 }
 
-defineExpose({
-  confirm,
-  cancel,
-});
+defineExpose({ confirm, cancel });
 </script>

@@ -19,7 +19,7 @@
       title="Удалить обратную связь"
       :is-open="showDeleteFeedback"
       @close="showDeleteFeedback = false">
-      <DeleteFeedbackModal
+      <DeleteFeedback
         v-if="showDeleteFeedback && currentFeedback"
         :id="currentFeedback.id"
         ref="delete-feedback"
@@ -54,7 +54,7 @@ import { useApiCall } from '@/shared/lib';
 import {
   GetAllFeedback,
   FeedbackCard,
-  DeleteFeedbackModal,
+  DeleteFeedback,
 } from '@/features/feedback';
 
 defineOptions({ name: 'AdminFeedbackPage' });

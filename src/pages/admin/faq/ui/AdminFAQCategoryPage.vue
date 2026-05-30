@@ -73,20 +73,15 @@
         </template>
       </SlideOver>
 
-      <SlideOver ref="deleteCategorySlideOver">
-        <template #header>
-          <span class="admin-faq-category-page__slide-over-title">
-            Удалить категорию
-          </span>
-        </template>
-        <template #default>
-          <DeleteCategory
-            v-if="showDeleteCategory"
-            :id="id"
-            ref="delete-category"
-            @success="successDeleteCategory"
-            @cancel="cancelDeleteCategory" />
-        </template>
+      <CenterModal
+        v-model:is-open="isDeleteCategoryOpen"
+        title="Удалить категорию"
+        @close="isDeleteCategoryOpen = false">
+        <DeleteCategory
+          :id="category?.id || ''"
+          ref="deleteCategoryRef"
+          @success="onDeleteCategorySuccess"
+          @cancel="isDeleteCategoryOpen = false" />
         <template #footer>
           <Button
             label="Удалить"
@@ -94,11 +89,10 @@
             @click="deleteCategoryRef?.confirm()" />
           <Button
             label="Отмена"
-            outlined
             severity="secondary"
             @click="deleteCategoryRef?.cancel()" />
         </template>
-      </SlideOver>
+      </CenterModal>
 
       <SlideOver ref="createEntrySlideOver">
         <template #header>
@@ -153,20 +147,15 @@
         </template>
       </SlideOver>
 
-      <SlideOver ref="deleteEntrySlideOver">
-        <template #header>
-          <span class="admin-faq-category-page__slide-over-title">
-            Удалить запись
-          </span>
-        </template>
-        <template #default>
-          <DeleteEntryModal
-            v-if="showDeleteEntry && currentEntry"
-            :id="currentEntry.id"
-            ref="delete-entry"
-            @success="successDeleteEntry"
-            @cancel="cancelDeleteEntry" />
-        </template>
+      <CenterModal
+        v-model:is-open="isDeleteEntryOpen"
+        title="Удалить запись"
+        @close="isDeleteEntryOpen = false">
+        <DeleteEntryModal
+          :id="entryToDeleteId"
+          ref="deleteEntryRef"
+          @success="onDeleteEntrySuccess"
+          @cancel="isDeleteEntryOpen = false" />
         <template #footer>
           <Button
             label="Удалить"
@@ -174,11 +163,10 @@
             @click="deleteEntryRef?.confirm()" />
           <Button
             label="Отмена"
-            outlined
             severity="secondary"
             @click="deleteEntryRef?.cancel()" />
         </template>
-      </SlideOver>
+      </CenterModal>
     </template>
   </div>
 </template>
@@ -208,6 +196,8 @@ import {
   UpdateEntryContent,
 } from '@/entities/faq';
 
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
+
 defineOptions({ name: 'AdminFAQCategoryPage' });
 
 const { id } = defineProps<{
@@ -229,21 +219,20 @@ const { execute: executeFetch } = useApiCall(() => GetCategoryById(id));
 const currentEntry = ref<FaqEntryResponse | null>(null);
 
 const showUpdateCategory = ref(false);
-const showDeleteCategory = ref(false);
+const isDeleteCategoryOpen = ref(false);
 const showCreateEntry = ref(false);
 const showUpdateEntry = ref(false);
-const showDeleteEntry = ref(false);
+const isDeleteEntryOpen = ref(false);
+const entryToDeleteId = ref('');
 
 const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
-const deleteCategorySlideOver = useTemplateRef('deleteCategorySlideOver');
 const createEntrySlideOver = useTemplateRef('createEntrySlideOver');
 const updateEntrySlideOver = useTemplateRef('updateEntrySlideOver');
-const deleteEntrySlideOver = useTemplateRef('deleteEntrySlideOver');
 const updateCategoryRef = useTemplateRef('update-category');
-const deleteCategoryRef = useTemplateRef('delete-category');
+const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
 const createEntryContentRef = useTemplateRef('create-entry-content');
 const updateEntryContentRef = useTemplateRef('update-entry-content');
-const deleteEntryRef = useTemplateRef('delete-entry');
+const deleteEntryRef = useTemplateRef('deleteEntryRef');
 
 const dragOptions = reactive({
   animation: 150,
@@ -292,19 +281,12 @@ function cancelUpdateCategory() {
   updateCategorySlideOver.value?.close();
 }
 
-async function openDeleteCategory() {
-  showDeleteCategory.value = true;
-  await deleteCategorySlideOver.value?.open();
-  showDeleteCategory.value = false;
+function openDeleteCategory() {
+  isDeleteCategoryOpen.value = true;
 }
 
-function successDeleteCategory() {
-  deleteCategorySlideOver.value?.close();
+function onDeleteCategorySuccess() {
   router.push({ name: 'admin-faq' });
-}
-
-function cancelDeleteCategory() {
-  deleteCategorySlideOver.value?.close();
 }
 
 async function openCreateEntry() {
@@ -343,23 +325,18 @@ function cancelUpdateEntry() {
 }
 
 function openDeleteEntry(entry: FaqEntryResponse) {
-  currentEntry.value = entry;
-  showDeleteEntry.value = true;
-  deleteEntrySlideOver.value?.open();
+  entryToDeleteId.value = entry.id;
+  isDeleteEntryOpen.value = true;
 }
 
-function successDeleteEntry(entryId: string) {
+function onDeleteEntrySuccess(entryId: string) {
   if (category.value) {
     category.value.entries = category.value.entries.filter(
       (e: FaqEntryResponse) => e.id !== entryId,
     );
   }
 
-  deleteEntrySlideOver.value?.close();
-}
-
-function cancelDeleteEntry() {
-  deleteEntrySlideOver.value?.close();
+  isDeleteEntryOpen.value = false;
 }
 
 fetchData();

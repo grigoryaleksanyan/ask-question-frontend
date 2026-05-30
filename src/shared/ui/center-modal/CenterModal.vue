@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    v-model:visible="isVisible"
+    :visible="visible"
     :header="title"
     modal
     :draggable="false"
     :style="{ maxWidth: '600px' }"
-    @hide="onClose">
+    @update:visible="onVisibleUpdate">
     <slot></slot>
     <template #footer>
       <slot name="footer"></slot>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 
 import Dialog from 'primevue/dialog';
 
@@ -31,16 +31,20 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-const isVisible = computed({
-  get() {
-    return isOpen;
-  },
-  set() {
-    onClose();
-  },
-});
+const visible = ref(isOpen);
 
-function onClose() {
-  emit('close');
+watch(
+  () => isOpen,
+  (newVal) => {
+    visible.value = newVal;
+  },
+);
+
+function onVisibleUpdate(value: boolean) {
+  console.log('onVisibleUpdate', value);
+  if (!value) {
+    visible.value = false;
+    emit('close');
+  }
 }
 </script>

@@ -78,20 +78,15 @@
         </template>
       </SlideOver>
 
-      <SlideOver ref="deleteCategorySlideOver">
-        <template #header>
-          <span class="admin-faq-page__slide-over-title">
-            Удалить категорию
-          </span>
-        </template>
-        <template #default>
-          <DeleteCategory
-            v-if="showDeleteCategory && currentCategory"
-            :id="currentCategory.id"
-            ref="delete-category"
-            @success="successDeleteCategory"
-            @cancel="cancelDeleteCategory" />
-        </template>
+      <CenterModal
+        v-model:is-open="isDeleteCategoryOpen"
+        title="Удалить категорию"
+        @close="isDeleteCategoryOpen = false">
+        <DeleteCategory
+          :id="categoryToDeleteId"
+          ref="deleteCategoryRef"
+          @success="onDeleteCategorySuccess"
+          @cancel="isDeleteCategoryOpen = false" />
         <template #footer>
           <Button
             label="Удалить"
@@ -99,11 +94,10 @@
             @click="deleteCategoryRef?.confirm()" />
           <Button
             label="Отмена"
-            outlined
             severity="secondary"
-            @click="deleteCategoryRef?.cancel()" />
+            @click="isDeleteCategoryOpen = false" />
         </template>
-      </SlideOver>
+      </CenterModal>
     </template>
 
     <router-view></router-view>
@@ -131,6 +125,7 @@ import {
   UpdateCategory,
   DeleteCategory,
 } from '@/entities/faq';
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 defineOptions({ name: 'AdminFAQPage' });
 
@@ -149,14 +144,14 @@ const currentCategory = ref<FaqCategoryWithEntriesResponse | null>(null);
 
 const showCreateCategory = ref(false);
 const showUpdateCategory = ref(false);
-const showDeleteCategory = ref(false);
+const isDeleteCategoryOpen = ref(false);
+const categoryToDeleteId = ref('');
 
 const createCategorySlideOver = useTemplateRef('createCategorySlideOver');
 const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
-const deleteCategorySlideOver = useTemplateRef('deleteCategorySlideOver');
 const createCategoryRef = useTemplateRef('create-category');
 const updateCategoryRef = useTemplateRef('update-category');
-const deleteCategoryRef = useTemplateRef('delete-category');
+const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
 
 const dragOptions = reactive({
   animation: 150,
@@ -237,28 +232,13 @@ function cancelUpdateCategory() {
 }
 
 function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
-  currentCategory.value = cat;
-  openDeleteCategory();
+  categoryToDeleteId.value = cat.id;
+  isDeleteCategoryOpen.value = true;
 }
 
-async function openDeleteCategory() {
-  showDeleteCategory.value = true;
-  await deleteCategorySlideOver.value?.open();
-  showDeleteCategory.value = false;
-}
-
-function successDeleteCategory() {
-  if (currentCategory.value) {
-    categories.value = categories.value.filter(
-      (c) => c.id !== currentCategory.value!.id,
-    );
-  }
-
-  deleteCategorySlideOver.value?.close();
-}
-
-function cancelDeleteCategory() {
-  deleteCategorySlideOver.value?.close();
+function onDeleteCategorySuccess(id: string) {
+  categories.value = categories.value.filter((category) => category.id !== id);
+  isDeleteCategoryOpen.value = false;
 }
 
 if (route.name === 'admin-faq') {

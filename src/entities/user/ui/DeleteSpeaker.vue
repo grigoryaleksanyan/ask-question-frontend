@@ -3,34 +3,36 @@
 </template>
 
 <script setup lang="ts">
-import { useApiCall } from '@/shared/lib';
+import { useDeleteConfirm } from '@/shared/lib';
 import { Delete } from '../api/speakers-repository';
 
 defineOptions({ name: 'DeleteSpeaker' });
 
-const { id } = defineProps<{
-  id: string;
-}>();
+const { id } = defineProps<{ id: string }>();
 
 const emit = defineEmits<{
   success: [id: string];
+  cancel: [];
 }>();
 
-const { execute: executeDelete, error: deleteError } = useApiCall(Delete, {
+const { confirm: doConfirm } = useDeleteConfirm({
+  apiFn: Delete,
   successMessage: 'Спикер успешно удалён',
+  showPreloader: false,
 });
 
 async function confirm() {
-  await executeDelete(id);
-
-  if (!deleteError.value) {
+  const ok = await doConfirm(id);
+  if (ok) {
     emit('success', id);
   }
 }
 
-defineExpose({
-  confirm,
-});
+function cancel() {
+  emit('cancel');
+}
+
+defineExpose({ confirm, cancel });
 </script>
 
 <style lang="scss" scoped>
