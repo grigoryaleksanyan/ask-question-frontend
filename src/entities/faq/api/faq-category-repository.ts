@@ -33,6 +33,21 @@ export async function GetAllWithEntries(): Promise<
   return result;
 }
 
+export async function GetAllWithEntriesForAdmin(): Promise<
+  FaqCategoryWithEntriesResponse[]
+> {
+  const result = await httpClient
+    .get<FaqCategoryWithEntriesResponse[]>(
+      `${apiRoute}/GetAllWithEntriesForAdmin`,
+    )
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка получения списка категорий', { cause: error });
+    });
+
+  return result;
+}
+
 export async function GetById(
   id: string,
 ): Promise<FaqCategoryWithEntriesResponse> {

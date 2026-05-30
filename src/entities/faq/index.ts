@@ -1,6 +1,7 @@
 export {
   GetAll as GetAllCategories,
   GetAllWithEntries,
+  GetAllWithEntriesForAdmin,
   GetById as GetCategoryById,
   Create as CreateCategoryApi,
   Update as UpdateCategoryApi,

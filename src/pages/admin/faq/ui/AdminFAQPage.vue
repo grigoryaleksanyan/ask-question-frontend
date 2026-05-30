@@ -124,7 +124,7 @@ import Button from 'primevue/button';
 
 import { useApiCall } from '@/shared/lib';
 import {
-  GetAllWithEntries,
+  GetAllWithEntriesForAdmin,
   SetCategoryOrder,
   CategoryCard,
   CreateCategory,
@@ -143,7 +143,7 @@ const { execute: executeSetOrder } = useApiCall(SetCategoryOrder, {
     categories.value = oldOrderCategories;
   },
 });
-const { execute: executeFetch } = useApiCall(GetAllWithEntries);
+const { execute: executeFetch } = useApiCall(GetAllWithEntriesForAdmin);
 
 const currentCategory = ref<FaqCategoryWithEntriesResponse | null>(null);
 
