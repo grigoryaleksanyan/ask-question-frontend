@@ -1,99 +1,77 @@
 <template>
-  <div
-    style="max-width: 1200px"
-    class="text-left p-5 mx-auto">
-    <div class="grid">
-      <div class="col-12">
-        <div class="grid">
-          <div class="col-12 flex align-items-center">
-            <h1
-              class="typography__headline--small typography__headline--medium--sm mr-4">
-              Спикеры
-            </h1>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="col-12">
-            <Button
-              size="small"
-              severity="secondary"
-              @click="showCreateSpeaker = true">
-              Добавить спикера
-              <i class="pi pi-plus ml-2"></i>
-            </Button>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div
-            v-for="speaker in speakers"
-            :key="speaker.id"
-            class="col-12 sm:col-6 md:col-4">
-            <SpeakerCard
-              :speaker="speaker"
-              @update="clickUpdateSpeakerBtn(speaker)"
-              @delete="clickDeleteSpeakerBtn(speaker)" />
-          </div>
-        </div>
-      </div>
+  <div class="admin-speakers-page">
+    <div class="admin-speakers-page__actions">
+      <button
+        class="admin-speakers-page__add-btn"
+        @click="openCreateSlideOver">
+        + Добавить
+      </button>
     </div>
 
-    <CenterModal
-      title="Создать спикера"
-      :is-open="showCreateSpeaker"
-      @close="showCreateSpeaker = false">
+    <div class="admin-speakers-page__list">
+      <SpeakerCard
+        v-for="speaker in speakers"
+        :key="speaker.id"
+        :speaker="speaker"
+        @update="openUpdateSlideOver(speaker)"
+        @delete="openDeleteSlideOver(speaker)" />
+    </div>
+
+    <SlideOver ref="create-slide-over">
+      <template #header>
+        <span class="slide-over-header">Создать спикера</span>
+      </template>
+
       <CreateSpeaker
         ref="create-speaker"
-        :is-open="showCreateSpeaker"
-        @success="successCreateSpeaker"
-        @cancel="showCreateSpeaker = false" />
+        @success="successCreateSpeaker" />
+
       <template #footer>
         <Button
           label="Создать"
           @click="createSpeakerRef?.submitForm()" />
         <Button
-          label="Отмена"
+          label="Закрыть"
           outlined
           severity="secondary"
-          @click="createSpeakerRef?.cancel()" />
+          @click="createSlideOverRef?.close()" />
       </template>
-    </CenterModal>
+    </SlideOver>
 
-    <CenterModal
-      title="Изменить спикера"
-      :is-open="showUpdateSpeaker"
-      @close="showUpdateSpeaker = false">
+    <SlideOver ref="update-slide-over">
+      <template #header>
+        <span class="slide-over-header">Изменить спикера</span>
+      </template>
+
       <UpdateSpeaker
-        v-if="showUpdateSpeaker && currentSpeaker"
+        v-if="currentSpeaker"
         ref="update-speaker"
         :speaker="currentSpeaker"
-        :is-open="showUpdateSpeaker"
-        @success="successUpdateSpeaker"
-        @cancel="showUpdateSpeaker = false" />
+        @success="successUpdateSpeaker" />
+
       <template #footer>
         <Button
           label="Изменить"
           @click="updateSpeakerRef?.submitForm()" />
         <Button
-          label="Отмена"
+          label="Закрыть"
           outlined
           severity="secondary"
-          @click="updateSpeakerRef?.cancel()" />
+          @click="updateSlideOverRef?.close()" />
       </template>
-    </CenterModal>
+    </SlideOver>
 
-    <CenterModal
-      title="Удалить спикера"
-      :is-open="showDeleteSpeaker"
-      @close="showDeleteSpeaker = false">
+    <SlideOver ref="delete-slide-over">
+      <template #header>
+        <span class="slide-over-header">Удалить спикера</span>
+      </template>
+
       <DeleteSpeaker
-        v-if="showDeleteSpeaker && currentSpeaker"
+        v-if="currentSpeaker"
         :id="currentSpeaker.id"
         ref="delete-speaker"
-        :is-open="showDeleteSpeaker"
-        @success="successDeleteSpeaker"
-        @cancel="showDeleteSpeaker = false" />
+        @success="successDeleteSpeaker" />
+
       <template #footer>
         <Button
           label="Удалить"
@@ -103,59 +81,20 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="deleteSpeakerRef?.cancel()" />
+          @click="deleteSlideOverRef?.close()" />
       </template>
-    </CenterModal>
-
-    <CenterModal
-      title="Данные для входа"
-      :is-open="showCredentials"
-      @close="showCredentials = false">
-      <div
-        style="max-height: 400px; overflow-y: auto"
-        class="p-7">
-        <p class="typography__body--large mb-4">
-          Спикер успешно создан. Сохраните данные для входа:
-        </p>
-        <div class="flex align-items-center mb-2">
-          <p class="mr-2"><b>Логин:</b> {{ credentials.login }}</p>
-          <Button
-            icon="pi pi-copy"
-            text
-            size="small"
-            title="Копировать логин"
-            @click="copyToClipboard(credentials.login)" />
-        </div>
-        <div class="flex align-items-center">
-          <p class="mr-2"><b>Пароль:</b> {{ credentials.generatedPassword }}</p>
-          <Button
-            icon="pi pi-copy"
-            text
-            size="small"
-            title="Копировать пароль"
-            @click="copyToClipboard(credentials.generatedPassword)" />
-        </div>
-      </div>
-      <template #footer>
-        <Button
-          label="Закрыть"
-          @click="showCredentials = false" />
-      </template>
-    </CenterModal>
+    </SlideOver>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, useTemplateRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 import type { SpeakerResponse, CreateSpeakerResponse } from '@/shared/types';
 
 import Button from 'primevue/button';
 
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
-
 import { useApiCall } from '@/shared/lib';
-import { useToast } from 'primevue/usetoast';
 import {
   GetAllSpeakers,
   SpeakerCard,
@@ -167,17 +106,13 @@ import {
 defineOptions({ name: 'AdminSpeakersPage' });
 
 const { execute: executeFetch } = useApiCall(GetAllSpeakers);
-const toast = useToast();
 
 const speakers = ref<SpeakerResponse[]>([]);
 const currentSpeaker = ref<SpeakerResponse | null>(null);
 
-const showCreateSpeaker = ref(false);
-const showUpdateSpeaker = ref(false);
-const showDeleteSpeaker = ref(false);
-const showCredentials = ref(false);
-
-const credentials = reactive({ login: '', generatedPassword: '' });
+const createSlideOverRef = useTemplateRef('create-slide-over');
+const updateSlideOverRef = useTemplateRef('update-slide-over');
+const deleteSlideOverRef = useTemplateRef('delete-slide-over');
 
 const createSpeakerRef = useTemplateRef('create-speaker');
 const updateSpeakerRef = useTemplateRef('update-speaker');
@@ -190,55 +125,71 @@ async function fetchData() {
   }
 }
 
-function successCreateSpeaker(speaker: CreateSpeakerResponse) {
-  credentials.login = speaker.login;
-  credentials.generatedPassword = speaker.generatedPassword;
-  showCreateSpeaker.value = false;
-  showCredentials.value = true;
-  fetchData();
+function openCreateSlideOver() {
+  createSpeakerRef.value?.resetForm();
+  createSlideOverRef.value?.open();
 }
 
-function clickUpdateSpeakerBtn(speaker: SpeakerResponse) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function successCreateSpeaker(speaker: CreateSpeakerResponse) {
+  fetchData();
+  createSlideOverRef.value?.close();
+}
+
+function openUpdateSlideOver(speaker: SpeakerResponse) {
   currentSpeaker.value = speaker;
-  showUpdateSpeaker.value = true;
+  updateSlideOverRef.value?.open();
 }
 
 function successUpdateSpeaker(modifiedSpeaker: SpeakerResponse) {
   speakers.value = speakers.value.map((s) =>
     s.id === modifiedSpeaker.id ? modifiedSpeaker : s,
   );
-
-  showUpdateSpeaker.value = false;
+  updateSlideOverRef.value?.close();
 }
 
-function clickDeleteSpeakerBtn(speaker: SpeakerResponse) {
+function openDeleteSlideOver(speaker: SpeakerResponse) {
   currentSpeaker.value = speaker;
-  showDeleteSpeaker.value = true;
+  deleteSlideOverRef.value?.open();
 }
 
 function successDeleteSpeaker(speakerId: string) {
   speakers.value = speakers.value.filter((s) => s.id !== speakerId);
-  showDeleteSpeaker.value = false;
-}
-
-async function copyToClipboard(text: string) {
-  try {
-    await navigator.clipboard.writeText(text);
-    toast.add({
-      severity: 'success',
-      detail: 'Скопировано в буфер обмена',
-      group: 'api',
-      life: 3000,
-    });
-  } catch {
-    toast.add({
-      severity: 'error',
-      detail: 'Не удалось скопировать',
-      group: 'api',
-      life: undefined,
-    });
-  }
+  deleteSlideOverRef.value?.close();
 }
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.admin-speakers-page {
+  padding: 16px 24px;
+}
+
+.admin-speakers-page__actions {
+  margin-bottom: 16px;
+}
+
+.admin-speakers-page__add-btn {
+  padding: 4px 14px;
+  border: none;
+  border-radius: 4px;
+  background: variables.$main-color;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-speakers-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slide-over-header {
+  color: variables.$text-primary-dark;
+  font-size: 16px;
+  font-weight: 600;
+}
+</style>

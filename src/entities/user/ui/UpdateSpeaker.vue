@@ -11,7 +11,7 @@
       <InputText
         type="text"
         placeholder="Фамилия"
-        class="w-full" />
+        class="w-full dark-input" />
       <Message
         v-if="$field?.invalid"
         severity="error"
@@ -28,7 +28,7 @@
       <InputText
         type="text"
         placeholder="Имя"
-        class="w-full" />
+        class="w-full dark-input" />
       <Message
         v-if="$field?.invalid"
         severity="error"
@@ -44,7 +44,7 @@
       <InputText
         type="text"
         placeholder="Отчество"
-        class="w-full" />
+        class="w-full dark-input" />
     </FormField>
 
     <FormField
@@ -54,7 +54,7 @@
       <InputText
         type="text"
         placeholder="Почта"
-        class="w-full" />
+        class="w-full dark-input" />
       <Message
         v-if="$field?.invalid"
         severity="error"
@@ -70,7 +70,7 @@
       <InputText
         type="text"
         placeholder="Должность"
-        class="w-full" />
+        class="w-full dark-input" />
     </FormField>
 
     <FormField
@@ -79,7 +79,7 @@
       <Textarea
         placeholder="Дополнительная информация"
         rows="2"
-        class="w-full" />
+        class="w-full dark-input" />
     </FormField>
   </Form>
 </template>
@@ -102,14 +102,12 @@ import { Update } from '../api/speakers-repository';
 
 defineOptions({ name: 'UpdateSpeaker' });
 
-const { speaker, isOpen } = defineProps<{
+const { speaker } = defineProps<{
   speaker: SpeakerResponse;
-  isOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
   success: [speaker: SpeakerResponse];
-  cancel: [];
 }>();
 
 const { execute: executeUpdate, error: updateError } = useApiCall(Update, {
@@ -131,6 +129,7 @@ const schema = z.object({
 });
 
 const resolver = zodResolver(schema);
+
 const initialValues = {
   firstName: speaker.firstName,
   lastName: speaker.lastName,
@@ -170,12 +169,9 @@ async function onSubmit({
 }
 
 watch(
-  () => isOpen,
+  () => speaker,
   (newValue) => {
-    if (!newValue) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.reset();
-    } else {
+    if (newValue) {
       fillForm();
     }
   },
@@ -198,12 +194,16 @@ function submitForm() {
   (formRef.value as any)?.submit();
 }
 
-function cancel() {
-  emit('cancel');
-}
-
 defineExpose({
   submitForm,
-  cancel,
+  fillForm,
 });
 </script>
+
+<style lang="scss" scoped>
+:deep(.dark-input) {
+  border-color: variables.$border-dark;
+  background: variables.$surface-dark;
+  color: variables.$text-primary-dark;
+}
+</style>

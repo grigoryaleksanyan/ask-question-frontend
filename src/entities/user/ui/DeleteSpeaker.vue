@@ -1,5 +1,5 @@
 <template>
-  <p class="text-body-large">Вы действительно хотите удалить спикера?</p>
+  <p class="delete-speaker__text">Вы действительно хотите удалить спикера?</p>
 </template>
 
 <script setup lang="ts">
@@ -14,7 +14,6 @@ const { id } = defineProps<{
 
 const emit = defineEmits<{
   success: [id: string];
-  cancel: [];
 }>();
 
 const { execute: executeDelete, error: deleteError } = useApiCall(Delete, {
@@ -29,12 +28,14 @@ async function confirm() {
   }
 }
 
-function cancel() {
-  emit('cancel');
-}
-
 defineExpose({
   confirm,
-  cancel,
 });
 </script>
+
+<style lang="scss" scoped>
+.delete-speaker__text {
+  color: variables.$text-primary-dark;
+  font-size: 14px;
+}
+</style>
