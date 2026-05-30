@@ -103,11 +103,12 @@ const chartOptions = {
   flex-direction: column;
   padding: 14px;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
 }
 
 .timeline-line-chart__title {
+  margin-bottom: 20px;
   color: variables.$text-primary-dark;
   font-size: 15px;
   font-weight: 600;

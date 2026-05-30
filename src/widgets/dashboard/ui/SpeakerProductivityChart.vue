@@ -47,12 +47,12 @@ const { topSpeakers } = defineProps<{
 .speaker-productivity-chart {
   padding: 14px;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
 }
 
 .speaker-productivity-chart__title {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   color: variables.$text-primary-dark;
   font-size: 15px;
   font-weight: 600;

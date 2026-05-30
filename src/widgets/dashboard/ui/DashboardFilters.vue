@@ -77,7 +77,7 @@ onMounted(async () => {
   padding: 10px 16px;
   border: none;
   border-radius: 6px;
-  background: variables.$surface-dark-border;
+  background: variables.$surface-dark-elevated;
   color: variables.$text-secondary;
   cursor: pointer;
   font-size: 14px;

@@ -1,7 +1,7 @@
 <template>
   <div class="votes-summary">
     <div class="votes-summary__title">Лайки / Дизлайки</div>
-    <div class="flex flex-column align-items-center pt-4">
+    <div class="flex flex-column align-items-center">
       <div class="flex gap-8">
         <div class="text-center">
           <div class="votes-summary__likes">
@@ -69,14 +69,15 @@ const dislikesPercent = computed(() => {
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   padding: 14px;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
 }
 
 .votes-summary__title {
+  margin-bottom: 20px;
   color: variables.$text-primary-dark;
   font-size: 15px;
   font-weight: 600;
