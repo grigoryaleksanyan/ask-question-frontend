@@ -15,16 +15,14 @@
       Обратная связь отсутствует
     </p>
 
-    <CenterModal
-      title="Удалить обратную связь"
-      :is-open="showDeleteFeedback"
-      @close="showDeleteFeedback = false">
+    <CenterModal ref="feedbackModalRef">
+      <template #header> Удалить обратную связь </template>
       <DeleteFeedback
-        v-if="showDeleteFeedback && currentFeedback"
+        v-if="currentFeedback"
         :id="currentFeedback.id"
         ref="delete-feedback"
         @success="successDeleteFeedback"
-        @cancel="showDeleteFeedback = false" />
+        @cancel="feedbackModalRef?.close()" />
       <template #footer>
         <Button
           label="Удалить"
@@ -34,7 +32,7 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="deleteFeedbackRef?.cancel()" />
+          @click="feedbackModalRef?.close()" />
       </template>
     </CenterModal>
   </div>
@@ -63,8 +61,9 @@ const { execute: executeFetchFeedbacks } = useApiCall(GetAllFeedback);
 
 const feedbacks = ref<FeedbackResponse[]>([]);
 const currentFeedback = ref<FeedbackResponse | null>(null);
-const showDeleteFeedback = ref(false);
 
+const feedbackModalRef =
+  useTemplateRef<InstanceType<typeof CenterModal>>('feedbackModalRef');
 const deleteFeedbackRef = useTemplateRef('delete-feedback');
 
 async function fetchData() {
@@ -76,14 +75,14 @@ async function fetchData() {
 
 function clickDeleteFeedbackBtn(feedback: FeedbackResponse) {
   currentFeedback.value = feedback;
-  showDeleteFeedback.value = true;
+  feedbackModalRef.value?.open();
 }
 
 function successDeleteFeedback(feedbackId: string) {
   feedbacks.value = feedbacks.value.filter(
     (feedback) => feedback.id !== feedbackId,
   );
-  showDeleteFeedback.value = false;
+  feedbackModalRef.value?.close();
 }
 
 fetchData();
