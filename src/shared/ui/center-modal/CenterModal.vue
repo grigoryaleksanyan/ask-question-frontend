@@ -59,11 +59,11 @@ defineExpose({ open, confirm, close });
   background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;
 
-  .p-dialog-header {
+  :deep(.p-dialog-header) {
     color: variables.$text-primary-dark;
   }
 
-  .p-dialog-footer {
+  :deep(.p-dialog-footer) {
     color: variables.$text-primary-dark;
   }
 }

@@ -64,19 +64,19 @@ function toastIconClass(severity: string) {
     color: variables.$text-primary-dark;
   }
 
-  .p-dark &.p-toast-message-success {
+  .p-dark &--success {
     border-left: 4px solid variables.$success-color;
   }
 
-  .p-dark &.p-toast-message-error {
+  .p-dark &--error {
     border-left: 4px solid variables.$error-color;
   }
 
-  .p-dark &.p-toast-message-warn {
+  .p-dark &--warn {
     border-left: 4px solid variables.$warning-color;
   }
 
-  .p-dark &.p-toast-message-info {
+  .p-dark &--info {
     border-left: 4px solid variables.$info-color;
   }
 
