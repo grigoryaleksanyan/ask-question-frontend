@@ -1,37 +1,35 @@
 <template>
-  <div
-    class="grid grid-nogutter align-items-center"
-    style="height: 100vh">
-    <div class="col-12 flex justify-content-center">
-      <Card
-        class="shadow-3 login-view__card"
-        style="width: 600px">
-        <template #content>
-          <h1 class="mb-5">Авторизация</h1>
-          <form @submit.prevent="onSubmit">
-            <div class="mb-3">
-              <InputText
-                v-model="controls.email"
-                autocomplete="username"
-                placeholder="Введите Email"
-                class="w-full" />
-            </div>
-            <div class="mb-3">
-              <Password
-                v-model="controls.password"
-                placeholder="Введите Пароль"
-                autocomplete="current-password"
-                :feedback="false"
-                class="w-full"
-                input-class="w-full" />
-            </div>
-            <Button
-              type="submit"
-              label="Войти" />
-          </form>
-        </template>
-      </Card>
-    </div>
+  <div class="login-view">
+    <h1 class="login-view__title">Вход</h1>
+    <p class="login-view__subtitle">Панель администратора</p>
+    <form @submit.prevent="onSubmit">
+      <div class="login-view__field">
+        <label class="login-view__label">Email</label>
+        <InputText
+          v-model="controls.email"
+          autocomplete="username"
+          class="login-view__input" />
+      </div>
+      <div class="login-view__field">
+        <label class="login-view__label">Пароль</label>
+        <Password
+          v-model="controls.password"
+          autocomplete="current-password"
+          :feedback="false"
+          class="login-view__password"
+          input-class="login-view__input" />
+      </div>
+      <Button
+        type="submit"
+        label="Войти"
+        severity="primary"
+        class="login-view__submit" />
+      <p
+        v-if="error"
+        class="login-view__error">
+        {{ error.message }}
+      </p>
+    </form>
   </div>
 </template>
 
@@ -43,7 +41,6 @@ import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '../store';
 import { Login } from '../api/auth-repository';
 
-import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
@@ -54,7 +51,7 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 
-const { execute: executeLogin } = useApiCall(Login, {
+const { execute: executeLogin, error } = useApiCall(Login, {
   showPreloader: false,
   onSuccess(user) {
     authStore.setAuthData(user);
@@ -74,3 +71,63 @@ async function onSubmit() {
   });
 }
 </script>
+
+<style lang="scss">
+.login-view {
+  max-width: 320px;
+  padding: 80px 16px;
+  margin: 0 auto;
+}
+
+.login-view__title {
+  margin-bottom: 4px;
+  color: $text-primary;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.login-view__subtitle {
+  margin-bottom: 24px;
+  color: $text-muted;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-view__field {
+  margin-bottom: 16px;
+}
+
+.login-view__label {
+  display: block;
+  margin-bottom: 4px;
+  color: $text-secondary;
+  font-size: 12px;
+}
+
+.login-view__input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid $border-light;
+  border-radius: 6px;
+  background: $surface-card;
+  font-size: 14px;
+}
+
+.login-view__password {
+  width: 100%;
+}
+
+.login-view__submit {
+  width: 100%;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-view__error {
+  margin-top: 8px;
+  color: $error-color;
+  font-size: 13px;
+}
+</style>
