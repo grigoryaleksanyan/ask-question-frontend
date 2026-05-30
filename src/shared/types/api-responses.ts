@@ -91,6 +91,12 @@ export interface PaginatedResponse<T> {
   pageSize: number;
 }
 
+export interface SpeakerPublicResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface SpeakerResponse {
   id: string;
   firstName: string;

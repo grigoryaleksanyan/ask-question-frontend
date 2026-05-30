@@ -5,6 +5,7 @@
         <SelectButton
           v-model="sortOrder"
           :options="sortOptions"
+          option-label="label"
           option-value="value"
           @change="onFilterChange">
           <template #option="{ option }">
@@ -36,7 +37,10 @@
           <Select
             v-model="selectedSpeaker"
             :options="speakerItems"
-            option-label="displayName"
+            :option-label="
+              (speaker: SpeakerPublicResponse) =>
+                `${speaker.lastName} ${speaker.firstName}`
+            "
             option-value="id"
             placeholder="Спикер"
             show-clear
@@ -62,10 +66,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-import type { AreaResponse } from '@/shared/types';
+import type { SpeakerPublicResponse, AreaResponse } from '@/shared/types';
 
 import { GetAllAreas } from '@/entities/area';
-import { GetAllSpeakers } from '@/entities/user';
+import { GetAllPublicSpeakers } from '@/entities/user';
+import { useApiCall } from '@/shared/lib';
 import SelectButton from 'primevue/selectbutton';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
@@ -83,11 +88,18 @@ const emit = defineEmits<{
   ): void;
 }>();
 
+const { execute: executeFetchSpeakers } = useApiCall(GetAllPublicSpeakers, {
+  showPreloader: false,
+});
+const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
+  showPreloader: false,
+});
+
 const showFilters = ref(false);
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const selectedSpeaker = ref<string | null>(null);
 const selectedAreaId = ref<string | null>(null);
-const speakerItems = ref<{ id: string; displayName: string }[]>([]);
+const speakerItems = ref<SpeakerPublicResponse[]>([]);
 const areaItems = ref<AreaResponse[]>([]);
 
 const sortOptions = [
@@ -117,14 +129,15 @@ function onFilterChange() {
 
 onMounted(async () => {
   const [speakers, areas] = await Promise.all([
-    GetAllSpeakers(),
-    GetAllAreas(),
+    executeFetchSpeakers(),
+    executeFetchAreas(),
   ]);
-  speakerItems.value = speakers.map((s) => ({
-    id: s.id,
-    displayName: `${s.lastName} ${s.firstName}`,
-  }));
-  areaItems.value = areas;
+  if (speakers) {
+    speakerItems.value = speakers;
+  }
+  if (areas) {
+    areaItems.value = areas;
+  }
 });
 </script>
 

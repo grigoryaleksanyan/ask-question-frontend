@@ -1,5 +1,6 @@
 import { useToast } from 'primevue/usetoast';
 
+import router from '@/app/router';
 import httpClient from '@/shared/api';
 
 import { TOAST_HANDLED } from '@/shared/lib/use-api-call';
@@ -9,7 +10,9 @@ export default function setupHttpClientInterceptors() {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
-        window.location.href = '/login';
+        if (router.currentRoute.value.meta.isProtected) {
+          window.location.href = '/login';
+        }
 
         return Promise.reject(error);
       }

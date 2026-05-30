@@ -1,6 +1,7 @@
 import httpClient from '@/shared/api';
 
 import type {
+  SpeakerPublicResponse,
   SpeakerResponse,
   CreateSpeakerResponse,
   SpeakerCreateRequest,
@@ -8,6 +9,17 @@ import type {
 } from '@/shared/types';
 
 const apiRoute = '/api/Speaker';
+
+export async function GetAllPublicSpeakers(): Promise<SpeakerPublicResponse[]> {
+  const result = await httpClient
+    .get<SpeakerPublicResponse[]>(`${apiRoute}/GetAllPublic`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка получения списка спикеров', { cause: error });
+    });
+
+  return result;
+}
 
 export async function GetAllSpeakers(): Promise<SpeakerResponse[]> {
   const result = await httpClient

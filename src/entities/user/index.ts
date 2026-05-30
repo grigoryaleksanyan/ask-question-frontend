@@ -1,5 +1,6 @@
 export { GetUserData, ChangePassword } from './api/user-repository';
 export {
+  GetAllPublicSpeakers,
   GetAllSpeakers,
   GetSpeakerById,
   Create as CreateSpeakerApi,

@@ -98,10 +98,10 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 
-import type { AreaResponse, SpeakerResponse } from '@/shared/types';
+import type { AreaResponse, SpeakerPublicResponse } from '@/shared/types';
 
 import { GetAllAreas } from '@/entities/area';
-import { GetAllSpeakers } from '@/entities/user';
+import { GetAllPublicSpeakers } from '@/entities/user';
 import { useApiCall } from '@/shared/lib';
 import { GetCaptcha, Create } from '../api/questions-repository';
 
@@ -120,7 +120,7 @@ const { execute: executeGetCaptcha } = useApiCall(GetCaptcha, {
 const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
   showPreloader: false,
 });
-const { execute: executeFetchSpeakers } = useApiCall(GetAllSpeakers, {
+const { execute: executeFetchSpeakers } = useApiCall(GetAllPublicSpeakers, {
   showPreloader: false,
 });
 const { execute: executeSubmit } = useApiCall(Create, {
@@ -137,7 +137,7 @@ const { execute: executeSubmit } = useApiCall(Create, {
 
 const details = ref(false);
 const areas = ref<AreaResponse[]>([]);
-const speakers = ref<SpeakerResponse[]>([]);
+const speakers = ref<SpeakerPublicResponse[]>([]);
 const captchaData = ref<string | null>(null);
 const captcha = ref(null as string | null);
 

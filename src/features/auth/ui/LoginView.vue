@@ -13,6 +13,7 @@
               <InputText
                 v-model="controls.email"
                 type="email"
+                autocomplete="username"
                 placeholder="Введите Email"
                 class="w-full" />
             </div>
@@ -20,6 +21,7 @@
               <Password
                 v-model="controls.password"
                 placeholder="Введите Пароль"
+                autocomplete="current-password"
                 :feedback="false"
                 class="w-full"
                 input-class="w-full" />

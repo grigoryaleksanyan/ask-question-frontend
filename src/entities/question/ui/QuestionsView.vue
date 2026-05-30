@@ -23,30 +23,24 @@
 
     <div class="grid grid-nogutter mb-3">
       <div class="col-12 mb-4">
-        <TabView
-          v-model:active-index="activeTabIndex"
+        <Tabs
+          v-model:value="activeTab"
           class="questions-view__tabs">
-          <TabPanel value="new">
-            <template #header>
+          <TabList>
+            <Tab value="new">
               <span>Новые <i class="pi pi-box" /></span>
-            </template>
-          </TabPanel>
-          <TabPanel value="inFocus">
-            <template #header>
+            </Tab>
+            <Tab value="inFocus">
               <span>В фокусе <i class="pi pi-question-circle" /></span>
-            </template>
-          </TabPanel>
-          <TabPanel value="withComment">
-            <template #header>
+            </Tab>
+            <Tab value="withComment">
               <span>С комментарием <i class="pi pi-comment" /></span>
-            </template>
-          </TabPanel>
-          <TabPanel value="answered">
-            <template #header>
+            </Tab>
+            <Tab value="answered">
               <span>Отвеченные <i class="pi pi-megaphone" /></span>
-            </template>
-          </TabPanel>
-        </TabView>
+            </Tab>
+          </TabList>
+        </Tabs>
       </div>
     </div>
 
@@ -102,8 +96,9 @@ import QuestionCard from './QuestionCard.vue';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
 import Paginator from 'primevue/paginator';
 
 defineOptions({ name: 'QuestionsView' });
@@ -117,22 +112,22 @@ const totalCount = ref(0);
 const currentPage = ref(1);
 const pageSize = 10;
 const searchQuery = ref('');
-const activeTabIndex = ref(0);
+const activeTab = ref('new');
 const filterSortOrder = ref<'asc' | 'desc'>('desc');
 const filterSpeakerId = ref<string | undefined>(undefined);
 const filterAreaId = ref<string | undefined>(undefined);
 
-const tabIndexToStatus: QuestionStatusId[] = [
-  QuestionStatusId.New,
-  QuestionStatusId.InFocus,
-  QuestionStatusId.WithComment,
-  QuestionStatusId.Answered,
-];
+const tabToStatus: Record<string, QuestionStatusId> = {
+  new: QuestionStatusId.New,
+  inFocus: QuestionStatusId.InFocus,
+  withComment: QuestionStatusId.WithComment,
+  answered: QuestionStatusId.Answered,
+};
 
 const params = computed<QuestionListParams>(() => ({
   page: currentPage.value,
   pageSize,
-  status: tabIndexToStatus[activeTabIndex.value],
+  status: tabToStatus[activeTab.value],
   speakerId: filterSpeakerId.value,
   areaId: filterAreaId.value,
   search: searchQuery.value || undefined,
@@ -149,7 +144,7 @@ watch(searchQuery, () => {
   }, 300);
 });
 
-watch(activeTabIndex, () => {
+watch(activeTab, () => {
   currentPage.value = 1;
   fetchData();
 });
@@ -190,7 +185,7 @@ fetchData();
   max-width: 1000px;
 }
 
-.questions-view__tabs :deep(.p-tabview-panels) {
+.questions-view__tabs :deep(.p-tabpanels) {
   display: none;
 }
 

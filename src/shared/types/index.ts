@@ -10,6 +10,7 @@ export type {
   AreaResponse,
   FeedbackResponse,
   PaginatedResponse,
+  SpeakerPublicResponse,
   SpeakerResponse,
   CreateSpeakerResponse,
   DashboardSummaryResponse,
