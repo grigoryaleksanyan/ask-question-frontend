@@ -50,17 +50,18 @@
       </template>
     </SidebarModal>
 
-    <CenterModal
-      title="Удалить запись"
-      :is-open="showDeleteArea"
-      @close="showDeleteArea = false">
-      <DeleteArea
-        v-if="showDeleteArea && currentArea"
-        :id="currentArea.id"
-        ref="delete-area"
-        :is-open="showDeleteArea"
-        @success="successDeleteArea"
-        @cancel="showDeleteArea = false" />
+    <CenterModal ref="delete-area-modal">
+      <template #header>Удалить запись</template>
+      <template #default="{ confirm, close }">
+        <DeleteArea
+          v-if="currentArea"
+          :id="currentArea.id"
+          ref="delete-area"
+          :modal-confirm="confirm"
+          :modal-close="close"
+          @success="successDeleteArea"
+          @cancel="close" />
+      </template>
       <template #footer>
         <Button
           label="Удалить"
@@ -70,7 +71,7 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="deleteAreaRef?.cancel()" />
+          @click="deleteAreaModalRef?.value?.close()" />
       </template>
     </CenterModal>
   </div>
@@ -108,11 +109,11 @@ const { execute: executeSetOrder } = useApiCall(SetAreaOrder, {
 });
 const { execute: executeFetch } = useApiCall(GetAllAreas);
 const currentArea = ref<AreaResponse | null>(null);
-const showDeleteArea = ref(false);
 
 const createAreaModal = useTemplateRef('create-area-modal');
 const createAreaRef = useTemplateRef('create-area');
 const deleteAreaRef = useTemplateRef('delete-area');
+const deleteAreaModalRef = useTemplateRef('delete-area-modal');
 
 const dragOptions = reactive({
   animation: 150,
@@ -157,12 +158,11 @@ function successUpdateArea(modifiedArea: AreaResponse) {
 
 function clickDeleteAreaBtn(area: AreaResponse) {
   currentArea.value = area;
-  showDeleteArea.value = true;
+  deleteAreaModalRef?.value?.open();
 }
 
 function successDeleteArea(areaId: string) {
   areas.value = areas.value.filter((area) => area.id !== areaId);
-  showDeleteArea.value = false;
 }
 
 fetchData();
