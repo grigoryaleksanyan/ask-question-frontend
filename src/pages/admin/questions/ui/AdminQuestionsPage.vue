@@ -1,5 +1,7 @@
 <template>
-  <div class="admin-questions-page">
+  <div
+    ref="rootRef"
+    class="admin-questions-page">
     <div class="admin-questions-page__tabs">
       <button
         v-for="tab in tabs"
@@ -94,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, useTemplateRef } from 'vue';
 
 import type { QuestionResponse } from '@/shared/types';
 
@@ -115,6 +117,14 @@ const { execute: executeFetch } = useApiCall(GetAllQuestions, {
 const questions = ref<QuestionResponse[]>([]);
 const selectedIds = ref<Set<string>>(new Set());
 const activeTab = ref<string>('all');
+const rootRef = useTemplateRef('rootRef');
+const textMutedColor = computed(() => {
+  if (!rootRef.value) return '#a8adb8';
+  return (
+    getComputedStyle(rootRef.value).getPropertyValue('--text-muted').trim() ||
+    '#a8adb8'
+  );
+});
 
 const tabCounts = computed(() => ({
   all: questions.value.length,
@@ -191,7 +201,7 @@ function getStatusColor(status: QuestionStatusId): string {
   const entry = Object.values(QUESTION_STATUSES).find(
     (s) => s.STATUS_ID === status,
   );
-  return entry?.COLOR ?? '#a8adb8';
+  return entry?.COLOR ?? textMutedColor.value;
 }
 
 function getStatusLabel(status: QuestionStatusId): string {
@@ -232,6 +242,8 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-questions-page {
+  --text-muted: #{variables.$text-muted};
+
   padding: 24px;
   color: variables.$text-primary-dark;
 }
@@ -245,7 +257,7 @@ fetchData();
 .admin-questions-page__tab {
   padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   background: none;
   color: variables.$text-secondary;
   cursor: pointer;

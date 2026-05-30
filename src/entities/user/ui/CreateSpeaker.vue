@@ -183,7 +183,7 @@ defineExpose({
 .create-speaker__credentials {
   padding: 12px;
   border: 1px solid variables.$border-dark;
-  border-radius: 6px;
+  border-radius: 10px;
   margin-top: 16px;
   background: variables.$surface-dark-elevated;
 }

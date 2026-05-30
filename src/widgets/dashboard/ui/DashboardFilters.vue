@@ -76,7 +76,7 @@ onMounted(async () => {
 .dashboard-filters__period-tab {
   padding: 10px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
   color: variables.$text-secondary;
   cursor: pointer;
