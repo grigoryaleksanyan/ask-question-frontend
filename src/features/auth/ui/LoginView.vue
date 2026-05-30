@@ -12,7 +12,6 @@
             <div class="mb-3">
               <InputText
                 v-model="controls.email"
-                type="email"
                 autocomplete="username"
                 placeholder="Введите Email"
                 class="w-full" />
