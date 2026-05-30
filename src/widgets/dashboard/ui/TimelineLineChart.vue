@@ -2,30 +2,8 @@
   <v-card
     elevation="2"
     height="100%">
-    <v-card-title class="d-flex justify-space-between align-center pa-3">
+    <v-card-title class="pa-3">
       <span class="text-body-large font-weight-bold">Динамика вопросов</span>
-      <v-btn-toggle
-        v-model="selectedPeriod"
-        density="compact"
-        variant="outlined"
-        color="primary"
-        divided>
-        <v-btn
-          size="x-small"
-          :value="7"
-          >7 дн</v-btn
-        >
-        <v-btn
-          size="x-small"
-          :value="30"
-          >30 дн</v-btn
-        >
-        <v-btn
-          size="x-small"
-          :value="90"
-          >90 дн</v-btn
-        >
-      </v-btn-toggle>
     </v-card-title>
     <v-card-text class="pt-0">
       <Line
@@ -37,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { Line } from 'vue-chartjs';
 import {
   Chart as ChartJS,
@@ -52,14 +30,8 @@ import type { TimelinePointResponse } from '@/shared/types';
 
 defineOptions({ name: 'TimelineLineChart' });
 
-const selectedPeriod = defineModel<number>({ default: 30 });
-
 const { timeline } = defineProps<{
   timeline: TimelinePointResponse[];
-}>();
-
-const emit = defineEmits<{
-  'update-period-days': [periodDays: number];
 }>();
 
 ChartJS.register(
@@ -70,12 +42,6 @@ ChartJS.register(
   Filler,
   Tooltip,
 );
-
-watch(selectedPeriod, (value) => {
-  if (value === 7 || value === 30 || value === 90) {
-    emit('update-period-days', value);
-  }
-});
 
 const chartData = computed(() => ({
   labels: timeline.map((p) => {

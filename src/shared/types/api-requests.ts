@@ -12,7 +12,7 @@ export interface ChangePasswordRequest {
 export interface QuestionCreateRequest {
   text: string | null;
   author: string | null;
-  area: string | null;
+  areaId: string | null;
   speakerId: string | null;
 }
 
@@ -20,7 +20,7 @@ export interface QuestionUpdateRequest {
   id: string;
   text: string;
   author: string | null;
-  area: string | null;
+  areaId: string | null;
   speakerId: string | null;
 }
 

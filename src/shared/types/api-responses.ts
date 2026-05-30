@@ -34,7 +34,7 @@ export interface QuestionResponse {
   status: QuestionStatusId;
   text: string;
   author: string | null;
-  area: string | null;
+  areaTitle: string | null;
   speakerId: string | null;
   speakerName: string;
   views: number;
@@ -109,12 +109,16 @@ export interface CreateSpeakerResponse extends SpeakerResponse {
 export interface DashboardSummaryResponse {
   totalQuestions: number;
   answeredQuestions: number;
+  unansweredQuestions: number;
+  averageResponseTimeHours: number;
   totalFeedback: number;
   totalAreas: number;
+  questionsWithoutSpeaker: number;
   byStatus: StatusDistributionResponse[];
   timeline: TimelinePointResponse[];
   byArea: AreaDistributionResponse[];
-  topSpeakers: SpeakerStatsResponse[];
+  topSpeakers: SpeakerProductivityResponse[];
+  speakerAreas: SpeakerAreaResponse[];
   votes: VotesSummaryResponse;
 }
 
@@ -134,9 +138,20 @@ export interface AreaDistributionResponse {
   count: number;
 }
 
-export interface SpeakerStatsResponse {
+export interface SpeakerProductivityResponse {
+  speakerId: string;
   speakerName: string;
-  answeredCount: number;
+  assignedQuestions: number;
+  answeredQuestions: number;
+  answerRate: number;
+  averageResponseHours: number;
+}
+
+export interface SpeakerAreaResponse {
+  speakerId: string;
+  speakerName: string;
+  areaTitle: string;
+  questionCount: number;
 }
 
 export interface VotesSummaryResponse {

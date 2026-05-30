@@ -34,7 +34,7 @@
               </v-col>
               <v-col cols="11">
                 <p style="margin: 0; color: white; text-align: center">
-                  {{ authorDisplay }}, {{ question.area || '' }},
+                  {{ authorDisplay }}, {{ question.areaTitle || '' }},
                   {{ formattedDate }}
                   <br />
                   кому: {{ question.speakerName }}

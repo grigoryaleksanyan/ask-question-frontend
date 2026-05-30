@@ -32,7 +32,7 @@ const selected = ref<QuestionResponse[]>([]);
 
 const headers = [
   { title: 'Имя', key: 'author' },
-  { title: 'Зона ответственности', key: 'zone' },
+  { title: 'Зона ответственности', key: 'areaTitle' },
   { title: 'Спикер', key: 'speakerName' },
   { title: 'Вопрос', key: 'text' },
   { title: 'Лайки', key: 'likes' },

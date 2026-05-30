@@ -15,7 +15,7 @@ export interface QuestionListParams {
   pageSize?: number;
   status?: number;
   speakerId?: string;
-  area?: string;
+  areaId?: string;
   search?: string;
   sortOrder?: 'asc' | 'desc';
 }
@@ -41,7 +41,7 @@ export async function GetAll(
   if (params?.status !== undefined && params?.status !== null)
     queryParams.status = String(params.status);
   if (params?.speakerId) queryParams.speakerId = params.speakerId;
-  if (params?.area) queryParams.area = params.area;
+  if (params?.areaId) queryParams.areaId = params.areaId;
   if (params?.search) queryParams.search = params.search;
   if (params?.sortOrder) queryParams.sortOrder = params.sortOrder;
 

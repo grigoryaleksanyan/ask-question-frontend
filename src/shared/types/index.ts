@@ -16,7 +16,8 @@ export type {
   StatusDistributionResponse,
   TimelinePointResponse,
   AreaDistributionResponse,
-  SpeakerStatsResponse,
+  SpeakerProductivityResponse,
+  SpeakerAreaResponse,
   VotesSummaryResponse,
 } from './api-responses';
 

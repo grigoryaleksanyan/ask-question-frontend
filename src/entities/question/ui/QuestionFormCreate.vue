@@ -62,10 +62,10 @@
                 </v-col>
                 <v-col>
                   <v-select
-                    v-model="controls.area"
+                    v-model="controls.areaId"
                     :items="areas"
                     item-title="title"
-                    item-value="title"
+                    item-value="id"
                     label="Область*"
                     :rules="rules"
                     :menu-props="
@@ -156,7 +156,7 @@ const controls = reactive({
   text: null as string | null,
   author: null as string | null,
   speakerId: null as string | null,
-  area: undefined as string | undefined,
+  areaId: undefined as string | undefined,
 });
 
 const rules = [
@@ -217,7 +217,7 @@ async function submitForm() {
       await Create(captcha.value!, {
         text: controls.text!,
         author: controls.author!,
-        area: controls.area ?? null,
+        areaId: controls.areaId ?? null,
         speakerId: controls.speakerId ?? null,
       });
 

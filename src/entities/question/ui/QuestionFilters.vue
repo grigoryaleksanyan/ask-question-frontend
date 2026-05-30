@@ -78,10 +78,10 @@
           cols="12"
           class="col-sm-6">
           <v-select
-            v-model="selectedArea"
+            v-model="selectedAreaId"
             :items="areaItems"
             item-title="title"
-            item-value="title"
+            item-value="id"
             label="Зона ответственности"
             variant="outlined"
             clearable
@@ -110,7 +110,7 @@ const emit = defineEmits<{
     e: 'change',
     filters: {
       speakerId?: string;
-      area?: string;
+      areaId?: string;
       sortOrder: 'asc' | 'desc';
     },
   ): void;
@@ -119,7 +119,7 @@ const emit = defineEmits<{
 const showFilters = ref(false);
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const selectedSpeaker = ref<string | null>(null);
-const selectedArea = ref<string | null>(null);
+const selectedAreaId = ref<string | null>(null);
 const speakerItems = ref<{ id: string; displayName: string }[]>([]);
 const areaItems = ref<AreaResponse[]>([]);
 
@@ -130,7 +130,7 @@ function toggleFilters() {
 function onFilterChange() {
   emit('change', {
     speakerId: selectedSpeaker.value ?? undefined,
-    area: selectedArea.value ?? undefined,
+    areaId: selectedAreaId.value ?? undefined,
     sortOrder: sortOrder.value,
   });
 }
