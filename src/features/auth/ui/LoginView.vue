@@ -55,7 +55,7 @@ const { execute: executeLogin, error } = useApiCall(Login, {
   showPreloader: false,
   onSuccess(user) {
     authStore.setAuthData(user);
-    router.go(-1);
+    router.push('/admin');
   },
 });
 
@@ -105,7 +105,7 @@ async function onSubmit() {
   font-size: 12px;
 }
 
-.login-view__input {
+:deep(.login-view__input) {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid variables.$border-light;
