@@ -176,7 +176,7 @@ defineExpose({
 <style lang="scss" scoped>
 :deep(.dark-input) {
   border-color: variables.$border-dark;
-  background: variables.$surface-dark;
+  background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;
 }
 
@@ -185,7 +185,7 @@ defineExpose({
   border: 1px solid variables.$border-dark;
   border-radius: 6px;
   margin-top: 16px;
-  background: variables.$surface-dark;
+  background: variables.$surface-dark-elevated;
 }
 
 .create-speaker__credentials-title {

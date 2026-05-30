@@ -140,7 +140,7 @@ defineExpose({
   padding: 8px 12px;
   border: 1px solid variables.$border-dark;
   border-radius: 6px;
-  background: variables.$surface-dark;
+  background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;
   font-size: 14px;
   outline: none;

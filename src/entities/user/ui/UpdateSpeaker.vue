@@ -203,7 +203,7 @@ defineExpose({
 <style lang="scss" scoped>
 :deep(.dark-input) {
   border-color: variables.$border-dark;
-  background: variables.$surface-dark;
+  background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;
 }
 </style>
