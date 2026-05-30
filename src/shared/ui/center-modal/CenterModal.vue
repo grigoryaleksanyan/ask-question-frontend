@@ -1,12 +1,16 @@
 <template>
   <Dialog
-    :visible="visible"
-    :header="title"
+    v-model:visible="isVisible"
     modal
     :draggable="false"
     :style="{ maxWidth: '600px' }"
-    @update:visible="onVisibleUpdate">
-    <slot></slot>
+    @hide="onHide">
+    <template #header>
+      <slot name="header"></slot>
+    </template>
+    <slot
+      :confirm="confirm"
+      :close="close"></slot>
     <template #footer>
       <slot name="footer"></slot>
     </template>
@@ -14,37 +18,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 import Dialog from 'primevue/dialog';
 
-interface Props {
-  isOpen: boolean;
-  title: string;
-}
-
 defineOptions({ name: 'CenterModal' });
 
-const { isOpen, title } = defineProps<Props>();
+const isVisible = ref(false);
+let resolvePromise: ((value: string) => void) | null = null;
 
-const emit = defineEmits<{
-  close: [];
-}>();
+function open(): Promise<string> {
+  isVisible.value = true;
+  return new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+}
 
-const visible = ref(isOpen);
+function confirm() {
+  isVisible.value = false;
+  resolvePromise?.('confirm');
+  resolvePromise = null;
+}
 
-watch(
-  () => isOpen,
-  (newVal) => {
-    visible.value = newVal;
-  },
-);
+function close() {
+  isVisible.value = false;
+  resolvePromise?.('close');
+  resolvePromise = null;
+}
 
-function onVisibleUpdate(value: boolean) {
-  console.log('onVisibleUpdate', value);
-  if (!value) {
-    visible.value = false;
-    emit('close');
+function onHide() {
+  resolvePromise?.('close');
+  resolvePromise = null;
+}
+
+defineExpose({ open, confirm, close });
+</script>
+
+<style lang="scss" scoped>
+:global(.p-dark) .p-dialog {
+  background: variables.$surface-dark-elevated;
+  color: variables.$text-primary-dark;
+
+  .p-dialog-header {
+    color: variables.$text-primary-dark;
+  }
+
+  .p-dialog-footer {
+    color: variables.$text-primary-dark;
   }
 }
-</script>
+</style>
