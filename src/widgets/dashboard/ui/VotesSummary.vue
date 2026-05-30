@@ -66,7 +66,10 @@ const dislikesPercent = computed(() => {
 
 <style lang="scss" scoped>
 .votes-summary {
+  display: flex;
   height: 100%;
+  flex-direction: column;
+  justify-content: center;
   padding: 14px;
   border: 1px solid variables.$border-dark;
   border-radius: 8px;

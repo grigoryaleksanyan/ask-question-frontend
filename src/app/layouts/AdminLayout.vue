@@ -22,7 +22,6 @@
       <header class="admin-topbar">
         <div class="admin-topbar__section">{{ sectionName }}</div>
         <div class="admin-topbar__actions">
-          <span class="admin-topbar__cmdk">⌘K</span>
           <span class="admin-topbar__user">{{ userName }}</span>
         </div>
       </header>
@@ -255,14 +254,6 @@ async function logout() {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.admin-topbar__cmdk {
-  padding: 4px 10px;
-  border: 1px solid variables.$border-dark;
-  border-radius: 4px;
-  color: variables.$text-secondary;
-  font-size: 12px;
 }
 
 .admin-topbar__user {

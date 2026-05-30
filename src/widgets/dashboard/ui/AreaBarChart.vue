@@ -1,10 +1,11 @@
 <template>
   <div class="area-bar-chart">
     <div class="area-bar-chart__title">Вопросы по областям</div>
-    <Bar
-      :data="chartData"
-      :options="chartOptions"
-      style="height: 200px" />
+    <div class="area-bar-chart__body">
+      <Bar
+        :data="chartData"
+        :options="chartOptions" />
+    </div>
   </div>
 </template>
 
@@ -62,7 +63,9 @@ const chartOptions = {
 
 <style lang="scss" scoped>
 .area-bar-chart {
+  display: flex;
   height: 100%;
+  flex-direction: column;
   padding: 14px;
   border: 1px solid variables.$border-dark;
   border-radius: 8px;
@@ -73,5 +76,11 @@ const chartOptions = {
   color: variables.$text-primary-dark;
   font-size: 15px;
   font-weight: 600;
+}
+
+.area-bar-chart__body {
+  position: relative;
+  min-height: 0;
+  flex: 1;
 }
 </style>
