@@ -2,11 +2,10 @@
   <div class="admin-areas">
     <div class="admin-areas__header">
       <span class="admin-areas__title">Области</span>
-      <span
-        class="admin-areas__add"
-        @click="showCreateAreaModal">
-        + Добавить
-      </span>
+      <Button
+        label="+ Добавить"
+        size="small"
+        @click="showCreateAreaModal" />
     </div>
 
     <Draggable
@@ -189,12 +188,6 @@ fetchData();
   color: variables.$text-primary-dark;
   font-size: 14px;
   font-weight: 500;
-}
-
-.admin-areas__add {
-  color: variables.$main-color;
-  cursor: pointer;
-  font-size: 12px;
 }
 
 .admin-areas__list {

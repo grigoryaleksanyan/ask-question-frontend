@@ -1,11 +1,10 @@
 <template>
   <div class="admin-speakers-page">
     <div class="admin-speakers-page__actions">
-      <button
-        class="admin-speakers-page__add-btn"
-        @click="openCreateSlideOver">
-        + Добавить
-      </button>
+      <Button
+        label="+ Добавить"
+        size="small"
+        @click="openCreateSlideOver" />
     </div>
 
     <div class="admin-speakers-page__list">
@@ -168,17 +167,6 @@ fetchData();
 
 .admin-speakers-page__actions {
   margin-bottom: 16px;
-}
-
-.admin-speakers-page__add-btn {
-  padding: 4px 14px;
-  border: none;
-  border-radius: 4px;
-  background: variables.$main-color;
-  color: #fff;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
 }
 
 .admin-speakers-page__list {

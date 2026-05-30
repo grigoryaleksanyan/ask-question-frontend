@@ -20,11 +20,12 @@
       </div>
 
       <div class="admin-faq-category-page__entries">
-        <button
-          class="admin-faq-category-page__add-entry"
-          @click="openCreateEntry">
-          + Добавить запись
-        </button>
+        <div class="admin-faq-category-page__add-entry">
+          <Button
+            label="+ Добавить"
+            size="small"
+            @click="openCreateEntry" />
+        </div>
 
         <Draggable
           v-model="draggableEntries"
@@ -412,21 +413,7 @@ fetchData();
 }
 
 .admin-faq-category-page__add-entry {
-  display: block;
-  width: 100%;
-  padding: 10px 16px;
-  border: none;
-  border-bottom: 1px solid variables.$border-dark;
-  margin: 0;
-  background: none;
-  color: variables.$main-color;
-  cursor: pointer;
-  font-size: 13px;
-  text-align: left;
-}
-
-.admin-faq-category-page__add-entry:hover {
-  background: rgb(255 255 255 / 5%);
+  padding: 8px 0 12px 16px;
 }
 
 .admin-faq-category-page__slide-over-title {

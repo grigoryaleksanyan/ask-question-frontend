@@ -4,11 +4,9 @@
       <div class="admin-faq-page__header">
         <h1 class="admin-faq-page__title">Категории FAQ</h1>
         <Button
+          label="+ Добавить"
           size="small"
-          severity="secondary"
-          @click="openCreateCategory">
-          + Категория
-        </Button>
+          @click="openCreateCategory" />
       </div>
 
       <Draggable
