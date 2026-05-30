@@ -181,6 +181,9 @@ fetchData();
 .admin-areas__list {
   display: flex;
   flex-wrap: wrap;
+  border: 1px solid variables.$border-dark;
+  border-radius: 10px;
+  background: variables.$surface-dark-elevated;
   gap: 8px;
 }
 </style>

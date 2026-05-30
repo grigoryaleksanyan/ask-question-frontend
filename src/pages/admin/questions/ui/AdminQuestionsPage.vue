@@ -191,7 +191,7 @@ function getStatusColor(status: QuestionStatusId): string {
   const entry = Object.values(QUESTION_STATUSES).find(
     (s) => s.STATUS_ID === status,
   );
-  return entry?.COLOR ?? '#9ba1b0';
+  return entry?.COLOR ?? '#a8adb8';
 }
 
 function getStatusLabel(status: QuestionStatusId): string {
@@ -232,7 +232,7 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-questions-page {
-  padding: 20px 28px;
+  padding: 24px;
   color: variables.$text-primary-dark;
 }
 
@@ -264,7 +264,7 @@ fetchData();
 .admin-questions-page__table {
   overflow: hidden;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
 }
 

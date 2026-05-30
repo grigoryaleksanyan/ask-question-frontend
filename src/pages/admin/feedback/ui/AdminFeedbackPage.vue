@@ -96,6 +96,9 @@ fetchData();
 .admin-feedback-page__list {
   display: flex;
   flex-direction: column;
+  border: 1px solid variables.$border-dark;
+  border-radius: 10px;
+  background: variables.$surface-dark-elevated;
   gap: 8px;
 }
 
