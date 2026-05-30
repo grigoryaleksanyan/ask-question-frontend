@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
 
 import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
@@ -39,9 +39,8 @@ import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'CreateCategory' });
 
-const { order, isOpen } = defineProps<{
+const { order } = defineProps<{
   order: number;
-  isOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -79,16 +78,6 @@ async function onSubmit({
     emit('success', createdCategory);
   }
 }
-
-watch(
-  () => isOpen,
-  (newValue) => {
-    if (!newValue) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.reset();
-    }
-  },
-);
 
 function submitForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

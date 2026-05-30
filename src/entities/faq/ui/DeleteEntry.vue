@@ -1,5 +1,5 @@
 <template>
-  <p class="text-body-large">Вы действительно хотите удалить запись?</p>
+  <p class="delete-entry__text">Вы действительно хотите удалить запись?</p>
 </template>
 
 <script setup lang="ts">
@@ -38,3 +38,12 @@ defineExpose({
   cancel,
 });
 </script>
+
+<style lang="scss" scoped>
+.delete-entry__text {
+  color: variables.$text-primary-dark;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+</style>

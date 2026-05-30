@@ -1,78 +1,65 @@
 <template>
-  <div>
-    <div v-if="category">
-      <div class="grid">
-        <div class="col-12">
-          <div class="grid">
-            <div class="col-12 flex align-items-center">
-              <h1
-                class="typography__headline--small typography__headline--medium--sm mr-4">
-                Категория: {{ category.name }}
-              </h1>
-
-              <Button
-                title="Изменить"
-                icon="pi pi-pencil"
-                text
-                size="small"
-                @click="showUpdateCategory = true" />
-
-              <Button
-                title="Удалить"
-                icon="pi pi-trash"
-                text
-                size="small"
-                severity="danger"
-                @click="showDeleteCategory = true" />
-            </div>
-          </div>
-
-          <div class="grid">
-            <div class="col-12">
-              <Button
-                size="small"
-                severity="secondary"
-                @click="showCreateEntryModal">
-                Добавить запись
-                <i class="pi pi-plus ml-2"></i>
-              </Button>
-            </div>
-          </div>
-          <Draggable
-            v-model="draggableEntries"
-            v-bind="dragOptions"
-            class="grid"
-            item-key="id"
-            handle=".handle"
-            draggable=".draggable"
-            drag-class="vuedraggable-drag"
-            ghost-class="vuedraggable-ghost">
-            <template #item="{ element }">
-              <div
-                cols="12"
-                class="col-12 draggable">
-                <EntryCard
-                  :entry="element"
-                  @copy-link="copyLink(element)"
-                  @update="showUpdateEntryModal(element)"
-                  @delete="clickDeleteEntryBtn(element)" />
-              </div>
-            </template>
-          </Draggable>
+  <div class="admin-faq-category-page">
+    <template v-if="category">
+      <div class="admin-faq-category-page__header">
+        <h1 class="admin-faq-category-page__title">{{ category.name }}</h1>
+        <div class="admin-faq-category-page__actions">
+          <button
+            title="Изменить"
+            class="admin-faq-category-page__action"
+            @click="openUpdateCategory">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button
+            title="Удалить"
+            class="admin-faq-category-page__action admin-faq-category-page__action--danger"
+            @click="openDeleteCategory">
+            <i class="pi pi-trash"></i>
+          </button>
         </div>
       </div>
 
-      <CenterModal
-        title="Изменить категорию "
-        :is-open="showUpdateCategory"
-        @close="showUpdateCategory = false">
-        <UpdateCategory
-          v-if="showUpdateCategory"
-          ref="update-category"
-          :category="category"
-          :is-open="showUpdateCategory"
-          @success="successUpdateCategory"
-          @cancel="showUpdateCategory = false" />
+      <div class="admin-faq-category-page__entries">
+        <button
+          class="admin-faq-category-page__add-entry"
+          @click="openCreateEntry">
+          + Добавить запись
+        </button>
+
+        <Draggable
+          v-model="draggableEntries"
+          v-bind="dragOptions"
+          item-key="id"
+          handle=".drag-handle"
+          draggable=".draggable"
+          drag-class="vuedraggable-drag"
+          ghost-class="vuedraggable-ghost">
+          <template #item="{ element, index }">
+            <div class="draggable">
+              <EntryCard
+                :entry="element"
+                :is-last="index === category.entries.length - 1"
+                @update="openUpdateEntry(element)"
+                @delete="openDeleteEntry(element)" />
+            </div>
+          </template>
+        </Draggable>
+      </div>
+
+      <SlideOver ref="updateCategorySlideOver">
+        <template #header>
+          <span class="admin-faq-category-page__slide-over-title">
+            Изменить категорию
+          </span>
+        </template>
+        <template #default>
+          <UpdateCategory
+            v-if="showUpdateCategory"
+            ref="update-category"
+            :category="category"
+            @success="successUpdateCategory"
+            @cancel="cancelUpdateCategory" />
+        </template>
         <template #footer>
           <Button
             label="Изменить"
@@ -83,19 +70,22 @@
             severity="secondary"
             @click="updateCategoryRef?.cancel()" />
         </template>
-      </CenterModal>
+      </SlideOver>
 
-      <CenterModal
-        title="Удалить категорию "
-        :is-open="showDeleteCategory"
-        @close="showDeleteCategory = false">
-        <DeleteCategory
-          v-if="showDeleteCategory"
-          :id="id"
-          ref="delete-category"
-          :is-open="showDeleteCategory"
-          @success="successDeleteCategory"
-          @cancel="showDeleteCategory = false" />
+      <SlideOver ref="deleteCategorySlideOver">
+        <template #header>
+          <span class="admin-faq-category-page__slide-over-title">
+            Удалить категорию
+          </span>
+        </template>
+        <template #default>
+          <DeleteCategory
+            v-if="showDeleteCategory"
+            :id="id"
+            ref="delete-category"
+            @success="successDeleteCategory"
+            @cancel="cancelDeleteCategory" />
+        </template>
         <template #footer>
           <Button
             label="Удалить"
@@ -107,62 +97,75 @@
             severity="secondary"
             @click="deleteCategoryRef?.cancel()" />
         </template>
-      </CenterModal>
+      </SlideOver>
 
-      <SidebarModal ref="createEntryModal">
-        <template #header>Создать запись в FAQ</template>
-        <template #default="{ confirm, close }">
+      <SlideOver ref="createEntrySlideOver">
+        <template #header>
+          <span class="admin-faq-category-page__slide-over-title">
+            Создать запись в FAQ
+          </span>
+        </template>
+        <template #default>
           <CreateEntryContent
+            v-if="showCreateEntry"
             ref="create-entry-content"
-            :modal-confirm="confirm"
-            :modal-close="close"
             :category-id="category.id"
-            :order="category.entries.length" />
+            :order="category.entries.length"
+            @success="successCreateEntry"
+            @cancel="cancelCreateEntry" />
         </template>
         <template #footer>
           <Button
             label="Создать"
-            @click="createEntryContent?.submitForm()" />
+            @click="createEntryContentRef?.submitForm()" />
           <Button
             label="Отмена"
             outlined
             severity="secondary"
-            @click="createEntryContent?.modalClose()" />
+            @click="createEntryContentRef?.cancel()" />
         </template>
-      </SidebarModal>
+      </SlideOver>
 
-      <SidebarModal ref="updateEntryModal">
-        <template #header>Изменить запись в FAQ</template>
-        <template #default="{ confirm, close }">
+      <SlideOver ref="updateEntrySlideOver">
+        <template #header>
+          <span class="admin-faq-category-page__slide-over-title">
+            Изменить запись в FAQ
+          </span>
+        </template>
+        <template #default>
           <UpdateEntryContent
+            v-if="showUpdateEntry && currentEntry"
             ref="update-entry-content"
-            :modal-confirm="confirm"
-            :modal-close="close"
-            :entry="currentEntry!" />
+            :entry="currentEntry"
+            @success="successUpdateEntry"
+            @cancel="cancelUpdateEntry" />
         </template>
         <template #footer>
           <Button
             label="Изменить"
-            @click="updateEntryContent?.submitForm()" />
+            @click="updateEntryContentRef?.submitForm()" />
           <Button
             label="Отмена"
             outlined
             severity="secondary"
-            @click="updateEntryContent?.modalClose()" />
+            @click="updateEntryContentRef?.cancel()" />
         </template>
-      </SidebarModal>
+      </SlideOver>
 
-      <CenterModal
-        title="Удалить запись "
-        :is-open="showDeleteEntry"
-        @close="showDeleteEntry = false">
-        <DeleteEntryModal
-          v-if="showDeleteEntry && currentEntry"
-          :id="currentEntry.id"
-          ref="delete-entry"
-          :is-open="showDeleteEntry"
-          @success="successDeleteEntry"
-          @cancel="showDeleteEntry = false" />
+      <SlideOver ref="deleteEntrySlideOver">
+        <template #header>
+          <span class="admin-faq-category-page__slide-over-title">
+            Удалить запись
+          </span>
+        </template>
+        <template #default>
+          <DeleteEntryModal
+            v-if="showDeleteEntry && currentEntry"
+            :id="currentEntry.id"
+            ref="delete-entry"
+            @success="successDeleteEntry"
+            @cancel="cancelDeleteEntry" />
+        </template>
         <template #footer>
           <Button
             label="Удалить"
@@ -174,8 +177,8 @@
             severity="secondary"
             @click="deleteEntryRef?.cancel()" />
         </template>
-      </CenterModal>
-    </div>
+      </SlideOver>
+    </template>
   </div>
 </template>
 
@@ -191,10 +194,7 @@ import type {
 
 import Button from 'primevue/button';
 
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
-
-import { useApiCall, copyToClipboard } from '@/shared/lib';
-import { useToast } from 'primevue/usetoast';
+import { useApiCall } from '@/shared/lib';
 
 import {
   GetCategoryById,
@@ -225,12 +225,24 @@ const { execute: executeSetOrder } = useApiCall(SetEntryOrder, {
   },
 });
 const { execute: executeFetch } = useApiCall(() => GetCategoryById(id));
-const toast = useToast();
 const currentEntry = ref<FaqEntryResponse | null>(null);
 
 const showUpdateCategory = ref(false);
 const showDeleteCategory = ref(false);
+const showCreateEntry = ref(false);
+const showUpdateEntry = ref(false);
 const showDeleteEntry = ref(false);
+
+const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
+const deleteCategorySlideOver = useTemplateRef('deleteCategorySlideOver');
+const createEntrySlideOver = useTemplateRef('createEntrySlideOver');
+const updateEntrySlideOver = useTemplateRef('updateEntrySlideOver');
+const deleteEntrySlideOver = useTemplateRef('deleteEntrySlideOver');
+const updateCategoryRef = useTemplateRef('update-category');
+const deleteCategoryRef = useTemplateRef('delete-category');
+const createEntryContentRef = useTemplateRef('create-entry-content');
+const updateEntryContentRef = useTemplateRef('update-entry-content');
+const deleteEntryRef = useTemplateRef('delete-entry');
 
 const dragOptions = reactive({
   animation: 150,
@@ -238,14 +250,6 @@ const dragOptions = reactive({
   disabled: false,
   forceFallback: true,
 });
-
-const createEntryModal = useTemplateRef('createEntryModal');
-const updateEntryModal = useTemplateRef('updateEntryModal');
-const createEntryContent = useTemplateRef('create-entry-content');
-const updateEntryContent = useTemplateRef('update-entry-content');
-const updateCategoryRef = useTemplateRef('update-category');
-const deleteCategoryRef = useTemplateRef('delete-category');
-const deleteEntryRef = useTemplateRef('delete-entry');
 
 const draggableEntries = computed({
   get() {
@@ -269,30 +273,10 @@ async function fetchData() {
   }
 }
 
-async function showCreateEntryModal() {
-  const result = await createEntryModal.value.open();
-
-  if (result.status) {
-    const entry = result.data as FaqEntryResponse;
-    category.value?.entries.push(entry);
-  }
-}
-
-async function showUpdateEntryModal(entry: FaqEntryResponse) {
-  currentEntry.value = entry;
-
-  const result = await updateEntryModal.value.open();
-
-  if (result.status) {
-    const modifiedEntry = result.data as FaqEntryResponse;
-
-    if (category.value) {
-      category.value.entries = category.value.entries.map(
-        (e: FaqEntryResponse) =>
-          e.id === modifiedEntry.id ? modifiedEntry : e,
-      );
-    }
-  }
+async function openUpdateCategory() {
+  showUpdateCategory.value = true;
+  await updateCategorySlideOver.value?.open();
+  showUpdateCategory.value = false;
 }
 
 function successUpdateCategory(name: string) {
@@ -300,41 +284,67 @@ function successUpdateCategory(name: string) {
     category.value.name = name;
   }
 
-  showUpdateCategory.value = false;
+  updateCategorySlideOver.value?.close();
+}
+
+function cancelUpdateCategory() {
+  updateCategorySlideOver.value?.close();
+}
+
+async function openDeleteCategory() {
+  showDeleteCategory.value = true;
+  await deleteCategorySlideOver.value?.open();
+  showDeleteCategory.value = false;
 }
 
 function successDeleteCategory() {
-  showDeleteCategory.value = false;
-
+  deleteCategorySlideOver.value?.close();
   router.push({ name: 'admin-faq' });
 }
 
-function copyLink(entry: FaqEntryResponse) {
-  const link = `${window.location.protocol}//${window.location.host}/faq?id=${entry.id}`;
-
-  copyToClipboard(link)
-    .then(() => {
-      toast.add({
-        severity: 'success',
-        detail: 'Ссылка скопирована в буфер обмена',
-        group: 'api',
-        life: 3000,
-      });
-    })
-    .catch((error: unknown) => {
-      const err = error as Error;
-      toast.add({
-        severity: 'error',
-        detail: err.message,
-        group: 'api',
-        life: undefined,
-      });
-    });
+function cancelDeleteCategory() {
+  deleteCategorySlideOver.value?.close();
 }
 
-function clickDeleteEntryBtn(entry: FaqEntryResponse) {
+async function openCreateEntry() {
+  showCreateEntry.value = true;
+  await createEntrySlideOver.value?.open();
+  showCreateEntry.value = false;
+}
+
+function successCreateEntry(entry: FaqEntryResponse) {
+  category.value?.entries.push(entry);
+  createEntrySlideOver.value?.close();
+}
+
+function cancelCreateEntry() {
+  createEntrySlideOver.value?.close();
+}
+
+function openUpdateEntry(entry: FaqEntryResponse) {
+  currentEntry.value = entry;
+  showUpdateEntry.value = true;
+  updateEntrySlideOver.value?.open();
+}
+
+function successUpdateEntry(updatedEntry: FaqEntryResponse) {
+  if (category.value) {
+    category.value.entries = category.value.entries.map(
+      (e: FaqEntryResponse) => (e.id === updatedEntry.id ? updatedEntry : e),
+    );
+  }
+
+  updateEntrySlideOver.value?.close();
+}
+
+function cancelUpdateEntry() {
+  updateEntrySlideOver.value?.close();
+}
+
+function openDeleteEntry(entry: FaqEntryResponse) {
   currentEntry.value = entry;
   showDeleteEntry.value = true;
+  deleteEntrySlideOver.value?.open();
 }
 
 function successDeleteEntry(entryId: string) {
@@ -343,8 +353,85 @@ function successDeleteEntry(entryId: string) {
       (e: FaqEntryResponse) => e.id !== entryId,
     );
   }
-  showDeleteEntry.value = false;
+
+  deleteEntrySlideOver.value?.close();
+}
+
+function cancelDeleteEntry() {
+  deleteEntrySlideOver.value?.close();
 }
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.admin-faq-category-page {
+  padding: 16px 24px;
+}
+
+.admin-faq-category-page__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.admin-faq-category-page__title {
+  flex: 1;
+  color: variables.$text-primary-dark;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.admin-faq-category-page__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.admin-faq-category-page__action {
+  padding: 4px 8px;
+  border: none;
+  background: none;
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.admin-faq-category-page__action:hover {
+  color: variables.$text-primary-dark;
+}
+
+.admin-faq-category-page__action--danger:hover {
+  color: variables.$error-color;
+}
+
+.admin-faq-category-page__entries {
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
+}
+
+.admin-faq-category-page__add-entry {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 1px solid variables.$border-dark;
+  margin: 0;
+  background: none;
+  color: variables.$main-color;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.admin-faq-category-page__add-entry:hover {
+  background: rgb(255 255 255 / 5%);
+}
+
+.admin-faq-category-page__slide-over-title {
+  color: variables.$text-primary-dark;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+</style>

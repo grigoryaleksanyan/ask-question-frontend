@@ -1,19 +1,27 @@
 <template>
-  <div
-    tabindex="0"
-    class="category-card"
-    @click="clickOnCard"
-    @keypress.enter="clickOnCard">
-    <div class="category-card__info">
-      <span class="category-card__title">{{ category.name }}</span>
+  <div class="category-card">
+    <div class="category-card__header">
+      <span class="category-card__drag-handle drag-handle">⠷</span>
+      <span
+        class="category-card__name"
+        tabindex="0"
+        @click="navigateToCategory"
+        @keypress.enter="navigateToCategory">
+        {{ category.name }}
+      </span>
+      <span class="category-card__count">{{ entryCountText }}</span>
+      <ContextMenuButton :items="menuItems" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
+
+import { ContextMenuButton } from '@/shared/ui/context-menu';
 
 defineOptions({ name: 'CategoryCard' });
 
@@ -21,9 +29,36 @@ const { category } = defineProps<{
   category: FaqCategoryWithEntriesResponse;
 }>();
 
+const emit = defineEmits<{
+  update: [];
+  delete: [];
+}>();
+
 const router = useRouter();
 
-function clickOnCard() {
+const entryCountText = computed(() => {
+  const count = category.entries?.length ?? 0;
+  const forms = ['записей', 'запись', 'записи'];
+  const abs = Math.abs(count) % 100;
+  const idx = abs > 10 && abs < 20 ? 0 : ([0, 1, 2, 2, 2][abs % 10] ?? 0);
+
+  return `${count} ${forms[idx]}`;
+});
+
+const menuItems = computed(() => [
+  {
+    label: 'Изменить',
+    icon: 'pi pi-pencil',
+    command: () => emit('update'),
+  },
+  {
+    label: 'Удалить',
+    icon: 'pi pi-trash',
+    command: () => emit('delete'),
+  },
+]);
+
+function navigateToCategory() {
   router.push({
     name: 'admin-faq-category',
     params: { id: category.id },
@@ -33,50 +68,47 @@ function clickOnCard() {
 
 <style lang="scss" scoped>
 .category-card {
-  position: relative;
-  display: flex;
-  overflow: hidden;
-  width: 100%;
-  height: 116px;
-  justify-content: center;
-  padding: 15px;
-  border: 1px solid variables.$border-light;
-  border-radius: 12px;
-  background-color: variables.$card-bg;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: variables.$surface-dark-elevated;
 }
 
-.category-card__info {
+.category-card__header {
   display: flex;
   align-items: center;
+  padding: 12px 16px;
+  gap: 8px;
 }
 
-.category-card__title {
-  margin-right: 10px;
-  color: #000;
-  transition: color 0.2s ease;
+.category-card__drag-handle {
+  color: variables.$text-secondary;
+  cursor: grab;
+  font-size: 12px;
 }
 
-.category-card:hover {
-  box-shadow: 0 0 15px 0 rgb(0 0 0 / 10%);
+.category-card__name {
+  flex: 1;
+  color: variables.$text-primary-dark;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
 
-  .category-card__title {
-    color: variables.$link-hover;
-  }
+.category-card__name:hover {
+  color: variables.$main-color;
+}
+
+.category-card__count {
+  color: variables.$text-secondary;
+  font-size: 11px;
 }
 
 .vuedraggable-drag > .category-card {
-  transform: rotate(3deg);
+  transform: rotate(2deg);
 }
 
-.vuedraggable-ghost > .category-card::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(230 230 230);
-  content: '';
+.vuedraggable-ghost > .category-card {
+  opacity: 0.5;
 }
 </style>

@@ -54,6 +54,8 @@ import { z } from 'zod';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
 
+import type { FaqEntryResponse } from '@/shared/types';
+
 import { useApiCall } from '@/shared/lib';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
@@ -63,18 +65,18 @@ import { Create as CreateEntry } from '../api/faq-entry-repository';
 
 defineOptions({ name: 'CreateEntryContent' });
 
-const { modalConfirm, modalClose, categoryId, order } = defineProps<{
-  modalConfirm: () => Promise<void>;
-  modalClose: () => void;
+const { categoryId, order } = defineProps<{
   categoryId: string;
   order: number;
 }>();
 
+const emit = defineEmits<{
+  success: [entry: FaqEntryResponse];
+  cancel: [];
+}>();
+
 const { execute: executeCreateEntry } = useApiCall(CreateEntry, {
   successMessage: 'Запись успешно создана',
-  onSuccess: () => {
-    modalConfirm();
-  },
 });
 
 const formRef = useTemplateRef('form');
@@ -95,12 +97,16 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  await executeCreateEntry({
+  const entry = await executeCreateEntry({
     faqCategoryId: categoryId,
     question: values.question as string,
     answer: sanitizeHtml(values.answer as string),
     order,
   });
+
+  if (entry) {
+    emit('success', entry);
+  }
 }
 
 function submitForm() {
@@ -109,9 +115,7 @@ function submitForm() {
 }
 
 function cancel() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.reset();
-  modalClose();
+  emit('cancel');
 }
 
 defineExpose({

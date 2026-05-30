@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
 
 import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
@@ -40,9 +40,8 @@ import { Update as UpdateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'UpdateCategory' });
 
-const { category, isOpen } = defineProps<{
+const { category } = defineProps<{
   category: FaqCategoryResponse;
-  isOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -79,19 +78,6 @@ async function onSubmit({
     emit('success', name);
   }
 }
-
-watch(
-  () => isOpen,
-  (newValue) => {
-    if (!newValue) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.reset();
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.setValues({ name: category.name });
-    }
-  },
-);
 
 function submitForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

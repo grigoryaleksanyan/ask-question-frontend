@@ -66,17 +66,17 @@ import { Update as UpdateEntry } from '../api/faq-entry-repository';
 
 defineOptions({ name: 'UpdateEntryContent' });
 
-const { modalConfirm, modalClose, entry } = defineProps<{
-  modalConfirm: () => Promise<void>;
-  modalClose: () => void;
+const { entry } = defineProps<{
   entry: FaqEntryResponse;
+}>();
+
+const emit = defineEmits<{
+  success: [entry: FaqEntryResponse];
+  cancel: [];
 }>();
 
 const { execute: executeUpdateEntry } = useApiCall(UpdateEntry, {
   successMessage: 'Запись успешно изменена',
-  onSuccess: () => {
-    modalConfirm();
-  },
 });
 
 const formRef = useTemplateRef('form');
@@ -98,11 +98,15 @@ async function onSubmit({
 }) {
   if (!valid) return;
 
-  await executeUpdateEntry({
+  const updatedEntry = await executeUpdateEntry({
     id: entry.id,
     question: values.question as string,
     answer: sanitizeHtml(values.answer as string),
   });
+
+  if (updatedEntry) {
+    emit('success', updatedEntry);
+  }
 }
 
 function submitForm() {
@@ -111,7 +115,7 @@ function submitForm() {
 }
 
 function cancel() {
-  modalClose();
+  emit('cancel');
 }
 
 defineExpose({
