@@ -1,34 +1,32 @@
 <template>
   <div class="faq-view">
-    <div class="flex">
-      <div class="col-12 my-8">
-        <h1 class="text-headline-large text-center">
-          Часто задаваемые вопросы
-        </h1>
-      </div>
-    </div>
+    <h1 class="faq-view__title">Часто задаваемые вопросы</h1>
 
     <template v-if="categories.length > 0">
       <div
         v-for="category in categories"
         :key="category.id"
-        class="flex mb-8 justify-center">
-        <div class="col-12 sm:col-3">
-          <h2 class="text-headline-small mb-3 faq-view__section-title">
-            {{ category.name }}
-          </h2>
+        class="faq-view__category">
+        <div class="faq-view__category-label">
+          {{ category.name }}
         </div>
-        <div class="col-12 sm:col-9">
+        <div class="faq-view__category-entries">
           <Accordion multiple>
             <AccordionPanel
               v-for="entry in category.entries"
               :key="entry.id"
               :value="entry.id">
               <AccordionHeader>
-                <span class="faq-view__question">{{ entry.question }}</span>
+                <span
+                  class="faq-view__question"
+                  :data-entry-id="entry.id"
+                  >{{ entry.question }}</span
+                >
               </AccordionHeader>
               <AccordionContent>
-                <div v-html="entry.answer"></div>
+                <div
+                  class="faq-view__answer"
+                  v-html="entry.answer"></div>
               </AccordionContent>
             </AccordionPanel>
           </Accordion>
@@ -37,11 +35,7 @@
     </template>
 
     <template v-else>
-      <div class="flex">
-        <div class="col-12">
-          <p class="faq-view__empty">Записи отсутсвуют</p>
-        </div>
-      </div>
+      <p class="faq-view__empty">Записи отсутствуют</p>
     </template>
   </div>
 </template>
@@ -79,14 +73,22 @@ async function fetchData() {
 onMounted(() => {
   const { id } = route.query;
 
-  if (id) {
+  if (typeof id === 'string') {
     setTimeout(() => {
-      const element = document.querySelector(`#${id}`);
+      const entrySpan = document.querySelector(`[data-entry-id="${id}"]`);
 
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (entrySpan) {
+        const panel = entrySpan.closest('.p-accordion-panel');
 
-        ((element as HTMLElement).children[0] as HTMLElement).click();
+        if (panel) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          const headerLink = panel.querySelector<HTMLElement>(
+            '.p-accordion-header-link',
+          );
+
+          headerLink?.click();
+        }
       }
     }, 100);
   }
@@ -97,21 +99,77 @@ fetchData();
 
 <style lang="scss" scoped>
 .faq-view {
-  max-width: 1400px;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
-.faq-view__section-title {
-  padding-left: 10px;
-  border-left: 5px solid variables.$main-color;
+.faq-view__title {
+  margin: 0 0 24px;
+  color: variables.$text-primary;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.faq-view__category-label {
+  padding-left: 8px;
+  border-left: 2px solid variables.$main-color;
+  margin-bottom: 10px;
+  color: variables.$text-muted;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.faq-view__category-entries {
+  overflow: hidden;
+  border: 1px solid variables.$border-light;
+  border-radius: 8px;
+  margin-bottom: 16px;
+
+  :deep(.p-accordion) {
+    border: none;
+  }
+
+  :deep(.p-accordion-panel) {
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  :deep(.p-accordion-header-link) {
+    padding: 14px 16px;
+    border: none;
+    background: transparent;
+  }
+
+  :deep(.p-accordion-content) {
+    padding: 0 16px 14px;
+    border: none;
+  }
+}
+
+.faq-view__category-entries
+  :deep(.p-accordion-panel[data-p-active='true'])
+  .faq-view__question {
+  font-weight: 500;
 }
 
 .faq-view__question {
-  font-size: 18px;
+  color: variables.$text-primary;
+  font-size: 14px;
+}
+
+.faq-view__answer {
+  color: variables.$text-secondary;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .faq-view__empty {
   color: variables.$text-muted;
-  font-size: 1.5rem;
+  font-size: 16px;
   text-align: center;
 }
 </style>
