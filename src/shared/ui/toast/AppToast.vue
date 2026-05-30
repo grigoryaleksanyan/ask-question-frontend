@@ -58,6 +58,28 @@ function toastIconClass(severity: string) {
   align-items: center;
   padding: 15px;
 
+  .p-dark & {
+    border: 1px solid variables.$border-dark;
+    background: variables.$surface-dark-elevated;
+    color: variables.$text-primary-dark;
+  }
+
+  .p-dark &.p-toast-message-success {
+    border-left: 4px solid variables.$success-color;
+  }
+
+  .p-dark &.p-toast-message-error {
+    border-left: 4px solid variables.$error-color;
+  }
+
+  .p-dark &.p-toast-message-warn {
+    border-left: 4px solid variables.$warning-color;
+  }
+
+  .p-dark &.p-toast-message-info {
+    border-left: 4px solid variables.$info-color;
+  }
+
   &--success {
     border-color: variables.$success-color;
   }
