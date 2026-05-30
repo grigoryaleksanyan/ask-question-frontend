@@ -69,7 +69,7 @@ function navigateToCategory() {
 <style lang="scss" scoped>
 .category-card {
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 12px;
   background: variables.$surface-dark-elevated;
 }

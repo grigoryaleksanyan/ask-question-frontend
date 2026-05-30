@@ -37,7 +37,7 @@ const emit = defineEmits<{
 .feedback-card {
   padding: 12px 14px;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
 }
 

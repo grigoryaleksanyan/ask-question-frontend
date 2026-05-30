@@ -71,7 +71,7 @@ const menuItems: MenuItem[] = [
   align-items: center;
   padding: 14px 16px;
   border: 1px solid variables.$border-dark;
-  border-radius: 8px;
+  border-radius: 10px;
   background: variables.$surface-dark-elevated;
   gap: 12px;
 }
