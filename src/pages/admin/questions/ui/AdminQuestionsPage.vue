@@ -59,6 +59,7 @@
           @click.stop>
           <Checkbox
             :model-value="selectedIds.has(question.id)"
+            binary
             @change="toggleSelect(question.id)" />
         </div>
         <div
