@@ -1,56 +1,26 @@
 <template>
-  <Card class="shadow-2 feedback-card">
-    <template #title>
-      <div class="grid grid-nogutter py-2">
-        <div class="col-12 align-self-center">
-          <span class="typography__body--large feedback-card__field">
-            Имя: {{ feedback.username }}
-          </span>
-          <br />
-          <span class="typography__body--large feedback-card__field">
-            Почта: {{ feedback.email }}
-          </span>
-        </div>
-      </div>
-    </template>
-    <template #content>
-      <div class="flex">
-        <div class="feedback-card__body p-3">
-          <p>{{ feedback.theme }}</p>
-          <p class="feedback-card__italic">
-            {{ feedback.text }}
-          </p>
-        </div>
-      </div>
-    </template>
-    <template #footer>
-      <Divider />
-      <div class="flex align-items-center py-1">
-        <div>
-          <span class="typography__body--small">
-            Создана: {{ new Date(feedback.created).toLocaleDateString() }}
-          </span>
-        </div>
-        <div class="flex justify-content-end align-items-center flex-1">
-          <Button
-            icon="pi pi-trash"
-            severity="danger"
-            text
-            size="small"
-            title="Удалить"
-            @click="emit('delete')" />
-        </div>
-      </div>
-    </template>
-  </Card>
+  <div class="feedback-card">
+    <div class="feedback-card__header">
+      <span class="feedback-card__theme">{{ feedback.theme }}</span>
+      <span class="feedback-card__time">
+        {{ new Date(feedback.created).toLocaleDateString() }}
+      </span>
+    </div>
+    <p class="feedback-card__text">{{ feedback.text }}</p>
+    <div class="feedback-card__footer">
+      <span class="feedback-card__email">{{ feedback.email }}</span>
+      <button
+        class="feedback-card__delete"
+        title="Удалить"
+        @click="emit('delete')">
+        <i class="pi pi-trash"></i>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { FeedbackResponse } from '@/shared/types';
-
-import Card from 'primevue/card';
-import Divider from 'primevue/divider';
-import Button from 'primevue/button';
 
 defineOptions({ name: 'FeedbackCard' });
 
@@ -65,26 +35,71 @@ const emit = defineEmits<{
 
 <style lang="scss" scoped>
 .feedback-card {
-  background-color: variables.$card-bg;
-  transition: box-shadow 0.2s ease;
+  padding: 12px 14px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 8px;
+  background: variables.$surface-dark-elevated;
 }
 
-.feedback-card:hover {
-  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
+.feedback-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.feedback-card__field {
+.feedback-card__theme {
+  overflow: hidden;
+  color: variables.$text-primary-dark;
+  font-size: 13px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feedback-card__time {
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: variables.$text-muted;
+  font-size: 11px;
+}
+
+.feedback-card__text {
+  margin-bottom: 6px;
+  color: variables.$text-secondary;
+  font-size: 12px;
+  line-height: 1.5;
   overflow-wrap: break-word;
 }
 
-.feedback-card__body {
-  width: 100%;
-  max-height: 200px;
-  background-color: variables.$card-content-bg;
-  overflow-y: scroll;
+.feedback-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.feedback-card__italic {
-  font-style: italic;
+.feedback-card__email {
+  overflow: hidden;
+  color: variables.$text-muted;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feedback-card__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: variables.$text-muted;
+  cursor: pointer;
+  transition: color 0.15s;
+
+  &:hover {
+    color: variables.$error-color;
+  }
 }
 </style>

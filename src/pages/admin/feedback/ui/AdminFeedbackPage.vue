@@ -1,39 +1,21 @@
 <template>
-  <div class="admin-feedback-page text-left p-5 mx-auto">
-    <div class="grid">
-      <div class="col-12">
-        <div class="grid">
-          <div class="col-12">
-            <h1
-              class="typography__headline--small typography__headline--medium--sm">
-              Обратная связь
-            </h1>
-          </div>
-        </div>
+  <div class="admin-feedback-page">
+    <h1 class="admin-feedback-page__title">Обратная связь</h1>
 
-        <template v-if="feedbacks.length > 0">
-          <div class="grid">
-            <div
-              v-for="feedback in feedbacks"
-              :key="feedback.id"
-              class="col-12">
-              <FeedbackCard
-                :feedback="feedback"
-                @delete="clickDeleteFeedbackBtn(feedback)" />
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="grid">
-            <div class="col-12">
-              <p class="admin-feedback-page__empty">
-                Обратная связь отсутствует
-              </p>
-            </div>
-          </div>
-        </template>
-      </div>
+    <div
+      v-if="feedbacks.length > 0"
+      class="admin-feedback-page__list">
+      <FeedbackCard
+        v-for="feedback in feedbacks"
+        :key="feedback.id"
+        :feedback="feedback"
+        @delete="clickDeleteFeedbackBtn(feedback)" />
     </div>
+    <p
+      v-else
+      class="admin-feedback-page__empty">
+      Обратная связь отсутствует
+    </p>
 
     <CenterModal
       title="Удалить обратную связь"
@@ -111,11 +93,24 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-feedback-page {
-  max-width: 1200px;
+  padding: 16px 24px;
+}
+
+.admin-feedback-page__title {
+  margin-bottom: 16px;
+  color: variables.$text-primary-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.admin-feedback-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .admin-feedback-page__empty {
   color: variables.$text-muted;
-  font-size: 1.125rem;
+  font-size: 13px;
 }
 </style>
