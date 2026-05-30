@@ -60,11 +60,10 @@
       </template>
     </SlideOver>
 
-    <SlideOver ref="delete-slide-over">
-      <template #header>
-        <span class="slide-over-header">Удалить спикера</span>
-      </template>
-
+    <CenterModal
+      :is-open="isDeleteModalOpen"
+      title="Удалить спикера"
+      @close="isDeleteModalOpen = false">
       <DeleteSpeaker
         v-if="currentSpeaker"
         :id="currentSpeaker.id"
@@ -80,9 +79,9 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="deleteSlideOverRef?.close()" />
+          @click="isDeleteModalOpen = false" />
       </template>
-    </SlideOver>
+    </CenterModal>
   </div>
 </template>
 
@@ -94,6 +93,7 @@ import type { SpeakerResponse, CreateSpeakerResponse } from '@/shared/types';
 import Button from 'primevue/button';
 
 import { useApiCall } from '@/shared/lib';
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 import {
   GetAllSpeakers,
   SpeakerCard,
@@ -111,7 +111,8 @@ const currentSpeaker = ref<SpeakerResponse | null>(null);
 
 const createSlideOverRef = useTemplateRef('create-slide-over');
 const updateSlideOverRef = useTemplateRef('update-slide-over');
-const deleteSlideOverRef = useTemplateRef('delete-slide-over');
+
+const isDeleteModalOpen = ref(false);
 
 const createSpeakerRef = useTemplateRef('create-speaker');
 const updateSpeakerRef = useTemplateRef('update-speaker');
@@ -149,12 +150,12 @@ function successUpdateSpeaker(modifiedSpeaker: SpeakerResponse) {
 
 function openDeleteSlideOver(speaker: SpeakerResponse) {
   currentSpeaker.value = speaker;
-  deleteSlideOverRef.value?.open();
+  isDeleteModalOpen.value = true;
 }
 
 function successDeleteSpeaker(speakerId: string) {
   speakers.value = speakers.value.filter((s) => s.id !== speakerId);
-  deleteSlideOverRef.value?.close();
+  isDeleteModalOpen.value = false;
 }
 
 fetchData();
