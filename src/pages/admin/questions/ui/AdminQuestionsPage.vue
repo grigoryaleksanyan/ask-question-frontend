@@ -16,7 +16,7 @@
         <div
           class="admin-questions-page__cell admin-questions-page__cell--check">
           <Checkbox
-            v-model="allSelected"
+            :model-value="allSelected"
             binary
             @change="toggleAll" />
         </div>
