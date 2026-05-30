@@ -73,15 +73,13 @@
         </template>
       </SlideOver>
 
-      <CenterModal
-        v-model:is-open="isDeleteCategoryOpen"
-        title="Удалить категорию"
-        @close="isDeleteCategoryOpen = false">
+      <CenterModal ref="deleteCategoryModalRef">
+        <template #header>Удалить категорию</template>
         <DeleteCategory
           :id="category?.id || ''"
           ref="deleteCategoryRef"
           @success="onDeleteCategorySuccess"
-          @cancel="isDeleteCategoryOpen = false" />
+          @cancel="deleteCategoryModalRef?.close()" />
         <template #footer>
           <Button
             label="Удалить"
@@ -90,7 +88,7 @@
           <Button
             label="Отмена"
             severity="secondary"
-            @click="deleteCategoryRef?.cancel()" />
+            @click="deleteCategoryModalRef?.close()" />
         </template>
       </CenterModal>
 
@@ -147,15 +145,13 @@
         </template>
       </SlideOver>
 
-      <CenterModal
-        v-model:is-open="isDeleteEntryOpen"
-        title="Удалить запись"
-        @close="isDeleteEntryOpen = false">
+      <CenterModal ref="deleteEntryModalRef">
+        <template #header>Удалить запись</template>
         <DeleteEntryModal
           :id="entryToDeleteId"
           ref="deleteEntryRef"
           @success="onDeleteEntrySuccess"
-          @cancel="isDeleteEntryOpen = false" />
+          @cancel="deleteEntryModalRef?.close()" />
         <template #footer>
           <Button
             label="Удалить"
@@ -164,7 +160,7 @@
           <Button
             label="Отмена"
             severity="secondary"
-            @click="deleteEntryRef?.cancel()" />
+            @click="deleteEntryModalRef?.close()" />
         </template>
       </CenterModal>
     </template>
@@ -219,19 +215,19 @@ const { execute: executeFetch } = useApiCall(() => GetCategoryById(id));
 const currentEntry = ref<FaqEntryResponse | null>(null);
 
 const showUpdateCategory = ref(false);
-const isDeleteCategoryOpen = ref(false);
 const showCreateEntry = ref(false);
 const showUpdateEntry = ref(false);
-const isDeleteEntryOpen = ref(false);
 const entryToDeleteId = ref('');
 
 const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
 const createEntrySlideOver = useTemplateRef('createEntrySlideOver');
 const updateEntrySlideOver = useTemplateRef('updateEntrySlideOver');
 const updateCategoryRef = useTemplateRef('update-category');
+const deleteCategoryModalRef = useTemplateRef('deleteCategoryModalRef');
 const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
 const createEntryContentRef = useTemplateRef('create-entry-content');
 const updateEntryContentRef = useTemplateRef('update-entry-content');
+const deleteEntryModalRef = useTemplateRef('deleteEntryModalRef');
 const deleteEntryRef = useTemplateRef('deleteEntryRef');
 
 const dragOptions = reactive({
@@ -282,7 +278,7 @@ function cancelUpdateCategory() {
 }
 
 function openDeleteCategory() {
-  isDeleteCategoryOpen.value = true;
+  deleteCategoryModalRef.value?.open();
 }
 
 function onDeleteCategorySuccess() {
@@ -326,7 +322,7 @@ function cancelUpdateEntry() {
 
 function openDeleteEntry(entry: FaqEntryResponse) {
   entryToDeleteId.value = entry.id;
-  isDeleteEntryOpen.value = true;
+  deleteEntryModalRef.value?.open();
 }
 
 function onDeleteEntrySuccess(entryId: string) {
@@ -336,7 +332,7 @@ function onDeleteEntrySuccess(entryId: string) {
     );
   }
 
-  isDeleteEntryOpen.value = false;
+  deleteEntryModalRef.value?.close();
 }
 
 fetchData();
