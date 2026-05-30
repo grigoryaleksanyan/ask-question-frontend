@@ -60,10 +60,11 @@
       </template>
     </SlideOver>
 
-    <CenterModal
-      :is-open="isDeleteModalOpen"
-      title="Удалить спикера"
-      @close="isDeleteModalOpen = false">
+    <CenterModal ref="delete-modal">
+      <template #header>
+        <span class="slide-over-header">Удалить спикера</span>
+      </template>
+
       <DeleteSpeaker
         v-if="currentSpeaker"
         :id="currentSpeaker.id"
@@ -79,7 +80,7 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="isDeleteModalOpen = false" />
+          @click="deleteModalRef?.close()" />
       </template>
     </CenterModal>
   </div>
@@ -112,7 +113,7 @@ const currentSpeaker = ref<SpeakerResponse | null>(null);
 const createSlideOverRef = useTemplateRef('create-slide-over');
 const updateSlideOverRef = useTemplateRef('update-slide-over');
 
-const isDeleteModalOpen = ref(false);
+const deleteModalRef = useTemplateRef('delete-modal');
 
 const createSpeakerRef = useTemplateRef('create-speaker');
 const updateSpeakerRef = useTemplateRef('update-speaker');
@@ -150,12 +151,12 @@ function successUpdateSpeaker(modifiedSpeaker: SpeakerResponse) {
 
 function openDeleteSlideOver(speaker: SpeakerResponse) {
   currentSpeaker.value = speaker;
-  isDeleteModalOpen.value = true;
+  deleteModalRef.value?.open();
 }
 
 function successDeleteSpeaker(speakerId: string) {
   speakers.value = speakers.value.filter((s) => s.id !== speakerId);
-  isDeleteModalOpen.value = false;
+  deleteModalRef.value?.close();
 }
 
 fetchData();
