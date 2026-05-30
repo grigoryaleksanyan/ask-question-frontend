@@ -1,58 +1,71 @@
 <template>
-  <v-card
-    elevation="2"
-    height="100%">
-    <v-card-title class="text-body-large font-weight-bold pb-0">
-      Лайки / Дизлайки
-    </v-card-title>
-    <v-card-text class="d-flex flex-column align-center justify-center pt-4">
-      <div class="d-flex ga-8">
-        <div class="text-center">
-          <div
-            class="text-headline-large font-weight-bold"
+  <Card class="h-full">
+    <template #title>
+      <span
+        class="typography__body--large"
+        style="font-weight: bold">
+        Лайки / Дизлайки
+      </span>
+    </template>
+    <template #content>
+      <div class="flex flex-column align-items-center pt-4">
+        <div class="flex gap-8">
+          <div class="text-center">
+            <div
+              class="typography__headline--large"
+              style="color: #4ecca3; font-weight: bold">
+              {{ votes.totalLikes.toLocaleString() }}
+            </div>
+            <div
+              class="typography__body--small mt-1"
+              style="color: rgb(0 0 0 / 60%)">
+              👍 Лайки
+            </div>
+          </div>
+          <div class="text-center">
+            <div
+              class="typography__headline--large"
+              style="color: #ef5350; font-weight: bold">
+              {{ votes.totalDislikes.toLocaleString() }}
+            </div>
+            <div
+              class="typography__body--small mt-1"
+              style="color: rgb(0 0 0 / 60%)">
+              👎 Дизлайки
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex align-items-center gap-2 mt-4 w-full"
+          style="max-width: 300px">
+          <span
+            class="typography__body--small"
             style="color: #4ecca3">
-            {{ votes.totalLikes.toLocaleString() }}
-          </div>
-          <div class="text-body-small text-medium-emphasis mt-1">👍 Лайки</div>
-        </div>
-        <div class="text-center">
-          <div
-            class="text-headline-large font-weight-bold"
+            {{ likesPercent }}%
+          </span>
+          <ProgressBar
+            :value="likesPercent"
+            :show-value="false"
+            style="height: 10px"
+            class="flex-grow-1" />
+          <span
+            class="typography__body--small"
             style="color: #ef5350">
-            {{ votes.totalDislikes.toLocaleString() }}
-          </div>
-          <div class="text-body-small text-medium-emphasis mt-1">
-            👎 Дизлайки
-          </div>
+            {{ dislikesPercent }}%
+          </span>
         </div>
       </div>
-      <div
-        class="d-flex align-center ga-2 mt-4 w-100"
-        style="max-width: 300px">
-        <span
-          class="text-body-small"
-          style="color: #4ecca3">
-          {{ likesPercent }}%
-        </span>
-        <v-progress-linear
-          :model-value="likesPercent"
-          height="10"
-          rounded
-          bg-color="#ef5350"
-          color="#4ecca3" />
-        <span
-          class="text-body-small"
-          style="color: #ef5350">
-          {{ dislikesPercent }}%
-        </span>
-      </div>
-    </v-card-text>
-  </v-card>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import type { VotesSummaryResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
+import ProgressBar from 'primevue/progressbar';
 
 defineOptions({ name: 'VotesSummary' });
 

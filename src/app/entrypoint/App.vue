@@ -1,9 +1,9 @@
 <template>
-  <v-app>
+  <div>
     <component :is="layout" />
     <AppPreloader />
     <AppAlert />
-  </v-app>
+  </div>
 </template>
 
 <script setup lang="ts">

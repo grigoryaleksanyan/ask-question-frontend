@@ -1,60 +1,90 @@
 <template>
-  <v-form
-    ref="createSpeaker"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <CenterModalContentWrapper>
-      <template #default>
-        <v-text-field
-          v-model="lastName"
-          :rules="requiredRules"
-          variant="outlined"
-          label="Фамилия" />
+  <Form
+    ref="form"
+    :resolver
+    @submit="onSubmit">
+    <FormField
+      v-slot="$field"
+      name="lastName"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Фамилия"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="firstName"
-          :rules="requiredRules"
-          variant="outlined"
-          label="Имя" />
+    <FormField
+      v-slot="$field"
+      name="firstName"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Имя"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="patronymic"
-          variant="outlined"
-          label="Отчество" />
+    <FormField
+      name="patronymic"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Отчество"
+        class="w-full" />
+    </FormField>
 
-        <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          variant="outlined"
-          label="Почта" />
+    <FormField
+      v-slot="$field"
+      name="email"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Почта"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="position"
-          variant="outlined"
-          label="Должность" />
-      </template>
-      <template #actions>
-        <v-btn
-          type="submit"
-          variant="flat"
-          color="primary">
-          Создать
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="blue-grey"
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </CenterModalContentWrapper>
-  </v-form>
+    <FormField
+      name="position"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Должность"
+        class="w-full" />
+    </FormField>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, useTemplateRef } from 'vue';
+import { watch, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { CreateSpeakerResponse } from '@/shared/types';
+
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -72,62 +102,72 @@ const emit = defineEmits<{
 }>();
 
 const alertStore = useAlertStore();
+const formRef = useTemplateRef('form');
 
-const valid = ref(true);
-const firstName = ref(null as string | null);
-const lastName = ref(null as string | null);
-const patronymic = ref(null as string | null);
-const email = ref(null as string | null);
-const position = ref(null as string | null);
-const createSpeaker = useTemplateRef('createSpeaker');
+const schema = z.object({
+  lastName: z.string().min(1, 'Обязательное поле'),
+  firstName: z.string().min(1, 'Обязательное поле'),
+  patronymic: z.string(),
+  email: z
+    .string()
+    .min(1, 'Обязательное поле')
+    .email('Введите корректный email'),
+  position: z.string(),
+});
 
-const requiredRules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
 
-const emailRules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-  (v: string) => /.+@.+\..+/.test(v) || 'Почта должна быть валидна!',
-];
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  try {
+    const createdSpeaker = await Create({
+      firstName: values.firstName as string,
+      lastName: values.lastName as string,
+      patronymic: (values.patronymic as string) || null,
+      position: (values.position as string) || null,
+      email: values.email as string,
+    });
+
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Спикер успешно создан',
+    });
+
+    emit('success', createdSpeaker);
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      createSpeaker.value!.reset();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.reset();
     }
   },
 );
 
-async function submitForm() {
-  const { valid: isValid } = await createSpeaker.value!.validate();
-
-  if (isValid) {
-    try {
-      const createdSpeaker = await Create({
-        firstName: firstName.value!,
-        lastName: lastName.value!,
-        patronymic: patronymic.value,
-        position: position.value,
-        email: email.value!,
-      });
-
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Спикер успешно создан',
-      });
-
-      emit('success', createdSpeaker);
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    }
-  }
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
 }
 
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

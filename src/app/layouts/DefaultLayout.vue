@@ -1,57 +1,64 @@
 <template>
   <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      theme="dark"
-      temporary
+    <Drawer
+      v-model:visible="drawerVisible"
+      position="left"
+      modal
       class="drawer-navigation">
+      <template #header><span>Навигация</span></template>
       <DrawerNavigation :nav-items="navItems" />
-    </v-navigation-drawer>
+    </Drawer>
 
-    <v-app-bar theme="dark">
-      <v-app-bar-nav-icon
-        class="drawer-navigation-burger"
-        @click="toggleDrawer" />
+    <Toolbar class="app-toolbar">
+      <template #start>
+        <Button
+          icon="pi pi-bars"
+          class="drawer-navigation-burger p-button-text"
+          @click="drawerVisible = true" />
+        <AppLogo />
+      </template>
+      <template #end>
+        <HeaderNavigation
+          :nav-items="navItems"
+          class="header-navigation" />
+      </template>
+    </Toolbar>
 
-      <AppLogo />
-
-      <v-spacer></v-spacer>
-
-      <HeaderNavigation
-        :nav-items="navItems"
-        class="header-navigation" />
-    </v-app-bar>
-
-    <v-main style="min-height: 100vh">
+    <div style="min-height: 100vh">
       <router-view></router-view>
-    </v-main>
+    </div>
 
-    <v-footer theme="dark">
-      @{{ year }} Grigory Aleksanyan
-
-      <v-spacer></v-spacer>
-
-      <v-tooltip
-        text="Обратная связь по порталу"
-        location="start">
-        <template #activator="{ props }">
-          <v-btn
-            icon
-            variant="flat"
-            v-bind="props"
-            @click="showFeedbackModal">
-            <v-icon size="24px">mdi-email-open</v-icon>
-          </v-btn>
-        </template>
-      </v-tooltip>
-    </v-footer>
+    <footer class="app-footer">
+      <span>@{{ year }} Grigory Aleksanyan</span>
+      <div class="flex-grow-1"></div>
+      <Button
+        v-tooltip:left="'Обратная связь по порталу'"
+        icon="pi pi-envelope"
+        text
+        @click="showFeedbackModal" />
+    </footer>
 
     <SidebarModal ref="feedback-modal">
+      <template #header>Обратная связь</template>
       <template #default="{ togglePreloader, confirm, close }">
         <SidebarFeedbackContent
+          ref="feedback-content"
           :show-preloader="togglePreloader"
           :modal-confirm="confirm"
           :modal-close="close" />
+      </template>
+      <template #footer>
+        <Button
+          label="Отправить"
+          @click="feedbackContent?.submitForm()" />
+        <Button
+          label="Отмена"
+          outlined
+          @click="feedbackContent?.modalClose()" />
+        <Button
+          label="preloader"
+          outlined
+          @click="feedbackContent?.show()" />
       </template>
     </SidebarModal>
   </div>
@@ -62,6 +69,10 @@ import { computed, ref, useTemplateRef } from 'vue';
 
 import type { NavItem } from '@/shared/types';
 
+import Drawer from 'primevue/drawer';
+import Toolbar from 'primevue/toolbar';
+import Button from 'primevue/button';
+
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
 import AppLogo from '@/shared/ui/AppLogo.vue';
@@ -70,24 +81,25 @@ import { SidebarFeedbackContent } from '@/features/feedback';
 
 defineOptions({ name: 'DefaultLayout' });
 
-const drawer = ref(false);
+const drawerVisible = ref(false);
 
 const feedbackModal = useTemplateRef('feedback-modal');
+const feedbackContent = useTemplateRef('feedback-content');
 
 const navItems: NavItem[] = [
   {
     title: 'Главная',
-    icon: 'mdi-home',
+    icon: 'pi pi-home',
     link: '/',
   },
   {
     title: 'Все вопросы',
-    icon: 'mdi-account-question',
+    icon: 'pi pi-user',
     link: '/questions',
   },
   {
     title: 'FAQ',
-    icon: 'mdi-frequently-asked-questions',
+    icon: 'pi pi-question',
     link: '/faq',
   },
 ];
@@ -97,13 +109,22 @@ const year = computed(() => new Date().getFullYear());
 async function showFeedbackModal() {
   await feedbackModal.value.open();
 }
-
-function toggleDrawer() {
-  drawer.value = !drawer.value;
-}
 </script>
 
 <style lang="scss" scoped>
+.app-toolbar {
+  background-color: #1f2937;
+  color: white;
+}
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #1f2937;
+  color: white;
+}
+
 @media (width <= 600px) {
   .header-navigation {
     display: none;

@@ -1,17 +1,19 @@
 <template>
-  <v-card
-    elevation="2"
-    height="100%">
-    <v-card-title class="text-body-large font-weight-bold pb-0">
-      Области спикеров
-    </v-card-title>
-    <v-card-text class="pt-2">
+  <Card class="h-full">
+    <template #title>
+      <span
+        class="typography__body--large"
+        style="font-weight: bold">
+        Области спикеров
+      </span>
+    </template>
+    <template #content>
       <Bar
         :data="chartData"
         :options="chartOptions"
         style="height: 220px" />
-    </v-card-text>
-  </v-card>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +27,10 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+
 import type { SpeakerAreaResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
 
 defineOptions({ name: 'SpeakerAreasChart' });
 

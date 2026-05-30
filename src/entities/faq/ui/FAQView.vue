@@ -1,62 +1,53 @@
 <template>
-  <v-container
-    fluid
+  <div
+    class="faq-view"
     style="max-width: 1400px">
-    <v-row no-gutters>
-      <v-col
-        cols="12"
-        class="my-8">
-        <h1 class="text-headline-large text-sm-display-small text-center">
+    <div class="flex">
+      <div class="col-12 my-8">
+        <h1 class="text-headline-large text-center">
           Часто задаваемые вопросы
         </h1>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
     <template v-if="categories.length > 0">
-      <v-row
+      <div
         v-for="category in categories"
         :key="category.id"
-        class="mb-8 justify-center">
-        <v-col
-          cols="12"
-          sm="3">
-          <h2
-            class="text-headline-small text-sm-headline-medium mb-3 section-title">
+        class="flex mb-8 justify-center">
+        <div class="col-12 sm:col-3">
+          <h2 class="text-headline-small mb-3 faq-view__section-title">
             {{ category.name }}
           </h2>
-        </v-col>
-        <v-col
-          cols="12"
-          sm="9">
-          <v-expansion-panels
-            selected-class="active-panel"
-            variant="accordion">
-            <v-expansion-panel
+        </div>
+        <div class="col-12 sm:col-9">
+          <Accordion multiple>
+            <AccordionPanel
               v-for="entry in category.entries"
-              :id="entry.id"
-              :key="entry.id">
-              <v-expansion-panel-title>
-                <span class="question">{{ entry.question }}</span>
-              </v-expansion-panel-title>
-              <v-expansion-panel-text>
+              :key="entry.id"
+              :value="entry.id">
+              <AccordionHeader>
+                <span class="faq-view__question">{{ entry.question }}</span>
+              </AccordionHeader>
+              <AccordionContent>
                 <div v-html="entry.answer"></div>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
+              </AccordionContent>
+            </AccordionPanel>
+          </Accordion>
+        </div>
+      </div>
     </template>
 
     <template v-else>
-      <v-row>
-        <v-col cols="12">
+      <div class="flex">
+        <div class="col-12">
           <p style="color: grey; font-size: 24px; text-align: center">
             Записи отсутсвуют
           </p>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
     </template>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -66,6 +57,11 @@ import { useRoute } from 'vue-router';
 import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
+
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 
 import { useAlertStore } from '@/entities/alert';
 import { usePreloaderStore } from '@/features/preloader';
@@ -112,16 +108,12 @@ fetchData();
 </script>
 
 <style lang="scss" scoped>
-.section-title {
+.faq-view__section-title {
   padding-left: 10px;
   border-left: 5px solid variables.$main-color;
 }
 
-.question {
+.faq-view__question {
   font-size: 18px;
-}
-
-.active-panel .question {
-  color: variables.$main-color;
 }
 </style>

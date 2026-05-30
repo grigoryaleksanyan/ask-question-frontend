@@ -1,69 +1,73 @@
 <template>
-  <v-container
+  <div
     style="max-width: 1200px"
-    class="text-left pa-5 mx-auto"
-    fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row>
-          <v-col
-            cols="12"
-            class="d-flex align-center">
-            <h1 class="text-headline-small text-sm-headline-medium mr-4">
+    class="text-left p-5 mx-auto">
+    <div class="grid">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-12 flex align-items-center">
+            <h1
+              class="typography__headline--small typography__headline--medium--sm mr-4">
               Области
             </h1>
-          </v-col>
-        </v-row>
+          </div>
+        </div>
 
-        <v-row>
-          <v-col cols="12">
-            <v-btn
+        <div class="grid">
+          <div class="col-12">
+            <Button
               size="small"
-              color="blue-grey"
+              severity="secondary"
               @click="showCreateArea = true">
               Добавить область
-              <v-icon
-                end
-                theme="dark">
-                mdi-plus
-              </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+              <i class="pi pi-plus ml-2"></i>
+            </Button>
+          </div>
+        </div>
 
         <Draggable
           v-model="draggableAreas"
           v-bind="dragOptions"
-          class="v-row"
+          class="grid"
           item-key="id"
           handle=".handle"
           draggable=".draggable"
           drag-class="vuedraggable-drag"
           ghost-class="vuedraggable-ghost">
           <template #item="{ element }">
-            <v-col
+            <div
               :key="element.id"
-              cols="12"
-              class="draggable">
+              class="col-12 draggable">
               <AreaCard
                 :area="element"
                 @update="clickUpdateAreaBtn(element)"
                 @delete="clickDeleteAreaBtn(element)" />
-            </v-col>
+            </div>
           </template>
         </Draggable>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
     <CenterModal
       title="Создать область"
       :is-open="showCreateArea"
       @close="showCreateArea = false">
       <CreateArea
+        ref="create-area"
         :order="areas.length"
         :is-open="showCreateArea"
         @success="successCreateArea"
         @cancel="showCreateArea = false" />
+      <template #footer>
+        <Button
+          label="Создать"
+          @click="createAreaRef?.submitForm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="createAreaRef?.cancel()" />
+      </template>
     </CenterModal>
 
     <CenterModal
@@ -72,10 +76,21 @@
       @close="showUpdateArea = false">
       <UpdateArea
         v-if="showUpdateArea && currentArea"
+        ref="update-area"
         :area="currentArea"
         :is-open="showUpdateArea"
         @success="successUpdateArea"
         @cancel="showUpdateArea = false" />
+      <template #footer>
+        <Button
+          label="Изменить"
+          @click="updateAreaRef?.submitForm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="updateAreaRef?.cancel()" />
+      </template>
     </CenterModal>
 
     <CenterModal
@@ -85,18 +100,34 @@
       <DeleteArea
         v-if="showDeleteArea && currentArea"
         :id="currentArea.id"
+        ref="delete-area"
         :is-open="showDeleteArea"
         @success="successDeleteArea"
         @cancel="showDeleteArea = false" />
+      <template #footer>
+        <Button
+          label="Удалить"
+          severity="danger"
+          @click="deleteAreaRef?.confirm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="deleteAreaRef?.cancel()" />
+      </template>
     </CenterModal>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, useTemplateRef } from 'vue';
 import Draggable from 'vuedraggable';
 
 import type { AreaResponse } from '@/shared/types';
+
+import Button from 'primevue/button';
+
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -122,6 +153,10 @@ const currentArea = ref<AreaResponse | null>(null);
 const showCreateArea = ref(false);
 const showUpdateArea = ref(false);
 const showDeleteArea = ref(false);
+
+const createAreaRef = useTemplateRef('create-area');
+const updateAreaRef = useTemplateRef('update-area');
+const deleteAreaRef = useTemplateRef('delete-area');
 
 const dragOptions = reactive({
   animation: 150,

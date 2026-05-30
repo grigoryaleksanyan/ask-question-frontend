@@ -1,25 +1,32 @@
 <template>
-  <v-card
-    elevation="2"
-    height="100%">
-    <v-card-title class="text-body-large font-weight-bold pb-0">
-      Вопросы по статусам
-    </v-card-title>
-    <v-card-text class="d-flex flex-column align-center pt-2">
-      <Doughnut
-        :data="chartData"
-        :options="chartOptions"
-        style="max-height: 220px" />
-    </v-card-text>
-  </v-card>
+  <Card class="h-full">
+    <template #title>
+      <span
+        class="typography__body--large"
+        style="font-weight: bold">
+        Вопросы по статусам
+      </span>
+    </template>
+    <template #content>
+      <div class="flex flex-column align-items-center pt-2">
+        <Doughnut
+          :data="chartData"
+          :options="chartOptions"
+          style="max-height: 220px" />
+      </div>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Doughnut } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
 import type { StatusDistributionResponse } from '@/shared/types';
 import { QuestionStatusId } from '@/shared/types';
+
+import Card from 'primevue/card';
 
 defineOptions({ name: 'StatusDoughnutChart' });
 

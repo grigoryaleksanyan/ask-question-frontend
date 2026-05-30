@@ -1,17 +1,19 @@
 <template>
-  <v-card
-    elevation="2"
-    height="100%">
-    <v-card-title class="text-body-large font-weight-bold pb-0">
-      Вопросы по областям
-    </v-card-title>
-    <v-card-text class="pt-2">
+  <Card class="h-full">
+    <template #title>
+      <span
+        class="typography__body--large"
+        style="font-weight: bold">
+        Вопросы по областям
+      </span>
+    </template>
+    <template #content>
       <Bar
         :data="chartData"
         :options="chartOptions"
         style="height: 200px" />
-    </v-card-text>
-  </v-card>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +26,10 @@ import {
   BarElement,
   Tooltip,
 } from 'chart.js';
+
 import type { AreaDistributionResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
 
 defineOptions({ name: 'AreaBarChart' });
 

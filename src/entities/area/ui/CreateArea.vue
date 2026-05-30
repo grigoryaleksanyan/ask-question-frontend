@@ -1,38 +1,38 @@
 <template>
-  <v-form
-    ref="createArea"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <CenterModalContentWrapper>
-      <template #default>
-        <v-text-field
-          v-model="title"
-          :rules="rules"
-          variant="outlined"
-          label="Заголовок" />
-      </template>
-      <template #actions>
-        <v-btn
-          type="submit"
-          variant="flat"
-          color="primary">
-          Создать
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="blue-grey"
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </CenterModalContentWrapper>
-  </v-form>
+  <Form
+    ref="form"
+    :resolver
+    @submit="onSubmit">
+    <FormField
+      v-slot="$field"
+      name="title"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Заголовок"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, useTemplateRef } from 'vue';
+import { watch, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { AreaResponse } from '@/shared/types';
+
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -51,46 +51,59 @@ const emit = defineEmits<{
 }>();
 
 const alertStore = useAlertStore();
+const formRef = useTemplateRef('form');
 
-const valid = ref(true);
-const title = ref(null as string | null);
-const createArea = useTemplateRef('createArea');
+const schema = z.object({
+  title: z.string().min(1, 'Обязательное поле'),
+});
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
+
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  try {
+    const createdArea = await Create({ title: values.title as string, order });
+
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Область успешно создана',
+    });
+
+    emit('success', createdArea);
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      createArea.value!.reset();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.reset();
     }
   },
 );
 
-async function submitForm() {
-  const { valid: isValid } = await createArea.value!.validate();
-
-  if (isValid) {
-    try {
-      const createdArea = await Create({ title: title.value!, order });
-
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Область успешно создана',
-      });
-
-      emit('success', createdArea);
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    }
-  }
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
 }
 
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

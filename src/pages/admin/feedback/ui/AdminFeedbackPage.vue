@@ -1,39 +1,39 @@
 <template>
-  <v-container
+  <div
     style="max-width: 1200px"
-    class="text-left pa-5 mx-auto"
-    fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row>
-          <v-col cols="12">
-            <h1 class="text-headline-small text-sm-headline-medium">
+    class="text-left p-5 mx-auto">
+    <div class="grid">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-12">
+            <h1
+              class="typography__headline--small typography__headline--medium--sm">
               Обратная связь
             </h1>
-          </v-col>
-        </v-row>
+          </div>
+        </div>
 
         <template v-if="feedbacks.length > 0">
-          <v-row>
-            <v-col
+          <div class="grid">
+            <div
               v-for="feedback in feedbacks"
               :key="feedback.id"
-              cols="12">
+              class="col-12">
               <FeedbackCard
                 :feedback="feedback"
                 @delete="clickDeleteFeedbackBtn(feedback)" />
-            </v-col>
-          </v-row>
+            </div>
+          </div>
         </template>
         <template v-else>
-          <v-row>
-            <v-col cols="12">
+          <div class="grid">
+            <div class="col-12">
               <p>Обратная связь отсутствует</p>
-            </v-col>
-          </v-row>
+            </div>
+          </div>
         </template>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
     <CenterModal
       title="Удалить обратную связь"
@@ -42,16 +42,32 @@
       <DeleteFeedbackModal
         v-if="showDeleteFeedback && currentFeedback"
         :id="currentFeedback.id"
+        ref="delete-feedback"
         @success="successDeleteFeedback"
         @cancel="showDeleteFeedback = false" />
+      <template #footer>
+        <Button
+          label="Удалить"
+          severity="danger"
+          @click="deleteFeedbackRef?.confirm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="deleteFeedbackRef?.cancel()" />
+      </template>
     </CenterModal>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 import type { FeedbackResponse } from '@/shared/types';
+
+import Button from 'primevue/button';
+
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -71,6 +87,8 @@ const preloaderStore = usePreloaderStore();
 const feedbacks = ref<FeedbackResponse[]>([]);
 const currentFeedback = ref<FeedbackResponse | null>(null);
 const showDeleteFeedback = ref(false);
+
+const deleteFeedbackRef = useTemplateRef('delete-feedback');
 
 async function fetchData() {
   try {

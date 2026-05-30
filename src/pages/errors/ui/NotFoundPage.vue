@@ -1,26 +1,23 @@
 <template>
-  <v-container fluid>
-    <v-row
-      class="align-center"
-      style="height: 100vh">
-      <v-col
-        cols="12"
-        class="d-flex flex-column align-center">
-        <h1 class="text-headline-small text-sm-headline-large mb-8">
-          Такой страницы не существует &#128577;
-        </h1>
-        <v-btn
-          variant="flat"
-          @click="toBack()">
-          Вернуться
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div
+    class="grid align-items-center"
+    style="height: 100vh">
+    <div class="col-12 flex flex-column align-items-center">
+      <h1
+        class="typography__headline--small typography__headline--large--sm mb-8">
+        Такой страницы не существует &#128577;
+      </h1>
+      <Button
+        label="Вернуться"
+        @click="toBack()" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+
+import Button from 'primevue/button';
 
 defineOptions({ name: 'NotFoundPage' });
 

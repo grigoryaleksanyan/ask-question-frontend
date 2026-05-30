@@ -1,70 +1,63 @@
 <template>
-  <v-container
-    fluid
-    class="pa-0">
+  <div class="pa-0">
     <VideoBackground
       style="height: 100vh"
       :src="backgroundVideo"
       :poster="backgroundPoster"
       overlay="linear-gradient(0deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5))">
-      <v-row
-        class="pa-3 align-content-center"
+      <div
+        class="grid p-3 align-content-center"
         style="height: 100vh">
-        <v-col cols="12">
+        <div class="col-12">
           <h1 class="portal-title">Ask me</h1>
           <p class="additional-text">Ты не получаешь ответов?</p>
           <p class="additional-text">
             Главная причина в том, что ты не задаешь вопросов.
           </p>
-        </v-col>
-        <v-col
-          cols="12"
-          class="d-flex justify-center">
+        </div>
+        <div class="col-12 flex justify-content-center">
           <QuestionFormCreate />
-        </v-col>
-        <v-col
-          cols="12"
-          class="d-flex justify-center mt-12">
-          <v-btn
+        </div>
+        <div class="col-12 flex justify-content-center mt-12">
+          <Button
             class="btn-to-popular-question"
-            color="rgba(255, 255, 255, 0.5)"
-            icon
-            @click="goTo('#popular', { offset: -headerHeight })">
-            <v-icon>mdi-arrow-down-drop-circle-outline</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+            icon="pi pi-angle-down"
+            rounded
+            @click="scrollToPopular" />
+        </div>
+      </div>
     </VideoBackground>
-    <v-row
+    <div
       id="popular"
-      class="my-5 mx-auto"
+      class="grid my-5 mx-auto"
       style="max-width: 800px; min-height: 100vh">
-      <v-col cols="12">
-        <v-row>
-          <v-col cols="12">
-            <h3 class="text-headline-large text-sm-display-small text-center">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-12">
+            <h3 class="typography__headline--large text-center">
               Популярные вопросы
             </h3>
-          </v-col>
-          <v-col cols="12">
+          </div>
+          <div class="col-12">
             <QuestionCard
               v-for="question in questions"
               :key="question.id"
               :question="question" />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useGoTo } from 'vuetify';
 
 import VideoBackground from 'vue-responsive-video-background-player';
 
 import type { QuestionResponse } from '@/shared/types';
+
+import Button from 'primevue/button';
 
 import {
   GetPopularQuestions,
@@ -76,7 +69,6 @@ import { ALERT_TYPES } from '@/shared/config';
 
 defineOptions({ name: 'MainPage' });
 
-const goTo = useGoTo();
 const alertStore = useAlertStore();
 
 const backgroundVideo = ref(
@@ -86,7 +78,10 @@ const backgroundPoster = ref(
   new URL('@/shared/assets/img/poster.jpg', import.meta.url).href,
 );
 const questions = ref<QuestionResponse[]>([]);
-const headerHeight = ref(64);
+
+function scrollToPopular() {
+  document.querySelector('#popular')?.scrollIntoView({ behavior: 'smooth' });
+}
 
 async function fetchData() {
   try {

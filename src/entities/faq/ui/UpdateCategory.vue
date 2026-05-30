@@ -1,38 +1,39 @@
 <template>
-  <v-form
-    ref="updateCategory"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <CenterModalContentWrapper>
-      <template #default>
-        <v-text-field
-          v-model="name"
-          :rules="rules"
-          variant="outlined"
-          label="Название" />
-      </template>
-      <template #actions>
-        <v-btn
-          type="submit"
-          variant="flat"
-          color="primary">
-          Изменить
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="blue-grey"
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </CenterModalContentWrapper>
-  </v-form>
+  <Form
+    ref="form"
+    :resolver
+    :initial-values
+    @submit="onSubmit">
+    <FormField
+      v-slot="$field"
+      name="name"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Название"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, useTemplateRef } from 'vue';
+import { watch, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { FaqCategoryResponse } from '@/shared/types';
+
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -51,52 +52,63 @@ const emit = defineEmits<{
 }>();
 
 const alertStore = useAlertStore();
+const formRef = useTemplateRef('form');
 
-const valid = ref(true);
-const name = ref(null as string | null);
-const updateCategory = useTemplateRef('updateCategory');
+const schema = z.object({
+  name: z.string().min(1, 'Обязательное поле'),
+});
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
+const initialValues = { name: category.name };
+
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  try {
+    await UpdateCategoryApi({ id: category.id, name: values.name as string });
+
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Категория успешно изменена',
+    });
+
+    emit('success', values.name as string);
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      updateCategory.value!.reset();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.reset();
     } else {
-      name.value = category.name;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.setValues({ name: category.name });
     }
   },
 );
 
-onMounted(() => {
-  name.value = category.name;
-});
-
-async function submitForm() {
-  const { valid: isValid } = await updateCategory.value!.validate();
-
-  if (isValid) {
-    try {
-      await UpdateCategoryApi({ id: category.id, name: name.value! });
-
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Категория успешно изменена',
-      });
-
-      emit('success', name.value!);
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    }
-  }
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
 }
 
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

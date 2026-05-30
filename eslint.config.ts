@@ -2,7 +2,6 @@ import js from '@eslint/js';
 import globals from 'globals';
 import pluginVue from 'eslint-plugin-vue';
 import pluginUnicorn from 'eslint-plugin-unicorn';
-import pluginVuetify from 'eslint-plugin-vuetify';
 import pluginImportX from 'eslint-plugin-import-x';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
@@ -17,7 +16,6 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   pluginUnicorn.configs.recommended,
-  ...pluginVuetify.configs['flat/recommended-v4'],
 
   {
     languageOptions: {
@@ -363,7 +361,7 @@ export default tseslint.config(
       'vue/prefer-separate-static-class': 'error',
       'vue/no-restricted-class': [
         'error',
-        '/^(?![a-z]([a-z0-9-]+)?(__([a-z0-9]+-?)+)?(--([a-z0-9]+-?)+){0,2}$)/',
+        '/^(?!(sm|md|lg|xl):[a-z]|[a-z]([a-z0-9-]+)?(__([a-z0-9]+-?)+)?(--([a-z0-9]+-?)+){0,2}$)/',
       ],
       'vue/no-unused-properties': [
         'error',

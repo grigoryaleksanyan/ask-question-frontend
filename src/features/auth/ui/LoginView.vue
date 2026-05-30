@@ -1,39 +1,37 @@
 <template>
-  <v-container fluid>
-    <v-row
-      class="align-center"
-      style="height: 100vh">
-      <v-col
-        cols="12"
-        class="d-flex justify-center">
-        <v-sheet
-          class="pa-7"
-          width="600"
-          color="white"
-          elevation="3"
-          rounded>
+  <div
+    class="grid grid-nogutter align-items-center"
+    style="height: 100vh">
+    <div class="col-12 flex justify-content-center">
+      <Card
+        class="shadow-3 login-view__card"
+        style="width: 600px">
+        <template #content>
           <h1 class="mb-5">Авторизация</h1>
-          <v-text-field
-            v-model="controls.email"
-            type="email"
-            label="Введите Email"
-            variant="outlined" />
-          <v-text-field
-            v-model="controls.password"
-            type="password"
-            label="Введите Пароль"
-            variant="outlined" />
-
-          <v-btn
-            variant="flat"
-            color="primary"
-            @click="onSubmit">
-            Войти
-          </v-btn>
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </v-container>
+          <form @submit.prevent="onSubmit">
+            <div class="mb-3">
+              <InputText
+                v-model="controls.email"
+                type="email"
+                placeholder="Введите Email"
+                class="w-full" />
+            </div>
+            <div class="mb-3">
+              <Password
+                v-model="controls.password"
+                placeholder="Введите Пароль"
+                :feedback="false"
+                class="w-full"
+                input-class="w-full" />
+            </div>
+            <Button
+              type="submit"
+              label="Войти" />
+          </form>
+        </template>
+      </Card>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +42,11 @@ import { useAlertStore } from '@/entities/alert';
 import { ALERT_TYPES } from '@/shared/config';
 import { useAuthStore } from '../store';
 import { Login } from '../api/auth-repository';
+
+import Card from 'primevue/card';
+import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
+import Button from 'primevue/button';
 
 defineOptions({ name: 'LoginView' });
 

@@ -1,23 +1,5 @@
 <template>
-  <CenterModalContentWrapper>
-    <template #default>
-      <p class="text-body-large">Вы действительно хотите удалить область?</p>
-    </template>
-    <template #actions>
-      <v-btn
-        variant="flat"
-        color="primary"
-        @click="confirm">
-        Удалить
-      </v-btn>
-      <v-btn
-        variant="outlined"
-        color="blue-grey"
-        @click="cancel">
-        Отмена
-      </v-btn>
-    </template>
-  </CenterModalContentWrapper>
+  <p class="text-body-large">Вы действительно хотите удалить область?</p>
 </template>
 
 <script setup lang="ts">
@@ -57,4 +39,9 @@ async function confirm() {
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  confirm,
+  cancel,
+});
 </script>

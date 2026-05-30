@@ -1,165 +1,123 @@
 <template>
-  <v-container
-    fluid
-    style="max-width: 1000px">
+  <div style="max-width: 1000px">
     <template v-if="question">
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-          class="my-8">
-          <h1 class="text-headline-large text-sm-display-small text-center">
+      <div class="grid grid-nogutter">
+        <div class="col-12 my-8">
+          <h1
+            class="typography__headline--large typography__display--small--sm text-center">
             Вопрос
           </h1>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-          class="d-flex justify-center">
-          <v-sheet
-            color="#2b2b2b"
-            width="100%">
-            <v-row
-              no-gutters
-              class="py-5 px-2 px-sm-5 align-center"
+      <div class="grid grid-nogutter">
+        <div class="col-12 flex justify-content-center">
+          <div style=" width: 100%;background-color: #2b2b2b">
+            <div
+              class="flex align-items-center py-5 px-2 question-id-view__header-row"
               style="height: 100%">
-              <v-col cols="1">
-                <v-btn
-                  color="white"
-                  icon
-                  @click="goBack">
-                  <v-icon>mdi-24px mdi-arrow-left-circle-outline</v-icon>
-                </v-btn>
-              </v-col>
-              <v-col cols="11">
+              <div style="width: 8.3333%">
+                <Button
+                  icon="pi pi-arrow-left"
+                  style="background-color: white; color: #2b2b2b"
+                  @click="goBack" />
+              </div>
+              <div style="width: 91.6667%">
                 <p style="margin: 0; color: white; text-align: center">
                   {{ authorDisplay }}, {{ question.areaTitle || '' }},
                   {{ formattedDate }}
                   <br />
                   кому: {{ question.speakerName }}
                 </p>
-              </v-col>
-            </v-row>
-          </v-sheet>
-        </v-col>
-        <v-col cols="12">
-          <v-sheet
-            class="pa-5 pa-sm-8 d-flex flex-column justify-center"
-            min-height="250px"
-            color="#E8EAF6"
-            width="100%">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div
+            class="p-5 question-id-view__content flex flex-column justify-content-center"
+            style=" width: 100%; min-height: 250px;background-color: #e8eaf6">
             <div>
-              <v-row
-                no-gutters
-                class="mb-6">
-                <v-col
-                  cols="12"
-                  class="d-flex">
-                  <v-sheet
-                    :color="color"
-                    height="auto"
-                    width="7">
-                  </v-sheet>
-                  <v-sheet
-                    color="white"
-                    height="auto"
-                    width="100%"
-                    class="pa-3">
+              <div class="flex mb-6">
+                <div class="col-12 flex">
+                  <div
+                    :style="{
+                      backgroundColor: color,
+                      width: '7px',
+                    }"></div>
+                  <div
+                    style=" flex: 1;background-color: white"
+                    class="p-3">
                     <p
                       style="color: grey"
-                      class="pa-0 ma-0 text-sm-body-large text-body-medium"
+                      class="m-0 typography__body--medium typography__body--large--sm"
                       v-html="question.text"></p>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row
-                class="align-center"
-                no-gutters>
-                <v-col class="align-self-center">
-                  <v-icon
+                  </div>
+                </div>
+              </div>
+              <div class="flex align-items-center">
+                <div class="flex align-items-center">
+                  <i
+                    class="pi pi-eye mr-2"
                     title="Количество просмотров"
-                    size="20"
-                    class="mr-2">
-                    mdi-eye
-                  </v-icon>
-                  <span class="text-body-small text-sm-body-medium">
-                    {{ replaceCounter(question.views) }}
-                  </span>
-                </v-col>
-                <v-col class="d-flex justify-end align-center">
-                  <v-btn
+                    style="font-size: 20px"></i>
+                  <span
+                    class="typography__body--small typography__body--medium--sm"
+                    >{{ replaceCounter(question.views) }}</span
+                  >
+                </div>
+                <div class="flex justify-content-end align-items-center flex-1">
+                  <Button
+                    :outlined="question.userVote !== 'Like'"
                     class="mr-1"
-                    variant="outlined"
-                    color="primary"
                     @click="handleLike">
-                    <v-icon
-                      class="mr-2"
+                    <i
+                      class="pi pi-thumbs-up mr-2"
                       title="Понравился"
-                      size="20">
-                      {{
-                        question.userVote === 'Like'
-                          ? 'mdi-thumb-up'
-                          : 'mdi-thumb-up-outline'
-                      }}
-                    </v-icon>
-                    <span class="text-body-small text-sm-body-medium mr-1">
-                      {{ replaceCounter(question.likes) }}
-                    </span>
-                  </v-btn>
-                  <v-btn
+                      style="font-size: 20px"></i>
+                    <span
+                      class="typography__body--small typography__body--medium--sm mr-1"
+                      >{{ replaceCounter(question.likes) }}</span
+                    >
+                  </Button>
+                  <Button
+                    :outlined="question.userVote !== 'Dislike'"
+                    severity="danger"
                     class="mr-1"
-                    variant="outlined"
-                    color="error"
                     @click="handleDislike">
-                    <v-icon
-                      class="mr-2"
+                    <i
+                      class="pi pi-thumbs-down mr-2"
                       title="Не понравился"
-                      size="20">
-                      {{
-                        question.userVote === 'Dislike'
-                          ? 'mdi-thumb-down'
-                          : 'mdi-thumb-down-outline'
-                      }}
-                    </v-icon>
-                    <span class="text-body-small text-sm-body-medium">
-                      {{ replaceCounter(question.dislikes) }}
-                    </span>
-                  </v-btn>
-                </v-col>
-              </v-row>
+                      style="font-size: 20px"></i>
+                    <span
+                      class="typography__body--small typography__body--medium--sm"
+                      >{{ replaceCounter(question.dislikes) }}</span
+                    >
+                  </Button>
+                </div>
+              </div>
             </div>
-          </v-sheet>
-        </v-col>
-      </v-row>
+          </div>
+        </div>
+      </div>
     </template>
 
     <template v-else-if="isLoading">
-      <v-row
-        no-gutters
-        class="my-8">
-        <v-col
-          cols="12"
-          class="text-center">
-          <v-progress-circular
-            indeterminate
-            size="64" />
-        </v-col>
-      </v-row>
+      <div class="grid grid-nogutter my-8">
+        <div class="col-12 text-center">
+          <ProgressSpinner style="width: 64px; height: 64px" />
+        </div>
+      </div>
     </template>
 
     <template v-else>
-      <v-row
-        no-gutters
-        class="my-8">
-        <v-col
-          cols="12"
-          class="text-center">
+      <div class="grid grid-nogutter my-8">
+        <div class="col-12 text-center">
           <p style="color: grey; font-size: 22px">Вопрос не найден</p>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
     </template>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -174,6 +132,9 @@ import {
   DislikeQuestion,
 } from '../api/questions-repository';
 import QUESTION_STATUSES from '../config/question-statuses';
+
+import Button from 'primevue/button';
+import ProgressSpinner from 'primevue/progressspinner';
 
 defineOptions({ name: 'QuestionIdView' });
 
@@ -236,7 +197,7 @@ async function handleLike() {
     question.value.dislikes = result.dislikes;
     question.value.userVote = result.userVote;
   } catch {
-    // Error handled at API level
+    // intentionally empty - error handled at API level
   }
 }
 
@@ -249,7 +210,7 @@ async function handleDislike() {
     question.value.dislikes = result.dislikes;
     question.value.userVote = result.userVote;
   } catch {
-    // Error handled at API level
+    // intentionally empty - error handled at API level
   }
 }
 
@@ -257,3 +218,20 @@ onMounted(() => {
   fetchQuestion();
 });
 </script>
+
+<style lang="scss" scoped>
+.question-id-view__content {
+  background-color: #e8eaf6;
+}
+
+@media (width >= 600px) {
+  .question-id-view__header-row {
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .question-id-view__content {
+    padding: 2rem;
+  }
+}
+</style>

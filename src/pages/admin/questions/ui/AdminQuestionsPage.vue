@@ -1,24 +1,54 @@
 <template>
-  <v-container fluid>
-    <v-row class="pa-3">
-      <v-col>
-        <v-data-table
-          v-model="selected"
-          :headers="headers"
-          :items="questions"
-          item-key="id"
-          show-select
-          class="elevation-1">
-        </v-data-table>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="p-3">
+    <DataTable
+      v-model:selection="selected"
+      :value="questions"
+      table-style="min-width: 100%">
+      <Column
+        selection-mode="multiple"
+        header-style="width: 3rem" />
+      <Column
+        field="author"
+        header="Имя" />
+      <Column
+        field="areaTitle"
+        header="Зона ответственности" />
+      <Column
+        field="speakerName"
+        header="Спикер" />
+      <Column
+        field="text"
+        header="Вопрос" />
+      <Column
+        field="likes"
+        header="Лайки" />
+      <Column
+        field="dislikes"
+        header="Дизлайки" />
+      <Column
+        field="views"
+        header="Просмотры" />
+      <Column
+        field="status"
+        header="Статус" />
+      <Column
+        field="created"
+        header="Дата создания" />
+      <Column
+        field="answered"
+        header="Дата ответа" />
+    </DataTable>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
 import type { QuestionResponse } from '@/shared/types';
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+
 import { ALERT_TYPES } from '@/shared/config';
 import { GetAllQuestions } from '@/entities/question';
 import { useAlertStore } from '@/entities/alert';
@@ -29,19 +59,6 @@ const alertStore = useAlertStore();
 
 const questions = ref<QuestionResponse[]>([]);
 const selected = ref<QuestionResponse[]>([]);
-
-const headers = [
-  { title: 'Имя', key: 'author' },
-  { title: 'Зона ответственности', key: 'areaTitle' },
-  { title: 'Спикер', key: 'speakerName' },
-  { title: 'Вопрос', key: 'text' },
-  { title: 'Лайки', key: 'likes' },
-  { title: 'Дизлайки', key: 'dislikes' },
-  { title: 'Просмотры', key: 'views' },
-  { title: 'Статус', key: 'status' },
-  { title: 'Дата создания', key: 'created' },
-  { title: 'Дата ответа', key: 'answered' },
-];
 
 async function fetchData() {
   try {

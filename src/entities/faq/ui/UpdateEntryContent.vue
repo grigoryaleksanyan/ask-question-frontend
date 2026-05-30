@@ -1,53 +1,66 @@
 <template>
-  <SidebarContentWrapper title="Изменить запись в FAQ">
-    <template #default>
-      <v-form
-        ref="updateEntry"
-        v-model="valid"
-        @submit.prevent="submitForm">
-        <v-row
-          no-gutters
-          class="mt-2">
-          <v-col cols="12">
-            <v-text-field
-              v-model="controls.question"
-              :rules="rules"
-              label="Вопрос"
-              variant="outlined" />
-          </v-col>
+  <Form
+    ref="form"
+    :resolver
+    :initial-values
+    @submit="onSubmit">
+    <div class="mt-2">
+      <div class="col-12">
+        <FormField
+          v-slot="$field"
+          name="question"
+          initial-value="">
+          <InputText
+            type="text"
+            placeholder="Вопрос"
+            class="w-full" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+      </div>
 
-          <v-col cols="12">
-            <RichEditor v-model="controls.answer" />
-          </v-col>
-        </v-row>
-      </v-form>
-    </template>
-    <template #footer>
-      <v-btn
-        variant="flat"
-        color="primary"
-        @click="submitForm">
-        Изменить
-      </v-btn>
-      <v-btn
-        variant="outlined"
-        color="blue-grey"
-        @click="modalClose">
-        Отмена
-      </v-btn>
-    </template>
-  </SidebarContentWrapper>
+      <div class="col-12">
+        <FormField
+          v-slot="$field"
+          name="answer"
+          initial-value="">
+          <Textarea
+            placeholder="Ответ"
+            rows="5"
+            class="w-full" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+      </div>
+    </div>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import type { FaqEntryResponse } from '@/shared/types';
 
 import { ALERT_TYPES } from '@/shared/config';
-import RichEditor from '@/shared/ui/rich-editor';
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
+import Textarea from 'primevue/textarea';
 
 import { useAlertStore } from '@/entities/alert';
 import { usePreloaderStore } from '@/features/preloader';
@@ -64,51 +77,59 @@ const { modalConfirm, modalClose, entry } = defineProps<{
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
+const formRef = useTemplateRef('form');
 
-const updateEntry = useTemplateRef('updateEntry');
-
-const valid = ref(false);
-
-const controls = reactive({
-  question: null as string | null,
-  answer: null as string | null,
+const schema = z.object({
+  question: z.string().min(1, 'Обязательное поле'),
+  answer: z.string().min(1, 'Обязательное поле'),
 });
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
+const initialValues = { question: entry.question, answer: entry.answer };
 
-onMounted(() => {
-  controls.question = entry.question;
-  controls.answer = entry.answer;
-});
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
 
-async function submitForm() {
-  const { valid: isValid } = await updateEntry.value!.validate();
+  try {
+    preloaderStore.addLoader();
 
-  if (isValid) {
-    try {
-      preloaderStore.addLoader();
+    await UpdateEntry({
+      id: entry.id,
+      question: values.question as string,
+      answer: sanitizeHtml(values.answer as string),
+    });
 
-      await UpdateEntry({
-        id: entry.id,
-        question: controls.question!,
-        answer: sanitizeHtml(controls.answer!),
-      });
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Запись успешно изменена',
+    });
 
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Запись успешно изменена',
-      });
-
-      modalConfirm();
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    } finally {
-      preloaderStore.removeLoader();
-    }
+    modalConfirm();
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  } finally {
+    preloaderStore.removeLoader();
   }
 }
+
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
+}
+
+function cancel() {
+  modalClose();
+}
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

@@ -1,74 +1,66 @@
 <template>
   <div>
     <div v-if="category">
-      <v-row>
-        <v-col cols="12">
-          <v-row>
-            <v-col
-              cols="12"
-              class="d-flex align-center">
-              <h1 class="text-headline-small text-sm-headline-medium mr-4">
+      <div class="grid">
+        <div class="col-12">
+          <div class="grid">
+            <div class="col-12 flex align-items-center">
+              <h1
+                class="typography__headline--small typography__headline--medium--sm mr-4">
                 Категория: {{ category.name }}
               </h1>
 
-              <v-btn
+              <Button
                 title="Изменить"
-                icon
-                variant="flat"
-                size="x-small"
-                @click="showUpdateCategory = true">
-                <v-icon size="20">mdi-pencil-outline</v-icon>
-              </v-btn>
-
-              <v-btn
-                title="Удалить"
-                icon
-                variant="flat"
-                size="x-small"
-                @click="showDeleteCategory = true">
-                <v-icon size="20">mdi-delete-outline</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12">
-              <v-btn
+                icon="pi pi-pencil"
+                text
                 size="small"
-                color="blue-grey"
+                @click="showUpdateCategory = true" />
+
+              <Button
+                title="Удалить"
+                icon="pi pi-trash"
+                text
+                size="small"
+                severity="danger"
+                @click="showDeleteCategory = true" />
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="col-12">
+              <Button
+                size="small"
+                severity="secondary"
                 @click="showCreateEntryModal">
                 Добавить запись
-                <v-icon
-                  end
-                  theme="dark">
-                  mdi-plus
-                </v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
+                <i class="pi pi-plus ml-2"></i>
+              </Button>
+            </div>
+          </div>
           <Draggable
             v-model="draggableEntries"
             v-bind="dragOptions"
-            class="v-row"
+            class="grid"
             item-key="id"
             handle=".handle"
             draggable=".draggable"
             drag-class="vuedraggable-drag"
             ghost-class="vuedraggable-ghost">
             <template #item="{ element }">
-              <v-col
+              <div
                 cols="12"
-                class="draggable">
+                class="col-12 draggable">
                 <EntryCard
                   :entry="element"
                   @copy-link="copyLink(element)"
                   @update="showUpdateEntryModal(element)"
                   @delete="clickDeleteEntryBtn(element)" />
-              </v-col>
+              </div>
             </template>
           </Draggable>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
       <CenterModal
         title="Изменить категорию "
@@ -76,10 +68,21 @@
         @close="showUpdateCategory = false">
         <UpdateCategory
           v-if="showUpdateCategory"
+          ref="update-category"
           :category="category"
           :is-open="showUpdateCategory"
           @success="successUpdateCategory"
           @cancel="showUpdateCategory = false" />
+        <template #footer>
+          <Button
+            label="Изменить"
+            @click="updateCategoryRef?.submitForm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="updateCategoryRef?.cancel()" />
+        </template>
       </CenterModal>
 
       <CenterModal
@@ -89,27 +92,63 @@
         <DeleteCategory
           v-if="showDeleteCategory"
           :id="id"
+          ref="delete-category"
           :is-open="showDeleteCategory"
           @success="successDeleteCategory"
           @cancel="showDeleteCategory = false" />
+        <template #footer>
+          <Button
+            label="Удалить"
+            severity="danger"
+            @click="deleteCategoryRef?.confirm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="deleteCategoryRef?.cancel()" />
+        </template>
       </CenterModal>
 
       <SidebarModal ref="createEntryModal">
+        <template #header>Создать запись в FAQ</template>
         <template #default="{ confirm, close }">
           <CreateEntryContent
+            ref="create-entry-content"
             :modal-confirm="confirm"
             :modal-close="close"
             :category-id="category.id"
             :order="category.entries.length" />
         </template>
+        <template #footer>
+          <Button
+            label="Создать"
+            @click="createEntryContent?.submitForm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="createEntryContent?.modalClose()" />
+        </template>
       </SidebarModal>
 
       <SidebarModal ref="updateEntryModal">
+        <template #header>Изменить запись в FAQ</template>
         <template #default="{ confirm, close }">
           <UpdateEntryContent
+            ref="update-entry-content"
             :modal-confirm="confirm"
             :modal-close="close"
             :entry="currentEntry!" />
+        </template>
+        <template #footer>
+          <Button
+            label="Изменить"
+            @click="updateEntryContent?.submitForm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="updateEntryContent?.modalClose()" />
         </template>
       </SidebarModal>
 
@@ -120,9 +159,21 @@
         <DeleteEntryModal
           v-if="showDeleteEntry && currentEntry"
           :id="currentEntry.id"
+          ref="delete-entry"
           :is-open="showDeleteEntry"
           @success="successDeleteEntry"
           @cancel="showDeleteEntry = false" />
+        <template #footer>
+          <Button
+            label="Удалить"
+            severity="danger"
+            @click="deleteEntryRef?.confirm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="deleteEntryRef?.cancel()" />
+        </template>
       </CenterModal>
     </div>
   </div>
@@ -137,6 +188,10 @@ import type {
   FaqCategoryWithEntriesResponse,
   FaqEntryResponse,
 } from '@/shared/types';
+
+import Button from 'primevue/button';
+
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -181,6 +236,11 @@ const dragOptions = reactive({
 
 const createEntryModal = useTemplateRef('createEntryModal');
 const updateEntryModal = useTemplateRef('updateEntryModal');
+const createEntryContent = useTemplateRef('create-entry-content');
+const updateEntryContent = useTemplateRef('update-entry-content');
+const updateCategoryRef = useTemplateRef('update-category');
+const deleteCategoryRef = useTemplateRef('delete-category');
+const deleteEntryRef = useTemplateRef('delete-entry');
 
 const draggableEntries = computed({
   get() {

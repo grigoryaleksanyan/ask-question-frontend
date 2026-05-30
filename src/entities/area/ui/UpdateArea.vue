@@ -1,38 +1,39 @@
 <template>
-  <v-form
-    ref="updateArea"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <CenterModalContentWrapper>
-      <template #default>
-        <v-text-field
-          v-model="title"
-          :rules="rules"
-          variant="outlined"
-          label="Заголовок" />
-      </template>
-      <template #actions>
-        <v-btn
-          type="submit"
-          variant="flat"
-          color="primary">
-          Изменить
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="blue-grey"
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </CenterModalContentWrapper>
-  </v-form>
+  <Form
+    ref="form"
+    :resolver
+    :initial-values
+    @submit="onSubmit">
+    <FormField
+      v-slot="$field"
+      name="title"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Заголовок"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, useTemplateRef } from 'vue';
+import { watch, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { AreaResponse } from '@/shared/types';
+
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -51,52 +52,66 @@ const emit = defineEmits<{
 }>();
 
 const alertStore = useAlertStore();
+const formRef = useTemplateRef('form');
 
-const valid = ref(true);
-const title = ref(null as string | null);
-const updateArea = useTemplateRef('updateArea');
+const schema = z.object({
+  title: z.string().min(1, 'Обязательное поле'),
+});
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
+const initialValues = { title: area.title };
+
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  try {
+    const updatedArea = await Update({
+      id: area.id,
+      title: values.title as string,
+    });
+
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Категория успешно изменена',
+    });
+
+    emit('success', updatedArea);
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      updateArea.value!.reset();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.reset();
     } else {
-      title.value = area.title;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.setValues({ title: area.title });
     }
   },
 );
 
-onMounted(() => {
-  title.value = area.title;
-});
-
-async function submitForm() {
-  const { valid: isValid } = await updateArea.value!.validate();
-
-  if (isValid) {
-    try {
-      const updatedArea = await Update({ id: area.id, title: title.value! });
-
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Категория успешно изменена',
-      });
-
-      emit('success', updatedArea);
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    }
-  }
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
 }
 
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

@@ -5,10 +5,8 @@
         v-model:period-days="periodDays"
         v-model:speaker-id="speakerId" />
 
-      <v-row
-        density="compact"
-        class="mt-3">
-        <v-col cols="12">
+      <div class="grid mt-3">
+        <div class="col-12">
           <StatCardsRow
             :total-questions="data.totalQuestions"
             :answered-questions="data.answeredQuestions"
@@ -17,58 +15,40 @@
             :total-feedback="data.totalFeedback"
             :total-areas="data.totalAreas"
             :questions-without-speaker="data.questionsWithoutSpeaker" />
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row
-        density="compact"
-        class="mt-3">
-        <v-col
-          cols="12"
-          md="4">
+      <div class="grid mt-3">
+        <div class="col-12 md:col-4">
           <StatusDoughnutChart :by-status="data.byStatus" />
-        </v-col>
-        <v-col
-          cols="12"
-          md="8">
+        </div>
+        <div class="col-12 md:col-8">
           <TimelineLineChart :timeline="data.timeline" />
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row
-        density="compact"
-        class="mt-3">
-        <v-col cols="12">
+      <div class="grid mt-3">
+        <div class="col-12">
           <SpeakerProductivityChart :top-speakers="data.topSpeakers" />
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row
-        density="compact"
-        class="mt-3">
-        <v-col
-          cols="12"
-          md="6">
+      <div class="grid mt-3">
+        <div class="col-12 md:col-6">
           <SpeakerAreasChart :speaker-areas="data.speakerAreas" />
-        </v-col>
-        <v-col
-          cols="12"
-          md="3">
+        </div>
+        <div class="col-12 md:col-3">
           <AreaBarChart :by-area="data.byArea" />
-        </v-col>
-        <v-col
-          cols="12"
-          md="3">
+        </div>
+        <div class="col-12 md:col-3">
           <VotesSummary :votes="data.votes" />
-        </v-col>
-      </v-row>
+        </div>
+      </div>
     </div>
     <div
       v-else
-      class="d-flex justify-center pa-8">
-      <v-progress-circular
-        indeterminate
-        color="primary" />
+      class="flex justify-content-center p-8">
+      <ProgressSpinner />
     </div>
   </div>
 </template>
@@ -77,6 +57,8 @@
 import { ref, watch } from 'vue';
 
 import type { DashboardSummaryResponse } from '@/shared/types';
+
+import ProgressSpinner from 'primevue/progressspinner';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { GetDashboardSummary } from '@/entities/dashboard';

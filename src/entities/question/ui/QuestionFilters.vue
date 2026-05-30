@@ -1,98 +1,62 @@
 <template>
-  <v-container>
-    <v-row class="justify-space-between">
-      <v-col cols="6">
-        <v-btn-toggle
+  <div>
+    <div class="grid grid-nogutter justify-content-between">
+      <div class="col-6">
+        <SelectButton
           v-model="sortOrder"
-          density="compact"
-          @update:model-value="onFilterChange">
-          <v-btn
-            size="small"
-            title="Сначала новые"
-            value="desc">
-            <v-icon
-              size="20"
-              color="#717171">
-              mdi-arrow-up-thin
-            </v-icon>
-          </v-btn>
-
-          <v-btn
-            size="small"
-            title="Сначала старые"
-            value="asc">
-            <v-icon
-              size="20"
-              color="#717171">
-              mdi-arrow-down-thin
-            </v-icon>
-          </v-btn>
-        </v-btn-toggle>
-      </v-col>
-      <v-col
-        cols="6"
-        class="d-flex justify-end">
-        <v-btn
-          elevation="0"
+          :options="sortOptions"
+          option-value="value"
+          @change="onFilterChange">
+          <template #option="{ option }">
+            <i
+              :class="option.icon"
+              style=" color: #717171;font-size: 20px"></i>
+          </template>
+        </SelectButton>
+      </div>
+      <div class="col-6 flex justify-content-end">
+        <Button
           size="small"
+          severity="secondary"
           title="Показать/скрыть блок фильтров"
           @click="toggleFilters">
-          <span class="mr-1"> Фильтры</span>
-          <v-icon
-            v-if="!showFilters"
-            size="20"
-            color="#717171">
-            mdi-filter-outline
-          </v-icon>
-          <v-icon
-            v-else
-            size="20"
-            color="#717171">
-            mdi-filter-remove-outline
-          </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+          <span class="mr-1">Фильтры</span>
+          <i
+            :class="showFilters ? 'pi pi-filter-slash' : 'pi pi-filter'"
+            style=" color: #717171;font-size: 20px"></i>
+        </Button>
+      </div>
+    </div>
 
-    <v-expand-transition>
-      <v-row
+    <Transition name="expand">
+      <div
         v-show="showFilters"
-        class="mt-6 justify-center">
-        <v-col
-          cols="12"
-          class="col-sm-6">
-          <v-select
+        class="grid grid-nogutter mt-6 justify-content-center">
+        <div class="col-12 question-filters__select-col">
+          <Select
             v-model="selectedSpeaker"
-            :items="speakerItems"
-            item-title="displayName"
-            item-value="id"
-            label="Спикер"
-            variant="outlined"
-            clearable
-            hide-details
-            density="compact"
-            :menu-props="{ location: 'bottom' } as Record<string, unknown>"
+            :options="speakerItems"
+            option-label="displayName"
+            option-value="id"
+            placeholder="Спикер"
+            show-clear
+            size="small"
             @update:model-value="onFilterChange" />
-        </v-col>
-        <v-col
-          cols="12"
-          class="col-sm-6">
-          <v-select
+        </div>
+        <div class="col-12 question-filters__select-col">
+          <Select
             v-model="selectedAreaId"
-            :items="areaItems"
-            item-title="title"
-            item-value="id"
-            label="Зона ответственности"
-            variant="outlined"
-            clearable
-            hide-details
-            density="compact"
-            :menu-props="{ location: 'bottom' } as Record<string, unknown>"
+            :options="areaItems"
+            option-label="title"
+            option-value="id"
+            placeholder="Зона ответственности"
+            show-clear
+            size="small"
             @update:model-value="onFilterChange" />
-        </v-col>
-      </v-row>
-    </v-expand-transition>
-  </v-container>
+        </div>
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -100,8 +64,11 @@ import { ref, onMounted } from 'vue';
 
 import type { AreaResponse } from '@/shared/types';
 
-import { GetAllSpeakers } from '@/entities/user';
 import { GetAllAreas } from '@/entities/area';
+import { GetAllSpeakers } from '@/entities/user';
+import SelectButton from 'primevue/selectbutton';
+import Button from 'primevue/button';
+import Select from 'primevue/select';
 
 defineOptions({ name: 'QuestionFilters' });
 
@@ -122,6 +89,19 @@ const selectedSpeaker = ref<string | null>(null);
 const selectedAreaId = ref<string | null>(null);
 const speakerItems = ref<{ id: string; displayName: string }[]>([]);
 const areaItems = ref<AreaResponse[]>([]);
+
+const sortOptions = [
+  {
+    label: 'Сначала новые',
+    value: 'desc',
+    icon: 'pi pi-arrow-up',
+  },
+  {
+    label: 'Сначала старые',
+    value: 'asc',
+    icon: 'pi pi-arrow-down',
+  },
+];
 
 function toggleFilters() {
   showFilters.value = !showFilters.value;
@@ -147,3 +127,27 @@ onMounted(async () => {
   areaItems.value = areas;
 });
 </script>
+
+<style lang="scss" scoped>
+.expand-enter-active,
+.expand-leave-active {
+  overflow: hidden;
+  max-height: 500px;
+  opacity: 1;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+@media (width >= 600px) {
+  .question-filters__select-col {
+    width: 50%;
+  }
+}
+</style>

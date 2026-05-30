@@ -1,12 +1,10 @@
 <template>
-  <span>
+  <span class="question-status-icon">
     <span>статус: {{ curentStatus.text }}</span>
-    <v-icon
-      size="24"
-      :color="curentStatus.color"
-      class="ml-2">
-      {{ curentStatus.icon }}
-    </v-icon>
+    <i
+      :class="curentStatus.icon"
+      :style="{ color: curentStatus.color, fontSize: '24px' }"
+      class="ml-2"></i>
   </span>
 </template>
 
@@ -27,24 +25,31 @@ const statusList = [
   {
     text: QUESTION_STATUSES.NEW.TITLE,
     color: QUESTION_STATUSES.NEW.COLOR,
-    icon: 'mdi-help-circle-outline',
+    icon: 'pi pi-question-circle',
   },
   {
     text: QUESTION_STATUSES.IN_FOCUS.TITLE,
     color: QUESTION_STATUSES.IN_FOCUS.COLOR,
-    icon: 'mdi-eye-outline',
+    icon: 'pi pi-eye',
   },
   {
     text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
     color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-    icon: 'mdi-comment-text-outline',
+    icon: 'pi pi-comment',
   },
   {
     text: QUESTION_STATUSES.ANSWERED.TITLE,
     color: QUESTION_STATUSES.ANSWERED.COLOR,
-    icon: 'mdi-check-circle-outline',
+    icon: 'pi pi-check-circle',
   },
 ];
 
 const curentStatus = computed(() => statusList[status]);
 </script>
+
+<style lang="scss" scoped>
+.question-status-icon {
+  display: inline-flex;
+  align-items: center;
+}
+</style>

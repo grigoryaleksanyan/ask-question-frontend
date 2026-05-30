@@ -1,52 +1,33 @@
 <template>
-  <v-row
-    density="compact"
-    class="align-center">
-    <v-col cols="auto">
-      <v-btn-toggle
+  <div class="flex align-items-center">
+    <div class="col-auto">
+      <SelectButton
         v-model="selectedPeriod"
-        density="compact"
-        variant="outlined"
-        color="primary"
-        divided>
-        <v-btn
-          size="small"
-          :value="7">
-          7 дн
-        </v-btn>
-        <v-btn
-          size="small"
-          :value="30">
-          30 дн
-        </v-btn>
-        <v-btn
-          size="small"
-          :value="90">
-          90 дн
-        </v-btn>
-      </v-btn-toggle>
-    </v-col>
-    <v-col cols="auto">
-      <v-select
+        :options="periodOptions"
+        option-label="label"
+        option-value="value"
+        size="small" />
+    </div>
+    <div class="col-auto">
+      <Select
         v-model="selectedSpeakerId"
-        :items="speakerItems"
-        item-title="title"
-        item-value="value"
-        label="Спикер"
-        variant="outlined"
-        clearable
-        hide-details
-        density="compact"
-        min-width="200"
-        :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
-    </v-col>
-  </v-row>
+        :options="speakerItems"
+        option-label="title"
+        option-value="value"
+        placeholder="Спикер"
+        show-clear
+        style="min-width: 200px" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
 import type { SpeakerResponse } from '@/shared/types';
+
+import SelectButton from 'primevue/selectbutton';
+import Select from 'primevue/select';
 
 import { GetAllSpeakers } from '@/entities/user';
 import { ALERT_TYPES } from '@/shared/config';
@@ -60,6 +41,13 @@ const selectedSpeakerId = defineModel<string | null>('speakerId', {
 });
 
 const alertStore = useAlertStore();
+
+const periodOptions = [
+  { label: '7 дн', value: 7 },
+  { label: '30 дн', value: 30 },
+  { label: '90 дн', value: 90 },
+];
+
 const speakerItems = ref<{ title: string; value: string | null }[]>([]);
 
 onMounted(async () => {

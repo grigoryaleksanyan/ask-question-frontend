@@ -1,74 +1,38 @@
 <template>
-  <SidebarContentWrapper title="Обратная связь">
-    <template #default>
-      <v-form
-        ref="feedbackForm"
-        class="ma-0 pa-0"
-        @submit.prevent="submitForm">
-        <v-row
-          no-gutters
-          class="mt-2">
-          <v-col cols="12">
-            <v-text-field
-              v-model="controls.username"
-              label="Имя"
-              :rules="rules"
-              density="compact"
-              variant="outlined" />
-          </v-col>
-          <v-col cols="12">
-            <v-text-field
-              v-model="controls.email"
-              label="Email"
-              :rules="rules"
-              density="compact"
-              variant="outlined" />
-          </v-col>
-          <v-col cols="12">
-            <v-select
-              v-model="controls.theme"
-              label="Тема обращения"
-              :items="themes"
-              :rules="rules"
-              variant="outlined"
-              :menu-props="{ location: 'bottom' } as Record<string, unknown>" />
-          </v-col>
-          <v-col cols="12">
-            <v-textarea
-              v-model="controls.text"
-              :rules="rules"
-              label="Текст обращения"
-              auto-grow
-              variant="outlined" />
-          </v-col>
-        </v-row>
-      </v-form>
-    </template>
-    <template #footer>
-      <v-btn
-        color="primary"
-        @click="submitForm">
-        Отправить
-      </v-btn>
-      <v-btn
-        color="primary"
-        variant="outlined"
-        @click="modalClose">
-        Отмена
-      </v-btn>
-
-      <v-btn
-        color="primary"
-        variant="outlined"
-        @click="show">
-        preloader
-      </v-btn>
-    </template>
-  </SidebarContentWrapper>
+  <form class="m-0 p-0">
+    <div class="grid grid-nogutter mt-2">
+      <div class="col-12">
+        <InputText
+          v-model="controls.username"
+          placeholder="Имя"
+          class="w-full" />
+      </div>
+      <div class="col-12">
+        <InputText
+          v-model="controls.email"
+          placeholder="Email"
+          class="w-full" />
+      </div>
+      <div class="col-12">
+        <Select
+          v-model="controls.theme"
+          :options="themes"
+          placeholder="Тема обращения"
+          class="w-full" />
+      </div>
+      <div class="col-12">
+        <Textarea
+          v-model="controls.text"
+          placeholder="Текст обращения"
+          auto-resize
+          class="w-full" />
+      </div>
+    </div>
+  </form>
 </template>
 
 <script setup lang="ts">
-import { reactive, useTemplateRef } from 'vue';
+import { reactive } from 'vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 
@@ -76,6 +40,10 @@ import { useAlertStore } from '@/entities/alert';
 import { usePreloaderStore } from '@/features/preloader';
 
 import { Create } from '../api/feedback-repository';
+
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import Select from 'primevue/select';
 
 defineOptions({ name: 'SidebarFeedbackContent' });
 
@@ -87,8 +55,6 @@ const { showPreloader, modalConfirm, modalClose } = defineProps<{
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
-
-const feedbackForm = useTemplateRef('feedbackForm');
 
 const themes = [
   'Технические проблемы в работе сайта',
@@ -102,15 +68,17 @@ const controls = reactive({
   text: null as string | null,
 });
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+function validate(): boolean {
+  return !!(
+    controls.username?.trim() &&
+    controls.email?.trim() &&
+    controls.theme?.trim() &&
+    controls.text?.trim()
+  );
+}
 
 async function submitForm() {
-  const { valid } = await feedbackForm.value!.validate();
-
-  if (!valid) {
+  if (!validate()) {
     return;
   }
 
@@ -141,4 +109,10 @@ function show() {
     showPreloader(false);
   }, 2000);
 }
+
+defineExpose({
+  submitForm,
+  show,
+  modalClose,
+});
 </script>

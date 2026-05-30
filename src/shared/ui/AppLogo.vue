@@ -1,10 +1,9 @@
 <template>
   <div class="logo-wrapper">
-    <v-img
+    <img
       alt="logo"
-      width="auto"
-      :src="imageUrl">
-    </v-img>
+      :src="imageUrl"
+      style="width: auto; max-width: 100%" />
   </div>
 </template>
 

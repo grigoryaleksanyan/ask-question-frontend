@@ -1,79 +1,69 @@
 <template>
-  <v-card
-    elevation="2"
-    color="#E8EAF6">
-    <v-card-title class="py-2">
-      <v-row
-        no-gutters
-        class="text-body-large">
-        <v-col
-          class="align-self-center"
-          cols="12">
-          <span style="overflow-wrap: break-word">
+  <Card
+    class="shadow-2 feedback-card"
+    style="background-color: #e8eaf6">
+    <template #title>
+      <div class="grid grid-nogutter py-2">
+        <div class="col-12 align-self-center">
+          <span
+            style="overflow-wrap: break-word"
+            class="typography__body--large">
             Имя: {{ feedback.username }}
           </span>
           <br />
-          <span style="overflow-wrap: break-word">
+          <span
+            style="overflow-wrap: break-word"
+            class="typography__body--large">
             Почта: {{ feedback.email }}
           </span>
-        </v-col>
-        <v-col
-          class="d-flex justify-start justify-sm-end"
-          cols="12"
-          sm="6">
-        </v-col>
-      </v-row>
-    </v-card-title>
-    <v-card-text>
-      <div class="d-flex">
-        <v-sheet
-          style="overflow-y: scroll"
-          color="white"
-          max-height="200px"
-          width="100%"
-          class="pa-3">
-          <div>
-            <p>
-              {{ feedback.theme }}
-            </p>
-            <p class="font-italic">
-              {{ feedback.text }}
-            </p>
-          </div>
-        </v-sheet>
+        </div>
       </div>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions class="py-1">
-      <v-container
-        fluid
-        class="py-0">
-        <v-row
-          class="align-center"
-          no-gutters>
-          <v-col>
-            <span class="text-body-small">
-              Создана: {{ new Date(feedback.created).toLocaleDateString() }}
-            </span>
-          </v-col>
-          <v-col class="d-flex justify-end align-center">
-            <v-btn
-              title="Удалить"
-              icon
-              variant="text"
-              size="small"
-              @click="emit('delete')">
-              <v-icon size="20">mdi-delete-outline</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-actions>
-  </v-card>
+    </template>
+    <template #content>
+      <div class="flex">
+        <div
+          style="
+            width: 100%;
+            max-height: 200px;
+            background-color: white;
+            overflow-y: scroll;
+          "
+          class="p-3">
+          <p>{{ feedback.theme }}</p>
+          <p style="font-style: italic">
+            {{ feedback.text }}
+          </p>
+        </div>
+      </div>
+    </template>
+    <template #footer>
+      <Divider />
+      <div class="flex align-items-center py-1">
+        <div>
+          <span class="typography__body--small">
+            Создана: {{ new Date(feedback.created).toLocaleDateString() }}
+          </span>
+        </div>
+        <div class="flex justify-content-end align-items-center flex-1">
+          <Button
+            icon="pi pi-trash"
+            severity="danger"
+            text
+            size="small"
+            title="Удалить"
+            @click="emit('delete')" />
+        </div>
+      </div>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import type { FeedbackResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
+import Divider from 'primevue/divider';
+import Button from 'primevue/button';
 
 defineOptions({ name: 'FeedbackCard' });
 

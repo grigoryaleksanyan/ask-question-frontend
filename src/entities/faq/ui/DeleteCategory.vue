@@ -1,28 +1,12 @@
 <template>
-  <CenterModalContentWrapper>
-    <template #default>
-      <p class="text-body-large">
-        Вы действительно хотите удалить всю категорию?
-      </p>
-      <p class="ma-0 text-body-medium font-weight-bold">
-        Так же будут удалены все записи!
-      </p>
-    </template>
-    <template #actions>
-      <v-btn
-        variant="flat"
-        color="primary"
-        @click="confirm">
-        Удалить
-      </v-btn>
-      <v-btn
-        variant="outlined"
-        color="blue-grey"
-        @click="cancel">
-        Отмена
-      </v-btn>
-    </template>
-  </CenterModalContentWrapper>
+  <div>
+    <p class="text-body-large">
+      Вы действительно хотите удалить всю категорию?
+    </p>
+    <p class="m-0 text-body-medium font-bold">
+      Так же будут удалены все записи!
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -62,4 +46,9 @@ async function confirm() {
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  confirm,
+  cancel,
+});
 </script>

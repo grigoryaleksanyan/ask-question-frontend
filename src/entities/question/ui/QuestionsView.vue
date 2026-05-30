@@ -1,121 +1,97 @@
 <template>
-  <v-container
-    fluid
-    style="max-width: 1000px">
-    <v-row no-gutters>
-      <v-col
-        cols="12"
-        class="my-8">
-        <h1 class="text-headline-large text-sm-display-small text-center">
+  <div style="max-width: 1000px">
+    <div class="grid grid-nogutter">
+      <div class="col-12 my-8">
+        <h1
+          class="typography__headline--large typography__display--small--sm text-center">
           Все вопросы
         </h1>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
-    <v-row
-      no-gutters
-      class="mb-8 justify-center">
-      <v-col
-        cols="12"
-        sm="8">
-        <v-text-field
-          v-model="searchQuery"
-          label="Поиск"
-          variant="solo-inverted"
-          prepend-inner-icon="mdi-magnify"
-          clearable
-          hide-details />
-      </v-col>
-    </v-row>
+    <div class="grid grid-nogutter mb-8 justify-content-center">
+      <div class="col-12 questions-view__search-col">
+        <IconField>
+          <InputIcon class="pi pi-search" />
+          <InputText
+            v-model="searchQuery"
+            placeholder="Поиск"
+            class="w-full" />
+        </IconField>
+      </div>
+    </div>
 
-    <v-row
-      no-gutters
-      class="mb-3">
-      <v-col
-        cols="12"
-        class="mb-4">
-        <v-tabs
-          v-model="activeTab"
-          :show-arrows="mobile"
-          align-tabs="center">
-          <v-tab
-            value="new"
-            style="width: 150px">
-            Новые
-            <v-icon class="ml-2 ml-sm-0">mdi-new-box</v-icon>
-          </v-tab>
-          <v-tab
-            value="inFocus"
-            style="width: 150px">
-            В фокусе
-            <v-icon class="ml-2 ml-sm-0">mdi-crosshairs-question</v-icon>
-          </v-tab>
-          <v-tab
-            value="withComment"
-            style="width: 150px">
-            С комментарием
-            <v-icon class="ml-2 ml-sm-0">mdi-comment-text-outline</v-icon>
-          </v-tab>
-          <v-tab
-            value="answered"
-            style="width: 150px">
-            Отвеченные
-            <v-icon class="ml-2 ml-sm-0">mdi-bullhorn-outline</v-icon>
-          </v-tab>
-        </v-tabs>
-      </v-col>
-    </v-row>
+    <div class="grid grid-nogutter mb-3">
+      <div class="col-12 mb-4">
+        <TabView
+          v-model:active-index="activeTabIndex"
+          class="questions-view__tabs">
+          <TabPanel value="new">
+            <template #header>
+              <span>Новые <i class="pi pi-box" /></span>
+            </template>
+          </TabPanel>
+          <TabPanel value="inFocus">
+            <template #header>
+              <span>В фокусе <i class="pi pi-question-circle" /></span>
+            </template>
+          </TabPanel>
+          <TabPanel value="withComment">
+            <template #header>
+              <span>С комментарием <i class="pi pi-comment" /></span>
+            </template>
+          </TabPanel>
+          <TabPanel value="answered">
+            <template #header>
+              <span>Отвеченные <i class="pi pi-megaphone" /></span>
+            </template>
+          </TabPanel>
+        </TabView>
+      </div>
+    </div>
 
-    <v-row
-      no-gutters
-      class="mb-3">
-      <v-col cols="12">
+    <div class="grid grid-nogutter mb-3">
+      <div class="col-12">
         <QuestionFilters @change="onFiltersChange" />
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
     <template v-if="questions.length > 0">
-      <v-row
-        no-gutters
-        class="mb-5">
-        <v-col cols="12">
+      <div class="grid grid-nogutter mb-5">
+        <div class="col-12">
           <QuestionCard
             v-for="question in questions"
             :key="question.id"
             :question="question" />
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row
-        no-gutters
-        class="mb-5">
-        <v-col cols="12">
-          <v-pagination
-            v-model="currentPage"
-            :length="totalPages"
-            :total-visible="7" />
-        </v-col>
-      </v-row>
+      <div class="grid grid-nogutter mb-5">
+        <div class="col-12">
+          <Paginator
+            :rows="pageSize"
+            :total-records="totalCount"
+            :first="(currentPage - 1) * pageSize"
+            @page="onPageChange" />
+        </div>
+      </div>
     </template>
 
     <template v-else-if="!isLoading">
-      <v-row
-        no-gutters
-        class="my-6">
-        <v-col cols="12">
+      <div class="grid grid-nogutter my-6">
+        <div class="col-12">
           <p
             style="margin: 0; color: grey; font-size: 22px; text-align: center">
             Вопросы отсутствуют
           </p>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
     </template>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { useDisplay } from 'vuetify';
 
 import type { QuestionResponse } from '@/shared/types';
 
@@ -127,9 +103,14 @@ import { GetAll, type QuestionListParams } from '../api/questions-repository';
 import QuestionFilters from './QuestionFilters.vue';
 import QuestionCard from './QuestionCard.vue';
 
-defineOptions({ name: 'QuestionsView' });
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Paginator from 'primevue/paginator';
 
-const { mobile } = useDisplay();
+defineOptions({ name: 'QuestionsView' });
 
 const alertStore = useAlertStore();
 
@@ -139,24 +120,22 @@ const totalCount = ref(0);
 const currentPage = ref(1);
 const pageSize = 10;
 const searchQuery = ref('');
-const activeTab = ref('new');
+const activeTabIndex = ref(0);
 const filterSortOrder = ref<'asc' | 'desc'>('desc');
 const filterSpeakerId = ref<string | undefined>(undefined);
 const filterAreaId = ref<string | undefined>(undefined);
 
-const statusMap: Record<string, QuestionStatusId> = {
-  new: QuestionStatusId.New,
-  inFocus: QuestionStatusId.InFocus,
-  withComment: QuestionStatusId.WithComment,
-  answered: QuestionStatusId.Answered,
-};
-
-const totalPages = computed(() => Math.ceil(totalCount.value / pageSize));
+const tabIndexToStatus: QuestionStatusId[] = [
+  QuestionStatusId.New,
+  QuestionStatusId.InFocus,
+  QuestionStatusId.WithComment,
+  QuestionStatusId.Answered,
+];
 
 const params = computed<QuestionListParams>(() => ({
   page: currentPage.value,
   pageSize,
-  status: statusMap[activeTab.value],
+  status: tabIndexToStatus[activeTabIndex.value],
   speakerId: filterSpeakerId.value,
   areaId: filterAreaId.value,
   search: searchQuery.value || undefined,
@@ -173,7 +152,7 @@ watch(searchQuery, () => {
   }, 300);
 });
 
-watch(activeTab, () => {
+watch(activeTabIndex, () => {
   currentPage.value = 1;
   fetchData();
 });
@@ -181,6 +160,10 @@ watch(activeTab, () => {
 watch(currentPage, () => {
   fetchData();
 });
+
+function onPageChange(event: { page: number }) {
+  currentPage.value = event.page + 1;
+}
 
 function onFiltersChange(filters: {
   speakerId?: string;
@@ -210,3 +193,15 @@ async function fetchData() {
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.questions-view__tabs :deep(.p-tabview-panels) {
+  display: none;
+}
+
+@media (width >= 600px) {
+  .questions-view__search-col {
+    width: 66.6667%;
+  }
+}
+</style>

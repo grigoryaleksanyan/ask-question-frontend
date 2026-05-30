@@ -1,94 +1,85 @@
 <template>
-  <v-card
+  <Card
     class="entry-card"
-    elevation="2"
-    color="#E8EAF6">
-    <v-card-title class="py-2">
-      <v-row
-        no-gutters
-        class="text-body-large">
-        <v-col
-          class="align-self-center"
-          cols="12">
+    style="background-color: #e8eaf6">
+    <template #title>
+      <div class="flex text-body-large">
+        <div class="col-12 self-center">
           <span style="overflow-wrap: break-word">{{ entry.question }}</span>
-        </v-col>
-        <v-col
-          class="d-flex justify-start justify-sm-end"
-          cols="12"
-          sm="6">
-        </v-col>
-      </v-row>
-    </v-card-title>
-    <v-card-text>
-      <div class="d-flex">
-        <v-sheet
-          style="overflow-y: scroll"
-          color="white"
-          max-height="200px"
-          width="100%"
-          class="pa-3">
-          <div v-html="entry.answer"></div>
-        </v-sheet>
+        </div>
+        <div class="col-12 sm:col-6 flex justify-start sm:justify-end"></div>
       </div>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions class="py-1">
-      <v-container
-        fluid
-        class="py-0">
-        <v-row
-          class="align-center"
-          no-gutters>
-          <v-col>
-            <span class="text-body-small">
-              Создана: {{ new Date(entry.created).toLocaleDateString() }}
-            </span>
-          </v-col>
-          <v-col class="d-flex justify-end align-center">
-            <v-btn
-              title="Переместить"
-              class="handle"
-              icon
-              variant="text"
-              size="small">
-              <v-icon size="20"> mdi-arrow-all </v-icon>
-            </v-btn>
+    </template>
+    <template #content>
+      <div class="flex">
+        <div
+          class="entry-card__answer p-3"
+          style="
+            width: 100%;
+            max-height: 200px;
+            background-color: white;
+            overflow-y: scroll;
+          ">
+          <div v-html="entry.answer"></div>
+        </div>
+      </div>
+    </template>
+    <template #footer>
+      <Divider />
+      <div class="flex items-center py-1">
+        <div class="m-0">
+          <span class="text-body-small">
+            Создана: {{ new Date(entry.created).toLocaleDateString() }}
+          </span>
+        </div>
+        <div class="flex justify-end items-center ml-auto">
+          <Button
+            title="Переместить"
+            class="handle"
+            icon="pi pi-arrows"
+            severity="secondary"
+            text
+            rounded
+            size="small" />
 
-            <v-btn
-              title="Скопировать ссылку на запись"
-              icon
-              variant="text"
-              size="small"
-              @click="emit('copy-link')">
-              <v-icon size="20">mdi-link</v-icon>
-            </v-btn>
+          <Button
+            title="Скопировать ссылку на запись"
+            icon="pi pi-link"
+            severity="secondary"
+            text
+            rounded
+            size="small"
+            @click="emit('copy-link')" />
 
-            <v-btn
-              title="Изменить"
-              icon
-              variant="text"
-              size="small"
-              @click="emit('update')">
-              <v-icon size="20">mdi-pencil-outline</v-icon>
-            </v-btn>
+          <Button
+            title="Изменить"
+            icon="pi pi-pencil"
+            severity="secondary"
+            text
+            rounded
+            size="small"
+            @click="emit('update')" />
 
-            <v-btn
-              title="Удалить"
-              icon
-              variant="text"
-              size="small"
-              @click="emit('delete')">
-              <v-icon size="20">mdi-delete-outline</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-actions>
-  </v-card>
+          <Button
+            title="Удалить"
+            icon="pi pi-trash"
+            severity="secondary"
+            text
+            rounded
+            size="small"
+            @click="emit('delete')" />
+        </div>
+      </div>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import type { FaqEntryResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+import Divider from 'primevue/divider';
 
 defineOptions({ name: 'EntryCard' });
 
@@ -106,6 +97,10 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .entry-card {
   position: relative;
+}
+
+.entry-card__answer {
+  border-radius: 4px;
 }
 
 .vuedraggable-drag > .entry-card {

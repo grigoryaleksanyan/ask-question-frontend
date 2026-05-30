@@ -1,52 +1,53 @@
 <template>
-  <v-sheet
-    class="area-card pa-3 rounded-lg"
-    color="#E8EAF6">
-    <v-row
-      class="align-center"
-      no-gutters>
-      <v-col class="px-2">
-        <span> {{ area.title }} </span>
-      </v-col>
+  <div
+    class="area-card p-3 border-round-lg"
+    style="background-color: #e8eaf6">
+    <div class="flex items-center">
+      <div class="px-2">
+        <span>{{ area.title }}</span>
+      </div>
 
-      <v-col class="d-flex justify-end align-center">
-        <v-divider
-          vertical
+      <div class="flex justify-end items-center ml-auto">
+        <Divider
+          layout="vertical"
           class="mr-3" />
 
-        <v-btn
+        <Button
           title="Переместить"
           class="handle"
-          icon
-          variant="text"
-          size="small">
-          <v-icon size="20"> mdi-arrow-all </v-icon>
-        </v-btn>
+          icon="pi pi-arrows"
+          severity="secondary"
+          text
+          rounded
+          size="small" />
 
-        <v-btn
+        <Button
           title="Изменить"
-          icon
-          variant="text"
+          icon="pi pi-pencil"
+          severity="secondary"
+          text
+          rounded
           size="small"
-          @click="emit('update')">
-          <v-icon size="20"> mdi-pencil-outline </v-icon>
-        </v-btn>
+          @click="emit('update')" />
 
-        <v-btn
+        <Button
           title="Удалить"
-          icon
-          variant="text"
+          icon="pi pi-trash"
+          severity="secondary"
+          text
+          rounded
           size="small"
-          @click="emit('delete')">
-          <v-icon size="20"> mdi-delete-outline </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-sheet>
+          @click="emit('delete')" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { AreaResponse } from '@/shared/types';
+
+import Button from 'primevue/button';
+import Divider from 'primevue/divider';
 
 defineOptions({ name: 'AreaCard' });
 

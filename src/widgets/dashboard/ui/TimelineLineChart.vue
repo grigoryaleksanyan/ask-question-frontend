@@ -1,17 +1,19 @@
 <template>
-  <v-card
-    elevation="2"
-    height="100%">
-    <v-card-title class="pa-3">
-      <span class="text-body-large font-weight-bold">Динамика вопросов</span>
-    </v-card-title>
-    <v-card-text class="pt-0">
+  <Card class="h-full">
+    <template #title>
+      <span
+        class="typography__body--large"
+        style="font-weight: bold">
+        Динамика вопросов
+      </span>
+    </template>
+    <template #content>
       <Line
         :data="chartData"
         :options="chartOptions"
         style="height: 200px" />
-    </v-card-text>
-  </v-card>
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -26,7 +28,10 @@ import {
   Filler,
   Tooltip,
 } from 'chart.js';
+
 import type { TimelinePointResponse } from '@/shared/types';
+
+import Card from 'primevue/card';
 
 defineOptions({ name: 'TimelineLineChart' });
 

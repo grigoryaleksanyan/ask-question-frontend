@@ -1,60 +1,63 @@
 <template>
-  <v-container
+  <div
     style="max-width: 1200px"
-    class="text-left pa-5 mx-auto"
-    fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row>
-          <v-col
-            cols="12"
-            class="d-flex align-center">
-            <h1 class="text-headline-small text-sm-headline-medium mr-4">
+    class="text-left p-5 mx-auto">
+    <div class="grid">
+      <div class="col-12">
+        <div class="grid">
+          <div class="col-12 flex align-items-center">
+            <h1
+              class="typography__headline--small typography__headline--medium--sm mr-4">
               Спикеры
             </h1>
-          </v-col>
-        </v-row>
+          </div>
+        </div>
 
-        <v-row>
-          <v-col cols="12">
-            <v-btn
+        <div class="grid">
+          <div class="col-12">
+            <Button
               size="small"
-              color="blue-grey"
+              severity="secondary"
               @click="showCreateSpeaker = true">
               Добавить спикера
-              <v-icon
-                end
-                theme="dark">
-                mdi-plus
-              </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+              <i class="pi pi-plus ml-2"></i>
+            </Button>
+          </div>
+        </div>
 
-        <v-row>
-          <v-col
+        <div class="grid">
+          <div
             v-for="speaker in speakers"
             :key="speaker.id"
-            cols="12"
-            sm="6"
-            md="4">
+            class="col-12 sm:col-6 md:col-4">
             <SpeakerCard
               :speaker="speaker"
               @update="clickUpdateSpeakerBtn(speaker)"
               @delete="clickDeleteSpeakerBtn(speaker)" />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <CenterModal
       title="Создать спикера"
       :is-open="showCreateSpeaker"
       @close="showCreateSpeaker = false">
       <CreateSpeaker
+        ref="create-speaker"
         :is-open="showCreateSpeaker"
         @success="successCreateSpeaker"
         @cancel="showCreateSpeaker = false" />
+      <template #footer>
+        <Button
+          label="Создать"
+          @click="createSpeakerRef?.submitForm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="createSpeakerRef?.cancel()" />
+      </template>
     </CenterModal>
 
     <CenterModal
@@ -63,10 +66,21 @@
       @close="showUpdateSpeaker = false">
       <UpdateSpeaker
         v-if="showUpdateSpeaker && currentSpeaker"
+        ref="update-speaker"
         :speaker="currentSpeaker"
         :is-open="showUpdateSpeaker"
         @success="successUpdateSpeaker"
         @cancel="showUpdateSpeaker = false" />
+      <template #footer>
+        <Button
+          label="Изменить"
+          @click="updateSpeakerRef?.submitForm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="updateSpeakerRef?.cancel()" />
+      </template>
     </CenterModal>
 
     <CenterModal
@@ -76,62 +90,69 @@
       <DeleteSpeaker
         v-if="showDeleteSpeaker && currentSpeaker"
         :id="currentSpeaker.id"
+        ref="delete-speaker"
         :is-open="showDeleteSpeaker"
         @success="successDeleteSpeaker"
         @cancel="showDeleteSpeaker = false" />
+      <template #footer>
+        <Button
+          label="Удалить"
+          severity="danger"
+          @click="deleteSpeakerRef?.confirm()" />
+        <Button
+          label="Отмена"
+          outlined
+          severity="secondary"
+          @click="deleteSpeakerRef?.cancel()" />
+      </template>
     </CenterModal>
 
     <CenterModal
       title="Данные для входа"
       :is-open="showCredentials"
       @close="showCredentials = false">
-      <CenterModalContentWrapper>
-        <template #default>
-          <p class="text-body-large mb-4">
-            Спикер успешно создан. Сохраните данные для входа:
-          </p>
-          <div class="d-flex align-center mb-2">
-            <p class="mr-2"><b>Логин:</b> {{ credentials.login }}</p>
-            <v-btn
-              icon
-              variant="text"
-              size="small"
-              title="Копировать логин"
-              @click="copyToClipboard(credentials.login)">
-              <v-icon size="18"> mdi-content-copy </v-icon>
-            </v-btn>
-          </div>
-          <div class="d-flex align-center">
-            <p class="mr-2">
-              <b>Пароль:</b> {{ credentials.generatedPassword }}
-            </p>
-            <v-btn
-              icon
-              variant="text"
-              size="small"
-              title="Копировать пароль"
-              @click="copyToClipboard(credentials.generatedPassword)">
-              <v-icon size="18"> mdi-content-copy </v-icon>
-            </v-btn>
-          </div>
-        </template>
-        <template #actions>
-          <v-btn
-            variant="flat"
-            color="primary"
-            @click="showCredentials = false">
-            Закрыть
-          </v-btn>
-        </template>
-      </CenterModalContentWrapper>
+      <div
+        style="max-height: 400px; overflow-y: auto"
+        class="p-7">
+        <p class="typography__body--large mb-4">
+          Спикер успешно создан. Сохраните данные для входа:
+        </p>
+        <div class="flex align-items-center mb-2">
+          <p class="mr-2"><b>Логин:</b> {{ credentials.login }}</p>
+          <Button
+            icon="pi pi-copy"
+            text
+            size="small"
+            title="Копировать логин"
+            @click="copyToClipboard(credentials.login)" />
+        </div>
+        <div class="flex align-items-center">
+          <p class="mr-2"><b>Пароль:</b> {{ credentials.generatedPassword }}</p>
+          <Button
+            icon="pi pi-copy"
+            text
+            size="small"
+            title="Копировать пароль"
+            @click="copyToClipboard(credentials.generatedPassword)" />
+        </div>
+      </div>
+      <template #footer>
+        <Button
+          label="Закрыть"
+          @click="showCredentials = false" />
+      </template>
     </CenterModal>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, useTemplateRef } from 'vue';
 
 import type { SpeakerResponse, CreateSpeakerResponse } from '@/shared/types';
+
+import Button from 'primevue/button';
+
+import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 import { ALERT_TYPES } from '@/shared/config';
 import {
@@ -158,6 +179,10 @@ const showDeleteSpeaker = ref(false);
 const showCredentials = ref(false);
 
 const credentials = reactive({ login: '', generatedPassword: '' });
+
+const createSpeakerRef = useTemplateRef('create-speaker');
+const updateSpeakerRef = useTemplateRef('update-speaker');
+const deleteSpeakerRef = useTemplateRef('delete-speaker');
 
 async function fetchData() {
   try {

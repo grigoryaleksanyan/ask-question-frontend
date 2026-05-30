@@ -1,51 +1,63 @@
 <template>
-  <SidebarContentWrapper title="Создать запись в FAQ">
-    <template #default>
-      <v-form
-        ref="createEntry"
-        v-model="valid"
-        @submit.prevent="submitForm">
-        <v-row
-          no-gutters
-          class="mt-2">
-          <v-col cols="12">
-            <v-text-field
-              v-model="controls.question"
-              :rules="rules"
-              label="Вопрос"
-              variant="outlined" />
-          </v-col>
+  <Form
+    ref="form"
+    :resolver
+    @submit="onSubmit">
+    <div class="mt-2">
+      <div class="col-12">
+        <FormField
+          v-slot="$field"
+          name="question"
+          initial-value="">
+          <InputText
+            type="text"
+            placeholder="Вопрос"
+            class="w-full" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+      </div>
 
-          <v-col cols="12">
-            <RichEditor v-model="controls.answer" />
-          </v-col>
-        </v-row>
-      </v-form>
-    </template>
-    <template #footer>
-      <v-btn
-        variant="flat"
-        color="primary"
-        @click="submitForm">
-        Создать
-      </v-btn>
-      <v-btn
-        variant="outlined"
-        color="blue-grey"
-        @click="modalClose">
-        Отмена
-      </v-btn>
-    </template>
-  </SidebarContentWrapper>
+      <div class="col-12">
+        <FormField
+          v-slot="$field"
+          name="answer"
+          initial-value="">
+          <Textarea
+            placeholder="Ответ"
+            rows="5"
+            class="w-full" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+      </div>
+    </div>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import { ALERT_TYPES } from '@/shared/config';
-import RichEditor from '@/shared/ui/rich-editor';
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
+import Textarea from 'primevue/textarea';
 
 import { useAlertStore } from '@/entities/alert';
 import { usePreloaderStore } from '@/features/preloader';
@@ -63,47 +75,61 @@ const { modalConfirm, modalClose, categoryId, order } = defineProps<{
 
 const alertStore = useAlertStore();
 const preloaderStore = usePreloaderStore();
+const formRef = useTemplateRef('form');
 
-const createEntry = useTemplateRef('createEntry');
-
-const valid = ref(false);
-
-const controls = reactive({
-  question: null as string | null,
-  answer: null as string | null,
+const schema = z.object({
+  question: z.string().min(1, 'Обязательное поле'),
+  answer: z.string().min(1, 'Обязательное поле'),
 });
 
-const rules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
 
-async function submitForm() {
-  const { valid: isValid } = await createEntry.value!.validate();
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
 
-  if (isValid) {
-    try {
-      preloaderStore.addLoader();
+  try {
+    preloaderStore.addLoader();
 
-      await CreateEntry({
-        faqCategoryId: categoryId,
-        question: controls.question!,
-        answer: sanitizeHtml(controls.answer!),
-        order,
-      });
+    await CreateEntry({
+      faqCategoryId: categoryId,
+      question: values.question as string,
+      answer: sanitizeHtml(values.answer as string),
+      order,
+    });
 
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Запись успешно создана',
-      });
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Запись успешно создана',
+    });
 
-      modalConfirm();
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    } finally {
-      preloaderStore.removeLoader();
-    }
+    modalConfirm();
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  } finally {
+    preloaderStore.removeLoader();
   }
 }
+
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
+}
+
+function cancel() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.reset();
+  modalClose();
+}
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

@@ -1,34 +1,23 @@
 <template>
-  <v-dialog
-    :model-value="isOpen"
-    persistent
-    max-width="600">
-    <v-card>
-      <v-card-title class="d-flex justify-space-between">
-        <h4 class="text-truncate">
-          {{ title }}
-        </h4>
-        <v-btn
-          class="pa-0"
-          elevation="0"
-          min-width="40"
-          max-width="40"
-          min-height="40"
-          max-height="40"
-          width="40"
-          height="40"
-          style="border-radius: 8px"
-          @click="close">
-          <v-icon>mdi-plus mdi-rotate-45</v-icon>
-        </v-btn>
-      </v-card-title>
-      <v-divider></v-divider>
-      <slot> </slot>
-    </v-card>
-  </v-dialog>
+  <Dialog
+    v-model:visible="isVisible"
+    :header="title"
+    modal
+    :draggable="false"
+    :style="{ maxWidth: '600px' }"
+    @hide="onClose">
+    <slot></slot>
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
+import Dialog from 'primevue/dialog';
+
 interface Props {
   isOpen: boolean;
   title: string;
@@ -42,7 +31,16 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-function close() {
+const isVisible = computed({
+  get() {
+    return isOpen;
+  },
+  set() {
+    onClose();
+  },
+});
+
+function onClose() {
   emit('close');
 }
 </script>

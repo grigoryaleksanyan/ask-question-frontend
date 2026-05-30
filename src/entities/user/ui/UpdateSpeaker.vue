@@ -1,66 +1,101 @@
 <template>
-  <v-form
-    ref="updateSpeaker"
-    v-model="valid"
-    @submit.prevent="submitForm">
-    <CenterModalContentWrapper>
-      <template #default>
-        <v-text-field
-          v-model="lastName"
-          :rules="requiredRules"
-          variant="outlined"
-          label="Фамилия" />
+  <Form
+    ref="form"
+    :resolver
+    :initial-values
+    @submit="onSubmit">
+    <FormField
+      v-slot="$field"
+      name="lastName"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Фамилия"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="firstName"
-          :rules="requiredRules"
-          variant="outlined"
-          label="Имя" />
+    <FormField
+      v-slot="$field"
+      name="firstName"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Имя"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="patronymic"
-          variant="outlined"
-          label="Отчество" />
+    <FormField
+      name="patronymic"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Отчество"
+        class="w-full" />
+    </FormField>
 
-        <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          variant="outlined"
-          label="Почта" />
+    <FormField
+      v-slot="$field"
+      name="email"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Почта"
+        class="w-full" />
+      <Message
+        v-if="$field?.invalid"
+        severity="error"
+        size="small"
+        variant="simple">
+        {{ $field.error?.message }}
+      </Message>
+    </FormField>
 
-        <v-text-field
-          v-model="position"
-          variant="outlined"
-          label="Должность" />
+    <FormField
+      name="position"
+      initial-value="">
+      <InputText
+        type="text"
+        placeholder="Должность"
+        class="w-full" />
+    </FormField>
 
-        <v-textarea
-          v-model="additionalInfo"
-          variant="outlined"
-          label="Дополнительная информация"
-          rows="2" />
-      </template>
-      <template #actions>
-        <v-btn
-          type="submit"
-          variant="flat"
-          color="primary">
-          Изменить
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="blue-grey"
-          @click="cancel">
-          Отмена
-        </v-btn>
-      </template>
-    </CenterModalContentWrapper>
-  </v-form>
+    <FormField
+      name="additionalInfo"
+      initial-value="">
+      <Textarea
+        placeholder="Дополнительная информация"
+        rows="2"
+        class="w-full" />
+    </FormField>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, useTemplateRef } from 'vue';
+import { watch, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { SpeakerResponse } from '@/shared/types';
+
+import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
+import Textarea from 'primevue/textarea';
 
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
@@ -79,88 +114,102 @@ const emit = defineEmits<{
 }>();
 
 const alertStore = useAlertStore();
+const formRef = useTemplateRef('form');
 
-const valid = ref(true);
-const firstName = ref(null as string | null);
-const lastName = ref(null as string | null);
-const patronymic = ref(null as string | null);
-const email = ref(null as string | null);
-const position = ref(null as string | null);
-const additionalInfo = ref(null as string | null);
-const updateSpeaker = useTemplateRef('updateSpeaker');
+const schema = z.object({
+  lastName: z.string().min(1, 'Обязательное поле'),
+  firstName: z.string().min(1, 'Обязательное поле'),
+  patronymic: z.string(),
+  email: z
+    .string()
+    .min(1, 'Обязательное поле')
+    .email('Введите корректный email'),
+  position: z.string(),
+  additionalInfo: z.string(),
+});
 
-const requiredRules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-];
+const resolver = zodResolver(schema);
+const initialValues = {
+  firstName: speaker.firstName,
+  lastName: speaker.lastName,
+  patronymic: speaker.patronymic ?? '',
+  email: speaker.email,
+  position: speaker.position ?? '',
+  additionalInfo: speaker.additionalInfo ?? '',
+};
 
-const emailRules = [
-  (v: string) => !!v || 'Обязательное поле!',
-  (v: string) => (v && v.trim().length > 0) || 'Поле не должно быть пустым!',
-  (v: string) => /.+@.+\..+/.test(v) || 'Почта должна быть валидна!',
-];
+function mapFormValues(values: Record<string, unknown>) {
+  return {
+    firstName: values.firstName as string,
+    lastName: values.lastName as string,
+    patronymic: (values.patronymic as string) || null,
+    position: (values.position as string) || null,
+    email: values.email as string,
+    additionalInfo: (values.additionalInfo as string) || null,
+  };
+}
+
+async function onSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  try {
+    const mapped = mapFormValues(values);
+
+    await Update({ id: speaker.id, ...mapped });
+
+    alertStore.addAlert({
+      type: ALERT_TYPES.SUCCESS,
+      text: 'Спикер успешно изменён',
+    });
+
+    emit('success', { ...speaker, ...mapped });
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
 
 watch(
   () => isOpen,
   (newValue) => {
     if (!newValue) {
-      updateSpeaker.value!.reset();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (formRef.value as any)?.reset();
     } else {
       fillForm();
     }
   },
 );
 
-onMounted(() => {
-  fillForm();
-});
-
 function fillForm() {
-  firstName.value = speaker.firstName;
-  lastName.value = speaker.lastName;
-  patronymic.value = speaker.patronymic;
-  email.value = speaker.email;
-  position.value = speaker.position;
-  additionalInfo.value = speaker.additionalInfo;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.setValues({
+    firstName: speaker.firstName,
+    lastName: speaker.lastName,
+    patronymic: speaker.patronymic ?? '',
+    email: speaker.email,
+    position: speaker.position ?? '',
+    additionalInfo: speaker.additionalInfo ?? '',
+  });
 }
 
-async function submitForm() {
-  const { valid: isValid } = await updateSpeaker.value!.validate();
-
-  if (isValid) {
-    try {
-      await Update({
-        id: speaker.id,
-        firstName: firstName.value!,
-        lastName: lastName.value!,
-        patronymic: patronymic.value,
-        position: position.value,
-        email: email.value!,
-        additionalInfo: additionalInfo.value,
-      });
-
-      alertStore.addAlert({
-        type: ALERT_TYPES.SUCCESS,
-        text: 'Спикер успешно изменён',
-      });
-
-      emit('success', {
-        ...speaker,
-        firstName: firstName.value!,
-        lastName: lastName.value!,
-        patronymic: patronymic.value,
-        position: position.value,
-        email: email.value!,
-        additionalInfo: additionalInfo.value,
-      });
-    } catch (error) {
-      const err = error as Error;
-      alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
-    }
-  }
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
 }
 
 function cancel() {
   emit('cancel');
 }
+
+defineExpose({
+  submitForm,
+  cancel,
+});
 </script>

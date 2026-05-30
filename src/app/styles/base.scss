@@ -1,3 +1,5 @@
+@use 'typography';
+
 @font-face {
   font-display: swap;
   font-family: Roboto;
@@ -27,6 +29,10 @@
 
 html {
   overflow-y: auto;
+}
+
+body {
+  margin: 0;
 }
 
 html,

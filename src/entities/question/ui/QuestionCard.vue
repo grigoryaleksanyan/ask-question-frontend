@@ -1,125 +1,96 @@
 <template>
-  <v-container>
-    <v-card
-      :to="'/question/' + question.id"
-      elevation="2"
-      color="#E8EAF6">
-      <v-card-title class="py-2">
-        <v-row
-          no-gutters
-          class="text-body-small text-sm-body-medium">
-          <v-col
-            class="align-self-center"
-            cols="12"
-            sm="6">
-            <span>кому: {{ question.speakerName }}</span>
-          </v-col>
-          <v-col
-            class="d-flex justify-start justify-sm-end"
-            cols="12"
-            sm="6">
+  <div class="mb-3">
+    <Card
+      class="shadow-2 cursor-pointer question-card"
+      style="background-color: #e8eaf6"
+      @click="navigateToQuestion">
+      <template #title>
+        <div class="grid grid-nogutter py-2">
+          <div class="col-12 question-card__speaker-col align-self-center">
+            <span class="typography__body--small typography__body--medium--sm"
+              >кому: {{ question.speakerName }}</span
+            >
+          </div>
+          <div
+            class="col-12 question-card__status-col flex justify-content-start">
             <QuestionStatusIcon :status="question.status" />
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <div class="d-flex">
-          <v-sheet
-            :color="color"
-            height="auto"
-            width="7">
-          </v-sheet>
-          <v-sheet
-            color="white"
-            height="auto"
-            width="100%"
-            class="pa-3">
+          </div>
+        </div>
+      </template>
+      <template #content>
+        <div class="flex">
+          <div :style="{ backgroundColor: color, width: '7px' }"></div>
+          <div
+            style=" flex: 1;background-color: white"
+            class="p-3">
             <p
               style="color: grey"
-              class="pa-0 ma-0 text-sm-body-large text-body-medium"
+              class="m-0 typography__body--medium typography__body--large--sm"
               v-html="sliceText(question.text)"></p>
-          </v-sheet>
+          </div>
         </div>
-      </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions class="py-1">
-        <v-container
-          fluid
-          class="py-0">
-          <v-row
-            class="align-center"
-            no-gutters>
-            <v-col class="align-self-center">
-              <v-icon
-                title="Количество просмотров"
-                size="20"
-                class="mr-2">
-                mdi-eye
-              </v-icon>
-              <span class="text-body-small text-sm-body-medium">
-                {{ replaceCounter(localViews) }}
-              </span>
-            </v-col>
-            <v-col class="d-flex justify-end align-center">
-              <v-btn
-                icon
-                class="mr-1"
-                color="primary"
-                @click.prevent="handleLike">
-                <v-icon
-                  title="Понравился"
-                  size="20">
-                  {{
-                    localUserVote === 'Like'
-                      ? 'mdi-thumb-up'
-                      : 'mdi-thumb-up-outline'
-                  }}
-                </v-icon>
-              </v-btn>
-              <span class="text-body-small text-sm-body-medium mr-1">
-                {{ replaceCounter(localLikes) }}
-              </span>
-              <v-btn
-                icon
-                class="mr-1"
-                color="error"
-                @click.prevent="handleDislike">
-                <v-icon
-                  title="Не понравился"
-                  size="20">
-                  {{
-                    localUserVote === 'Dislike'
-                      ? 'mdi-thumb-down'
-                      : 'mdi-thumb-down-outline'
-                  }}
-                </v-icon>
-              </v-btn>
-              <span class="text-body-small text-sm-body-medium">
-                {{ replaceCounter(localDislikes) }}
-              </span>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+      </template>
+      <template #footer>
+        <Divider />
+        <div class="flex align-items-center py-1">
+          <div class="flex align-items-center">
+            <i
+              class="pi pi-eye mr-2"
+              title="Количество просмотров"
+              style="font-size: 20px"></i>
+            <span
+              class="typography__body--small typography__body--medium--sm"
+              >{{ replaceCounter(localViews) }}</span
+            >
+          </div>
+          <div class="flex justify-content-end align-items-center flex-1">
+            <Button
+              icon="pi pi-thumbs-up"
+              :outlined="localUserVote !== 'Like'"
+              class="mr-1"
+              @click.stop.prevent="handleLike" />
+            <span
+              class="typography__body--small typography__body--medium--sm mr-1"
+              >{{ replaceCounter(localLikes) }}</span
+            >
+            <Button
+              icon="pi pi-thumbs-down"
+              :outlined="localUserVote !== 'Dislike'"
+              severity="danger"
+              class="mr-1"
+              @click.stop.prevent="handleDislike" />
+            <span
+              class="typography__body--small typography__body--medium--sm"
+              >{{ replaceCounter(localDislikes) }}</span
+            >
+          </div>
+        </div>
+      </template>
+    </Card>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 import type { QuestionResponse, VoteType } from '@/shared/types';
 
 import { LikeQuestion, DislikeQuestion } from '../api/questions-repository';
 import QUESTION_STATUSES from '../config/question-statuses';
-
 import QuestionStatusIcon from './QuestionStatusIcon.vue';
+
+import Card from 'primevue/card';
+import Divider from 'primevue/divider';
+import Button from 'primevue/button';
 
 defineOptions({ name: 'QuestionCard' });
 
 const { question } = defineProps<{
   question: QuestionResponse;
 }>();
+
+const router = useRouter();
 
 const localLikes = ref(question.likes);
 const localDislikes = ref(question.dislikes);
@@ -140,6 +111,10 @@ const color = computed(() => {
       return QUESTION_STATUSES.ANSWERED.COLOR;
   }
 });
+
+function navigateToQuestion() {
+  router.push(`/question/${question.id}`);
+}
 
 function sliceText(text: string) {
   const maxTextLength = 300;
@@ -162,7 +137,7 @@ async function handleLike() {
     localDislikes.value = result.dislikes;
     localUserVote.value = result.userVote;
   } catch {
-    // Error handled at API level
+    // intentionally empty - error handled at API level
   }
 }
 
@@ -173,7 +148,7 @@ async function handleDislike() {
     localDislikes.value = result.dislikes;
     localUserVote.value = result.userVote;
   } catch {
-    // Error handled at API level
+    // intentionally empty - error handled at API level
   }
 }
 </script>
@@ -181,5 +156,18 @@ async function handleDislike() {
 <style lang="scss">
 .question-card-more {
   color: variables.$links-color;
+}
+</style>
+
+<style lang="scss" scoped>
+@media (width >= 600px) {
+  .question-card__speaker-col {
+    width: 50%;
+  }
+
+  .question-card__status-col {
+    width: 50%;
+    justify-content: end;
+  }
 }
 </style>
