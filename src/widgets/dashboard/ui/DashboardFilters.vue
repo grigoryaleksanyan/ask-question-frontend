@@ -74,13 +74,13 @@ onMounted(async () => {
 }
 
 .dashboard-filters__period-tab {
-  padding: 4px 10px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background: variables.$surface-dark-border;
   color: variables.$text-secondary;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   transition:
     background 0.15s,
     color 0.15s;
