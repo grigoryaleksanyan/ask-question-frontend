@@ -1,22 +1,26 @@
 <template>
   <nav
     class="drawer-nav"
-    :class="{ 'drawer-nav--dark': dark }">
+    :class="{
+      'drawer-nav--dark': dark,
+      'drawer-nav--icon-only': iconOnly,
+    }">
     <router-link
       v-for="item in navItems"
       :key="item.title"
-      v-tooltip.right="collapsed ? item.title : undefined"
+      v-tooltip.right="iconOnly || collapsed ? item.title : undefined"
       :to="item.link"
       class="drawer-nav-link"
       :class="{
-        'drawer-nav-link--collapsed': collapsed,
+        'drawer-nav-link--collapsed': collapsed && !iconOnly,
+        'drawer-nav-link--icon-only': iconOnly,
         'drawer-nav-link--dark': dark,
       }">
       <i
-        :class="item.icon"
+        :class="[item.icon, { 'drawer-nav-link__icon--icon-only': iconOnly }]"
         class="drawer-nav-link__icon"></i>
       <span
-        v-if="!collapsed"
+        v-if="!collapsed && !iconOnly"
         class="drawer-nav-link__text"
         >{{ item.title }}</span
       >
@@ -33,10 +37,12 @@ const {
   navItems,
   collapsed = false,
   dark = false,
+  iconOnly = false,
 } = defineProps<{
   navItems: NavItem[];
   collapsed?: boolean;
   dark?: boolean;
+  iconOnly?: boolean;
 }>();
 </script>
 
@@ -80,9 +86,53 @@ const {
   padding: 8px;
 }
 
+.drawer-nav--icon-only {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.drawer-nav-link--icon-only {
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 12px;
+  gap: 0;
+}
+
+.drawer-nav-link--icon-only:hover {
+  background-color: variables.$surface-bg;
+}
+
+.drawer-nav-link--icon-only.router-link-active {
+  background: rgba(variables.$main-color, 0.15);
+  color: variables.$main-color;
+}
+
+.drawer-nav-link--dark.drawer-nav-link--icon-only {
+  color: variables.$text-primary-dark;
+}
+
+.drawer-nav-link--dark.drawer-nav-link--icon-only:hover {
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.drawer-nav-link--dark.drawer-nav-link--icon-only.router-link-active {
+  background: rgba(variables.$main-color, 0.15);
+  color: variables.$main-color;
+}
+
 .drawer-nav-link__icon {
   flex-shrink: 0;
   font-size: 20px;
+}
+
+.drawer-nav-link__icon--icon-only {
+  font-size: 12px;
 }
 
 .drawer-nav-link__text {
