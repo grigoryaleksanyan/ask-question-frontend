@@ -13,7 +13,7 @@
         <Button
           title="Переместить"
           class="handle"
-          icon="pi pi-arrows"
+          icon="pi pi-arrows-alt"
           severity="secondary"
           text
           rounded
