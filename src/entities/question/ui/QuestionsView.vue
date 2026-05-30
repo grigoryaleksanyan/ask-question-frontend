@@ -141,7 +141,7 @@ const pageSize = 10;
 const searchQuery = ref('');
 const activeTab = ref('new');
 const filterSortOrder = ref<'asc' | 'desc'>('desc');
-const filterSpeaker = ref<string | undefined>(undefined);
+const filterSpeakerId = ref<string | undefined>(undefined);
 const filterArea = ref<string | undefined>(undefined);
 
 const statusMap: Record<string, QuestionStatusId> = {
@@ -157,7 +157,7 @@ const params = computed<QuestionListParams>(() => ({
   page: currentPage.value,
   pageSize,
   status: statusMap[activeTab.value],
-  speaker: filterSpeaker.value,
+  speakerId: filterSpeakerId.value,
   area: filterArea.value,
   search: searchQuery.value || undefined,
   sortOrder: filterSortOrder.value,
@@ -183,11 +183,11 @@ watch(currentPage, () => {
 });
 
 function onFiltersChange(filters: {
-  speaker?: string;
+  speakerId?: string;
   area?: string;
   sortOrder: 'asc' | 'desc';
 }) {
-  filterSpeaker.value = filters.speaker;
+  filterSpeakerId.value = filters.speakerId;
   filterArea.value = filters.area;
   filterSortOrder.value = filters.sortOrder;
   currentPage.value = 1;

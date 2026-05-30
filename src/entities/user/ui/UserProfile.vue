@@ -3,7 +3,16 @@
     <CenterModalContentWrapper>
       <template #default>
         <template v-if="getUserData?.userRoleId === 2">
-          <p><b>ФИО:</b> {{ getUserData?.userDetails?.fullName }}</p>
+          <p>
+            <b>ФИО:</b>
+            {{ getUserData?.userDetails?.lastName }}
+            {{ getUserData?.userDetails?.firstName }}
+            {{ getUserData?.userDetails?.patronymic }}
+          </p>
+          <p>
+            <b>Должность:</b>
+            {{ getUserData?.userDetails?.position }}
+          </p>
           <p><b>Почта:</b> {{ getUserData?.userDetails?.email }}</p>
           <p>
             <b>Доп. инфо:</b> {{ getUserData?.userDetails?.additionalInfo }}

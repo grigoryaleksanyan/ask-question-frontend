@@ -2,7 +2,10 @@ import type { UserRoleId, QuestionStatusId } from './models';
 
 export interface UserDetailsResponse {
   id: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  patronymic: string | null;
+  position: string | null;
   email: string;
   additionalInfo: string | null;
   created: string;
@@ -32,7 +35,8 @@ export interface QuestionResponse {
   text: string;
   author: string | null;
   area: string | null;
-  speaker: string;
+  speakerId: string | null;
+  speakerName: string;
   views: number;
   likes: number;
   dislikes: number;
@@ -89,7 +93,17 @@ export interface PaginatedResponse<T> {
 
 export interface SpeakerResponse {
   id: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  patronymic: string | null;
+  position: string | null;
+  email: string;
+  additionalInfo: string | null;
+  login: string;
+}
+
+export interface CreateSpeakerResponse extends SpeakerResponse {
+  generatedPassword: string;
 }
 
 export interface DashboardSummaryResponse {

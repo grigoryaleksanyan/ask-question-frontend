@@ -13,7 +13,7 @@ export interface QuestionCreateRequest {
   text: string | null;
   author: string | null;
   area: string | null;
-  speaker: string | null;
+  speakerId: string | null;
 }
 
 export interface QuestionUpdateRequest {
@@ -21,7 +21,7 @@ export interface QuestionUpdateRequest {
   text: string;
   author: string | null;
   area: string | null;
-  speaker: string;
+  speakerId: string | null;
 }
 
 export interface FaqCategoryCreateRequest {
@@ -62,4 +62,22 @@ export interface FeedbackCreateRequest {
   email: string;
   theme: string;
   text: string;
+}
+
+export interface SpeakerCreateRequest {
+  firstName: string;
+  lastName: string;
+  patronymic: string | null;
+  position: string | null;
+  email: string;
+}
+
+export interface SpeakerUpdateRequest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  patronymic: string | null;
+  position: string | null;
+  email: string;
+  additionalInfo: string | null;
 }

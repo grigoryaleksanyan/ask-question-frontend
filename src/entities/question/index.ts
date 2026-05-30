@@ -6,7 +6,6 @@ export {
   Create as CreateQuestion,
   Update as UpdateQuestion,
   Delete as DeleteQuestion,
-  GetSpeakers,
   LikeQuestion,
   DislikeQuestion,
 } from './api/questions-repository';

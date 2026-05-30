@@ -37,7 +37,7 @@
                   {{ authorDisplay }}, {{ question.area || '' }},
                   {{ formattedDate }}
                   <br />
-                  кому: {{ question.speaker }}
+                  кому: {{ question.speakerName }}
                 </p>
               </v-col>
             </v-row>

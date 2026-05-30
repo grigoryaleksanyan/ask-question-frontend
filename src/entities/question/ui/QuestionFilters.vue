@@ -64,8 +64,8 @@
           <v-select
             v-model="selectedSpeaker"
             :items="speakerItems"
-            item-title="fullName"
-            item-value="fullName"
+            item-title="displayName"
+            item-value="id"
             label="Спикер"
             variant="outlined"
             clearable
@@ -98,9 +98,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-import type { SpeakerResponse, AreaResponse } from '@/shared/types';
+import type { AreaResponse } from '@/shared/types';
 
-import { GetSpeakers } from '../api/questions-repository';
+import { GetAllSpeakers } from '@/entities/user';
 import { GetAllAreas } from '@/entities/area';
 
 defineOptions({ name: 'QuestionFilters' });
@@ -109,7 +109,7 @@ const emit = defineEmits<{
   (
     e: 'change',
     filters: {
-      speaker?: string;
+      speakerId?: string;
       area?: string;
       sortOrder: 'asc' | 'desc';
     },
@@ -120,7 +120,7 @@ const showFilters = ref(false);
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const selectedSpeaker = ref<string | null>(null);
 const selectedArea = ref<string | null>(null);
-const speakerItems = ref<SpeakerResponse[]>([]);
+const speakerItems = ref<{ id: string; displayName: string }[]>([]);
 const areaItems = ref<AreaResponse[]>([]);
 
 function toggleFilters() {
@@ -129,15 +129,21 @@ function toggleFilters() {
 
 function onFilterChange() {
   emit('change', {
-    speaker: selectedSpeaker.value ?? undefined,
+    speakerId: selectedSpeaker.value ?? undefined,
     area: selectedArea.value ?? undefined,
     sortOrder: sortOrder.value,
   });
 }
 
 onMounted(async () => {
-  const [speakers, areas] = await Promise.all([GetSpeakers(), GetAllAreas()]);
-  speakerItems.value = speakers;
+  const [speakers, areas] = await Promise.all([
+    GetAllSpeakers(),
+    GetAllAreas(),
+  ]);
+  speakerItems.value = speakers.map((s) => ({
+    id: s.id,
+    displayName: `${s.lastName} ${s.firstName}`,
+  }));
   areaItems.value = areas;
 });
 </script>

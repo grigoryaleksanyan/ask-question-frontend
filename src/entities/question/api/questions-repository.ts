@@ -5,18 +5,16 @@ import type {
   QuestionCreateRequest,
   QuestionUpdateRequest,
   PaginatedResponse,
-  SpeakerResponse,
   VoteResultResponse,
 } from '@/shared/types';
 
 const apiRoute = '/api/Question';
-const userApiRoute = '/api/User';
 
 export interface QuestionListParams {
   page?: number;
   pageSize?: number;
   status?: number;
-  speaker?: string;
+  speakerId?: string;
   area?: string;
   search?: string;
   sortOrder?: 'asc' | 'desc';
@@ -42,7 +40,7 @@ export async function GetAll(
   if (params?.pageSize) queryParams.pageSize = String(params.pageSize);
   if (params?.status !== undefined && params?.status !== null)
     queryParams.status = String(params.status);
-  if (params?.speaker) queryParams.speaker = params.speaker;
+  if (params?.speakerId) queryParams.speakerId = params.speakerId;
   if (params?.area) queryParams.area = params.area;
   if (params?.search) queryParams.search = params.search;
   if (params?.sortOrder) queryParams.sortOrder = params.sortOrder;
@@ -115,17 +113,6 @@ export async function Delete(id: string): Promise<void> {
     .catch((error) => {
       throw new Error('Ошибка удаления вопроса', { cause: error });
     });
-}
-
-export async function GetSpeakers(): Promise<SpeakerResponse[]> {
-  const result = await httpClient
-    .get<SpeakerResponse[]>(`${userApiRoute}/GetSpeakers`)
-    .then((response) => response.data)
-    .catch((error) => {
-      throw new Error('Ошибка получения списка спикеров', { cause: error });
-    });
-
-  return result;
 }
 
 export async function LikeQuestion(id: string): Promise<VoteResultResponse> {

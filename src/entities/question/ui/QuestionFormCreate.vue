@@ -17,6 +17,7 @@
             cols="9"
             sm="10">
             <v-textarea
+              v-model="controls.text"
               class="main-form-textarea"
               :rules="rules"
               rows="1"
@@ -75,7 +76,10 @@
               <v-row>
                 <v-col class="pt-0">
                   <v-select
-                    v-model="controls.speaker"
+                    v-model="controls.speakerId"
+                    :items="speakers"
+                    item-title="lastName"
+                    item-value="id"
                     label="Спикер*"
                     :rules="rules"
                     :menu-props="
@@ -129,9 +133,10 @@
 <script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
 
-import type { AreaResponse } from '@/shared/types';
+import type { AreaResponse, SpeakerResponse } from '@/shared/types';
 
 import { GetAllAreas } from '@/entities/area';
+import { GetAllSpeakers } from '@/entities/user';
 import { ALERT_TYPES } from '@/shared/config';
 import { useAlertStore } from '@/entities/alert';
 import { GetCaptcha, Create } from '../api/questions-repository';
@@ -143,13 +148,14 @@ const alertStore = useAlertStore();
 const valid = ref(true);
 const details = ref(false);
 const areas = ref<AreaResponse[]>([]);
+const speakers = ref<SpeakerResponse[]>([]);
 const captchaData = ref<string | null>(null);
 const captcha = ref(null as string | null);
 
 const controls = reactive({
   text: null as string | null,
   author: null as string | null,
-  speaker: null as string | null,
+  speakerId: null as string | null,
   area: undefined as string | undefined,
 });
 
@@ -194,16 +200,25 @@ async function fetchAllAreas() {
   }
 }
 
+async function fetchAllSpeakers() {
+  try {
+    speakers.value = await GetAllSpeakers();
+  } catch (error) {
+    const err = error as Error;
+    alertStore.addAlert({ type: ALERT_TYPES.ERROR, text: err.message });
+  }
+}
+
 async function submitForm() {
   const result = await questionAdd.value!.validate();
 
   if (result.valid) {
     try {
-      await Create(captchaData.value!, {
+      await Create(captcha.value!, {
         text: controls.text!,
         author: controls.author!,
         area: controls.area ?? null,
-        speaker: controls.speaker!,
+        speakerId: controls.speakerId ?? null,
       });
 
       toggleForm();
@@ -224,6 +239,7 @@ async function submitForm() {
 }
 
 fetchAllAreas();
+fetchAllSpeakers();
 </script>
 
 <style lang="scss" scoped>

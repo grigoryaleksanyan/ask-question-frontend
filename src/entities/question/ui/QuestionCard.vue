@@ -12,7 +12,7 @@
             class="align-self-center"
             cols="12"
             sm="6">
-            <span>кому: {{ question.speaker }}</span>
+            <span>кому: {{ question.speakerName }}</span>
           </v-col>
           <v-col
             class="d-flex justify-start justify-sm-end"

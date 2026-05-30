@@ -11,6 +11,7 @@ export type {
   FeedbackResponse,
   PaginatedResponse,
   SpeakerResponse,
+  CreateSpeakerResponse,
   DashboardSummaryResponse,
   StatusDistributionResponse,
   TimelinePointResponse,
@@ -31,6 +32,8 @@ export type {
   AreaCreateRequest,
   AreaUpdateRequest,
   FeedbackCreateRequest,
+  SpeakerCreateRequest,
+  SpeakerUpdateRequest,
 } from './api-requests';
 
 export {
