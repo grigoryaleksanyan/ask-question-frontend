@@ -340,7 +340,8 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-faq-category-page {
-  padding: 16px 24px;
+  padding: 24px;
+  color: variables.$text-primary-dark;
 }
 
 .admin-faq-category-page__header {

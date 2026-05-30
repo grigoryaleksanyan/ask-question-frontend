@@ -164,7 +164,8 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-speakers-page {
-  padding: 16px 24px;
+  padding: 24px;
+  color: variables.$text-primary-dark;
 }
 
 .admin-speakers-page__actions {
@@ -174,9 +175,7 @@ fetchData();
 .admin-speakers-page__list {
   display: flex;
   flex-direction: column;
-  border: 1px solid variables.$border-dark;
   border-radius: 10px;
-  background: variables.$surface-dark-elevated;
   gap: 8px;
 }
 

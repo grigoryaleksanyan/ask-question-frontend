@@ -248,7 +248,8 @@ if (route.name === 'admin-faq') {
 
 <style lang="scss" scoped>
 .admin-faq-page {
-  padding: 16px 24px;
+  padding: 24px;
+  color: variables.$text-primary-dark;
 }
 
 .admin-faq-page__actions {
