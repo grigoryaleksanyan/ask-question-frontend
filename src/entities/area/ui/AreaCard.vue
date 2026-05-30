@@ -1,51 +1,38 @@
 <template>
-  <div class="area-card p-3 border-round-lg">
-    <div class="flex items-center">
-      <div class="px-2">
-        <span>{{ area.title }}</span>
-      </div>
+  <div class="area-card">
+    <span class="area-card__handle handle">⠷</span>
 
-      <div class="flex justify-end items-center ml-auto">
-        <Divider
-          layout="vertical"
-          class="mr-3" />
+    <template v-if="isEditing">
+      <input
+        ref="edit-input"
+        v-model="editTitle"
+        class="area-card__input"
+        @keydown.enter="saveEdit"
+        @keydown.escape="cancelEdit"
+        @blur="saveEdit" />
+    </template>
 
-        <Button
-          title="Переместить"
-          class="handle"
-          icon="pi pi-arrows-alt"
-          severity="secondary"
-          text
-          rounded
-          size="small" />
+    <template v-else>
+      <span class="area-card__title">{{ area.title }}</span>
+    </template>
 
-        <Button
-          title="Изменить"
-          icon="pi pi-pencil"
-          severity="secondary"
-          text
-          rounded
-          size="small"
-          @click="emit('update')" />
+    <i
+      class="pi pi-pencil area-card__edit"
+      @click="startEdit"></i>
 
-        <Button
-          title="Удалить"
-          icon="pi pi-trash"
-          severity="secondary"
-          text
-          rounded
-          size="small"
-          @click="emit('delete')" />
-      </div>
-    </div>
+    <i
+      class="pi pi-trash area-card__delete"
+      @click="emit('delete')"></i>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, nextTick, useTemplateRef } from 'vue';
+
 import type { AreaResponse } from '@/shared/types';
 
-import Button from 'primevue/button';
-import Divider from 'primevue/divider';
+import { useApiCall } from '@/shared/lib';
+import { Update } from '../api/areas-repository';
 
 defineOptions({ name: 'AreaCard' });
 
@@ -54,34 +41,100 @@ const { area } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  update: [];
+  updated: [area: AreaResponse];
   delete: [];
 }>();
+
+const isEditing = ref(false);
+const editTitle = ref('');
+const editInput = useTemplateRef('edit-input');
+
+const { execute: executeUpdate } = useApiCall(Update, {
+  successMessage: 'Область изменена',
+  showPreloader: false,
+});
+
+async function startEdit() {
+  isEditing.value = true;
+  editTitle.value = area.title;
+  await nextTick();
+  editInput.value?.focus();
+}
+
+function cancelEdit() {
+  isEditing.value = false;
+  editTitle.value = '';
+}
+
+async function saveEdit() {
+  if (!isEditing.value) return;
+
+  const trimmed = editTitle.value.trim();
+  if (!trimmed || trimmed === area.title) {
+    cancelEdit();
+    return;
+  }
+
+  const result = await executeUpdate({ id: area.id, title: trimmed });
+  if (result) {
+    emit('updated', result);
+  }
+
+  isEditing.value = false;
+  editTitle.value = '';
+}
 </script>
 
 <style lang="scss" scoped>
 .area-card {
-  position: relative;
-  background-color: variables.$card-bg;
-  transition: box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid variables.$border-dark;
+  border-radius: 6px;
+  background: variables.$surface-dark-elevated;
+  gap: 6px;
 }
 
-.area-card:hover {
-  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
+.area-card__handle {
+  color: variables.$text-secondary;
+  cursor: grab;
+  font-size: 10px;
+}
+
+.area-card__title {
+  color: variables.$text-primary-dark;
+  font-size: 13px;
+}
+
+.area-card__input {
+  width: auto;
+  padding: 2px 6px;
+  border: 1px solid variables.$main-color;
+  border-radius: 4px;
+  background: transparent;
+  color: variables.$text-primary-dark;
+  font-size: 13px;
+  outline: none;
+}
+
+.area-card__edit {
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.area-card__delete {
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 11px;
 }
 
 .vuedraggable-drag > .area-card {
   transform: rotate(2deg);
 }
 
-.vuedraggable-ghost > .area-card::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  background-color: rgb(230 230 230);
-  content: '';
+.vuedraggable-ghost > .area-card {
+  opacity: 0.4;
 }
 </style>

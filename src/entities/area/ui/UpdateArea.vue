@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, useTemplateRef } from 'vue';
+import { useTemplateRef } from 'vue';
 
 import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
@@ -40,9 +40,8 @@ import { Update } from '../api/areas-repository';
 
 defineOptions({ name: 'UpdateArea' });
 
-const { area, isOpen } = defineProps<{
+const { area } = defineProps<{
   area: AreaResponse;
-  isOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -81,19 +80,6 @@ async function onSubmit({
     emit('success', updatedArea);
   }
 }
-
-watch(
-  () => isOpen,
-  (newValue) => {
-    if (!newValue) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.reset();
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formRef.value as any)?.setValues({ title: area.title });
-    }
-  },
-);
 
 function submitForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

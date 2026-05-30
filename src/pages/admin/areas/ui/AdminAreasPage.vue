@@ -1,63 +1,45 @@
 <template>
-  <div
-    style="max-width: 1200px"
-    class="text-left p-5 mx-auto">
-    <div class="grid">
-      <div class="col-12">
-        <div class="grid">
-          <div class="col-12 flex align-items-center">
-            <h1
-              class="typography__headline--small typography__headline--medium--sm mr-4">
-              Области
-            </h1>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="col-12">
-            <Button
-              size="small"
-              severity="secondary"
-              @click="showCreateArea = true">
-              Добавить область
-              <i class="pi pi-plus ml-2"></i>
-            </Button>
-          </div>
-        </div>
-
-        <Draggable
-          v-model="draggableAreas"
-          v-bind="dragOptions"
-          class="grid"
-          item-key="id"
-          handle=".handle"
-          draggable=".draggable"
-          drag-class="vuedraggable-drag"
-          ghost-class="vuedraggable-ghost">
-          <template #item="{ element }">
-            <div
-              :key="element.id"
-              class="col-12 draggable">
-              <AreaCard
-                :area="element"
-                @update="clickUpdateAreaBtn(element)"
-                @delete="clickDeleteAreaBtn(element)" />
-            </div>
-          </template>
-        </Draggable>
-      </div>
+  <div class="admin-areas">
+    <div class="admin-areas__header">
+      <span class="admin-areas__title">Области</span>
+      <span
+        class="admin-areas__add"
+        @click="showCreateAreaModal">
+        + Добавить
+      </span>
     </div>
 
-    <CenterModal
-      title="Создать область"
-      :is-open="showCreateArea"
-      @close="showCreateArea = false">
-      <CreateArea
-        ref="create-area"
-        :order="areas.length"
-        :is-open="showCreateArea"
-        @success="successCreateArea"
-        @cancel="showCreateArea = false" />
+    <Draggable
+      v-model="draggableAreas"
+      v-bind="dragOptions"
+      class="admin-areas__list"
+      item-key="id"
+      handle=".handle"
+      draggable=".draggable"
+      drag-class="vuedraggable-drag"
+      ghost-class="vuedraggable-ghost">
+      <template #item="{ element }">
+        <div
+          :key="element.id"
+          class="draggable">
+          <AreaCard
+            :area="element"
+            @updated="successUpdateArea"
+            @delete="clickDeleteAreaBtn(element)" />
+        </div>
+      </template>
+    </Draggable>
+
+    <SidebarModal ref="create-area-modal">
+      <template #header>Создать область</template>
+      <template #default="{ confirm, close }">
+        <CreateArea
+          ref="create-area"
+          :modal-confirm="confirm"
+          :modal-close="close"
+          :order="areas.length"
+          @success="successCreateArea" />
+      </template>
       <template #footer>
         <Button
           label="Создать"
@@ -68,33 +50,10 @@
           severity="secondary"
           @click="createAreaRef?.cancel()" />
       </template>
-    </CenterModal>
+    </SidebarModal>
 
     <CenterModal
-      title="Изменить область "
-      :is-open="showUpdateArea"
-      @close="showUpdateArea = false">
-      <UpdateArea
-        v-if="showUpdateArea && currentArea"
-        ref="update-area"
-        :area="currentArea"
-        :is-open="showUpdateArea"
-        @success="successUpdateArea"
-        @cancel="showUpdateArea = false" />
-      <template #footer>
-        <Button
-          label="Изменить"
-          @click="updateAreaRef?.submitForm()" />
-        <Button
-          label="Отмена"
-          outlined
-          severity="secondary"
-          @click="updateAreaRef?.cancel()" />
-      </template>
-    </CenterModal>
-
-    <CenterModal
-      title="Удалить запись "
+      title="Удалить запись"
       :is-open="showDeleteArea"
       @close="showDeleteArea = false">
       <DeleteArea
@@ -136,7 +95,6 @@ import {
   SetAreaOrder,
   AreaCard,
   CreateArea,
-  UpdateArea,
   DeleteArea,
 } from '@/entities/area';
 
@@ -152,13 +110,10 @@ const { execute: executeSetOrder } = useApiCall(SetAreaOrder, {
 });
 const { execute: executeFetch } = useApiCall(GetAllAreas);
 const currentArea = ref<AreaResponse | null>(null);
-
-const showCreateArea = ref(false);
-const showUpdateArea = ref(false);
 const showDeleteArea = ref(false);
 
+const createAreaModal = useTemplateRef('create-area-modal');
 const createAreaRef = useTemplateRef('create-area');
-const updateAreaRef = useTemplateRef('update-area');
 const deleteAreaRef = useTemplateRef('delete-area');
 
 const dragOptions = reactive({
@@ -188,22 +143,18 @@ async function fetchData() {
   }
 }
 
-function successCreateArea(area: AreaResponse) {
-  areas.value = [...areas.value, area];
-  showCreateArea.value = false;
+async function showCreateAreaModal() {
+  await createAreaModal.value?.open();
 }
 
-function clickUpdateAreaBtn(area: AreaResponse) {
-  currentArea.value = area;
-  showUpdateArea.value = true;
+function successCreateArea(area: AreaResponse) {
+  areas.value = [...areas.value, area];
 }
 
 function successUpdateArea(modifiedArea: AreaResponse) {
   areas.value = areas.value.map((area) =>
     area.id === modifiedArea.id ? modifiedArea : area,
   );
-
-  showUpdateArea.value = false;
 }
 
 function clickDeleteAreaBtn(area: AreaResponse) {
@@ -218,3 +169,37 @@ function successDeleteArea(areaId: string) {
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.admin-areas {
+  max-width: 1200px;
+  padding: 16px 24px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.admin-areas__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.admin-areas__title {
+  color: variables.$text-primary-dark;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-areas__add {
+  color: variables.$main-color;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.admin-areas__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+</style>
