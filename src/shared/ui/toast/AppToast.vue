@@ -106,6 +106,10 @@ function toastIconClass(severity: string) {
   margin-right: 10px;
   color: #1f2937;
   font-size: 0.875rem;
+
+  .p-dark & {
+    color: variables.$text-primary-dark;
+  }
 }
 
 .app-toast__close {
@@ -124,6 +128,14 @@ function toastIconClass(severity: string) {
 
   &:hover {
     color: #1f2937;
+  }
+
+  .p-dark & {
+    color: variables.$text-muted;
+
+    &:hover {
+      color: variables.$text-primary-dark;
+    }
   }
 }
 
