@@ -23,21 +23,24 @@ src/
     entrypoint/  — main.ts, App.vue
     router/      — маршруты, beforeEach-guard, auth-middleware
     layouts/     — DefaultLayout, EmptyLayout, AdminLayout
-    lib/         — registerPlugins, vuetify, vee-validate, global-components, http-client-interceptors
-    styles/      — base.scss (шрифты), variables.scss (SCSS-переменные)
+    lib/         — registerPlugins, primevue-theme, global-components, http-client-interceptors
+    styles/      — base.scss (шрифты), variables.scss (SCSS-переменные), typography.scss
   pages/     — композиции для маршрутов (main, errors, faq, questions, admin/*)
+  widgets/   — композитные виджеты: dashboard (графики, статистика)
   features/  — пользовательские действия: auth, feedback, preloader
-  entities/  — бизнес-модели: alert, faq, question, user, area
-  shared/    — инфраструктура (api, config, lib, routes, ui, assets)
+  entities/  — бизнес-модели: alert, area, dashboard, faq, question, user
+  shared/    — инфраструктура (api, assets, config, lib, routes, types, ui)
 ```
 
-Импорты только сверху вниз: `app → pages → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.ts`) — импортируй только через него.
+Импорты только сверху вниз: `app → pages → widgets → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.ts`) — импортируй только через него.
 
 Хранилища — Pinia Composition Stores: `features/preloader/store`, `entities/alert/store`, `features/auth/store`. Экспортируются через public API каждого слайса.
 
 ## Стек
 
-Vue 3.5 + Vuetify 4 + Pinia 3 + Vue Router 5 + VeeValidate 4 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`, `eslint-plugin-vuetify`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
+Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + Zod + Pinia 3 + Vue Router 5 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
+
+Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable, vue-responsive-video-background-player.
 
 ## Стили
 
@@ -52,9 +55,9 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 ## ESLint-правила (неочевидные)
 
 - ESLint 10 flat config через `typescript-eslint`, без `@eslint/eslintrc`/FlatCompat
-- Основные плагины: `typescript-eslint` (recommended), `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`, `vuetify` (`flat/recommended-v4`)
+- Основные плагины: `typescript-eslint` (recommended), `unicorn` (recommended, часть правил отключена), `import-x` (замена `import`), `vue`
 - Отключённые unicorn-правила: `prevent-abbreviations`, `no-null`, `no-array-reduce`, `prefer-top-level-await`, `switch-case-braces`, `prefer-global-this`, `no-negated-condition`, `filename-case`
-- `import-x/no-unresolved: error` — проверка резолва импортов через vite-резолвер. Исключения: vuetify subpath-exports (`vuetify/styles`, `vuetify/locale`) — inline disable
+- `import-x/no-unresolved: error` — проверка резолва импортов через vite-резолвер
 - `import-x/no-extraneous-dependencies: error` — devDependencies доступны только из конфигов (`eslint.config.ts`, `vite.config.ts`, `vitest.config.ts`, `.commitlintrc.cjs`, `tests/**`), не из `src/`
 - `no-throw-literal: error` — только `throw new Error()`, нельзя `throw "string"`
 - `@typescript-eslint/no-shadow: [error, { allow: ['i', 'j', 'k', 'e', 'err', 'error', 'event', '_'] }]` (заменяет `no-shadow`, который отключён)
@@ -83,6 +86,16 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 - `vue/prefer-separate-static-class` — статический класс отдельно от динамического
 - `vue/no-multiple-objects-in-class` — один объект в :class
 - `vue/no-root-v-if` — нельзя v-if на корневом элементе
+- `vue/component-api-style: [error, [script-setup]]` — только `<script setup>`
+- `vue/no-import-compiler-macros: error` — запрет импорта compiler macros
+- `vue/html-comment-content-spacing: [error, always]`
+- `vue/slot-name-casing: [error, kebab-case]`
+- `vue/no-template-target-blank: error`
+- `vue/match-component-import-name: error`
+- `vue/match-component-file-name: [error, { extensions: [vue], shouldMatchCase: true }]`
+- `vue/eqeqeq: error`
+- `vue/camelcase: [error, { properties: always }]`
+- `vue/custom-event-name-casing: [error, kebab-case]`
 - `curly: [error, all]`, `no-console: warn`, `no-debugger: error`
 
 ## Коммиты
@@ -97,32 +110,28 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 Макет страницы задаётся через `meta.layout` (default: `DefaultLayout`, также `EmptyLayout`, `AdminLayout`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach` через `auth-middleware.ts`. В навигационных хранниках можно использовать Pinia-хранилища напрямую (после `app.use(pinia)`).
 
-Маршруты: `/` (main), `/login` (EmptyLayout), `/questions`, `/question/:id`, `/faq`, `/admin`, `/admin-questions`, `/admin-faq`, `/admin-faq/:id`, `/admin-speakers`, `/admin-areas`, `/admin-feedback` (все admin — AdminLayout + isProtected), `/:catchAll(.*)` (404, EmptyLayout).
+Маршруты: `/` (main), `/login` (EmptyLayout), `/questions`, `/question/:id`, `/faq`, `/admin`, `/admin-questions`, `/admin-faq`, `/admin-faq/:id` (дочерний маршрут `/admin-faq`), `/admin-speakers`, `/admin-areas`, `/admin-feedback` (все admin — AdminLayout + isProtected), `/:catchAll(.*)` (404, EmptyLayout).
 
 ## Глобальные компоненты
 
-Регистрируются в `@/app/lib/global-components.ts`: SidebarModal, SidebarContentWrapper, CenterModal, CenterModalContentWrapper. Используй их напрямую в шаблонах без импорта.
+Регистрируются в `@/app/lib/global-components.ts`: SidebarModal. Используй напрямую в шаблонах без импорта. CenterModal импортируется напрямую.
 
-## VeeValidate
+## PrimeVue Forms + Zod
 
-Плагин подключается в `@/app/lib/vee-validate.ts`. Зарегистрированы правила: required, email, confirmed, max_value, required-date. Компоненты: VeeForm, VeeField, VeeErrorMessage.
+PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастомный Aura-пресет). Валидация форм — через `@primevue/forms` + Zod (замена VeeValidate).
 
 ## Shared UI
 
-- `sidebar-modal/` — SidebarModal (promise-based API: open/confirm/close, provide('close')), SidebarContentWrapper (slots: header/default/footer)
-- `center-modal/` — CenterModal (v-dialog), CenterModalContentWrapper (slots: default/actions)
+- `sidebar-modal/` — SidebarModal (promise-based API: open/confirm/close, provide('close')), SidebarPreloader
+- `center-modal/` — CenterModal
 - `rich-editor/` — RichEditor (**заглушка**, пустой div)
 - AppLogo, HeaderNavigation, DrawerNavigation
 
-## Известные проблемы steiger
+## Steiger
 
-`insignificant-slice` на entities и features — ложные срабатывания: steiger не видит Pinia-хранилища и динамические `import()` в роутере.
+Правило `fsd/insignificant-slice` **явно отключено** в `steiger.config.ts` — не считается ошибкой.
 
 ## Заглушки и неточности
 
 - RichEditor (`shared/ui/rich-editor/`) — пустой div, не реализован
-- AdminMainPage, AdminSpeakersPage — заглушки без функционала
-- QuestionIdView — хардкод данных, не использует реальный API
-- QuestionFilters — хардкод фильтров (speaker, zone)
-- `GetCapctha` — опечатка в имени функции и URL (должно быть `GetCaptcha`)
-- SidebarFeedbackContent содержит debug-кнопку для тестирования прелоадера
+- DefaultLayout — содержит debug-кнопку для тестирования прелоадера в футере модалки обратной связи
