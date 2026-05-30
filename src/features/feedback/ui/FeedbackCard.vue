@@ -51,7 +51,7 @@ const emit = defineEmits<{
 .feedback-card__theme {
   overflow: hidden;
   color: variables.$text-primary-dark;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -61,13 +61,13 @@ const emit = defineEmits<{
   flex-shrink: 0;
   margin-left: 8px;
   color: variables.$text-muted;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .feedback-card__text {
   margin-bottom: 6px;
   color: variables.$text-secondary;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
   overflow-wrap: break-word;
 }
@@ -81,7 +81,7 @@ const emit = defineEmits<{
 .feedback-card__email {
   overflow: hidden;
   color: variables.$text-muted;
-  font-size: 11px;
+  font-size: 13px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
