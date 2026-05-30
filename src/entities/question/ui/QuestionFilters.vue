@@ -1,65 +1,50 @@
 <template>
-  <div>
-    <div class="grid grid-nogutter justify-content-between">
-      <div class="col-6">
-        <SelectButton
-          v-model="sortOrder"
-          :options="sortOptions"
-          option-label="label"
-          option-value="value"
-          @change="onFilterChange">
-          <template #option="{ option }">
-            <i
-              :class="option.icon"
-              style="color: #717171; font-size: 20px"></i>
-          </template>
-        </SelectButton>
+  <div class="question-filters">
+    <div class="question-filters__row">
+      <button
+        class="question-filters__chip"
+        :class="{
+          'question-filters__chip--active': sortOrder === 'desc',
+        }"
+        @click="setSortOrder('desc')">
+        Сначала новые
+      </button>
+      <button
+        class="question-filters__chip"
+        :class="{
+          'question-filters__chip--active': sortOrder === 'asc',
+        }"
+        @click="setSortOrder('asc')">
+        Сначала старые
+      </button>
+
+      <div class="question-filters__select-wrap">
+        <Select
+          v-model="selectedSpeaker"
+          :options="speakerItems"
+          :option-label="
+            (speaker: SpeakerPublicResponse) =>
+              `${speaker.lastName} ${speaker.firstName}`
+          "
+          option-value="id"
+          placeholder="Спикер"
+          show-clear
+          class="question-filters__select"
+          @update:model-value="onFilterChange" />
       </div>
-      <div class="col-6 flex justify-content-end">
-        <Button
-          size="small"
-          severity="secondary"
-          title="Показать/скрыть блок фильтров"
-          @click="toggleFilters">
-          <span class="mr-1">Фильтры</span>
-          <i
-            :class="showFilters ? 'pi pi-filter-slash' : 'pi pi-filter'"
-            style="color: #717171; font-size: 20px"></i>
-        </Button>
+
+      <div class="question-filters__select-wrap">
+        <Select
+          v-model="selectedAreaId"
+          :options="areaItems"
+          option-label="title"
+          option-value="id"
+          placeholder="Зона"
+          show-clear
+          class="question-filters__select"
+          @update:model-value="onFilterChange" />
       </div>
     </div>
-
-    <Transition name="expand">
-      <div
-        v-show="showFilters"
-        class="grid grid-nogutter mt-6 justify-content-center">
-        <div class="col-12 question-filters__select-col">
-          <Select
-            v-model="selectedSpeaker"
-            :options="speakerItems"
-            :option-label="
-              (speaker: SpeakerPublicResponse) =>
-                `${speaker.lastName} ${speaker.firstName}`
-            "
-            option-value="id"
-            placeholder="Спикер"
-            show-clear
-            size="small"
-            @update:model-value="onFilterChange" />
-        </div>
-        <div class="col-12 question-filters__select-col">
-          <Select
-            v-model="selectedAreaId"
-            :options="areaItems"
-            option-label="title"
-            option-value="id"
-            placeholder="Зона ответственности"
-            show-clear
-            size="small"
-            @update:model-value="onFilterChange" />
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
@@ -71,8 +56,6 @@ import type { SpeakerPublicResponse, AreaResponse } from '@/shared/types';
 import { GetAllAreas } from '@/entities/area';
 import { GetAllPublicSpeakers } from '@/entities/user';
 import { useApiCall } from '@/shared/lib';
-import SelectButton from 'primevue/selectbutton';
-import Button from 'primevue/button';
 import Select from 'primevue/select';
 
 defineOptions({ name: 'QuestionFilters' });
@@ -95,28 +78,15 @@ const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
   showPreloader: false,
 });
 
-const showFilters = ref(false);
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const selectedSpeaker = ref<string | null>(null);
 const selectedAreaId = ref<string | null>(null);
 const speakerItems = ref<SpeakerPublicResponse[]>([]);
 const areaItems = ref<AreaResponse[]>([]);
 
-const sortOptions = [
-  {
-    label: 'Сначала новые',
-    value: 'desc',
-    icon: 'pi pi-arrow-up',
-  },
-  {
-    label: 'Сначала старые',
-    value: 'asc',
-    icon: 'pi pi-arrow-down',
-  },
-];
-
-function toggleFilters() {
-  showFilters.value = !showFilters.value;
+function setSortOrder(order: 'asc' | 'desc') {
+  sortOrder.value = order;
+  onFilterChange();
 }
 
 function onFilterChange() {
@@ -142,25 +112,38 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.expand-enter-active,
-.expand-leave-active {
-  overflow: hidden;
-  max-height: 500px;
-  opacity: 1;
+.question-filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.question-filters__chip {
+  padding: 5px 12px;
+  border: 1px solid variables.$border-light;
+  border-radius: 6px;
+  background: variables.$surface-card;
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 13px;
   transition:
-    max-height 0.3s ease,
-    opacity 0.3s ease;
-}
+    border-color 0.15s,
+    background 0.15s;
 
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-
-@media (width >= 600px) {
-  .question-filters__select-col {
-    width: 50%;
+  &--active {
+    border-color: variables.$main-color;
+    background: rgb(79 106 246 / 6%);
+    color: variables.$main-color;
   }
+}
+
+.question-filters__select-wrap {
+  min-width: 120px;
+}
+
+.question-filters__select {
+  font-size: 13px;
 }
 </style>

@@ -1,11 +1,7 @@
 <template>
-  <span class="question-status-icon">
-    <span>статус: {{ curentStatus.text }}</span>
-    <i
-      :class="curentStatus.icon"
-      :style="{ color: curentStatus.color, fontSize: '24px' }"
-      class="ml-2"></i>
-  </span>
+  <StatusDot
+    :color="statusColor"
+    :label="statusLabel" />
 </template>
 
 <script setup lang="ts">
@@ -13,6 +9,7 @@ import { computed } from 'vue';
 
 import { QuestionStatusId } from '@/shared/types';
 
+import { StatusDot } from '@/shared/ui/status-dot';
 import QUESTION_STATUSES from '../config/question-statuses';
 
 defineOptions({ name: 'QuestionStatusIcon' });
@@ -21,35 +18,27 @@ const { status = QuestionStatusId.New } = defineProps<{
   status?: QuestionStatusId;
 }>();
 
-const statusList = [
-  {
-    text: QUESTION_STATUSES.NEW.TITLE,
+const statusMap: Record<QuestionStatusId, { color: string; label: string }> = {
+  [QuestionStatusId.New]: {
     color: QUESTION_STATUSES.NEW.COLOR,
-    icon: 'pi pi-question-circle',
+    label: QUESTION_STATUSES.NEW.TITLE,
   },
-  {
-    text: QUESTION_STATUSES.IN_FOCUS.TITLE,
+  [QuestionStatusId.InFocus]: {
     color: QUESTION_STATUSES.IN_FOCUS.COLOR,
-    icon: 'pi pi-eye',
+    label: QUESTION_STATUSES.IN_FOCUS.TITLE,
   },
-  {
-    text: QUESTION_STATUSES.WITH_COMMENT.TITLE,
+  [QuestionStatusId.WithComment]: {
     color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-    icon: 'pi pi-comment',
+    label: QUESTION_STATUSES.WITH_COMMENT.TITLE,
   },
-  {
-    text: QUESTION_STATUSES.ANSWERED.TITLE,
+  [QuestionStatusId.Answered]: {
     color: QUESTION_STATUSES.ANSWERED.COLOR,
-    icon: 'pi pi-check-circle',
+    label: QUESTION_STATUSES.ANSWERED.TITLE,
   },
-];
+};
 
-const curentStatus = computed(() => statusList[status]);
+const statusColor = computed(
+  () => statusMap[status]?.color ?? QUESTION_STATUSES.ANSWERED.COLOR,
+);
+const statusLabel = computed(() => statusMap[status]?.label ?? '');
 </script>
-
-<style lang="scss" scoped>
-.question-status-icon {
-  display: inline-flex;
-  align-items: center;
-}
-</style>
