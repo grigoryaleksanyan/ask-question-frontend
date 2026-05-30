@@ -237,6 +237,7 @@ async function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
 }
 
 function onDeleteCategorySuccess(id: string) {
+  console.log('deleted', id);
   categories.value = categories.value.filter((category) => category.id !== id);
   deleteCategoryModalRef.value?.close();
 }

@@ -71,7 +71,7 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="deleteAreaModalRef?.value?.close()" />
+          @click="deleteAreaModalRef?.close()" />
       </template>
     </CenterModal>
   </div>
