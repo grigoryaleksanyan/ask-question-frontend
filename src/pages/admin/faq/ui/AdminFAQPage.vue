@@ -1,8 +1,7 @@
 <template>
   <div class="admin-faq-page">
     <template v-if="isMainCatalog">
-      <div class="admin-faq-page__header">
-        <h1 class="admin-faq-page__title">Категории FAQ</h1>
+      <div class="admin-faq-page__actions">
         <Button
           label="+ Добавить"
           size="small"
@@ -272,17 +271,8 @@ if (route.name === 'admin-faq') {
   padding: 16px 24px;
 }
 
-.admin-faq-page__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.admin-faq-page__actions {
   margin-bottom: 16px;
-}
-
-.admin-faq-page__title {
-  color: variables.$text-primary-dark;
-  font-size: 1.125rem;
-  font-weight: 500;
 }
 
 .admin-faq-page__slide-over-title {

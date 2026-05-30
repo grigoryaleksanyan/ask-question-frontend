@@ -1,7 +1,5 @@
 <template>
   <div class="admin-feedback-page">
-    <h1 class="admin-feedback-page__title">Обратная связь</h1>
-
     <div
       v-if="feedbacks.length > 0"
       class="admin-feedback-page__list">
@@ -94,13 +92,6 @@ fetchData();
 <style lang="scss" scoped>
 .admin-feedback-page {
   padding: 16px 24px;
-}
-
-.admin-feedback-page__title {
-  margin-bottom: 16px;
-  color: variables.$text-primary-dark;
-  font-size: 15px;
-  font-weight: 600;
 }
 
 .admin-feedback-page__list {

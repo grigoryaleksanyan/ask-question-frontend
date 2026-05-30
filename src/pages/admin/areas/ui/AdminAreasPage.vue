@@ -1,7 +1,6 @@
 <template>
   <div class="admin-areas">
-    <div class="admin-areas__header">
-      <span class="admin-areas__title">Области</span>
+    <div class="admin-areas__actions">
       <Button
         label="+ Добавить"
         size="small"
@@ -177,17 +176,8 @@ fetchData();
   text-align: left;
 }
 
-.admin-areas__header {
-  display: flex;
-  align-items: center;
+.admin-areas__actions {
   margin-bottom: 16px;
-  gap: 12px;
-}
-
-.admin-areas__title {
-  color: variables.$text-primary-dark;
-  font-size: 14px;
-  font-weight: 500;
 }
 
 .admin-areas__list {
