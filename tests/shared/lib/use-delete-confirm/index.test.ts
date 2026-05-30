@@ -15,10 +15,11 @@ describe('useDeleteConfirm', () => {
 
   it('returns confirm function that calls apiFn and returns true on success', async () => {
     const mockExecute = vi.fn().mockResolvedValue('deleted');
+    const mockError = { value: null };
     (useApiCall as unknown as vi.Mock).mockReturnValue({
       execute: mockExecute,
       isLoading: { value: false },
-      error: { value: null },
+      error: mockError,
     });
 
     const apiFn = vi.fn().mockResolvedValue('result');
@@ -35,10 +36,11 @@ describe('useDeleteConfirm', () => {
 
   it('returns false when apiFn fails', async () => {
     const mockExecute = vi.fn().mockResolvedValue(undefined);
+    const mockError = { value: new Error('Failed') };
     (useApiCall as unknown as vi.Mock).mockReturnValue({
       execute: mockExecute,
       isLoading: { value: false },
-      error: { value: null },
+      error: mockError,
     });
 
     const apiFn = vi.fn();

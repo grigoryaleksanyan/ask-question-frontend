@@ -163,6 +163,7 @@ function clickDeleteAreaBtn(area: AreaResponse) {
 
 function successDeleteArea(areaId: string) {
   areas.value = areas.value.filter((area) => area.id !== areaId);
+  deleteAreaModalRef?.value?.close();
 }
 
 fetchData();

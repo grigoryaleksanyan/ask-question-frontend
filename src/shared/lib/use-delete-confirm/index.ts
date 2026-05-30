@@ -24,8 +24,8 @@ export function useDeleteConfirm<T = unknown>({
   });
 
   async function confirm(id: string): Promise<boolean> {
-    const result = await execute(id);
-    return result !== undefined;
+    await execute(id);
+    return !error.value;
   }
 
   return { confirm, isLoading, error };
