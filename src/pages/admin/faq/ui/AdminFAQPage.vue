@@ -78,15 +78,15 @@
         </template>
       </SlideOver>
 
-      <CenterModal
-        v-model:is-open="isDeleteCategoryOpen"
-        title="Удалить категорию"
-        @close="isDeleteCategoryOpen = false">
+      <CenterModal ref="deleteCategoryModalRef">
+        <template #header>
+          <span>Удалить категорию</span>
+        </template>
         <DeleteCategory
           :id="categoryToDeleteId"
           ref="deleteCategoryRef"
           @success="onDeleteCategorySuccess"
-          @cancel="isDeleteCategoryOpen = false" />
+          @cancel="deleteCategoryModalRef?.close()" />
         <template #footer>
           <Button
             label="Удалить"
@@ -95,7 +95,7 @@
           <Button
             label="Отмена"
             severity="secondary"
-            @click="isDeleteCategoryOpen = false" />
+            @click="deleteCategoryModalRef?.close()" />
         </template>
       </CenterModal>
     </template>
@@ -144,7 +144,6 @@ const currentCategory = ref<FaqCategoryWithEntriesResponse | null>(null);
 
 const showCreateCategory = ref(false);
 const showUpdateCategory = ref(false);
-const isDeleteCategoryOpen = ref(false);
 const categoryToDeleteId = ref('');
 
 const createCategorySlideOver = useTemplateRef('createCategorySlideOver');
@@ -152,6 +151,7 @@ const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
 const createCategoryRef = useTemplateRef('create-category');
 const updateCategoryRef = useTemplateRef('update-category');
 const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
+const deleteCategoryModalRef = useTemplateRef('deleteCategoryModalRef');
 
 const dragOptions = reactive({
   animation: 150,
@@ -231,14 +231,14 @@ function cancelUpdateCategory() {
   updateCategorySlideOver.value?.close();
 }
 
-function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
+async function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
   categoryToDeleteId.value = cat.id;
-  isDeleteCategoryOpen.value = true;
+  await deleteCategoryModalRef.value?.open();
 }
 
 function onDeleteCategorySuccess(id: string) {
   categories.value = categories.value.filter((category) => category.id !== id);
-  isDeleteCategoryOpen.value = false;
+  deleteCategoryModalRef.value?.close();
 }
 
 if (route.name === 'admin-faq') {
