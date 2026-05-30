@@ -1,7 +1,5 @@
 <template>
-  <div
-    style="max-width: 1200px"
-    class="admin-summary-page">
+  <div class="admin-summary-page">
     <DashboardWidget />
   </div>
 </template>
