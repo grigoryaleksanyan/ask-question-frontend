@@ -25,18 +25,18 @@ const { color, label = '' } = defineProps<{
 .status-dot {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .status-dot__indicator {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   flex-shrink: 0;
   border-radius: 50%;
 }
 
 .status-dot__label {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
 }
 </style>

@@ -52,9 +52,11 @@
         class="admin-questions-page__row"
         :class="{
           'admin-questions-page__row--selected': selectedIds.has(question.id),
-        }">
+        }"
+        @click="toggleSelect(question.id)">
         <div
-          class="admin-questions-page__cell admin-questions-page__cell--check">
+          class="admin-questions-page__cell admin-questions-page__cell--check"
+          @click.stop>
           <Checkbox
             :model-value="selectedIds.has(question.id)"
             @change="toggleSelect(question.id)" />
@@ -229,24 +231,24 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-questions-page {
-  padding: 16px 24px;
+  padding: 20px 28px;
   color: variables.$text-primary-dark;
 }
 
 .admin-questions-page__tabs {
   display: flex;
-  margin-bottom: 16px;
-  gap: 4px;
+  margin-bottom: 20px;
+  gap: 6px;
 }
 
 .admin-questions-page__tab {
-  padding: 4px 10px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background: none;
   color: variables.$text-secondary;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   transition:
     color 0.15s,
     background-color 0.15s;
@@ -269,22 +271,22 @@ fetchData();
 .admin-questions-page__row {
   display: grid;
   align-items: center;
-  padding: 8px 12px;
-  gap: 8px;
-  grid-template-columns: 24px 1fr 100px 100px 80px 80px 80px;
+  padding: 12px 16px;
+  gap: 12px;
+  grid-template-columns: 28px 1fr 120px 120px 100px 90px 90px;
 }
 
 .admin-questions-page__header {
   border-bottom: 1px solid variables.$border-dark;
   color: variables.$text-muted;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .admin-questions-page__row {
   border-bottom: 1px solid variables.$border-dark;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .admin-questions-page__row--selected {

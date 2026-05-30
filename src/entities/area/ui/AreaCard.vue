@@ -93,18 +93,18 @@ async function saveEdit() {
   border: 1px solid variables.$border-dark;
   border-radius: 6px;
   background: variables.$surface-dark-elevated;
-  gap: 6px;
+  gap: 10px;
 }
 
 .area-card__handle {
   color: variables.$text-secondary;
   cursor: grab;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .area-card__title {
   color: variables.$text-primary-dark;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .area-card__input {
@@ -114,20 +114,20 @@ async function saveEdit() {
   border-radius: 4px;
   background: transparent;
   color: variables.$text-primary-dark;
-  font-size: 13px;
+  font-size: 15px;
   outline: none;
 }
 
 .area-card__edit {
   color: variables.$text-secondary;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .area-card__delete {
   color: variables.$text-secondary;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .vuedraggable-drag > .area-card {

@@ -91,7 +91,7 @@ const menuItems: MenuItem[] = [
 
 .speaker-card__name {
   color: variables.$text-primary-dark;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
 }
 
@@ -109,6 +109,6 @@ const menuItems: MenuItem[] = [
   width: 100%;
   margin-top: 2px;
   color: variables.$text-secondary;
-  font-size: 12px;
+  font-size: 13px;
 }
 </style>

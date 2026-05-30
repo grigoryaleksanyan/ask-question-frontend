@@ -170,10 +170,7 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-areas {
-  max-width: 1200px;
   padding: 16px 24px;
-  margin: 0 auto;
-  text-align: left;
 }
 
 .admin-areas__actions {

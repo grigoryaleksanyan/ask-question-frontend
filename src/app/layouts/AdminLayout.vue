@@ -246,7 +246,7 @@ async function logout() {
 
 .admin-topbar__section {
   color: variables.$text-primary-dark;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -258,7 +258,7 @@ async function logout() {
 
 .admin-topbar__user {
   color: variables.$text-primary-dark;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .admin-content {
