@@ -4,7 +4,6 @@ import type {
   QuestionResponse,
   QuestionCreateRequest,
   QuestionUpdateRequest,
-  CaptchaResponse,
   PaginatedResponse,
   SpeakerResponse,
   VoteResultResponse,
@@ -23,9 +22,9 @@ export interface QuestionListParams {
   sortOrder?: 'asc' | 'desc';
 }
 
-export async function GetCaptcha(): Promise<CaptchaResponse> {
+export async function GetCaptcha(): Promise<string> {
   const result = await httpClient
-    .get<CaptchaResponse>(`${apiRoute}/GetCaptcha`)
+    .get<string>(`${apiRoute}/GetCaptcha`)
     .then((response) => response.data)
     .catch((error) => {
       throw new Error('Ошибка получения капчи', { cause: error });

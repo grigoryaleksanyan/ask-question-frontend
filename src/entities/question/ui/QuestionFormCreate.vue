@@ -103,9 +103,9 @@
                 <v-col
                   cols="6"
                   class="d-flex justify-center">
-                  <template v-if="captchaData?.captchaImage">
+                  <template v-if="captchaData">
                     <v-img
-                      :src="captchaData.captchaImage"
+                      :src="captchaData"
                       style="width: 100%; max-width: 160px; height: 48px"
                       alt="captcha" />
                   </template>
@@ -129,7 +129,7 @@
 <script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
 
-import type { AreaResponse, CaptchaResponse } from '@/shared/types';
+import type { AreaResponse } from '@/shared/types';
 
 import { GetAllAreas } from '@/entities/area';
 import { ALERT_TYPES } from '@/shared/config';
@@ -143,7 +143,7 @@ const alertStore = useAlertStore();
 const valid = ref(true);
 const details = ref(false);
 const areas = ref<AreaResponse[]>([]);
-const captchaData = ref<CaptchaResponse | null>(null);
+const captchaData = ref<string | null>(null);
 const captcha = ref(null as string | null);
 
 const controls = reactive({
@@ -199,7 +199,7 @@ async function submitForm() {
 
   if (result.valid) {
     try {
-      await Create(captchaData.value!.id, {
+      await Create(captchaData.value!, {
         text: controls.text!,
         author: controls.author!,
         area: controls.area ?? null,

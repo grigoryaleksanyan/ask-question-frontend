@@ -9,7 +9,6 @@ export type {
   FaqEntryResponse,
   AreaResponse,
   FeedbackResponse,
-  CaptchaResponse,
   PaginatedResponse,
   SpeakerResponse,
   DashboardSummaryResponse,

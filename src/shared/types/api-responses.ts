@@ -80,11 +80,6 @@ export interface FeedbackResponse {
   updated: string | null;
 }
 
-export interface CaptchaResponse {
-  id: string;
-  captchaImage: string;
-}
-
 export interface PaginatedResponse<T> {
   items: T[];
   totalCount: number;
