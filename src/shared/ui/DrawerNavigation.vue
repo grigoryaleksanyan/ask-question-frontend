@@ -51,7 +51,7 @@ const {
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 10px;
   color: variables.$text-secondary;
   font-size: 14px;
   gap: 8px;
@@ -74,7 +74,7 @@ const {
 }
 
 .drawer-nav-link--dark:hover {
-  background-color: rgb(255 255 255 / 10%);
+  background-color: rgb(255 255 255 / 6%);
 }
 
 .drawer-nav-link--dark.router-link-active {
@@ -99,7 +99,7 @@ const {
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 16px;
   gap: 0;
 }
@@ -118,7 +118,7 @@ const {
 }
 
 .drawer-nav-link--dark.drawer-nav-link--icon-only:hover {
-  background-color: rgb(255 255 255 / 10%);
+  background-color: rgb(255 255 255 / 6%);
 }
 
 .drawer-nav-link--dark.drawer-nav-link--icon-only.router-link-active {
