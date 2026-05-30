@@ -4,13 +4,11 @@
     position="right"
     modal
     :dismissable="closeOnClickAway"
-    style="width: 100%; max-width: 700px">
+    style="width: 100%; max-width: 400px">
     <template #header>
       <slot name="header"></slot>
     </template>
-    <div
-      style="overflow-y: auto; overscroll-behavior: none"
-      class="p-8">
+    <div style="overflow-y: auto; overscroll-behavior: none">
       <slot
         :is-open="isOpen"
         :toggle-preloader="togglePreloader"
