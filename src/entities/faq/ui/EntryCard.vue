@@ -1,25 +1,16 @@
 <template>
-  <Card
-    class="entry-card"
-    style="background-color: #e8eaf6">
+  <Card class="entry-card">
     <template #title>
       <div class="flex text-body-large">
         <div class="col-12 self-center">
-          <span style="overflow-wrap: break-word">{{ entry.question }}</span>
+          <span class="entry-card__title">{{ entry.question }}</span>
         </div>
         <div class="col-12 sm:col-6 flex justify-start sm:justify-end"></div>
       </div>
     </template>
     <template #content>
       <div class="flex">
-        <div
-          class="entry-card__answer p-3"
-          style="
-            width: 100%;
-            max-height: 200px;
-            background-color: white;
-            overflow-y: scroll;
-          ">
+        <div class="entry-card__answer p-3">
           <div v-html="entry.answer"></div>
         </div>
       </div>
@@ -97,10 +88,24 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .entry-card {
   position: relative;
+  background-color: variables.$card-bg;
+  transition: box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
+}
+
+.entry-card__title {
+  overflow-wrap: break-word;
 }
 
 .entry-card__answer {
+  width: 100%;
+  max-height: 200px;
   border-radius: 4px;
+  background-color: variables.$card-content-bg;
+  overflow-y: scroll;
 }
 
 .vuedraggable-drag > .entry-card {

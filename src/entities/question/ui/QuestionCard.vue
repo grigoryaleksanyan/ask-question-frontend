@@ -2,7 +2,6 @@
   <div class="mb-3">
     <Card
       class="shadow-2 cursor-pointer question-card"
-      style="background-color: #e8eaf6"
       @click="navigateToQuestion">
       <template #title>
         <div class="grid grid-nogutter py-2">
@@ -19,13 +18,12 @@
       </template>
       <template #content>
         <div class="flex">
-          <div :style="{ backgroundColor: color, width: '7px' }"></div>
           <div
-            style=" flex: 1;background-color: white"
-            class="p-3">
+            class="question-card__status-bar"
+            :style="{ backgroundColor: color }"></div>
+          <div class="question-card__body p-3">
             <p
-              style="color: grey"
-              class="m-0 typography__body--medium typography__body--large--sm"
+              class="question-card__text m-0 typography__body--medium typography__body--large--sm"
               v-html="sliceText(question.text)"></p>
           </div>
         </div>
@@ -160,6 +158,31 @@ async function handleDislike() {
 </style>
 
 <style lang="scss" scoped>
+.question-card {
+  background-color: variables.$card-bg;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.question-card:hover {
+  box-shadow: 0 4px 20px rgb(0 0 0 / 10%);
+  transform: translateY(-1px);
+}
+
+.question-card__status-bar {
+  width: 7px;
+}
+
+.question-card__body {
+  flex: 1;
+  background-color: variables.$card-content-bg;
+}
+
+.question-card__text {
+  color: variables.$text-muted;
+}
+
 @media (width >= 600px) {
   .question-card__speaker-col {
     width: 50%;

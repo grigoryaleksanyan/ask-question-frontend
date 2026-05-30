@@ -1,19 +1,13 @@
 <template>
-  <Card
-    class="shadow-2 feedback-card"
-    style="background-color: #e8eaf6">
+  <Card class="shadow-2 feedback-card">
     <template #title>
       <div class="grid grid-nogutter py-2">
         <div class="col-12 align-self-center">
-          <span
-            style="overflow-wrap: break-word"
-            class="typography__body--large">
+          <span class="typography__body--large feedback-card__field">
             Имя: {{ feedback.username }}
           </span>
           <br />
-          <span
-            style="overflow-wrap: break-word"
-            class="typography__body--large">
+          <span class="typography__body--large feedback-card__field">
             Почта: {{ feedback.email }}
           </span>
         </div>
@@ -21,16 +15,9 @@
     </template>
     <template #content>
       <div class="flex">
-        <div
-          style="
-            width: 100%;
-            max-height: 200px;
-            background-color: white;
-            overflow-y: scroll;
-          "
-          class="p-3">
+        <div class="feedback-card__body p-3">
           <p>{{ feedback.theme }}</p>
-          <p style="font-style: italic">
+          <p class="feedback-card__italic">
             {{ feedback.text }}
           </p>
         </div>
@@ -75,3 +62,29 @@ const emit = defineEmits<{
   delete: [];
 }>();
 </script>
+
+<style lang="scss" scoped>
+.feedback-card {
+  background-color: variables.$card-bg;
+  transition: box-shadow 0.2s ease;
+}
+
+.feedback-card:hover {
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
+}
+
+.feedback-card__field {
+  overflow-wrap: break-word;
+}
+
+.feedback-card__body {
+  width: 100%;
+  max-height: 200px;
+  background-color: variables.$card-content-bg;
+  overflow-y: scroll;
+}
+
+.feedback-card__italic {
+  font-style: italic;
+}
+</style>

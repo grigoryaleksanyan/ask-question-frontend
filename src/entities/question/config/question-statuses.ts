@@ -6,22 +6,22 @@ const QUESTION_STATUSES: Record<string, QuestionStatus> = {
   NEW: {
     STATUS_ID: QuestionStatusId.New,
     TITLE: 'новый',
-    COLOR: '#1976d2',
+    COLOR: '#5c6bc0',
   },
   IN_FOCUS: {
     STATUS_ID: QuestionStatusId.InFocus,
     TITLE: 'в фокусе',
-    COLOR: '#ff9800',
+    COLOR: '#26a69a',
   },
   WITH_COMMENT: {
     STATUS_ID: QuestionStatusId.WithComment,
     TITLE: 'с комментарием',
-    COLOR: '#428f4e',
+    COLOR: '#ffb74d',
   },
   ANSWERED: {
     STATUS_ID: QuestionStatusId.Answered,
     TITLE: 'отвеченный',
-    COLOR: '#9FB980',
+    COLOR: '#4ecca3',
   },
 };
 

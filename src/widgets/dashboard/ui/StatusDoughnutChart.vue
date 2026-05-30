@@ -28,6 +28,8 @@ import { QuestionStatusId } from '@/shared/types';
 
 import Card from 'primevue/card';
 
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
+
 defineOptions({ name: 'StatusDoughnutChart' });
 
 const { byStatus } = defineProps<{
@@ -44,10 +46,10 @@ const STATUS_LABELS: Record<number, string> = {
 };
 
 const STATUS_COLORS: Record<number, string> = {
-  [QuestionStatusId.New]: '#5c6bc0',
-  [QuestionStatusId.InFocus]: '#26a69a',
-  [QuestionStatusId.WithComment]: '#ffb74d',
-  [QuestionStatusId.Answered]: '#ef5350',
+  [QuestionStatusId.New]: QUESTION_STATUSES.NEW.COLOR,
+  [QuestionStatusId.InFocus]: QUESTION_STATUSES.IN_FOCUS.COLOR,
+  [QuestionStatusId.WithComment]: QUESTION_STATUSES.WITH_COMMENT.COLOR,
+  [QuestionStatusId.Answered]: QUESTION_STATUSES.ANSWERED.COLOR,
 };
 
 const chartData = computed(() => ({

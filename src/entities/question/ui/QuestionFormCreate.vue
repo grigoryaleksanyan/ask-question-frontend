@@ -1,7 +1,5 @@
 <template>
-  <Card
-    class="shadow-5 question-form-create"
-    style=" width: 600px;background-color: #e8eaf6">
+  <Card class="shadow-5 question-form-create">
     <template #content>
       <form @submit.prevent="submitForm">
         <div class="p-2">
@@ -16,8 +14,7 @@
                 @change="showDetails" />
             </div>
             <div
-              class="flex justify-content-end"
-              style="max-width: 85px">
+              class="flex justify-content-end question-form-create__toggle-col">
               <Button
                 title="Дополнительные сведения"
                 severity="primary"
@@ -79,13 +76,13 @@
                     <template v-if="captchaData">
                       <img
                         :src="captchaData"
-                        style="width: 100%; max-width: 160px; height: 48px"
+                        class="question-form-create__captcha"
                         alt="captcha" />
                     </template>
                     <template v-else>
                       <i
                         class="pi pi-refresh question-form-create__spinner"
-                        style=" height: 48px;color: grey"></i>
+                        style="height: 48px; color: grey"></i>
                     </template>
                   </div>
                 </div>
@@ -225,6 +222,11 @@ fetchAllSpeakers();
 </script>
 
 <style lang="scss" scoped>
+.question-form-create {
+  width: 600px;
+  background-color: variables.$card-bg;
+}
+
 .question-form-create__textarea {
   margin: 3px;
 }
@@ -240,6 +242,16 @@ fetchAllSpeakers();
 .question-form-create__textarea::-webkit-scrollbar-thumb {
   border-radius: 5px;
   background-color: variables.$scrollbar-color;
+}
+
+.question-form-create__toggle-col {
+  max-width: 85px;
+}
+
+.question-form-create__captcha {
+  width: 100%;
+  max-width: 160px;
+  height: 48px;
 }
 
 .question-form-create__spinner {

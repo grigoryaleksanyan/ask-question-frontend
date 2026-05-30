@@ -31,6 +31,8 @@ import type { AreaDistributionResponse } from '@/shared/types';
 
 import Card from 'primevue/card';
 
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
+
 defineOptions({ name: 'AreaBarChart' });
 
 const { byArea } = defineProps<{
@@ -44,7 +46,7 @@ const chartData = computed(() => ({
   datasets: [
     {
       data: byArea.map((a) => a.count),
-      backgroundColor: '#5c6bc0',
+      backgroundColor: QUESTION_STATUSES.NEW.COLOR,
       borderRadius: 4,
       barThickness: 18,
     },

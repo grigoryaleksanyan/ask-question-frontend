@@ -10,7 +10,7 @@
           <template #option="{ option }">
             <i
               :class="option.icon"
-              style=" color: #717171;font-size: 20px"></i>
+              style="color: #717171; font-size: 20px"></i>
           </template>
         </SelectButton>
       </div>
@@ -23,7 +23,7 @@
           <span class="mr-1">Фильтры</span>
           <i
             :class="showFilters ? 'pi pi-filter-slash' : 'pi pi-filter'"
-            style=" color: #717171;font-size: 20px"></i>
+            style="color: #717171; font-size: 20px"></i>
         </Button>
       </div>
     </div>

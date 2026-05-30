@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 1000px">
+  <div class="questions-view">
     <div class="grid grid-nogutter">
       <div class="col-12 my-8">
         <h1
@@ -80,10 +80,7 @@
     <template v-else-if="!isLoading">
       <div class="grid grid-nogutter my-6">
         <div class="col-12">
-          <p
-            style="margin: 0; color: grey; font-size: 22px; text-align: center">
-            Вопросы отсутствуют
-          </p>
+          <p class="questions-view__empty">Вопросы отсутствуют</p>
         </div>
       </div>
     </template>
@@ -195,8 +192,19 @@ fetchData();
 </script>
 
 <style lang="scss" scoped>
+.questions-view {
+  max-width: 1000px;
+}
+
 .questions-view__tabs :deep(.p-tabview-panels) {
   display: none;
+}
+
+.questions-view__empty {
+  margin: 0;
+  color: variables.$text-muted;
+  font-size: 1.375rem;
+  text-align: center;
 }
 
 @media (width >= 600px) {

@@ -33,6 +33,8 @@ import type { TimelinePointResponse } from '@/shared/types';
 
 import Card from 'primevue/card';
 
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
+
 defineOptions({ name: 'TimelineLineChart' });
 
 const { timeline } = defineProps<{
@@ -48,6 +50,9 @@ ChartJS.register(
   Tooltip,
 );
 
+const newColor = QUESTION_STATUSES.NEW.COLOR;
+const answeredColor = QUESTION_STATUSES.ANSWERED.COLOR;
+
 const chartData = computed(() => ({
   labels: timeline.map((p) => {
     const parts = p.date.split('-');
@@ -57,8 +62,8 @@ const chartData = computed(() => ({
     {
       label: 'Новые',
       data: timeline.map((p) => p.newCount),
-      borderColor: '#5c6bc0',
-      backgroundColor: 'rgba(92,107,192,0.15)',
+      borderColor: newColor,
+      backgroundColor: `${newColor}26`,
       fill: true,
       tension: 0.3,
       pointRadius: 2,
@@ -66,8 +71,8 @@ const chartData = computed(() => ({
     {
       label: 'Отвеченные',
       data: timeline.map((p) => p.answeredCount),
-      borderColor: '#26a69a',
-      backgroundColor: 'rgba(38,166,154,0.15)',
+      borderColor: answeredColor,
+      backgroundColor: `${answeredColor}26`,
       fill: true,
       tension: 0.3,
       pointRadius: 2,

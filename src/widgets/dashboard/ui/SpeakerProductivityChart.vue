@@ -32,6 +32,8 @@ import type { SpeakerProductivityResponse } from '@/shared/types';
 
 import Card from 'primevue/card';
 
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
+
 defineOptions({ name: 'SpeakerProductivityChart' });
 
 const { topSpeakers } = defineProps<{
@@ -46,14 +48,14 @@ const chartData = computed(() => ({
     {
       label: 'Назначено',
       data: topSpeakers.map((s) => s.assignedQuestions),
-      backgroundColor: '#5c6bc0',
+      backgroundColor: QUESTION_STATUSES.NEW.COLOR,
       borderRadius: 4,
       barThickness: 18,
     },
     {
       label: 'Отвечено',
       data: topSpeakers.map((s) => s.answeredQuestions),
-      backgroundColor: '#4ecca3',
+      backgroundColor: QUESTION_STATUSES.ANSWERED.COLOR,
       borderRadius: 4,
       barThickness: 18,
     },

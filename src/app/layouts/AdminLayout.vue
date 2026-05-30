@@ -161,7 +161,7 @@ async function logout() {
   width: 260px;
   flex-shrink: 0;
   padding: 16px 0;
-  background-color: #37474f;
+  background-color: variables.$sidebar-bg;
   color: white;
   transition: width 0.2s ease;
 }
@@ -186,7 +186,7 @@ async function logout() {
 }
 
 .app-toolbar {
-  background-color: #1f2937;
+  background-color: variables.$toolbar-bg;
   color: white;
 }
 </style>

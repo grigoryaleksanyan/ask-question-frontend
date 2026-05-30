@@ -8,8 +8,7 @@
         <template #content>
           <div class="text-center p-4">
             <div
-              class="typography__body--small text-uppercase"
-              style=" color: rgb(0 0 0 / 60%);letter-spacing: 1px">
+              class="typography__body--small text-uppercase stat-cards-row__label">
               {{ card.label }}
             </div>
             <div
@@ -28,6 +27,8 @@
 import { computed } from 'vue';
 
 import Card from 'primevue/card';
+
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
 
 defineOptions({ name: 'StatCardsRow' });
 
@@ -59,19 +60,33 @@ function formatHours(hours: number): string {
 
 const cards = computed(() => [
   { label: 'Всего вопросов', value: totalQuestions, color: 'inherit' },
-  { label: 'Отвечено', value: answeredQuestions, color: '#4ecca3' },
+  {
+    label: 'Отвечено',
+    value: answeredQuestions,
+    color: QUESTION_STATUSES.ANSWERED.COLOR,
+  },
   { label: 'Неотвечено', value: unansweredQuestions, color: '#ef5350' },
   {
     label: 'Ср. время ответа',
     value: formatHours(averageResponseTimeHours),
-    color: '#5c6bc0',
+    color: QUESTION_STATUSES.NEW.COLOR,
   },
   { label: 'Обратная связь', value: totalFeedback, color: 'inherit' },
   { label: 'Областей', value: totalAreas, color: 'inherit' },
   {
     label: 'Без спикера',
     value: questionsWithoutSpeaker,
-    color: questionsWithoutSpeaker > 0 ? '#ffb74d' : 'inherit',
+    color:
+      questionsWithoutSpeaker > 0
+        ? QUESTION_STATUSES.WITH_COMMENT.COLOR
+        : 'inherit',
   },
 ]);
 </script>
+
+<style lang="scss" scoped>
+.stat-cards-row__label {
+  color: variables.$text-secondary;
+  letter-spacing: 1px;
+}
+</style>

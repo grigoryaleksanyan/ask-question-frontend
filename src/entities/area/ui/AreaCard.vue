@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="area-card p-3 border-round-lg"
-    style="background-color: #e8eaf6">
+  <div class="area-card p-3 border-round-lg">
     <div class="flex items-center">
       <div class="px-2">
         <span>{{ area.title }}</span>
@@ -64,6 +62,12 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .area-card {
   position: relative;
+  background-color: variables.$card-bg;
+  transition: box-shadow 0.2s ease;
+}
+
+.area-card:hover {
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
 }
 
 .vuedraggable-drag > .area-card {

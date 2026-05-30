@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 1000px">
+  <div class="question-id-view">
     <template v-if="question">
       <div class="grid grid-nogutter">
         <div class="col-12 my-8">
@@ -12,18 +12,17 @@
 
       <div class="grid grid-nogutter">
         <div class="col-12 flex justify-content-center">
-          <div style=" width: 100%;background-color: #2b2b2b">
+          <div class="question-id-view__header">
             <div
-              class="flex align-items-center py-5 px-2 question-id-view__header-row"
-              style="height: 100%">
-              <div style="width: 8.3333%">
+              class="flex align-items-center py-5 px-2 question-id-view__header-row">
+              <div class="question-id-view__back">
                 <Button
                   icon="pi pi-arrow-left"
-                  style="background-color: white; color: #2b2b2b"
+                  class="question-id-view__back-btn"
                   @click="goBack" />
               </div>
-              <div style="width: 91.6667%">
-                <p style="margin: 0; color: white; text-align: center">
+              <div class="question-id-view__meta">
+                <p class="question-id-view__meta-text">
                   {{ authorDisplay }}, {{ question.areaTitle || '' }},
                   {{ formattedDate }}
                   <br />
@@ -35,22 +34,16 @@
         </div>
         <div class="col-12">
           <div
-            class="p-5 question-id-view__content flex flex-column justify-content-center"
-            style=" width: 100%; min-height: 250px;background-color: #e8eaf6">
+            class="question-id-view__content p-5 flex flex-column justify-content-center">
             <div>
               <div class="flex mb-6">
                 <div class="col-12 flex">
                   <div
-                    :style="{
-                      backgroundColor: color,
-                      width: '7px',
-                    }"></div>
-                  <div
-                    style=" flex: 1;background-color: white"
-                    class="p-3">
+                    class="question-id-view__status-bar"
+                    :style="{ backgroundColor: color }"></div>
+                  <div class="question-id-view__body p-3">
                     <p
-                      style="color: grey"
-                      class="m-0 typography__body--medium typography__body--large--sm"
+                      class="m-0 typography__body--medium typography__body--large--sm question-id-view__text"
                       v-html="question.text"></p>
                   </div>
                 </div>
@@ -113,7 +106,7 @@
     <template v-else>
       <div class="grid grid-nogutter my-8">
         <div class="col-12 text-center">
-          <p style="color: grey; font-size: 22px">Вопрос не найден</p>
+          <p class="question-id-view__empty">Вопрос не найден</p>
         </div>
       </div>
     </template>
@@ -220,8 +213,60 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.question-id-view {
+  max-width: 1000px;
+}
+
+.question-id-view__header {
+  width: 100%;
+  background-color: variables.$heading-dark-bg;
+}
+
+.question-id-view__header-row {
+  height: 100%;
+}
+
+.question-id-view__back {
+  width: 8.3333%;
+}
+
+.question-id-view__back-btn {
+  background-color: variables.$card-content-bg;
+  color: variables.$heading-dark-bg;
+}
+
+.question-id-view__meta {
+  width: 91.6667%;
+}
+
+.question-id-view__meta-text {
+  margin: 0;
+  color: variables.$card-content-bg;
+  text-align: center;
+}
+
 .question-id-view__content {
-  background-color: #e8eaf6;
+  width: 100%;
+  min-height: 250px;
+  background-color: variables.$card-bg;
+}
+
+.question-id-view__status-bar {
+  width: 7px;
+}
+
+.question-id-view__body {
+  flex: 1;
+  background-color: variables.$card-content-bg;
+}
+
+.question-id-view__text {
+  color: variables.$text-muted;
+}
+
+.question-id-view__empty {
+  color: variables.$text-muted;
+  font-size: 1.375rem;
 }
 
 @media (width >= 600px) {

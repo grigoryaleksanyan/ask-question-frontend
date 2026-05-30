@@ -1,11 +1,11 @@
 <template>
   <div
     tabindex="0"
-    class="card"
+    class="category-card"
     @click="clickOnCard"
     @keypress.enter="clickOnCard">
-    <div class="card-info-block">
-      <span class="card-info-block-title">{{ category.name }}</span>
+    <div class="category-card__info">
+      <span class="category-card__title">{{ category.name }}</span>
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ function clickOnCard() {
 </script>
 
 <style lang="scss" scoped>
-.card {
+.category-card {
   position: relative;
   display: flex;
   overflow: hidden;
@@ -40,50 +40,37 @@ function clickOnCard() {
   height: 116px;
   justify-content: center;
   padding: 15px;
-  border: 1px solid #d3d4db;
+  border: 1px solid variables.$border-light;
   border-radius: 12px;
-  background-color: #e8eaf6;
+  background-color: variables.$card-bg;
   cursor: pointer;
-  transition: all 0.2s linear;
+  transition: all 0.2s ease;
 }
 
-.card-info-block {
+.category-card__info {
   display: flex;
   align-items: center;
 }
 
-.card-info-block-title {
+.category-card__title {
   margin-right: 10px;
   color: #000;
+  transition: color 0.2s ease;
 }
 
-.card-info-block-icon {
-  width: 20px;
-  height: 20px;
-}
+.category-card:hover {
+  box-shadow: 0 0 15px 0 rgb(0 0 0 / 10%);
 
-.card-info-block-title,
-.card-info-block-icon {
-  transition: all 0.2s linear;
-}
-
-.card:hover {
-  box-shadow: 0 0 15px 0 rgb(180 180 180 / 65%);
-
-  .card-info-block-title {
-    color: #2b82e6;
-  }
-
-  .card-info-block-icon {
-    color: #2b82e6;
+  .category-card__title {
+    color: variables.$link-hover;
   }
 }
 
-.vuedraggable-drag > .card {
+.vuedraggable-drag > .category-card {
   transform: rotate(3deg);
 }
 
-.vuedraggable-ghost > .card::after {
+.vuedraggable-ghost > .category-card::after {
   position: absolute;
   top: 0;
   left: 0;

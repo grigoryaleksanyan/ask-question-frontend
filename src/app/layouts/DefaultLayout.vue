@@ -40,10 +40,9 @@
 
     <SidebarModal ref="feedback-modal">
       <template #header>Обратная связь</template>
-      <template #default="{ togglePreloader, confirm, close }">
+      <template #default="{ confirm, close }">
         <SidebarFeedbackContent
           ref="feedback-content"
-          :show-preloader="togglePreloader"
           :modal-confirm="confirm"
           :modal-close="close" />
       </template>
@@ -55,10 +54,6 @@
           label="Отмена"
           outlined
           @click="feedbackContent?.modalClose()" />
-        <Button
-          label="preloader"
-          outlined
-          @click="feedbackContent?.show()" />
       </template>
     </SidebarModal>
   </div>
@@ -113,7 +108,7 @@ async function showFeedbackModal() {
 
 <style lang="scss" scoped>
 .app-toolbar {
-  background-color: #1f2937;
+  background-color: variables.$toolbar-bg;
   color: white;
 }
 
@@ -121,7 +116,7 @@ async function showFeedbackModal() {
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  background-color: #1f2937;
+  background-color: variables.$toolbar-bg;
   color: white;
 }
 

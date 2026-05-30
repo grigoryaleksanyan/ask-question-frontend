@@ -47,8 +47,7 @@ import Select from 'primevue/select';
 
 defineOptions({ name: 'SidebarFeedbackContent' });
 
-const { showPreloader, modalConfirm, modalClose } = defineProps<{
-  showPreloader: (show: boolean) => void;
+const { modalConfirm, modalClose } = defineProps<{
   modalConfirm: () => Promise<void>;
   modalClose: () => void;
 }>();
@@ -103,16 +102,8 @@ async function submitForm() {
   }
 }
 
-function show() {
-  showPreloader(true);
-  setTimeout(() => {
-    showPreloader(false);
-  }, 2000);
-}
-
 defineExpose({
   submitForm,
-  show,
   modalClose,
 });
 </script>

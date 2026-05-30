@@ -11,36 +11,25 @@
       <div class="flex flex-column align-items-center pt-4">
         <div class="flex gap-8">
           <div class="text-center">
-            <div
-              class="typography__headline--large"
-              style="color: #4ecca3; font-weight: bold">
+            <div class="typography__headline--large votes-summary__likes">
               {{ votes.totalLikes.toLocaleString() }}
             </div>
-            <div
-              class="typography__body--small mt-1"
-              style="color: rgb(0 0 0 / 60%)">
+            <div class="typography__body--small mt-1 votes-summary__label">
               👍 Лайки
             </div>
           </div>
           <div class="text-center">
-            <div
-              class="typography__headline--large"
-              style="color: #ef5350; font-weight: bold">
+            <div class="typography__headline--large votes-summary__dislikes">
               {{ votes.totalDislikes.toLocaleString() }}
             </div>
-            <div
-              class="typography__body--small mt-1"
-              style="color: rgb(0 0 0 / 60%)">
+            <div class="typography__body--small mt-1 votes-summary__label">
               👎 Дизлайки
             </div>
           </div>
         </div>
         <div
-          class="flex align-items-center gap-2 mt-4 w-full"
-          style="max-width: 300px">
-          <span
-            class="typography__body--small"
-            style="color: #4ecca3">
+          class="flex align-items-center gap-2 mt-4 w-full votes-summary__progress">
+          <span class="typography__body--small votes-summary__likes">
             {{ likesPercent }}%
           </span>
           <ProgressBar
@@ -48,9 +37,7 @@
             :show-value="false"
             style="height: 10px"
             class="flex-grow-1" />
-          <span
-            class="typography__body--small"
-            style="color: #ef5350">
+          <span class="typography__body--small votes-summary__dislikes">
             {{ dislikesPercent }}%
           </span>
         </div>
@@ -89,3 +76,23 @@ const dislikesPercent = computed(() => {
   return Math.round((votes.totalDislikes / total.value) * 100);
 });
 </script>
+
+<style lang="scss" scoped>
+.votes-summary__likes {
+  color: variables.$chart-answered;
+  font-weight: bold;
+}
+
+.votes-summary__dislikes {
+  color: variables.$chart-unanswered;
+  font-weight: bold;
+}
+
+.votes-summary__label {
+  color: variables.$text-secondary;
+}
+
+.votes-summary__progress {
+  max-width: 300px;
+}
+</style>

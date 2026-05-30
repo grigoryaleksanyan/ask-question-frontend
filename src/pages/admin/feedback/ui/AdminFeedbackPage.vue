@@ -1,7 +1,5 @@
 <template>
-  <div
-    style="max-width: 1200px"
-    class="text-left p-5 mx-auto">
+  <div class="admin-feedback-page text-left p-5 mx-auto">
     <div class="grid">
       <div class="col-12">
         <div class="grid">
@@ -28,7 +26,9 @@
         <template v-else>
           <div class="grid">
             <div class="col-12">
-              <p>Обратная связь отсутствует</p>
+              <p class="admin-feedback-page__empty">
+                Обратная связь отсутствует
+              </p>
             </div>
           </div>
         </template>
@@ -116,3 +116,14 @@ function successDeleteFeedback(feedbackId: string) {
 
 fetchData();
 </script>
+
+<style lang="scss" scoped>
+.admin-feedback-page {
+  max-width: 1200px;
+}
+
+.admin-feedback-page__empty {
+  color: variables.$text-muted;
+  font-size: 1.125rem;
+}
+</style>

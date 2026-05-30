@@ -32,6 +32,8 @@ import type { SpeakerAreaResponse } from '@/shared/types';
 
 import Card from 'primevue/card';
 
+import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
+
 defineOptions({ name: 'SpeakerAreasChart' });
 
 const { speakerAreas } = defineProps<{
@@ -49,9 +51,9 @@ const areaTitles = computed(() => [
 ]);
 
 const AREA_COLORS = [
-  '#5c6bc0',
-  '#26a69a',
-  '#ffb74d',
+  QUESTION_STATUSES.NEW.COLOR,
+  QUESTION_STATUSES.IN_FOCUS.COLOR,
+  QUESTION_STATUSES.WITH_COMMENT.COLOR,
   '#ef5350',
   '#66bb6a',
   '#ab47bc',

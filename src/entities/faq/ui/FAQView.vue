@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="faq-view"
-    style="max-width: 1400px">
+  <div class="faq-view">
     <div class="flex">
       <div class="col-12 my-8">
         <h1 class="text-headline-large text-center">
@@ -41,9 +39,7 @@
     <template v-else>
       <div class="flex">
         <div class="col-12">
-          <p style="color: grey; font-size: 24px; text-align: center">
-            Записи отсутсвуют
-          </p>
+          <p class="faq-view__empty">Записи отсутсвуют</p>
         </div>
       </div>
     </template>
@@ -108,6 +104,10 @@ fetchData();
 </script>
 
 <style lang="scss" scoped>
+.faq-view {
+  max-width: 1400px;
+}
+
 .faq-view__section-title {
   padding-left: 10px;
   border-left: 5px solid variables.$main-color;
@@ -115,5 +115,11 @@ fetchData();
 
 .faq-view__question {
   font-size: 18px;
+}
+
+.faq-view__empty {
+  color: variables.$text-muted;
+  font-size: 1.5rem;
+  text-align: center;
 }
 </style>

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="speaker-card p-3 border-round-lg"
-    style="background-color: #e8eaf6">
+  <div class="speaker-card p-3 border-round-lg">
     <div class="flex items-center">
       <div class="px-2">
         <div class="text-body-large font-medium">
@@ -66,6 +64,12 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .speaker-card {
   position: relative;
+  background-color: variables.$card-bg;
+  transition: box-shadow 0.2s ease;
+}
+
+.speaker-card:hover {
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
 }
 
 .speaker-card__muted {
