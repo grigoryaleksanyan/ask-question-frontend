@@ -131,9 +131,6 @@ const tabCounts = computed(() => ({
   new: questions.value.filter((q) => q.status === QuestionStatusId.New).length,
   inFocus: questions.value.filter((q) => q.status === QuestionStatusId.InFocus)
     .length,
-  withComment: questions.value.filter(
-    (q) => q.status === QuestionStatusId.WithComment,
-  ).length,
   answered: questions.value.filter(
     (q) => q.status === QuestionStatusId.Answered,
   ).length,
@@ -143,11 +140,6 @@ const tabs = computed(() => [
   { key: 'all', label: 'Все', count: tabCounts.value.all },
   { key: 'new', label: 'Новые', count: tabCounts.value.new },
   { key: 'inFocus', label: 'В фокусе', count: tabCounts.value.inFocus },
-  {
-    key: 'withComment',
-    label: 'С комментарием',
-    count: tabCounts.value.withComment,
-  },
   { key: 'answered', label: 'Отвеченные', count: tabCounts.value.answered },
 ]);
 
@@ -157,7 +149,6 @@ const filteredQuestions = computed(() => {
   const statusMap: Record<string, QuestionStatusId> = {
     new: QuestionStatusId.New,
     inFocus: QuestionStatusId.InFocus,
-    withComment: QuestionStatusId.WithComment,
     answered: QuestionStatusId.Answered,
   };
 
