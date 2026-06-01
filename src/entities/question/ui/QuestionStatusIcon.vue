@@ -27,10 +27,6 @@ const statusMap: Record<QuestionStatusId, { color: string; label: string }> = {
     color: QUESTION_STATUSES.IN_FOCUS.COLOR,
     label: QUESTION_STATUSES.IN_FOCUS.TITLE,
   },
-  [QuestionStatusId.WithComment]: {
-    color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-    label: QUESTION_STATUSES.WITH_COMMENT.TITLE,
-  },
   [QuestionStatusId.Answered]: {
     color: QUESTION_STATUSES.ANSWERED.COLOR,
     label: QUESTION_STATUSES.ANSWERED.TITLE,
