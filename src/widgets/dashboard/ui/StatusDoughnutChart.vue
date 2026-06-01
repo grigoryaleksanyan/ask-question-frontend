@@ -28,14 +28,12 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const STATUS_LABELS: Record<number, string> = {
   [QuestionStatusId.New]: 'Новые',
   [QuestionStatusId.InFocus]: 'В фокусе',
-  [QuestionStatusId.WithComment]: 'С комментарием',
   [QuestionStatusId.Answered]: 'Отвеченные',
 };
 
 const STATUS_COLORS: Record<number, string> = {
   [QuestionStatusId.New]: '#6B7CF6',
   [QuestionStatusId.InFocus]: '#2AA89A',
-  [QuestionStatusId.WithComment]: '#E5A44F',
   [QuestionStatusId.Answered]: '#45BF8A',
 };
 
