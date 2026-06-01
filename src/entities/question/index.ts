@@ -8,6 +8,8 @@ export {
   Delete as DeleteQuestion,
   LikeQuestion,
   DislikeQuestion,
+  ChangeStatus as ChangeQuestionStatus,
+  SetComment as SetQuestionComment,
 } from './api/questions-repository';
 
 export type { QuestionListParams } from './api/questions-repository';

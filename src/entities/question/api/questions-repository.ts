@@ -136,3 +136,24 @@ export async function DislikeQuestion(id: string): Promise<VoteResultResponse> {
 
   return result;
 }
+
+export async function ChangeStatus(id: string, status: number): Promise<void> {
+  await httpClient
+    .post(`${apiRoute}/${id}/status`, { status })
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка изменения статуса вопроса', { cause: error });
+    });
+}
+
+export async function SetComment(
+  id: string,
+  comment: string | null,
+): Promise<void> {
+  await httpClient
+    .put(`${apiRoute}/${id}/comment`, { comment })
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка установки комментария', { cause: error });
+    });
+}
