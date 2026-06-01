@@ -27,6 +27,13 @@
 
         <div class="question-id-view__divider"></div>
 
+        <div
+          v-if="question.comment"
+          class="question-id-view__comment">
+          <p class="question-id-view__comment-label">Комментарий спикера:</p>
+          <p class="question-id-view__comment-text">{{ question.comment }}</p>
+        </div>
+
         <div class="question-id-view__vote-row">
           <QuestionVote
             :likes="question.likes"
@@ -85,8 +92,6 @@ const statusColor = computed(() => {
       return QUESTION_STATUSES.NEW.COLOR;
     case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
       return QUESTION_STATUSES.IN_FOCUS.COLOR;
-    case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
-      return QUESTION_STATUSES.WITH_COMMENT.COLOR;
     case QUESTION_STATUSES.ANSWERED.STATUS_ID:
       return QUESTION_STATUSES.ANSWERED.COLOR;
     default:
@@ -102,8 +107,6 @@ const statusLabel = computed(() => {
       return QUESTION_STATUSES.NEW.TITLE;
     case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
       return QUESTION_STATUSES.IN_FOCUS.TITLE;
-    case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
-      return QUESTION_STATUSES.WITH_COMMENT.TITLE;
     case QUESTION_STATUSES.ANSWERED.STATUS_ID:
       return QUESTION_STATUSES.ANSWERED.TITLE;
     default:
@@ -238,5 +241,26 @@ onMounted(() => {
   color: variables.$text-muted;
   font-size: 16px;
   text-align: center;
+}
+
+.question-id-view__comment {
+  padding: 12px;
+  border-radius: 4px;
+  border-left: 3px solid variables.$main-color;
+  margin-bottom: 20px;
+  background: rgb(79 106 246 / 4%);
+}
+
+.question-id-view__comment-label {
+  margin: 0 0 4px;
+  color: variables.$text-muted;
+  font-size: 12px;
+}
+
+.question-id-view__comment-text {
+  margin: 0;
+  color: variables.$text-primary;
+  font-size: 14px;
+  line-height: 1.5;
 }
 </style>
