@@ -100,11 +100,6 @@ const tabs = [
     color: QUESTION_STATUSES.IN_FOCUS.COLOR,
   },
   {
-    value: 'withComment',
-    label: 'С комментарием',
-    color: QUESTION_STATUSES.WITH_COMMENT.COLOR,
-  },
-  {
     value: 'answered',
     label: 'Отвеченные',
     color: QUESTION_STATUSES.ANSWERED.COLOR,
@@ -114,7 +109,6 @@ const tabs = [
 const tabToStatus: Record<string, QuestionStatusId> = {
   new: QuestionStatusId.New,
   inFocus: QuestionStatusId.InFocus,
-  withComment: QuestionStatusId.WithComment,
   answered: QuestionStatusId.Answered,
 };
 
