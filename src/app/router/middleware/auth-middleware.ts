@@ -1,9 +1,11 @@
-import { useAuthStore } from '@/features/auth';
-import { useToast } from 'primevue/usetoast';
-import { GetUserData } from '@/entities/user';
-import { TOAST_HANDLED } from '@/shared/lib/use-api-call';
+import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router';
 
-export default async function checkAuth(): Promise<true | { name: string }> {
+import { useAuthStore } from '@/features/auth';
+import { GetUserData } from '@/entities/user';
+
+export default async function checkAuth(
+  to: RouteLocationNormalized,
+): Promise<true | RouteLocationRaw> {
   const authStore = useAuthStore();
 
   if (!authStore.getAuthStatus) {
@@ -11,17 +13,8 @@ export default async function checkAuth(): Promise<true | { name: string }> {
       const user = await GetUserData();
       authStore.setAuthData(user);
       return true;
-    } catch (error) {
-      const toast = useToast();
-      const err = error as Error;
-      toast.add({
-        severity: 'error',
-        detail: err.message,
-        group: 'api',
-        life: undefined,
-      });
-      (error as Record<symbol, boolean>)[TOAST_HANDLED] = true;
-      return { name: 'login' };
+    } catch {
+      return { name: 'login', query: { redirect: to.fullPath } };
     }
   }
 
