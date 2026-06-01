@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import checkAuth from '@/app/router/middleware/auth-middleware';
+import { useAuthStore } from '@/features/auth';
 import ROUTES from '@/shared/routes';
 
 declare module 'vue-router' {
@@ -104,6 +105,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  if (to.name === 'login' && authStore.getAuthStatus) {
+    return { name: 'admin' };
+  }
+
   if (to.meta.isProtected) {
     return checkAuth(to);
   }
