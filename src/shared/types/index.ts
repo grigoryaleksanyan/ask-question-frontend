@@ -36,6 +36,8 @@ export type {
   FeedbackCreateRequest,
   SpeakerCreateRequest,
   SpeakerUpdateRequest,
+  QuestionStatusChangeRequest,
+  QuestionCommentRequest,
 } from './api-requests';
 
 export {

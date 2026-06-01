@@ -81,3 +81,11 @@ export interface SpeakerUpdateRequest {
   email: string;
   additionalInfo: string | null;
 }
+
+export interface QuestionStatusChangeRequest {
+  status: number;
+}
+
+export interface QuestionCommentRequest {
+  comment: string | null;
+}

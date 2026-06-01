@@ -32,6 +32,7 @@ export interface VoteResultResponse {
 export interface QuestionResponse {
   id: string;
   status: QuestionStatusId;
+  comment: string | null;
   text: string;
   author: string | null;
   areaTitle: string | null;

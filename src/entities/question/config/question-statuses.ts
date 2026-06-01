@@ -13,11 +13,6 @@ const QUESTION_STATUSES: Record<string, QuestionStatus> = {
     TITLE: 'в фокусе',
     COLOR: '#2AA89A',
   },
-  WITH_COMMENT: {
-    STATUS_ID: QuestionStatusId.WithComment,
-    TITLE: 'с комментарием',
-    COLOR: '#E5A44F',
-  },
   ANSWERED: {
     STATUS_ID: QuestionStatusId.Answered,
     TITLE: 'отвеченный',

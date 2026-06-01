@@ -6,8 +6,7 @@ export enum UserRoleId {
 export enum QuestionStatusId {
   New = 0,
   InFocus = 1,
-  WithComment = 2,
-  Answered = 3,
+  Answered = 2,
 }
 
 export interface QuestionStatus {
