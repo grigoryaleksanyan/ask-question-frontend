@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '../store';
@@ -48,6 +48,7 @@ import Button from 'primevue/button';
 defineOptions({ name: 'LoginView' });
 
 const router = useRouter();
+const route = useRoute();
 
 const authStore = useAuthStore();
 
@@ -55,7 +56,7 @@ const { execute: executeLogin, error } = useApiCall(Login, {
   showPreloader: false,
   onSuccess(user) {
     authStore.setAuthData(user);
-    router.push('/admin');
+    router.push((route.query.redirect as string) || '/admin');
   },
 });
 
