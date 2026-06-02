@@ -14,7 +14,12 @@ export {
 
 export type { QuestionListParams } from './api/questions-repository';
 
-export { default as QUESTION_STATUSES } from './config/question-statuses';
+export {
+  default as QUESTION_STATUSES,
+  questionStatusMap,
+  getStatusColor,
+  getStatusLabel,
+} from './config/question-statuses';
 
 export { default as QuestionCard } from './ui/QuestionCard.vue';
 export { default as QuestionListItem } from './ui/QuestionListItem.vue';
