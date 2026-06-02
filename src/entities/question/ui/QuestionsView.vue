@@ -67,7 +67,7 @@ import { QuestionStatusId } from '@/shared/types';
 import { useApiCall } from '@/shared/lib';
 import { StatusDot } from '@/shared/ui/status-dot';
 import { GetAll, type QuestionListParams } from '../api/questions-repository';
-import QUESTION_STATUSES from '../config/question-statuses';
+import { questionStatusMap } from '../config/question-statuses';
 
 import QuestionFilters from './QuestionFilters.vue';
 import QuestionListItem from './QuestionListItem.vue';
@@ -92,17 +92,17 @@ const tabs = [
   {
     value: 'new',
     label: 'Новые',
-    color: QUESTION_STATUSES.NEW.COLOR,
+    color: questionStatusMap[QuestionStatusId.New].color,
   },
   {
     value: 'inFocus',
     label: 'В фокусе',
-    color: QUESTION_STATUSES.IN_FOCUS.COLOR,
+    color: questionStatusMap[QuestionStatusId.InFocus].color,
   },
   {
     value: 'answered',
     label: 'Отвеченные',
-    color: QUESTION_STATUSES.ANSWERED.COLOR,
+    color: questionStatusMap[QuestionStatusId.Answered].color,
   },
 ];
 
