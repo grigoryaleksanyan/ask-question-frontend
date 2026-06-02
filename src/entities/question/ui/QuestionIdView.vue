@@ -13,6 +13,12 @@
             :color="statusColor"
             :label="statusLabel" />
           <span class="question-id-view__time">{{ formattedDate }}</span>
+          <span
+            v-if="question.answered"
+            class="question-id-view__answered-date">
+            · Ответ дан:
+            {{ new Date(question.answered).toLocaleDateString('ru-RU') }}
+          </span>
         </div>
 
         <p class="question-id-view__text">{{ question.text }}</p>
@@ -72,7 +78,7 @@ import {
   LikeQuestion,
   DislikeQuestion,
 } from '../api/questions-repository';
-import QUESTION_STATUSES from '../config/question-statuses';
+import { getStatusColor, getStatusLabel } from '../config/question-statuses';
 
 import QuestionVote from './QuestionVote.vue';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -84,35 +90,13 @@ const route = useRoute();
 const question = ref<QuestionResponse | null>(null);
 const isLoading = ref(true);
 
-const statusColor = computed(() => {
-  if (!question.value) return QUESTION_STATUSES.ANSWERED.COLOR;
+const statusColor = computed(() =>
+  question.value ? getStatusColor(question.value.status) : '',
+);
 
-  switch (question.value.status) {
-    case QUESTION_STATUSES.NEW.STATUS_ID:
-      return QUESTION_STATUSES.NEW.COLOR;
-    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-      return QUESTION_STATUSES.IN_FOCUS.COLOR;
-    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-    default:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-  }
-});
-
-const statusLabel = computed(() => {
-  if (!question.value) return '';
-
-  switch (question.value.status) {
-    case QUESTION_STATUSES.NEW.STATUS_ID:
-      return QUESTION_STATUSES.NEW.TITLE;
-    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-      return QUESTION_STATUSES.IN_FOCUS.TITLE;
-    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-      return QUESTION_STATUSES.ANSWERED.TITLE;
-    default:
-      return '';
-  }
-});
+const statusLabel = computed(() =>
+  question.value ? getStatusLabel(question.value.status) : '',
+);
 
 const formattedDate = computed(() => {
   if (!question.value) return '';
@@ -195,6 +179,11 @@ onMounted(() => {
 }
 
 .question-id-view__time {
+  color: variables.$text-muted;
+  font-size: 12px;
+}
+
+.question-id-view__answered-date {
   color: variables.$text-muted;
   font-size: 12px;
 }

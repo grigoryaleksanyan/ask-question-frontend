@@ -7,34 +7,21 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { QuestionStatusId } from '@/shared/types';
+import type { QuestionStatusId } from '@/shared/types';
 
 import { StatusDot } from '@/shared/ui/status-dot';
-import QUESTION_STATUSES from '../config/question-statuses';
+import QUESTION_STATUSES, {
+  questionStatusMap,
+} from '../config/question-statuses';
 
 defineOptions({ name: 'QuestionStatusIcon' });
 
-const { status = QuestionStatusId.New } = defineProps<{
+const { status = QUESTION_STATUSES.NEW.STATUS_ID } = defineProps<{
   status?: QuestionStatusId;
 }>();
 
-const statusMap: Record<QuestionStatusId, { color: string; label: string }> = {
-  [QuestionStatusId.New]: {
-    color: QUESTION_STATUSES.NEW.COLOR,
-    label: QUESTION_STATUSES.NEW.TITLE,
-  },
-  [QuestionStatusId.InFocus]: {
-    color: QUESTION_STATUSES.IN_FOCUS.COLOR,
-    label: QUESTION_STATUSES.IN_FOCUS.TITLE,
-  },
-  [QuestionStatusId.Answered]: {
-    color: QUESTION_STATUSES.ANSWERED.COLOR,
-    label: QUESTION_STATUSES.ANSWERED.TITLE,
-  },
-};
-
 const statusColor = computed(
-  () => statusMap[status]?.color ?? QUESTION_STATUSES.ANSWERED.COLOR,
+  () => questionStatusMap[status]?.color ?? QUESTION_STATUSES.ANSWERED.COLOR,
 );
-const statusLabel = computed(() => statusMap[status]?.label ?? '');
+const statusLabel = computed(() => questionStatusMap[status]?.label ?? '');
 </script>
