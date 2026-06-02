@@ -78,8 +78,11 @@ async function openModal() {
 }
 
 async function saveComment(confirm?: (data?: unknown) => void) {
-  await executeSetComment(questionId, localComment.value || null);
-  if (confirm) {
+  const result = await executeSetComment(
+    questionId,
+    localComment.value || null,
+  );
+  if (result !== undefined && confirm) {
     confirm();
   }
 }
