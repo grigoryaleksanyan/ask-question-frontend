@@ -32,7 +32,7 @@ import type { QuestionResponse } from '@/shared/types';
 
 import { StatusDot } from '@/shared/ui/status-dot';
 
-import QUESTION_STATUSES from '../config/question-statuses';
+import { getStatusColor } from '../config/question-statuses';
 
 defineOptions({ name: 'QuestionCard' });
 
@@ -46,20 +46,7 @@ const localLikes = ref(question.likes);
 const localDislikes = ref(question.dislikes);
 const localViews = ref(question.views);
 
-const statusColor = computed(() => {
-  switch (question.status) {
-    case QUESTION_STATUSES.NEW.STATUS_ID:
-      return QUESTION_STATUSES.NEW.COLOR;
-    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-      return QUESTION_STATUSES.IN_FOCUS.COLOR;
-    case QUESTION_STATUSES.WITH_COMMENT.STATUS_ID:
-      return QUESTION_STATUSES.WITH_COMMENT.COLOR;
-    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-    default:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-  }
-});
+const statusColor = computed(() => getStatusColor(question.status));
 
 const metaText = computed(() => {
   const parts: string[] = [];

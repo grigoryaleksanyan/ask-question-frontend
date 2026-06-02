@@ -27,7 +27,7 @@ import type { QuestionResponse } from '@/shared/types';
 
 import { StatusDot } from '@/shared/ui/status-dot';
 
-import QUESTION_STATUSES from '../config/question-statuses';
+import { getStatusColor } from '../config/question-statuses';
 
 defineOptions({ name: 'QuestionListItem' });
 
@@ -37,18 +37,7 @@ const { question } = defineProps<{
 
 const router = useRouter();
 
-const statusColor = computed(() => {
-  switch (question.status) {
-    case QUESTION_STATUSES.NEW.STATUS_ID:
-      return QUESTION_STATUSES.NEW.COLOR;
-    case QUESTION_STATUSES.IN_FOCUS.STATUS_ID:
-      return QUESTION_STATUSES.IN_FOCUS.COLOR;
-    case QUESTION_STATUSES.ANSWERED.STATUS_ID:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-    default:
-      return QUESTION_STATUSES.ANSWERED.COLOR;
-  }
-});
+const statusColor = computed(() => getStatusColor(question.status));
 
 const formattedDate = computed(() =>
   new Date(question.created).toLocaleDateString('ru-RU'),
