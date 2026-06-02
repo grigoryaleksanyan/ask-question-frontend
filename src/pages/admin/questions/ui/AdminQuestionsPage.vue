@@ -1,15 +1,15 @@
 <template>
-  <div
-    ref="rootRef"
-    class="admin-questions-page">
+  <div class="admin-questions-page">
     <div class="admin-questions-page__tabs">
       <button
         v-for="tab in tabs"
         :key="tab.key"
         class="admin-questions-page__tab"
-        :class="{ 'admin-questions-page__tab--active': activeTab === tab.key }"
+        :class="{
+          'admin-questions-page__tab--active': activeTab === tab.key,
+        }"
         @click="activeTab = tab.key">
-        {{ tab.label }} ({{ tab.count }})
+        {{ tab.label }}
       </button>
     </div>
 
@@ -39,8 +39,12 @@
           Статус
         </div>
         <div
+          class="admin-questions-page__cell admin-questions-page__cell--comment">
+          💬
+        </div>
+        <div
           class="admin-questions-page__cell admin-questions-page__cell--votes">
-          Голоса
+          ▲
         </div>
         <div
           class="admin-questions-page__cell admin-questions-page__cell--date">
@@ -49,7 +53,7 @@
       </div>
 
       <div
-        v-for="question in filteredQuestions"
+        v-for="question in questions"
         :key="question.id"
         class="admin-questions-page__row"
         :class="{
@@ -77,10 +81,22 @@
           {{ question.speakerName || '—' }}
         </div>
         <div
-          class="admin-questions-page__cell admin-questions-page__cell--status">
-          <StatusDot
-            :color="getStatusColor(question.status)"
-            :label="getStatusLabel(question.status)" />
+          class="admin-questions-page__cell admin-questions-page__cell--status"
+          @click.stop>
+          <QuestionStatusDropdown
+            :status="question.status"
+            :question-id="question.id"
+            @status-changed="onStatusChanged"
+            @error="onActionError" />
+        </div>
+        <div
+          class="admin-questions-page__cell admin-questions-page__cell--comment"
+          @click.stop>
+          <QuestionCommentButton
+            :question-id="question.id"
+            :comment="question.comment"
+            @comment-changed="onCommentChanged"
+            @error="onActionError" />
         </div>
         <div
           class="admin-questions-page__cell admin-questions-page__cell--votes">
@@ -92,75 +108,104 @@
         </div>
       </div>
     </div>
+
+    <QuestionBulkActions
+      :selected-ids="selectedIds"
+      @action-completed="fetchData"
+      @clear-selection="clearSelection" />
+
+    <div class="admin-questions-page__pagination">
+      <button
+        class="admin-questions-page__page-btn"
+        :disabled="currentPage <= 1"
+        @click="currentPage--">
+        ‹
+      </button>
+      <span class="admin-questions-page__page-info">
+        {{ currentPage }} / {{ totalPages }}
+      </span>
+      <button
+        class="admin-questions-page__page-btn"
+        :disabled="currentPage >= totalPages"
+        @click="currentPage++">
+        ›
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 import type { QuestionResponse } from '@/shared/types';
 
 import { QuestionStatusId } from '@/shared/types';
 import Checkbox from 'primevue/checkbox';
 
-import { GetAllQuestions } from '@/entities/question';
-import QUESTION_STATUSES from '@/entities/question/config/question-statuses';
-import { StatusDot } from '@/shared/ui/status-dot';
+import { GetAllQuestions, type QuestionListParams } from '@/entities/question';
+import {
+  QuestionStatusDropdown,
+  QuestionCommentButton,
+  QuestionBulkActions,
+} from '@/features/manage-question';
+import { useAuthStore } from '@/features/auth';
 import { useApiCall } from '@/shared/lib';
 
 defineOptions({ name: 'AdminQuestionsPage' });
+
+const authStore = useAuthStore();
 
 const { execute: executeFetch } = useApiCall(GetAllQuestions, {
   showPreloader: false,
 });
 
 const questions = ref<QuestionResponse[]>([]);
+const totalCount = ref(0);
+const currentPage = ref(1);
+const pageSize = 20;
 const selectedIds = ref<Set<string>>(new Set());
 const activeTab = ref<string>('all');
-const rootRef = useTemplateRef('rootRef');
-const textMutedColor = computed(() => {
-  if (!rootRef.value) return '#a8adb8';
-  return (
-    getComputedStyle(rootRef.value).getPropertyValue('--text-muted').trim() ||
-    '#a8adb8'
-  );
-});
 
-const tabCounts = computed(() => ({
-  all: questions.value.length,
-  new: questions.value.filter((q) => q.status === QuestionStatusId.New).length,
-  inFocus: questions.value.filter((q) => q.status === QuestionStatusId.InFocus)
-    .length,
-  answered: questions.value.filter(
-    (q) => q.status === QuestionStatusId.Answered,
-  ).length,
+const isSpeaker = computed(() => authStore.userData?.userRoleId === 2);
+
+const tabs = [
+  { key: 'all', label: 'Все' },
+  { key: 'new', label: 'Новые' },
+  { key: 'inFocus', label: 'В фокусе' },
+  { key: 'answered', label: 'Отвеченные' },
+];
+
+const tabToStatus: Record<string, QuestionStatusId | undefined> = {
+  all: undefined,
+  new: QuestionStatusId.New,
+  inFocus: QuestionStatusId.InFocus,
+  answered: QuestionStatusId.Answered,
+};
+
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(totalCount.value / pageSize)),
+);
+
+const params = computed<QuestionListParams>(() => ({
+  page: currentPage.value,
+  pageSize,
+  status: tabToStatus[activeTab.value],
+  speakerId: isSpeaker.value ? authStore.userData?.id : undefined,
 }));
 
-const tabs = computed(() => [
-  { key: 'all', label: 'Все', count: tabCounts.value.all },
-  { key: 'new', label: 'Новые', count: tabCounts.value.new },
-  { key: 'inFocus', label: 'В фокусе', count: tabCounts.value.inFocus },
-  { key: 'answered', label: 'Отвеченные', count: tabCounts.value.answered },
-]);
+const allSelected = computed(
+  () =>
+    questions.value.length > 0 &&
+    questions.value.every((q) => selectedIds.value.has(q.id)),
+);
 
-const filteredQuestions = computed(() => {
-  if (activeTab.value === 'all') return questions.value;
-
-  const statusMap: Record<string, QuestionStatusId> = {
-    new: QuestionStatusId.New,
-    inFocus: QuestionStatusId.InFocus,
-    answered: QuestionStatusId.Answered,
-  };
-
-  const targetStatus = statusMap[activeTab.value];
-  return questions.value.filter((q) => q.status === targetStatus);
+watch(activeTab, () => {
+  currentPage.value = 1;
+  fetchData();
 });
 
-const allSelected = computed(() => {
-  const filtered = filteredQuestions.value;
-  return (
-    filtered.length > 0 && filtered.every((q) => selectedIds.value.has(q.id))
-  );
+watch(currentPage, () => {
+  fetchData();
 });
 
 function toggleSelect(id: string) {
@@ -174,12 +219,10 @@ function toggleSelect(id: string) {
 }
 
 function toggleAll() {
-  const filtered = filteredQuestions.value;
-  const allInFilter = filtered.every((q) => selectedIds.value.has(q.id));
-
+  const allInPage = questions.value.every((q) => selectedIds.value.has(q.id));
   const next = new Set(selectedIds.value);
-  for (const q of filtered) {
-    if (allInFilter) {
+  for (const q of questions.value) {
+    if (allInPage) {
       next.delete(q.id);
     } else {
       next.add(q.id);
@@ -188,18 +231,26 @@ function toggleAll() {
   selectedIds.value = next;
 }
 
-function getStatusColor(status: QuestionStatusId): string {
-  const entry = Object.values(QUESTION_STATUSES).find(
-    (s) => s.STATUS_ID === status,
-  );
-  return entry?.COLOR ?? textMutedColor.value;
+function clearSelection() {
+  selectedIds.value = new Set();
 }
 
-function getStatusLabel(status: QuestionStatusId): string {
-  const entry = Object.values(QUESTION_STATUSES).find(
-    (s) => s.STATUS_ID === status,
-  );
-  return entry?.TITLE ?? '';
+function onStatusChanged(id: string, newStatus: QuestionStatusId) {
+  const question = questions.value.find((q) => q.id === id);
+  if (question) {
+    question.status = newStatus;
+  }
+}
+
+function onCommentChanged(id: string, newComment: string | null) {
+  const question = questions.value.find((q) => q.id === id);
+  if (question) {
+    question.comment = newComment;
+  }
+}
+
+function onActionError() {
+  fetchData();
 }
 
 function relativeTime(dateStr: string): string {
@@ -208,23 +259,32 @@ function relativeTime(dateStr: string): string {
   const diffMs = now - then;
 
   const minutes = Math.floor(diffMs / 60_000);
-  if (minutes < 1) return 'только что';
-  if (minutes < 60) return `${minutes} мин`;
+  if (minutes < 1) {
+    return 'только что';
+  }
+  if (minutes < 60) {
+    return `${minutes} мин`;
+  }
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}ч`;
+  if (hours < 24) {
+    return `${hours}ч`;
+  }
 
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}д`;
+  if (days < 30) {
+    return `${days}д`;
+  }
 
   const months = Math.floor(days / 30);
   return `${months}мес`;
 }
 
 async function fetchData() {
-  const result = await executeFetch();
+  const result = await executeFetch(params.value);
   if (result) {
     questions.value = result.items;
+    totalCount.value = result.totalCount;
   }
 }
 
@@ -233,8 +293,6 @@ fetchData();
 
 <style lang="scss" scoped>
 .admin-questions-page {
-  --text-muted: #{variables.$text-muted};
-
   padding: 24px;
   color: variables.$text-primary-dark;
 }
@@ -267,7 +325,7 @@ fetchData();
 .admin-questions-page__table {
   overflow: hidden;
   border: 1px solid variables.$border-dark;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   background: variables.$surface-dark-elevated;
 }
 
@@ -277,7 +335,7 @@ fetchData();
   align-items: center;
   padding: 12px 16px;
   gap: 12px;
-  grid-template-columns: 28px 1fr 120px 120px 100px 90px 90px;
+  grid-template-columns: 28px 1fr 120px 120px 120px 36px 70px 70px;
 }
 
 .admin-questions-page__header {
@@ -290,11 +348,21 @@ fetchData();
 
 .admin-questions-page__row {
   border-bottom: 1px solid variables.$border-dark;
+  cursor: pointer;
   font-size: 15px;
-}
+  transition: background 0.1s;
 
-.admin-questions-page__row--selected {
-  background: rgba(variables.$main-color, 0.05);
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(variables.$main-color, 0.04);
+  }
+
+  &--selected {
+    background: rgba(variables.$main-color, 0.08);
+  }
 }
 
 .admin-questions-page__cell--question {
@@ -312,8 +380,47 @@ fetchData();
   white-space: nowrap;
 }
 
+.admin-questions-page__cell--status {
+  min-width: 110px;
+}
+
+.admin-questions-page__cell--comment {
+  display: flex;
+  justify-content: center;
+}
+
 .admin-questions-page__cell--votes,
 .admin-questions-page__cell--date {
   color: variables.$text-secondary;
+}
+
+.admin-questions-page__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 12px;
+}
+
+.admin-questions-page__page-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid variables.$border-dark;
+  border-radius: 6px;
+  background: variables.$surface-dark-elevated;
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+}
+
+.admin-questions-page__page-info {
+  color: variables.$text-muted;
+  font-size: 13px;
 }
 </style>
