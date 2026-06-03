@@ -93,6 +93,7 @@ export interface QuestionCommentRequest {
 export interface SetupRequest {
   email: string;
   password: string;
+  confirmPassword: string;
   firstName: string;
   lastName: string;
   patronymic: string | null;
