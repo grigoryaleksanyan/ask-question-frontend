@@ -67,7 +67,7 @@ const controls = reactive({
 
 async function onSubmit() {
   await executeLogin({
-    login: controls.email!,
+    email: controls.email!,
     password: controls.password!,
   });
 }

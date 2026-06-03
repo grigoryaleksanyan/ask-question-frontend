@@ -63,7 +63,7 @@ describe('router beforeEach guard', () => {
     const authStore = useAuthStore();
     authStore.setAuthData({
       id: '1',
-      login: 'admin',
+      email: 'admin@askquestion.local',
       userRoleId: 1,
       created: '',
       updated: null,

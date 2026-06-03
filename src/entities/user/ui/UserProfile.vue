@@ -14,12 +14,11 @@
         <b>Должность:</b>
         {{ getUserData?.userDetails?.position }}
       </p>
-      <p><b>Почта:</b> {{ getUserData?.userDetails?.email }}</p>
       <p><b>Доп. инфо:</b> {{ getUserData?.userDetails?.additionalInfo }}</p>
     </template>
 
     <p><b>Id:</b> {{ getUserData?.id }}</p>
-    <p><b>Логин:</b> {{ getUserData?.login }}</p>
+    <p><b>Email:</b> {{ getUserData?.email }}</p>
     <p><b>Роль:</b> {{ getUserStringRole }}</p>
     <p>
       <b>Создан:</b>

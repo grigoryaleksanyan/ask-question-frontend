@@ -20,7 +20,7 @@ describe('useAuthStore', () => {
       const store = useAuthStore();
       const user = {
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,
@@ -37,7 +37,7 @@ describe('useAuthStore', () => {
 
       store.setAuthData({
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,
@@ -54,7 +54,7 @@ describe('useAuthStore', () => {
 
       store.setAuthData({
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,
@@ -70,7 +70,7 @@ describe('useAuthStore', () => {
 
       store.setAuthData({
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,
@@ -90,7 +90,7 @@ describe('useAuthStore', () => {
 
       store.setAuthData({
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,
@@ -104,7 +104,7 @@ describe('useAuthStore', () => {
       const store = useAuthStore();
       const user = {
         id: '1',
-        login: 'admin',
+        email: 'admin@askquestion.local',
         userRoleId: 1,
         created: '',
         updated: null,

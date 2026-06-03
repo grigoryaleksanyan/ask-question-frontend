@@ -135,7 +135,7 @@ const userName = computed(() => {
   if (details) {
     return `${details.firstName} ${details.lastName}`;
   }
-  return authStore.userData?.login ?? '';
+  return authStore.userData?.email ?? '';
 });
 
 const menuItems = [

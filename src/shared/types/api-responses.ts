@@ -6,7 +6,6 @@ export interface UserDetailsResponse {
   lastName: string;
   patronymic: string | null;
   position: string | null;
-  email: string;
   additionalInfo: string | null;
   created: string;
   updated: string | null;
@@ -14,7 +13,7 @@ export interface UserDetailsResponse {
 
 export interface UserResponse {
   id: string;
-  login: string;
+  email: string;
   userRoleId: UserRoleId;
   userDetails: UserDetailsResponse | null;
   created: string;
@@ -106,7 +105,6 @@ export interface SpeakerResponse {
   position: string | null;
   email: string;
   additionalInfo: string | null;
-  login: string;
 }
 
 export interface CreateSpeakerResponse extends SpeakerResponse {

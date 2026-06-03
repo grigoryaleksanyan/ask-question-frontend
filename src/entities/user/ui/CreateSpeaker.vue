@@ -77,7 +77,7 @@
       class="create-speaker__credentials">
       <p class="create-speaker__credentials-title">Данные для входа:</p>
       <div class="create-speaker__credentials-row">
-        <span><b>Логин:</b> {{ createdCredentials.login }}</span>
+        <span><b>Email:</b> {{ createdCredentials.email }}</span>
       </div>
       <div class="create-speaker__credentials-row">
         <span><b>Пароль:</b> {{ createdCredentials.generatedPassword }}</span>
@@ -108,7 +108,7 @@ const emit = defineEmits<{
 }>();
 
 const createdCredentials = ref<{
-  login: string;
+  email: string;
   generatedPassword: string;
 } | null>(null);
 
@@ -118,7 +118,7 @@ const { execute: executeCreate } = useApiCall(Create, {
   successMessage: 'Спикер успешно создан',
   onSuccess: (data) => {
     createdCredentials.value = {
-      login: data.login,
+      email: data.email,
       generatedPassword: data.generatedPassword,
     };
     emit('success', data);

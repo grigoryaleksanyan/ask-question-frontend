@@ -18,7 +18,7 @@ describe('checkAuth', () => {
     const authStore = useAuthStore();
     authStore.setAuthData({
       id: '1',
-      login: 'admin',
+      email: 'admin@askquestion.local',
       userRoleId: 1,
       created: '',
       updated: null,
@@ -33,7 +33,7 @@ describe('checkAuth', () => {
   it('вызывает GetUserData и возвращает true если не авторизован', async () => {
     const mockUser = {
       id: '1',
-      login: 'admin',
+      email: 'admin@askquestion.local',
       userRoleId: 1,
       created: '',
       updated: null,
