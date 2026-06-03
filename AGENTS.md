@@ -9,7 +9,7 @@
 - `npm run commit` — интерактивный коммит через better-commits (Conventional Commits)
 - `npm run test` — Vitest (однократный запуск), `npm run test:watch` — watch-режим
 - `npm run typecheck` — проверка типов через vue-tsc
-- Тесты: `tests/` (вне `src/`), environment: jsdom, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`)
+- Тесты: `tests/` (вне `src/`), environment: jsdom, globals: true, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`)
 
 Node >= 22.17.0, npm >= 10.9.2
 
@@ -27,20 +27,20 @@ src/
     styles/      — base.scss (шрифты), variables.scss (SCSS-переменные), typography.scss
   pages/     — композиции для маршрутов (main, errors, faq, questions, admin/*)
   widgets/   — композитные виджеты: dashboard (графики, статистика)
-  features/  — пользовательские действия: auth, feedback, preloader
-  entities/  — бизнес-модели: alert, area, dashboard, faq, question, user
-  shared/    — инфраструктура (api, assets, config, lib, routes, types, ui)
+  features/  — пользовательские действия: auth, feedback, preloader, manage-question
+  entities/  — бизнес-модели: area, dashboard, faq, question, user
+  shared/    — инфраструктура (api, assets, lib, routes, types, ui)
 ```
 
 Импорты только сверху вниз: `app → pages → widgets → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.ts`) — импортируй только через него.
 
-Хранилища — Pinia Composition Stores: `features/preloader/store`, `entities/alert/store`, `features/auth/store`. Экспортируются через public API каждого слайса.
+Хранилища — Pinia Composition Stores: `features/preloader/store`, `features/auth/store`. Экспортируются через public API каждого слайса.
 
 ## Стек
 
 Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + Zod + Pinia 3 + Vue Router 5 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
 
-Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable, vue-responsive-video-background-player.
+Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable.
 
 ## Стили
 
@@ -94,7 +94,8 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 - `vue/match-component-import-name: error`
 - `vue/match-component-file-name: [error, { extensions: [vue], shouldMatchCase: true }]`
 - `vue/eqeqeq: error`
-- `vue/camelcase: [error, { properties: always }]`
+- `camelcase: [error, { properties: 'never' }]` — базовое JS-правило (properties: never)
+- `vue/camelcase: [error, { properties: always }]` — Vue-специфичное правило (перекрывает базовое для Vue-контекста)
 - `vue/custom-event-name-casing: [error, kebab-case]`
 - `curly: [error, all]`, `no-console: warn`, `no-debugger: error`
 
@@ -104,7 +105,7 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## API-клиент
 
-`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 (hard redirect через `window.location.href = '/login'`) подключается в `@/app/lib/http-client-interceptors.ts`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
+`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 — мягкая навигация через `router.push({ name: 'login', query: { redirect: currentRoute } })` в `@/app/lib/http-client-interceptors.ts`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
 
 ## Роутинг
 
@@ -114,7 +115,7 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## Глобальные компоненты
 
-Регистрируются в `@/app/lib/global-components.ts`: SidebarModal. Используй напрямую в шаблонах без импорта. CenterModal импортируется напрямую.
+Регистрируются в `@/app/lib/global-components.ts`: SidebarModal, SlideOver. Используй напрямую в шаблонах без импорта. CenterModal импортируется напрямую.
 
 ## PrimeVue Forms + Zod
 
@@ -122,8 +123,12 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 
 ## Shared UI
 
-- `sidebar-modal/` — SidebarModal (promise-based API: open/confirm/close, provide('close')), SidebarPreloader
+- `sidebar-modal/` — SidebarModal (promise-based API: open/confirm/close через scoped slot props), SidebarPreloader (не экспортируется из public API)
 - `center-modal/` — CenterModal
+- `slide-over/` — SlideOver (глобальный компонент)
+- `context-menu/` — ContextMenuButton
+- `status-dot/` — StatusDot
+- `toast/` — AppToast
 - `rich-editor/` — RichEditor (**заглушка**, пустой div)
 - AppLogo, HeaderNavigation, DrawerNavigation
 
@@ -134,4 +139,4 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 ## Заглушки и неточности
 
 - RichEditor (`shared/ui/rich-editor/`) — пустой div, не реализован
-- DefaultLayout — содержит debug-кнопку для тестирования прелоадера в футере модалки обратной связи
+- DefaultLayout — кнопка обратной связи в footer страницы
