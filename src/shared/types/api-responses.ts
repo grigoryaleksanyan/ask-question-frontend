@@ -163,3 +163,7 @@ export interface VotesSummaryResponse {
   totalLikes: number;
   totalDislikes: number;
 }
+
+export interface SetupRequiredResponse {
+  setupRequired: boolean;
+}

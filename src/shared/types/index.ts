@@ -20,6 +20,7 @@ export type {
   SpeakerProductivityResponse,
   SpeakerAreaResponse,
   VotesSummaryResponse,
+  SetupRequiredResponse,
 } from './api-responses';
 
 export type {
@@ -38,6 +39,7 @@ export type {
   SpeakerUpdateRequest,
   QuestionStatusChangeRequest,
   QuestionCommentRequest,
+  SetupRequest,
 } from './api-requests';
 
 export {

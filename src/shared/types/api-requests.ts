@@ -89,3 +89,11 @@ export interface QuestionStatusChangeRequest {
 export interface QuestionCommentRequest {
   comment: string | null;
 }
+
+export interface SetupRequest {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  patronymic: string | null;
+}

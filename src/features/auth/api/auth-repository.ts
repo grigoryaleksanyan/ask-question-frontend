@@ -1,6 +1,11 @@
 import httpClient from '@/shared/api';
 
-import type { LoginRequest, UserResponse } from '@/shared/types';
+import type {
+  LoginRequest,
+  SetupRequest,
+  UserResponse,
+  SetupRequiredResponse,
+} from '@/shared/types';
 
 const apiRoute = '/api/Auth';
 
@@ -22,4 +27,26 @@ export async function Logout(): Promise<void> {
     .catch((error) => {
       throw new Error('Ошибка выхода', { cause: error });
     });
+}
+
+export async function SetupRequired(): Promise<SetupRequiredResponse> {
+  const result = await httpClient
+    .get<SetupRequiredResponse>(`${apiRoute}/SetupRequired`)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка проверки настройки', { cause: error });
+    });
+
+  return result;
+}
+
+export async function Setup(setupData: SetupRequest): Promise<UserResponse> {
+  const result = await httpClient
+    .post<UserResponse>(`${apiRoute}/Setup`, setupData)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error('Ошибка создания администратора', { cause: error });
+    });
+
+  return result;
 }
