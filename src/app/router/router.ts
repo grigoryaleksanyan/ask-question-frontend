@@ -26,6 +26,14 @@ const routes = [
     },
   },
   {
+    path: '/setup',
+    name: 'setup',
+    component: () => import('@/features/auth/ui/SetupView.vue'),
+    meta: {
+      layout: 'EmptyLayout',
+    },
+  },
+  {
     path: '/questions',
     name: 'questions',
     component: () => import('@/pages/questions'),
@@ -104,11 +112,23 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const authStore = useAuthStore();
+
+  if (authStore.getSetupRequired === null) {
+    await authStore.checkSetupRequired();
+  }
 
   if (to.name === 'login' && authStore.getAuthStatus) {
     return { name: 'admin' };
+  }
+
+  if (to.name === 'setup' && !authStore.getSetupRequired) {
+    return { name: 'login' };
+  }
+
+  if (to.name === 'login' && authStore.getSetupRequired) {
+    return { name: 'setup' };
   }
 
   if (to.meta.isProtected) {
