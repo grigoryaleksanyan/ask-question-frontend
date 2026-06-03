@@ -61,6 +61,12 @@ const routes = [
     meta: { layout: 'AdminLayout', isProtected: true },
   },
   {
+    path: '/admin-questions/:id',
+    name: ROUTES.adminQuestionDetail,
+    component: () => import('@/pages/admin/question-detail'),
+    meta: { layout: 'AdminLayout', isProtected: true },
+  },
+  {
     path: '/admin-faq',
     name: 'admin-faq',
     component: () => import('@/pages/admin/faq'),
