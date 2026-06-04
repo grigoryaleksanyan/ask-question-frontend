@@ -4,44 +4,40 @@
     :resolver
     :initial-values
     @submit="onSubmit">
-    <div class="mt-2">
-      <div class="col-12">
-        <FormField
-          v-slot="$field"
-          name="question"
-          initial-value="">
-          <InputText
-            type="text"
-            placeholder="Вопрос"
-            class="w-full" />
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple">
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
-      </div>
+    <div class="modal-form">
+      <FormField
+        v-slot="$field"
+        name="question"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Вопрос"
+          class="w-full" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-      <div class="col-12">
-        <FormField
-          v-slot="$field"
-          name="answer"
-          initial-value="">
-          <Textarea
-            placeholder="Ответ"
-            rows="5"
-            class="w-full" />
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple">
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
-      </div>
+      <FormField
+        v-slot="$field"
+        name="answer"
+        initial-value="">
+        <Textarea
+          placeholder="Ответ"
+          rows="5"
+          class="w-full" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
     </div>
   </Form>
 </template>
