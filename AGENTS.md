@@ -9,6 +9,10 @@
 - `npm run commit` — интерактивный коммит через better-commits (Conventional Commits)
 - `npm run test` — Vitest (однократный запуск), `npm run test:watch` — watch-режим
 - `npm run typecheck` — проверка типов через vue-tsc
+- `npm run preview` — Vite preview
+- `npm run prettier:check` — проверка форматирования Prettier
+- `npm run eslint:check` — проверка ESLint без автофикса
+- `npm run stylelint:check` — проверка Stylelint без автофикса
 - Тесты: `tests/` (вне `src/`), environment: jsdom, globals: true, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`), css: false
 
 Node >= 22.17.0, npm >= 10.9.2
@@ -24,12 +28,12 @@ src/
     router/      — маршруты, beforeEach-guard, auth-middleware
     layouts/     — DefaultLayout, EmptyLayout, AdminLayout
     lib/         — registerPlugins, primevue-theme, global-components, http-client-interceptors
-    styles/      — base.scss (шрифты), variables.scss (SCSS-переменные), typography.scss
-  pages/     — композиции для маршрутов (main, errors, faq, questions, admin/*)
+     styles/      — base.scss (шрифты), variables.scss (SCSS-переменные), typography.scss, modal-form.scss
+  pages/     — композиции для маршрутов (main, errors, faq, questions, question-detail, admin/*)
   widgets/   — композитные виджеты: dashboard (графики, статистика)
   features/  — пользовательские действия: auth, feedback, preloader, manage-question
   entities/  — бизнес-модели: area, dashboard, faq, question, user
-  shared/    — инфраструктура (api, assets, lib, routes, types, ui)
+  shared/    — инфраструктура (api, assets, dto, lib, routes, ui)
 ```
 
 Импорты только сверху вниз: `app → pages → widgets → features → entities → shared`. Кросс-импорты между слайсами одного слоя запрещены. Каждый слайс имеет public API (`index.ts`) — импортируй только через него.
@@ -46,11 +50,11 @@ Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + @primeuix/them
 
 - SCSS, глобальные переменные автоинжектируются через Vite — не добавляй `@use "@/app/styles/variables.scss"` вручную в компоненты
 - Имена классов — **BEM**: `block__element--modifier` (строго через kebab-case). Паттерн проверяется и ESLint, и Stylelint
-- Порядок CSS-свойств — idiomatic-order (stylelint-config-idiomatic-order)
+- Порядок CSS-свойств — idiomatic-order (stylelint-config-recommended-scss). Плагин `stylelint-scss` (транзитивная зависимость). Правило `import-notation: string` для SCSS-импортов
 
 ## Prettier
 
-printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, bracketSameLine: true, singleAttributePerLine: true, endOfLine: lf
+printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, bracketSameLine: true, bracketSpacing: true, singleAttributePerLine: true, endOfLine: lf
 
 ## ESLint-правила (неочевидные)
 
@@ -148,6 +152,7 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 | `useDeleteConfirm` | `shared/lib/use-delete-confirm/` | Обёртка над `useApiCall` для подтверждения удаления |
 | `copyToClipboard` | `shared/lib/copy-to-clipboard.ts` | Копирование текста в буфер обмена через `navigator.clipboard` |
 | `sanitizeHtml` | `shared/lib/html-sanitize.ts` | Санитизация HTML через DOMPurify с автоматическим `target="_blank"` + `rel="noopener noreferrer"` |
+| `preloader-state` | `shared/lib/preloader-state/` | Реактивный счётчик загрузок: `showPreloader` (computed), `addLoader()`, `removeLoader()`. Используется `features/preloader/store` |
 
 ## Entities — config
 
@@ -161,14 +166,19 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 - `checkSetupRequired()` — запрос `GET /api/Auth/SetupRequired`
 - `setAuthData()` устанавливает `setupRequired = false`
 
-## Shared types — setup
+## Shared dto — типы и DTO
 
-- `SetupRequiredResponse` — `{ setupRequired: boolean }`
-- `SetupRequest` — `{ email, password, confirmPassword, firstName, lastName, patronymic? }`
+Каталог `shared/dto/` (ранее `shared/types/`):
+
+- `models.ts` — энумы (`UserRoleId`, `QuestionStatusId`), интерфейсы (`QuestionStatus`, `NavItem`, `ModalResult`, `DateRangeValue`)
+- `api-requests.ts` — типы запросов: `LoginRequest`, `ChangePasswordRequest`, `SetupRequest`, `QuestionCreateRequest`, `QuestionUpdateRequest`, `FaqCategoryCreateRequest`, `FaqCategoryUpdateRequest`, `FaqEntryCreateRequest`, `FaqEntryUpdateRequest`, `AreaCreateRequest`, `AreaUpdateRequest`, `FeedbackCreateRequest`, `SpeakerCreateRequest`, `SpeakerUpdateRequest`, `QuestionStatusChangeRequest`, `QuestionCommentRequest`
+- `api-responses.ts` — типы ответов: `SetupRequiredResponse`, `UserDetailsResponse`, `UserResponse`, `VoteResultResponse`, `VoteType`, `QuestionResponse`, `FaqCategoryResponse`, `FaqCategoryWithEntriesResponse`, `FaqEntryResponse`, `AreaResponse`, `FeedbackResponse`, `PaginatedResponse<T>`, `SpeakerPublicResponse`, `SpeakerResponse`, `CreateSpeakerResponse`, `DashboardSummaryResponse`, `StatusDistributionResponse`, `TimelinePointResponse`, `AreaDistributionResponse`, `SpeakerProductivityResponse`, `SpeakerAreaResponse`, `VotesSummaryResponse`
 
 ## Steiger
 
 Правило `fsd/insignificant-slice` **явно отключено** в `steiger.config.ts` — не считается ошибкой.
+
+- `features/auth/ui/UserProfile.vue` — форма смены пароля и отображение данных пользователя (экспортируется через `features/auth/index.ts`)
 
 ## Заглушки и неточности
 
