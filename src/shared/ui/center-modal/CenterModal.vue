@@ -81,6 +81,10 @@ defineExpose({ open, confirm, close, togglePreloader });
 </script>
 
 <style lang="scss" scoped>
+:deep(.p-dialog-footer) {
+  border-top: 1px solid var(--p-surface-border);
+}
+
 :global(.p-dark) .p-dialog {
   background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;
