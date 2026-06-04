@@ -9,7 +9,7 @@
 - `npm run commit` — интерактивный коммит через better-commits (Conventional Commits)
 - `npm run test` — Vitest (однократный запуск), `npm run test:watch` — watch-режим
 - `npm run typecheck` — проверка типов через vue-tsc
-- Тесты: `tests/` (вне `src/`), environment: jsdom, globals: true, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`)
+- Тесты: `tests/` (вне `src/`), environment: jsdom, globals: true, setup: `tests/setup.ts` (сброс Pinia через `beforeEach`), css: false
 
 Node >= 22.17.0, npm >= 10.9.2
 
@@ -38,7 +38,7 @@ src/
 
 ## Стек
 
-Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + Zod + Pinia 3 + Vue Router 5 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
+Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + @primeuix/themes + Zod + Pinia 3 + Vue Router 5 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
 
 Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable.
 
@@ -101,7 +101,7 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 
 ## Коммиты
 
-Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase, заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged (автофикс: `prettier --write`, `eslint --fix`, `stylelint --fix`), commit-msg: commitlint. Breaking changes отключены.
+Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase (`general`, `client`, `server`), заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged (автофикс: `prettier --write`, `eslint --fix`, `stylelint --fix`), commit-msg: commitlint. Breaking changes отключены.
 
 ## API-клиент
 
@@ -109,9 +109,18 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## Роутинг
 
-Макет страницы задаётся через `meta.layout` (default: `DefaultLayout`, также `EmptyLayout`, `AdminLayout`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach` через `auth-middleware.ts`. В навигационных хранниках можно использовать Pinia-хранилища напрямую (после `app.use(pinia)`).
+Макет страницы задаётся через `meta.layout` (default: `DefaultLayout`, также `EmptyLayout`, `AdminLayout`). Защищённые маршруты — `meta.isProtected`, проверяется в `router.beforeEach` через `auth-middleware.ts`.
 
-Маршруты: `/` (main), `/login` (EmptyLayout), `/questions`, `/question/:id`, `/faq`, `/admin`, `/admin-questions`, `/admin-faq`, `/admin-faq/:id` (дочерний маршрут `/admin-faq`), `/admin-speakers`, `/admin-areas`, `/admin-feedback` (все admin — AdminLayout + isProtected), `/:catchAll(.*)` (404, EmptyLayout).
+**Дополнительная логика beforeEach:**
+1. Проверка `setupRequired` — если `null`, вызывается `authStore.checkSetupRequired()`
+2. Если авторизован и идёт на `/login` — редирект на `/admin`
+3. Если идёт на `/setup`, но setup не нужен — редирект на `/login`
+4. Если идёт на `/login`, но setup нужен — редирект на `/setup`
+5. Затем стандартная проверка `isProtected`
+
+**auth-middleware.ts**: при ошибке проверки авторизации проверяет `setupRequired` и редиректит на `/setup` или `/login`.
+
+Маршруты: `/` (main), `/login` (EmptyLayout), `/setup` (EmptyLayout), `/questions`, `/question/:id`, `/faq`, `/admin`, `/admin-questions`, `/admin-questions/:id` (AdminLayout, isProtected), `/admin-faq`, `/admin-faq/:id` name=`admin-faq-category` (AdminLayout, isProtected), `/admin-speakers`, `/admin-areas`, `/admin-feedback` (все admin — AdminLayout + isProtected), `/:catchAll(.*)` (404, EmptyLayout).
 
 ## Глобальные компоненты
 
@@ -131,6 +140,32 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 - `toast/` — AppToast
 - `rich-editor/` — RichEditor (**заглушка**, пустой div)
 - AppLogo, HeaderNavigation, DrawerNavigation
+
+## Shared lib — composables и утилиты
+
+| Composable/утилита | Путь | Описание |
+|---|---|---|
+| `useApiCall` | `shared/lib/use-api-call/` | Универсальный composable для API-вызовов: автоматически показывает/скрывает прелоадер, показывает toast при успехе/ошибке. Возвращает `execute`, `isLoading`, `error`, `data` |
+| `useDeleteConfirm` | `shared/lib/use-delete-confirm/` | Обёртка над `useApiCall` для подтверждения удаления |
+| `copyToClipboard` | `shared/lib/copy-to-clipboard.ts` | Копирование текста в буфер обмена через `navigator.clipboard` |
+| `sanitizeHtml` | `shared/lib/html-sanitize.ts` | Санитизация HTML через DOMPurify с автоматическим `target="_blank"` + `rel="noopener noreferrer"` |
+
+## Entities — config
+
+- `entities/question/config/question-statuses.ts` — маппинг статусов (New/InFocus/Answered) с цветами и названиями: `QUESTION_STATUSES`, `questionStatusMap`, `getStatusColor()`, `getStatusLabel()`
+
+## Auth store — расширения
+
+`features/auth/store` (`useAuthStore`) дополнительно содержит:
+- `setupRequired: ref<boolean | null>(null)` — флаг первичной настройки
+- `getSetupRequired` computed
+- `checkSetupRequired()` — запрос `GET /api/Auth/SetupRequired`
+- `setAuthData()` устанавливает `setupRequired = false`
+
+## Shared types — setup
+
+- `SetupRequiredResponse` — `{ setupRequired: boolean }`
+- `SetupRequest` — `{ email, password, confirmPassword, firstName, lastName, patronymic? }`
 
 ## Steiger
 
