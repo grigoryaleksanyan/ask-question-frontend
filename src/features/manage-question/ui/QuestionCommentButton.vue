@@ -13,27 +13,23 @@
     <template #header>
       <span>Комментарий к вопросу</span>
     </template>
-
-    <template #default="{ confirm, close }">
-      <div class="question-comment-button__modal-content">
-        <Textarea
-          v-model="localComment"
-          auto-resize
-          rows="4"
-          class="w-full"
-          placeholder="Введите комментарий..." />
-
-        <div class="question-comment-button__modal-actions">
-          <Button
-            label="Сохранить"
-            @click="saveComment(confirm)" />
-          <Button
-            label="Отмена"
-            severity="secondary"
-            outlined
-            @click="close()" />
-        </div>
-      </div>
+    <template #default>
+      <Textarea
+        v-model="localComment"
+        auto-resize
+        rows="4"
+        class="w-full"
+        placeholder="Введите комментарий..." />
+    </template>
+    <template #footer>
+      <Button
+        label="Сохранить"
+        @click="saveComment()" />
+      <Button
+        label="Отмена"
+        outlined
+        severity="secondary"
+        @click="sidebarModalRef?.close()" />
     </template>
   </SidebarModal>
 </template>
@@ -77,13 +73,13 @@ async function openModal() {
   await sidebarModalRef.value?.open();
 }
 
-async function saveComment(confirm?: (data?: unknown) => void) {
+async function saveComment() {
   const result = await executeSetComment(
     questionId,
     localComment.value || null,
   );
-  if (result !== undefined && confirm) {
-    confirm();
+  if (result !== undefined) {
+    sidebarModalRef.value?.confirm();
   }
 }
 </script>
@@ -113,16 +109,5 @@ async function saveComment(confirm?: (data?: unknown) => void) {
   &--has-comment {
     color: variables.$main-color;
   }
-}
-
-.question-comment-button__modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.question-comment-button__modal-actions {
-  display: flex;
-  gap: 8px;
 }
 </style>
