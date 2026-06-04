@@ -87,6 +87,7 @@
             @click="deleteCategoryRef?.confirm()" />
           <Button
             label="Отмена"
+            outlined
             severity="secondary"
             @click="deleteCategoryModalRef?.close()" />
         </template>
@@ -159,6 +160,7 @@
             @click="deleteEntryRef?.confirm()" />
           <Button
             label="Отмена"
+            outlined
             severity="secondary"
             @click="deleteEntryModalRef?.close()" />
         </template>
@@ -270,7 +272,7 @@ function successUpdateCategory(name: string) {
     category.value.name = name;
   }
 
-  updateCategorySlideOver.value?.close();
+  updateCategorySlideOver.value?.confirm();
 }
 
 function cancelUpdateCategory() {
@@ -282,6 +284,7 @@ function openDeleteCategory() {
 }
 
 function onDeleteCategorySuccess() {
+  deleteCategoryModalRef.value?.confirm();
   router.push({ name: 'admin-faq' });
 }
 
@@ -293,7 +296,7 @@ async function openCreateEntry() {
 
 function successCreateEntry(entry: FaqEntryResponse) {
   category.value?.entries.push(entry);
-  createEntrySlideOver.value?.close();
+  createEntrySlideOver.value?.confirm();
 }
 
 function cancelCreateEntry() {
@@ -313,7 +316,7 @@ function successUpdateEntry(updatedEntry: FaqEntryResponse) {
     );
   }
 
-  updateEntrySlideOver.value?.close();
+  updateEntrySlideOver.value?.confirm();
 }
 
 function cancelUpdateEntry() {
@@ -332,7 +335,7 @@ function onDeleteEntrySuccess(entryId: string) {
     );
   }
 
-  deleteEntryModalRef.value?.close();
+  deleteEntryModalRef.value?.confirm();
 }
 
 fetchData();
