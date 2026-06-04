@@ -39,10 +39,10 @@
         @click="showFeedbackModal" />
     </footer>
 
-    <SlideOver
-      ref="feedback-modal"
-      :content-padding="false">
-      <template #header>Обратная связь</template>
+    <SlideOver ref="feedback-modal">
+      <template #header>
+        <span class="typography__headline--medium">Обратная связь</span>
+      </template>
       <template #default>
         <SidebarFeedbackContent
           ref="feedback-content"
