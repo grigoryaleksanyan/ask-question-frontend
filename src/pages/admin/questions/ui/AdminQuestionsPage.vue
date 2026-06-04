@@ -119,6 +119,7 @@
 
     <QuestionBulkActions
       :selected-ids="selectedIds"
+      :questions="questions"
       @action-completed="fetchData"
       @clear-selection="clearSelection" />
 
