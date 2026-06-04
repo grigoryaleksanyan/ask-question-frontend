@@ -28,10 +28,10 @@
       </template>
     </Draggable>
 
-    <SlideOver
-      ref="create-area-modal"
-      :content-padding="false">
-      <template #header>Создать область</template>
+    <SlideOver ref="create-area-modal">
+      <template #header>
+        <span class="typography__headline--medium">Создать область</span>
+      </template>
       <template #default>
         <CreateArea
           ref="create-area"
