@@ -30,7 +30,7 @@
           label="Создать"
           @click="createSpeakerRef?.submitForm()" />
         <Button
-          label="Закрыть"
+          label="Отмена"
           outlined
           severity="secondary"
           @click="createSlideOverRef?.close()" />
@@ -53,7 +53,7 @@
           label="Изменить"
           @click="updateSpeakerRef?.submitForm()" />
         <Button
-          label="Закрыть"
+          label="Отмена"
           outlined
           severity="secondary"
           @click="updateSlideOverRef?.close()" />
@@ -134,7 +134,7 @@ function openCreateSlideOver() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function successCreateSpeaker(speaker: CreateSpeakerResponse) {
   fetchData();
-  createSlideOverRef.value?.close();
+  createSlideOverRef.value?.confirm();
 }
 
 function openUpdateSlideOver(speaker: SpeakerResponse) {
@@ -146,7 +146,7 @@ function successUpdateSpeaker(modifiedSpeaker: SpeakerResponse) {
   speakers.value = speakers.value.map((s) =>
     s.id === modifiedSpeaker.id ? modifiedSpeaker : s,
   );
-  updateSlideOverRef.value?.close();
+  updateSlideOverRef.value?.confirm();
 }
 
 function openDeleteSlideOver(speaker: SpeakerResponse) {
@@ -156,7 +156,7 @@ function openDeleteSlideOver(speaker: SpeakerResponse) {
 
 function successDeleteSpeaker(speakerId: string) {
   speakers.value = speakers.value.filter((s) => s.id !== speakerId);
-  deleteModalRef.value?.close();
+  deleteModalRef.value?.confirm();
 }
 
 fetchData();
