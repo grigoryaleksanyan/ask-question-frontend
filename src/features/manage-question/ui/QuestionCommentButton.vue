@@ -9,19 +9,19 @@
     <i class="pi pi-comment"></i>
   </button>
 
-  <SlideOver
-    ref="slideOverRef"
-    :content-padding="false">
+  <SlideOver ref="slideOverRef">
     <template #header>
-      <span>Комментарий к вопросу</span>
+      <span class="typography__headline--medium">Комментарий к вопросу</span>
     </template>
     <template #default>
-      <Textarea
-        v-model="localComment"
-        auto-resize
-        rows="4"
-        class="w-full"
-        placeholder="Введите комментарий..." />
+      <div class="modal-form">
+        <Textarea
+          v-model="localComment"
+          auto-resize
+          rows="4"
+          class="w-full"
+          placeholder="Введите комментарий..." />
+      </div>
     </template>
     <template #footer>
       <Button
