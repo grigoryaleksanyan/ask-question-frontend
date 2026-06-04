@@ -44,15 +44,14 @@ import Select from 'primevue/select';
 
 defineOptions({ name: 'SidebarFeedbackContent' });
 
-const { modalConfirm, modalClose } = defineProps<{
-  modalConfirm: () => Promise<void>;
-  modalClose: () => void;
+const emit = defineEmits<{
+  success: [];
 }>();
 
 const { execute: executeCreate } = useApiCall(Create, {
   successMessage: 'Обратная связь отправлена',
   onSuccess: () => {
-    modalConfirm();
+    emit('success');
   },
 });
 
@@ -92,6 +91,5 @@ async function submitForm() {
 
 defineExpose({
   submitForm,
-  modalClose,
 });
 </script>

@@ -62,9 +62,7 @@ import { Create } from '../api/areas-repository';
 
 defineOptions({ name: 'CreateArea' });
 
-const { modalConfirm, modalClose, order } = defineProps<{
-  modalConfirm: () => Promise<void>;
-  modalClose: () => void;
+const { order } = defineProps<{
   order: number;
 }>();
 
@@ -76,7 +74,6 @@ const { execute: executeCreate } = useApiCall(Create, {
   successMessage: 'Область успешно создана',
   onSuccess: (data) => {
     emit('success', data);
-    modalConfirm();
   },
 });
 
@@ -112,7 +109,6 @@ function submitForm() {
 function cancel() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formRef.value as any)?.reset();
-  modalClose();
 }
 
 defineExpose({
