@@ -40,9 +40,30 @@
         <span class="typography__headline--medium">Профиль пользователя</span>
       </template>
       <UserProfile
-        :is-open="showUserProfile"
-        @success="closeUserProfile"
-        @cancel="closeUserProfile" />
+        ref="user-profile"
+        @success="onProfileSuccess" />
+      <template #footer>
+        <template v-if="userProfileRef?.isChangingPassword">
+          <Button
+            label="Сохранить"
+            @click="userProfileRef?.submitForm()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="userProfileRef?.cancelChangePassword()" />
+        </template>
+        <template v-else>
+          <Button
+            label="Изменить пароль"
+            @click="userProfileRef?.changePassword()" />
+          <Button
+            label="Отмена"
+            outlined
+            severity="secondary"
+            @click="userProfileSlideOver?.close()" />
+        </template>
+      </template>
     </SlideOver>
   </div>
 </template>
@@ -53,6 +74,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import type { NavItem } from '@/shared/types';
 
+import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
 import { useAuthStore, Logout } from '@/features/auth';
@@ -81,6 +103,7 @@ const { execute: executeLogout } = useApiCall(Logout, {
 const showUserProfile = ref(false);
 const settingsMenu = useTemplateRef('settingsMenu');
 const userProfileSlideOver = useTemplateRef('userProfileSlideOver');
+const userProfileRef = useTemplateRef('user-profile');
 
 onMounted(() => {
   document.documentElement.classList.add('p-dark');
@@ -164,9 +187,9 @@ function openUserProfile() {
   userProfileSlideOver.value?.open();
 }
 
-function closeUserProfile() {
+function onProfileSuccess() {
+  userProfileSlideOver.value?.confirm();
   showUserProfile.value = false;
-  userProfileSlideOver.value?.close();
 }
 
 async function logout() {
