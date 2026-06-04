@@ -1,5 +1,5 @@
 <template>
-  <p class="delete-speaker__text">Вы действительно хотите удалить спикера?</p>
+  <p class="text-body-large">Вы действительно хотите удалить спикера?</p>
 </template>
 
 <script setup lang="ts">
@@ -34,10 +34,3 @@ function cancel() {
 
 defineExpose({ confirm, cancel });
 </script>
-
-<style lang="scss" scoped>
-.delete-speaker__text {
-  color: variables.$text-primary-dark;
-  font-size: 14px;
-}
-</style>
