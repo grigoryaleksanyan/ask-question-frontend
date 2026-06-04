@@ -47,7 +47,7 @@ function buildQuestionCard(question: QuestionResponse): Paragraph[] {
           size: 22,
         }),
       ],
-      spacing: { after: 80 },
+      spacing: { after: 120 },
     }),
     new Paragraph({
       children: [
@@ -62,7 +62,7 @@ function buildQuestionCard(question: QuestionResponse): Paragraph[] {
           size: 22,
         }),
       ],
-      spacing: { after: 80 },
+      spacing: { after: 120 },
     }),
     new Paragraph({
       children: [
@@ -77,7 +77,7 @@ function buildQuestionCard(question: QuestionResponse): Paragraph[] {
           size: 22,
         }),
       ],
-      spacing: { after: 120 },
+      spacing: { after: 250 },
     }),
     new Paragraph({
       children: [
@@ -85,10 +85,14 @@ function buildQuestionCard(question: QuestionResponse): Paragraph[] {
           text: question.text,
           font: 'Arial',
           size: 24,
+          italics: true,
         }),
       ],
-      spacing: { after: 200 },
+    }),
+    new Paragraph({
+      children: [],
       thematicBreak: true,
+      spacing: { after: 200 },
     }),
   ];
 }
