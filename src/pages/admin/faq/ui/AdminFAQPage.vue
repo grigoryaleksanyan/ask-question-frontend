@@ -94,6 +94,7 @@
             @click="deleteCategoryRef?.confirm()" />
           <Button
             label="Отмена"
+            outlined
             severity="secondary"
             @click="deleteCategoryModalRef?.close()" />
         </template>
@@ -196,7 +197,7 @@ function successCreateCategory(category: FaqCategoryResponse) {
     entries: [],
   };
   categories.value = [...categories.value, categoryWithEntries];
-  createCategorySlideOver.value?.close();
+  createCategorySlideOver.value?.confirm();
 }
 
 function cancelCreateCategory() {
@@ -224,7 +225,7 @@ function successUpdateCategory(name: string) {
     }
   }
 
-  updateCategorySlideOver.value?.close();
+  updateCategorySlideOver.value?.confirm();
 }
 
 function cancelUpdateCategory() {
@@ -238,7 +239,7 @@ async function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
 
 function onDeleteCategorySuccess(id: string) {
   categories.value = categories.value.filter((category) => category.id !== id);
-  deleteCategoryModalRef.value?.close();
+  deleteCategoryModalRef.value?.confirm();
 }
 
 if (route.name === 'admin-faq') {
