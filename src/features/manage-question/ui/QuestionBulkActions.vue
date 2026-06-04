@@ -6,6 +6,10 @@
       Выбрано: {{ selectedIds.size }}
     </span>
 
+    <QuestionExportButton
+      :selected-ids="selectedIds"
+      :questions="questions" />
+
     <div class="question-bulk-actions__group">
       <Select
         v-model="targetStatus"
@@ -37,17 +41,22 @@
 import { ref } from 'vue';
 
 import { QuestionStatusId } from '@/shared/dto';
-import type { QuestionStatusId as QuestionStatusIdType } from '@/shared/dto';
+import type {
+  QuestionStatusId as QuestionStatusIdType,
+  QuestionResponse,
+} from '@/shared/dto';
 
 import { ChangeQuestionStatus, DeleteQuestion } from '@/entities/question';
+import QuestionExportButton from './QuestionExportButton.vue';
 import { useToast } from 'primevue/usetoast';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
 
 defineOptions({ name: 'QuestionBulkActions' });
 
-const { selectedIds } = defineProps<{
+const { selectedIds, questions } = defineProps<{
   selectedIds: Set<string>;
+  questions: QuestionResponse[];
 }>();
 
 const emit = defineEmits<{
