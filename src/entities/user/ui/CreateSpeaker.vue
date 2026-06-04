@@ -3,84 +3,86 @@
     ref="form"
     :resolver
     @submit="onSubmit">
-    <FormField
-      v-slot="$field"
-      name="lastName"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Фамилия"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+    <div class="modal-form">
+      <FormField
+        v-slot="$field"
+        name="lastName"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Фамилия"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      v-slot="$field"
-      name="firstName"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Имя"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+      <FormField
+        v-slot="$field"
+        name="firstName"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Имя"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      name="patronymic"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Отчество"
-        class="w-full dark-input" />
-    </FormField>
+      <FormField
+        name="patronymic"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Отчество"
+          class="w-full dark-input" />
+      </FormField>
 
-    <FormField
-      v-slot="$field"
-      name="email"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Почта"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+      <FormField
+        v-slot="$field"
+        name="email"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Почта"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      name="position"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Должность"
-        class="w-full dark-input" />
-    </FormField>
+      <FormField
+        name="position"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Должность"
+          class="w-full dark-input" />
+      </FormField>
 
-    <div
-      v-if="createdCredentials"
-      class="create-speaker__credentials">
-      <p class="create-speaker__credentials-title">Данные для входа:</p>
-      <div class="create-speaker__credentials-row">
-        <span><b>Email:</b> {{ createdCredentials.email }}</span>
-      </div>
-      <div class="create-speaker__credentials-row">
-        <span><b>Пароль:</b> {{ createdCredentials.generatedPassword }}</span>
+      <div
+        v-if="createdCredentials"
+        class="create-speaker__credentials">
+        <p class="create-speaker__credentials-title">Данные для входа:</p>
+        <div class="create-speaker__credentials-row">
+          <span><b>Email:</b> {{ createdCredentials.email }}</span>
+        </div>
+        <div class="create-speaker__credentials-row">
+          <span><b>Пароль:</b> {{ createdCredentials.generatedPassword }}</span>
+        </div>
       </div>
     </div>
   </Form>
@@ -184,7 +186,6 @@ defineExpose({
   padding: 12px;
   border: 1px solid variables.$border-dark;
   border-radius: 10px;
-  margin-top: 16px;
   background: variables.$surface-dark-elevated;
 }
 
