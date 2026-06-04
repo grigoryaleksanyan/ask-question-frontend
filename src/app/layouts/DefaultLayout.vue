@@ -41,11 +41,10 @@
 
     <SidebarModal ref="feedback-modal">
       <template #header>Обратная связь</template>
-      <template #default="{ confirm, close }">
+      <template #default>
         <SidebarFeedbackContent
           ref="feedback-content"
-          :modal-confirm="confirm"
-          :modal-close="close" />
+          @success="onFeedbackSuccess" />
       </template>
       <template #footer>
         <Button
@@ -54,7 +53,8 @@
         <Button
           label="Отмена"
           outlined
-          @click="feedbackContent?.modalClose()" />
+          severity="secondary"
+          @click="feedbackModal?.close()" />
       </template>
     </SidebarModal>
   </div>
@@ -101,6 +101,10 @@ const navItems: NavItem[] = [
 ];
 
 const year = computed(() => new Date().getFullYear());
+
+function onFeedbackSuccess() {
+  feedbackModal.value?.confirm();
+}
 
 async function showFeedbackModal() {
   await feedbackModal.value.open();
