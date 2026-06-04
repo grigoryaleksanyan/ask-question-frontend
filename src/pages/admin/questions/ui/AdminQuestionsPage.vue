@@ -59,7 +59,7 @@
         :class="{
           'admin-questions-page__row--selected': selectedIds.has(question.id),
         }"
-        @click="toggleSelect(question.id)">
+        @click="navigateToDetail(question.id)">
         <div
           class="admin-questions-page__cell admin-questions-page__cell--check"
           @click.stop>
@@ -69,8 +69,16 @@
             @change="toggleSelect(question.id)" />
         </div>
         <div
-          class="admin-questions-page__cell admin-questions-page__cell--question">
-          {{ question.text }}
+          class="admin-questions-page__cell admin-questions-page__cell--question"
+          @click.stop>
+          <router-link
+            :to="{
+              name: ROUTES.adminQuestionDetail,
+              params: { id: question.id },
+            }"
+            class="admin-questions-page__question-link">
+            {{ question.text }}
+          </router-link>
         </div>
         <div
           class="admin-questions-page__cell admin-questions-page__cell--area">
@@ -141,6 +149,7 @@ import type { QuestionResponse } from '@/shared/dto';
 
 import { QuestionStatusId } from '@/shared/dto';
 import Checkbox from 'primevue/checkbox';
+import { useRouter } from 'vue-router';
 
 import { GetAllQuestions, type QuestionListParams } from '@/entities/question';
 import {
@@ -149,11 +158,14 @@ import {
   QuestionBulkActions,
 } from '@/features/manage-question';
 import { useAuthStore } from '@/features/auth';
+
+import ROUTES from '@/shared/routes';
 import { useApiCall } from '@/shared/lib';
 
 defineOptions({ name: 'AdminQuestionsPage' });
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const { execute: executeFetch } = useApiCall(GetAllQuestions, {
   showPreloader: false,
@@ -233,6 +245,10 @@ function toggleAll() {
 
 function clearSelection() {
   selectedIds.value = new Set();
+}
+
+function navigateToDetail(id: string) {
+  router.push({ name: ROUTES.adminQuestionDetail, params: { id } });
 }
 
 function onStatusChanged(id: string, newStatus: QuestionStatusId) {
@@ -363,6 +379,11 @@ fetchData();
   &--selected {
     background: rgba(variables.$main-color, 0.08);
   }
+}
+
+.admin-questions-page__question-link {
+  color: inherit;
+  text-decoration: none;
 }
 
 .admin-questions-page__cell--question {
