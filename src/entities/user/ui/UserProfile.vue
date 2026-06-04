@@ -1,6 +1,6 @@
 <template>
   <Form
-    v-slot="$form"
+    ref="form"
     :resolver
     @submit="onSubmit">
     <template v-if="getUserData?.userRoleId === 2">
@@ -36,15 +36,6 @@
           : '-'
       }}
     </p>
-
-    <template v-if="!showChangePassword">
-      <Button
-        class="mt-5"
-        size="small"
-        @click="showChangePassword = true">
-        Изменить пароль
-      </Button>
-    </template>
 
     <div
       v-show="showChangePassword"
@@ -100,26 +91,11 @@
         </Message>
       </FormField>
     </div>
-
-    <div class="flex gap-2 mt-4">
-      <Button
-        v-if="showChangePassword"
-        :disabled="!$form.valid"
-        type="submit">
-        Сохранить
-      </Button>
-      <Button
-        severity="secondary"
-        outlined
-        @click="emit('cancel')">
-        Отмена
-      </Button>
-    </div>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { Form, FormField } from '@primevue/forms';
@@ -127,7 +103,6 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 
 import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 import Message from 'primevue/message';
 
 import { useApiCall } from '@/shared/lib';
@@ -139,7 +114,6 @@ defineOptions({ name: 'UserProfile' });
 
 const emit = defineEmits<{
   success: [];
-  cancel: [];
 }>();
 
 const { execute: executeChangePassword } = useApiCall(ChangePassword, {
@@ -168,6 +142,23 @@ const schema = z
 
 const resolver = zodResolver(schema);
 
+const formRef = useTemplateRef('form');
+
+const isChangingPassword = computed(() => showChangePassword.value);
+
+function changePassword() {
+  showChangePassword.value = true;
+}
+
+function cancelChangePassword() {
+  showChangePassword.value = false;
+}
+
+function submitForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formRef.value as any)?.submit();
+}
+
 const getUserStringRole = computed(() => {
   if (getUserData.value?.userRoleId === 1) {
     return 'Администратор';
@@ -191,6 +182,13 @@ async function onSubmit({
     confirmPassword: values.confirmPassword as string,
   });
 }
+
+defineExpose({
+  isChangingPassword,
+  changePassword,
+  cancelChangePassword,
+  submitForm,
+});
 </script>
 
 <style lang="scss" scoped>
