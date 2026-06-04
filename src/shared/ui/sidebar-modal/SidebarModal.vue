@@ -10,8 +10,6 @@
     </template>
     <div style="overflow-y: auto; overscroll-behavior: none">
       <slot
-        :is-open="isOpen"
-        :toggle-preloader="togglePreloader"
         :confirm="confirm"
         :close="close">
       </slot>
@@ -27,13 +25,15 @@ import { ref, computed } from 'vue';
 
 import Drawer from 'primevue/drawer';
 
-import type { SidebarModalResult } from '@/shared/types';
+import type { ModalResult } from '@/shared/types';
+
+defineOptions({ name: 'SidebarModal' });
+
+const { closeOnClickAway = true } = defineProps<Props>();
 
 interface Props {
   closeOnClickAway?: boolean;
 }
-
-const { closeOnClickAway = true } = defineProps<Props>();
 
 const isOpen = ref(false);
 
@@ -49,14 +49,14 @@ const isVisible = computed({
 });
 
 let modalController: {
-  resolve: (value: SidebarModalResult) => void;
+  resolve: (value: ModalResult) => void;
   reject: (reason?: unknown) => void;
 } | null = null;
 
-function open(): Promise<SidebarModalResult> {
-  let resolve!: (value: SidebarModalResult) => void;
+function open(): Promise<ModalResult> {
+  let resolve!: (value: ModalResult) => void;
   let reject!: (reason?: unknown) => void;
-  const modalPromise = new Promise<SidebarModalResult>((ok, fail) => {
+  const modalPromise = new Promise<ModalResult>((ok, fail) => {
     resolve = ok;
     reject = fail;
   });
@@ -67,17 +67,17 @@ function open(): Promise<SidebarModalResult> {
   return modalPromise;
 }
 
-function resolveModal(status: boolean, data: unknown = null) {
+function resolveModal(status: boolean, data?: unknown) {
   modalController!.resolve({ status, data });
   isOpen.value = false;
 }
 
-function confirm(data: unknown = null) {
+function confirm(data?: unknown) {
   resolveModal(true, data);
 }
 
-function close(data: unknown = null) {
-  resolveModal(false, data);
+function close() {
+  resolveModal(false);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,6 +85,9 @@ function togglePreloader(_status: boolean) {}
 
 defineExpose({
   open,
+  confirm,
+  close,
+  togglePreloader,
 });
 </script>
 
