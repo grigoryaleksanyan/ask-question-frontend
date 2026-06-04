@@ -30,11 +30,9 @@
 
     <SidebarModal ref="create-area-modal">
       <template #header>Создать область</template>
-      <template #default="{ confirm, close }">
+      <template #default>
         <CreateArea
           ref="create-area"
-          :modal-confirm="confirm"
-          :modal-close="close"
           :order="areas.length"
           @success="successCreateArea" />
       </template>
@@ -46,21 +44,18 @@
           label="Отмена"
           outlined
           severity="secondary"
-          @click="createAreaRef?.cancel()" />
+          @click="createAreaModal?.close()" />
       </template>
     </SidebarModal>
 
     <CenterModal ref="delete-area-modal">
       <template #header>Удалить запись</template>
-      <template #default="{ confirm, close }">
+      <template #default>
         <DeleteArea
           v-if="currentArea"
           :id="currentArea.id"
           ref="delete-area"
-          :modal-confirm="confirm"
-          :modal-close="close"
-          @success="successDeleteArea"
-          @cancel="close" />
+          @success="successDeleteArea" />
       </template>
       <template #footer>
         <Button
@@ -148,6 +143,7 @@ async function showCreateAreaModal() {
 
 function successCreateArea(area: AreaResponse) {
   areas.value = [...areas.value, area];
+  createAreaModal.value?.confirm();
 }
 
 function successUpdateArea(modifiedArea: AreaResponse) {
@@ -163,7 +159,7 @@ function clickDeleteAreaBtn(area: AreaResponse) {
 
 function successDeleteArea(areaId: string) {
   areas.value = areas.value.filter((area) => area.id !== areaId);
-  deleteAreaModalRef?.value?.close();
+  deleteAreaModalRef.value?.confirm();
 }
 
 fetchData();
