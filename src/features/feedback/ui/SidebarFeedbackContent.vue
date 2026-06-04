@@ -1,33 +1,23 @@
 <template>
-  <form class="m-0 p-0">
-    <div class="grid grid-nogutter mt-2">
-      <div class="col-12">
-        <InputText
-          v-model="controls.username"
-          placeholder="Имя"
-          class="w-full" />
-      </div>
-      <div class="col-12">
-        <InputText
-          v-model="controls.email"
-          placeholder="Email"
-          class="w-full" />
-      </div>
-      <div class="col-12">
-        <Select
-          v-model="controls.theme"
-          :options="themes"
-          placeholder="Тема обращения"
-          class="w-full" />
-      </div>
-      <div class="col-12">
-        <Textarea
-          v-model="controls.text"
-          placeholder="Текст обращения"
-          auto-resize
-          class="w-full" />
-      </div>
-    </div>
+  <form class="modal-form">
+    <InputText
+      v-model="controls.username"
+      placeholder="Имя"
+      class="w-full" />
+    <InputText
+      v-model="controls.email"
+      placeholder="Email"
+      class="w-full" />
+    <Select
+      v-model="controls.theme"
+      :options="themes"
+      placeholder="Тема обращения"
+      class="w-full" />
+    <Textarea
+      v-model="controls.text"
+      placeholder="Текст обращения"
+      auto-resize
+      class="w-full" />
   </form>
 </template>
 
