@@ -4,83 +4,85 @@
     :resolver
     :initial-values
     @submit="onSubmit">
-    <FormField
-      v-slot="$field"
-      name="lastName"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Фамилия"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+    <div class="modal-form">
+      <FormField
+        v-slot="$field"
+        name="lastName"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Фамилия"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      v-slot="$field"
-      name="firstName"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Имя"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+      <FormField
+        v-slot="$field"
+        name="firstName"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Имя"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      name="patronymic"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Отчество"
-        class="w-full dark-input" />
-    </FormField>
+      <FormField
+        name="patronymic"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Отчество"
+          class="w-full dark-input" />
+      </FormField>
 
-    <FormField
-      v-slot="$field"
-      name="email"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Почта"
-        class="w-full dark-input" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+      <FormField
+        v-slot="$field"
+        name="email"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Почта"
+          class="w-full dark-input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-    <FormField
-      name="position"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Должность"
-        class="w-full dark-input" />
-    </FormField>
+      <FormField
+        name="position"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Должность"
+          class="w-full dark-input" />
+      </FormField>
 
-    <FormField
-      name="additionalInfo"
-      initial-value="">
-      <Textarea
-        placeholder="Дополнительная информация"
-        rows="2"
-        class="w-full dark-input" />
-    </FormField>
+      <FormField
+        name="additionalInfo"
+        initial-value="">
+        <Textarea
+          placeholder="Дополнительная информация"
+          rows="2"
+          class="w-full dark-input" />
+      </FormField>
+    </div>
   </Form>
 </template>
 
