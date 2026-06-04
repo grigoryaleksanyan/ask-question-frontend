@@ -82,7 +82,7 @@ function successDeleteFeedback(feedbackId: string) {
   feedbacks.value = feedbacks.value.filter(
     (feedback) => feedback.id !== feedbackId,
   );
-  feedbackModalRef.value?.close();
+  feedbackModalRef.value?.confirm();
 }
 
 fetchData();
