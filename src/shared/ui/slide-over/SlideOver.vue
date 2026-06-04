@@ -11,7 +11,7 @@
       <slot name="header"></slot>
     </template>
     <div
-      :class="{ 'slide-over__content--padded': contentPadding }"
+      class="slide-over__content"
       style="overflow-y: auto; overscroll-behavior: none">
       <slot
         :confirm="confirm"
@@ -32,11 +32,10 @@ import type { ModalResult } from '@/shared/types';
 
 defineOptions({ name: 'SlideOver' });
 
-const { closeOnClickAway = true, contentPadding = true } = defineProps<Props>();
+const { closeOnClickAway = true } = defineProps<Props>();
 
 interface Props {
   closeOnClickAway?: boolean;
-  contentPadding?: boolean;
 }
 
 const isVisible = ref(false);
@@ -91,11 +90,15 @@ defineExpose({ open, confirm, close, togglePreloader });
 </script>
 
 <style lang="scss" scoped>
-.slide-over__content--padded {
-  padding: 16px;
+.slide-over__content {
+  padding: 1rem;
 }
 
 .slide-over {
+  :deep(.p-drawer-footer) {
+    border-top: 1px solid var(--p-surface-border);
+  }
+
   :global(.p-dark) & {
     :deep(.p-drawer) {
       background: variables.$surface-dark-elevated;
