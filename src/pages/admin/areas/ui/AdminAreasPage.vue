@@ -28,7 +28,9 @@
       </template>
     </Draggable>
 
-    <SidebarModal ref="create-area-modal">
+    <SlideOver
+      ref="create-area-modal"
+      :content-padding="false">
       <template #header>Создать область</template>
       <template #default>
         <CreateArea
@@ -46,7 +48,7 @@
           severity="secondary"
           @click="createAreaModal?.close()" />
       </template>
-    </SidebarModal>
+    </SlideOver>
 
     <CenterModal ref="delete-area-modal">
       <template #header>Удалить запись</template>

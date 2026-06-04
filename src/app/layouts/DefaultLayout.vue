@@ -39,7 +39,9 @@
         @click="showFeedbackModal" />
     </footer>
 
-    <SidebarModal ref="feedback-modal">
+    <SlideOver
+      ref="feedback-modal"
+      :content-padding="false">
       <template #header>Обратная связь</template>
       <template #default>
         <SidebarFeedbackContent
@@ -56,7 +58,7 @@
           severity="secondary"
           @click="feedbackModal?.close()" />
       </template>
-    </SidebarModal>
+    </SlideOver>
   </div>
 </template>
 

@@ -9,7 +9,9 @@
     <i class="pi pi-comment"></i>
   </button>
 
-  <SidebarModal ref="sidebarModalRef">
+  <SlideOver
+    ref="slideOverRef"
+    :content-padding="false">
     <template #header>
       <span>Комментарий к вопросу</span>
     </template>
@@ -29,9 +31,9 @@
         label="Отмена"
         outlined
         severity="secondary"
-        @click="sidebarModalRef?.close()" />
+        @click="slideOverRef?.close()" />
     </template>
-  </SidebarModal>
+  </SlideOver>
 </template>
 
 <script setup lang="ts">
@@ -54,7 +56,7 @@ const emit = defineEmits<{
   error: [id: string];
 }>();
 
-const sidebarModalRef = useTemplateRef('sidebarModalRef');
+const slideOverRef = useTemplateRef('slideOverRef');
 const localComment = ref(comment ?? '');
 
 const { execute: executeSetComment } = useApiCall(SetQuestionComment, {
@@ -70,7 +72,7 @@ const { execute: executeSetComment } = useApiCall(SetQuestionComment, {
 
 async function openModal() {
   localComment.value = comment ?? '';
-  await sidebarModalRef.value?.open();
+  await slideOverRef.value?.open();
 }
 
 async function saveComment() {
@@ -79,7 +81,7 @@ async function saveComment() {
     localComment.value || null,
   );
   if (result !== undefined) {
-    sidebarModalRef.value?.confirm();
+    slideOverRef.value?.confirm();
   }
 }
 </script>

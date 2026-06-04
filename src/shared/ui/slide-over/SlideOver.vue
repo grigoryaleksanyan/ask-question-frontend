@@ -10,7 +10,9 @@
     <template #header>
       <slot name="header"></slot>
     </template>
-    <div style="overflow-y: auto; overscroll-behavior: none">
+    <div
+      :class="{ 'slide-over__content--padded': contentPadding }"
+      style="overflow-y: auto; overscroll-behavior: none">
       <slot
         :confirm="confirm"
         :close="close"></slot>
@@ -30,10 +32,11 @@ import type { ModalResult } from '@/shared/types';
 
 defineOptions({ name: 'SlideOver' });
 
-const { closeOnClickAway = true } = defineProps<Props>();
+const { closeOnClickAway = true, contentPadding = true } = defineProps<Props>();
 
 interface Props {
   closeOnClickAway?: boolean;
+  contentPadding?: boolean;
 }
 
 const isVisible = ref(false);
@@ -61,22 +64,23 @@ function open(): Promise<ModalResult> {
   return modalPromise;
 }
 
-function confirm(data?: unknown) {
-  modalController!.resolve({ status: true, data });
+function resolveModal(status: boolean, data?: unknown) {
+  modalController!.resolve({ status, data });
   isVisible.value = false;
   modalController = null;
 }
 
+function confirm(data?: unknown) {
+  resolveModal(true, data);
+}
+
 function close() {
-  modalController!.resolve({ status: false });
-  isVisible.value = false;
-  modalController = null;
+  resolveModal(false);
 }
 
 function onHide() {
   if (modalController) {
-    modalController.resolve({ status: false });
-    modalController = null;
+    resolveModal(false);
   }
 }
 
@@ -87,24 +91,24 @@ defineExpose({ open, confirm, close, togglePreloader });
 </script>
 
 <style lang="scss" scoped>
-.slide-over {
-  :deep(.p-drawer-content) {
-    padding: 16px;
-  }
+.slide-over__content--padded {
+  padding: 16px;
 }
 
-:global(.p-dark) .slide-over {
-  :deep(.p-drawer) {
-    background: variables.$surface-dark-elevated;
-    color: variables.$text-primary-dark;
-  }
+.slide-over {
+  :global(.p-dark) & {
+    :deep(.p-drawer) {
+      background: variables.$surface-dark-elevated;
+      color: variables.$text-primary-dark;
+    }
 
-  :deep(.p-drawer-header) {
-    color: variables.$text-primary-dark;
-  }
+    :deep(.p-drawer-header) {
+      color: variables.$text-primary-dark;
+    }
 
-  :deep(.p-drawer-footer) {
-    color: variables.$text-primary-dark;
+    :deep(.p-drawer-footer) {
+      color: variables.$text-primary-dark;
+    }
   }
 }
 </style>
