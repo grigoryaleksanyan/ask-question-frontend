@@ -21,9 +21,9 @@ export interface NavItem {
   link: string;
 }
 
-export interface SidebarModalResult {
+export interface ModalResult {
   status: boolean;
-  data: unknown;
+  data?: unknown;
 }
 
 export interface DateRangeValue {

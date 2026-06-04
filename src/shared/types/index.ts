@@ -47,6 +47,6 @@ export {
   QuestionStatusId,
   type QuestionStatus,
   type NavItem,
-  type SidebarModalResult,
+  type ModalResult,
   type DateRangeValue,
 } from './models';
