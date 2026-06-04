@@ -124,7 +124,7 @@ Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|styl
 
 ## Глобальные компоненты
 
-Регистрируются в `@/app/lib/global-components.ts`: SidebarModal, SlideOver. Используй напрямую в шаблонах без импорта. CenterModal импортируется напрямую.
+Регистрируются в `@/app/lib/global-components.ts`: SlideOver. Используй напрямую в шаблонах без импорта. CenterModal импортируется напрямую.
 
 ## PrimeVue Forms + Zod
 
@@ -132,9 +132,8 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 
 ## Shared UI
 
-- `sidebar-modal/` — SidebarModal (promise-based API: open/confirm/close через scoped slot props), SidebarPreloader (не экспортируется из public API)
 - `center-modal/` — CenterModal
-- `slide-over/` — SlideOver (глобальный компонент)
+- `slide-over/` — SlideOver (глобальный компонент, promise-based API: open/confirm/close через scoped slot props, проп `contentPadding` управляет паддингом контента, по умолчанию `true`)
 - `context-menu/` — ContextMenuButton
 - `status-dot/` — StatusDot
 - `toast/` — AppToast
