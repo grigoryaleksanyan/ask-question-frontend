@@ -49,9 +49,7 @@
 
       <SlideOver ref="updateCategorySlideOver">
         <template #header>
-          <span class="admin-faq-category-page__slide-over-title">
-            Изменить категорию
-          </span>
+          <span class="typography__headline--medium"> Изменить категорию </span>
         </template>
         <template #default>
           <UpdateCategory
@@ -95,7 +93,7 @@
 
       <SlideOver ref="createEntrySlideOver">
         <template #header>
-          <span class="admin-faq-category-page__slide-over-title">
+          <span class="typography__headline--medium">
             Создать запись в FAQ
           </span>
         </template>
@@ -122,7 +120,7 @@
 
       <SlideOver ref="updateEntrySlideOver">
         <template #header>
-          <span class="admin-faq-category-page__slide-over-title">
+          <span class="typography__headline--medium">
             Изменить запись в FAQ
           </span>
         </template>
@@ -391,11 +389,5 @@ fetchData();
 
 .admin-faq-category-page__add-entry {
   padding: 8px 0 12px 16px;
-}
-
-.admin-faq-category-page__slide-over-title {
-  color: variables.$text-primary-dark;
-  font-size: 1.25rem;
-  font-weight: 500;
 }
 </style>
