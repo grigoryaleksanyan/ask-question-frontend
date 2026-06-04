@@ -39,7 +39,7 @@
 
     <div
       v-show="showChangePassword"
-      class="mt-4">
+      class="modal-form">
       <FormField
         v-slot="$field"
         name="password"
