@@ -4,7 +4,7 @@ import type {
   AreaResponse,
   AreaCreateRequest,
   AreaUpdateRequest,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/Area';
 

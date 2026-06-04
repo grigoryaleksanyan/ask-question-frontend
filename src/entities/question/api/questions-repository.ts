@@ -6,7 +6,7 @@ import type {
   QuestionUpdateRequest,
   PaginatedResponse,
   VoteResultResponse,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/Question';
 

@@ -72,10 +72,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 
-import type { AreaResponse, SpeakerPublicResponse } from '@/shared/types';
+import type { AreaResponse, SpeakerPublicResponse } from '@/shared/dto';
 
-import { GetAllAreas } from '@/entities/area';
-import { GetAllPublicSpeakers } from '@/entities/user';
 import { useApiCall } from '@/shared/lib';
 import { GetCaptcha, Create } from '../api/questions-repository';
 
@@ -86,13 +84,12 @@ import Button from 'primevue/button';
 
 defineOptions({ name: 'QuestionFormCreate' });
 
+const { areas, speakers } = defineProps<{
+  areas: AreaResponse[];
+  speakers: SpeakerPublicResponse[];
+}>();
+
 const { execute: executeGetCaptcha } = useApiCall(GetCaptcha, {
-  showPreloader: false,
-});
-const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
-  showPreloader: false,
-});
-const { execute: executeFetchSpeakers } = useApiCall(GetAllPublicSpeakers, {
   showPreloader: false,
 });
 const { execute: executeSubmit } = useApiCall(Create, {
@@ -107,8 +104,6 @@ const { execute: executeSubmit } = useApiCall(Create, {
 });
 
 const showDetails = ref(false);
-const areas = ref<AreaResponse[]>([]);
-const speakers = ref<SpeakerPublicResponse[]>([]);
 const captchaData = ref<string | null>(null);
 const captcha = ref(null as string | null);
 
@@ -132,20 +127,6 @@ async function getCaptcha() {
   const result = await executeGetCaptcha();
   if (result) {
     captchaData.value = result;
-  }
-}
-
-async function fetchAllAreas() {
-  const result = await executeFetchAreas();
-  if (result) {
-    areas.value = result;
-  }
-}
-
-async function fetchAllSpeakers() {
-  const result = await executeFetchSpeakers();
-  if (result) {
-    speakers.value = result;
   }
 }
 
@@ -182,9 +163,6 @@ async function submitForm() {
     speakerId: controls.speakerId ?? null,
   });
 }
-
-fetchAllAreas();
-fetchAllSpeakers();
 </script>
 
 <style lang="scss" scoped>

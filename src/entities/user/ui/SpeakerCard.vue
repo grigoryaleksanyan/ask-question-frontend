@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import type { MenuItem } from 'primevue/menuitem';
 
-import type { SpeakerResponse } from '@/shared/types';
+import type { SpeakerResponse } from '@/shared/dto';
 
 import { ContextMenuButton } from '@/shared/ui/context-menu';
 

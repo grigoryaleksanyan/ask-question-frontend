@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef } from 'vue';
 
-import type { NavItem } from '@/shared/types';
+import type { NavItem } from '@/shared/dto';
 
 import Drawer from 'primevue/drawer';
 import Toolbar from 'primevue/toolbar';

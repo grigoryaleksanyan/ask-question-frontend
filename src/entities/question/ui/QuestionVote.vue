@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VoteType } from '@/shared/types';
+import type { VoteType } from '@/shared/dto';
 
 defineOptions({ name: 'QuestionVote' });
 

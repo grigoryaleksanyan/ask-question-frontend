@@ -24,7 +24,7 @@ import { ref } from 'vue';
 
 import Dialog from 'primevue/dialog';
 
-import type { ModalResult } from '@/shared/types';
+import type { ModalResult } from '@/shared/dto';
 
 defineOptions({ name: 'CenterModal' });
 

@@ -5,7 +5,7 @@ import type {
   SetupRequest,
   UserResponse,
   SetupRequiredResponse,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/Auth';
 

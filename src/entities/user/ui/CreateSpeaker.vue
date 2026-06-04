@@ -95,7 +95,7 @@ import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 
-import type { CreateSpeakerResponse } from '@/shared/types';
+import type { CreateSpeakerResponse } from '@/shared/dto';
 
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';

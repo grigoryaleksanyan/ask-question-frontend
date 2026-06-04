@@ -93,7 +93,7 @@ import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 
-import type { SpeakerResponse } from '@/shared/types';
+import type { SpeakerResponse } from '@/shared/dto';
 
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';

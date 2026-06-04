@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import type { VotesSummaryResponse } from '@/shared/types';
+import type { VotesSummaryResponse } from '@/shared/dto';
 
 import ProgressBar from 'primevue/progressbar';
 

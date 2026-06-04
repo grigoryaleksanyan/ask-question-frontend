@@ -6,7 +6,7 @@ import type {
   CreateSpeakerResponse,
   SpeakerCreateRequest,
   SpeakerUpdateRequest,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/Speaker';
 

@@ -1,5 +1,5 @@
 import httpClient from '@/shared/api';
-import type { DashboardSummaryResponse } from '@/shared/types';
+import type { DashboardSummaryResponse } from '@/shared/dto';
 
 const apiRoute = '/api/Dashboard';
 

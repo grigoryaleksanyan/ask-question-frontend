@@ -70,7 +70,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import type { QuestionResponse } from '@/shared/types';
+import type { QuestionResponse } from '@/shared/dto';
 
 import { StatusDot } from '@/shared/ui/status-dot';
 import {

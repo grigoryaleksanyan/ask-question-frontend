@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import type { QuestionStatusId } from '@/shared/types';
+import type { QuestionStatusId } from '@/shared/dto';
 
 import { StatusDot } from '@/shared/ui/status-dot';
 import QUESTION_STATUSES, {

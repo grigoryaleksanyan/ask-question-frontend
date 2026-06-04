@@ -5,7 +5,7 @@ import type {
   FaqCategoryWithEntriesResponse,
   FaqCategoryCreateRequest,
   FaqCategoryUpdateRequest,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/FaqCategory';
 

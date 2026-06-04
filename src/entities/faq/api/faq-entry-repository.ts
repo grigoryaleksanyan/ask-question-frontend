@@ -4,7 +4,7 @@ import type {
   FaqEntryResponse,
   FaqEntryCreateRequest,
   FaqEntryUpdateRequest,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 const apiRoute = '/api/FaqEntry';
 

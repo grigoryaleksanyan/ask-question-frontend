@@ -10,7 +10,10 @@
         placeholder="Поиск вопросов..." />
     </div>
 
-    <QuestionFilters @change="onFiltersChange" />
+    <QuestionFilters
+      :areas="areas"
+      :speakers="speakers"
+      @change="onFiltersChange" />
 
     <div class="questions-view__tabs">
       <button
@@ -61,9 +64,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 
-import type { QuestionResponse } from '@/shared/types';
+import type {
+  QuestionResponse,
+  AreaResponse,
+  SpeakerPublicResponse,
+} from '@/shared/dto';
 
-import { QuestionStatusId } from '@/shared/types';
+import { QuestionStatusId } from '@/shared/dto';
 import { useApiCall } from '@/shared/lib';
 import { StatusDot } from '@/shared/ui/status-dot';
 import { GetAll, type QuestionListParams } from '../api/questions-repository';
@@ -73,6 +80,11 @@ import QuestionFilters from './QuestionFilters.vue';
 import QuestionListItem from './QuestionListItem.vue';
 
 defineOptions({ name: 'QuestionsView' });
+
+const { areas, speakers } = defineProps<{
+  areas: AreaResponse[];
+  speakers: SpeakerPublicResponse[];
+}>();
 
 const { execute: executeFetch, isLoading } = useApiCall(GetAll, {
   showPreloader: false,

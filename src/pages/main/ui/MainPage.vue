@@ -5,7 +5,9 @@
       <p class="main-page__subtitle">
         Платформа для сбора вопросов спикерам вашей организации
       </p>
-      <QuestionFormCreate />
+      <QuestionFormCreate
+        :areas="areaItems"
+        :speakers="speakerItems" />
     </div>
 
     <div class="main-page__popular">
@@ -21,10 +23,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
-import type { QuestionResponse } from '@/shared/types';
+import type {
+  QuestionResponse,
+  AreaResponse,
+  SpeakerPublicResponse,
+} from '@/shared/dto';
 
+import { GetAllAreas } from '@/entities/area';
+import { GetAllPublicSpeakers } from '@/entities/user';
 import {
   GetPopularQuestions,
   QuestionCard,
@@ -37,8 +45,16 @@ defineOptions({ name: 'MainPage' });
 const { execute: executeFetch } = useApiCall(GetPopularQuestions, {
   showPreloader: false,
 });
+const { execute: executeFetchSpeakers } = useApiCall(GetAllPublicSpeakers, {
+  showPreloader: false,
+});
+const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
+  showPreloader: false,
+});
 
 const questions = ref<QuestionResponse[]>([]);
+const areaItems = ref<AreaResponse[]>([]);
+const speakerItems = ref<SpeakerPublicResponse[]>([]);
 
 async function fetchData() {
   const result = await executeFetch();
@@ -47,7 +63,20 @@ async function fetchData() {
   }
 }
 
-fetchData();
+onMounted(async () => {
+  const [speakers, areas] = await Promise.all([
+    executeFetchSpeakers(),
+    executeFetchAreas(),
+  ]);
+  if (speakers) {
+    speakerItems.value = speakers;
+  }
+  if (areas) {
+    areaItems.value = areas;
+  }
+
+  fetchData();
+});
 </script>
 
 <style lang="scss" scoped>

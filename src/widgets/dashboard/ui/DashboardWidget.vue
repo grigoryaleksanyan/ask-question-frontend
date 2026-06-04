@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-import type { DashboardSummaryResponse } from '@/shared/types';
+import type { DashboardSummaryResponse } from '@/shared/dto';
 
 import ProgressSpinner from 'primevue/progressspinner';
 

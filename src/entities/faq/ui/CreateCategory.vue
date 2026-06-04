@@ -31,7 +31,7 @@ import { Form, FormField } from '@primevue/forms';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 
-import type { FaqCategoryResponse } from '@/shared/types';
+import type { FaqCategoryResponse } from '@/shared/dto';
 
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';

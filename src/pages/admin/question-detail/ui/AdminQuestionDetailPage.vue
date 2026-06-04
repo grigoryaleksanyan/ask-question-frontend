@@ -107,7 +107,7 @@ import { useRoute } from 'vue-router';
 import type {
   QuestionResponse,
   QuestionStatusId as QuestionStatusIdType,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 import ProgressSpinner from 'primevue/progressspinner';
 

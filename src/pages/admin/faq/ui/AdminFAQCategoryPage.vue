@@ -175,7 +175,7 @@ import Draggable from 'vuedraggable';
 import type {
   FaqCategoryWithEntriesResponse,
   FaqEntryResponse,
-} from '@/shared/types';
+} from '@/shared/dto';
 
 import Button from 'primevue/button';
 

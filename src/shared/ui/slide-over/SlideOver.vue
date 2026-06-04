@@ -28,7 +28,7 @@ import { computed, ref } from 'vue';
 
 import Drawer from 'primevue/drawer';
 
-import type { ModalResult } from '@/shared/types';
+import type { ModalResult } from '@/shared/dto';
 
 defineOptions({ name: 'SlideOver' });
 

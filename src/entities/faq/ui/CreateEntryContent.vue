@@ -50,7 +50,7 @@ import { z } from 'zod';
 
 import sanitizeHtml from '@/shared/lib/html-sanitize';
 
-import type { FaqEntryResponse } from '@/shared/types';
+import type { FaqEntryResponse } from '@/shared/dto';
 
 import { useApiCall } from '@/shared/lib';
 import InputText from 'primevue/inputtext';

@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref, nextTick, useTemplateRef } from 'vue';
 
-import type { AreaResponse } from '@/shared/types';
+import type { AreaResponse } from '@/shared/dto';
 
 import { useApiCall } from '@/shared/lib';
 import { Update } from '../api/areas-repository';

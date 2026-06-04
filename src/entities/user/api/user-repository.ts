@@ -1,6 +1,6 @@
 import httpClient from '@/shared/api';
 
-import type { UserResponse, ChangePasswordRequest } from '@/shared/types';
+import type { UserResponse, ChangePasswordRequest } from '@/shared/dto';
 
 const apiRoute = '/api/User';
 

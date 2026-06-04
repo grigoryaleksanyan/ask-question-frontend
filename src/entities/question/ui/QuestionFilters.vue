@@ -21,7 +21,7 @@
       <div class="question-filters__select-wrap">
         <Select
           v-model="selectedSpeaker"
-          :options="speakerItems"
+          :options="speakers"
           :option-label="
             (speaker: SpeakerPublicResponse) =>
               `${speaker.lastName} ${speaker.firstName}`
@@ -36,7 +36,7 @@
       <div class="question-filters__select-wrap">
         <Select
           v-model="selectedAreaId"
-          :options="areaItems"
+          :options="areas"
           option-label="title"
           option-value="id"
           placeholder="Зона"
@@ -49,16 +49,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
-import type { SpeakerPublicResponse, AreaResponse } from '@/shared/types';
+import type { SpeakerPublicResponse, AreaResponse } from '@/shared/dto';
 
-import { GetAllAreas } from '@/entities/area';
-import { GetAllPublicSpeakers } from '@/entities/user';
-import { useApiCall } from '@/shared/lib';
 import Select from 'primevue/select';
 
 defineOptions({ name: 'QuestionFilters' });
+
+const { areas, speakers } = defineProps<{
+  areas: AreaResponse[];
+  speakers: SpeakerPublicResponse[];
+}>();
 
 const emit = defineEmits<{
   (
@@ -71,18 +73,9 @@ const emit = defineEmits<{
   ): void;
 }>();
 
-const { execute: executeFetchSpeakers } = useApiCall(GetAllPublicSpeakers, {
-  showPreloader: false,
-});
-const { execute: executeFetchAreas } = useApiCall(GetAllAreas, {
-  showPreloader: false,
-});
-
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const selectedSpeaker = ref<string | null>(null);
 const selectedAreaId = ref<string | null>(null);
-const speakerItems = ref<SpeakerPublicResponse[]>([]);
-const areaItems = ref<AreaResponse[]>([]);
 
 function setSortOrder(order: 'asc' | 'desc') {
   sortOrder.value = order;
@@ -96,19 +89,6 @@ function onFilterChange() {
     sortOrder: sortOrder.value,
   });
 }
-
-onMounted(async () => {
-  const [speakers, areas] = await Promise.all([
-    executeFetchSpeakers(),
-    executeFetchAreas(),
-  ]);
-  if (speakers) {
-    speakerItems.value = speakers;
-  }
-  if (areas) {
-    areaItems.value = areas;
-  }
-});
 </script>
 
 <style lang="scss" scoped>

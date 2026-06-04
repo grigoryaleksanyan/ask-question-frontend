@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 
-import type { FeedbackResponse } from '@/shared/types';
+import type { FeedbackResponse } from '@/shared/dto';
 
 import Button from 'primevue/button';
 

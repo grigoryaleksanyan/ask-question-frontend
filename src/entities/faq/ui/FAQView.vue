@@ -44,7 +44,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
+import type { FaqCategoryWithEntriesResponse } from '@/shared/dto';
 
 import { useApiCall } from '@/shared/lib';
 

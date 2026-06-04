@@ -1,6 +1,6 @@
-import { QuestionStatusId } from '@/shared/types';
+import { QuestionStatusId } from '@/shared/dto';
 
-import type { QuestionStatus } from '@/shared/types';
+import type { QuestionStatus } from '@/shared/dto';
 
 const QUESTION_STATUSES: Record<string, QuestionStatus> = {
   NEW: {

@@ -1,20 +1,13 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
 
-export const usePreloaderStore = defineStore('preloader', () => {
-  const loadings = ref(0);
+import {
+  showPreloader,
+  addLoader,
+  removeLoader,
+} from '@/shared/lib/preloader-state';
 
-  const showPreloader = computed(() => loadings.value > 0);
-
-  function addLoader() {
-    loadings.value += 1;
-  }
-
-  function removeLoader() {
-    if (loadings.value > 0) {
-      loadings.value -= 1;
-    }
-  }
-
-  return { loadings, showPreloader, addLoader, removeLoader };
-});
+export const usePreloaderStore = defineStore('preloader', () => ({
+  showPreloader,
+  addLoader,
+  removeLoader,
+}));

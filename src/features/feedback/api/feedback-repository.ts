@@ -1,6 +1,6 @@
 import httpClient from '@/shared/api';
 
-import type { FeedbackResponse, FeedbackCreateRequest } from '@/shared/types';
+import type { FeedbackResponse, FeedbackCreateRequest } from '@/shared/dto';
 
 const apiRoute = '/api/Feedback';
 

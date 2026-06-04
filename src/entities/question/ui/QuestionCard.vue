@@ -28,7 +28,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { QuestionResponse } from '@/shared/types';
+import type { QuestionResponse } from '@/shared/dto';
 
 import { StatusDot } from '@/shared/ui/status-dot';
 

@@ -106,9 +106,8 @@ import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
 import { useApiCall } from '@/shared/lib';
-import { useAuthStore } from '@/features/auth';
-
-import { ChangePassword } from '../api/user-repository';
+import { useAuthStore } from '../store';
+import { ChangePassword } from '@/entities/user';
 
 defineOptions({ name: 'UserProfile' });
 

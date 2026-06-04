@@ -21,7 +21,7 @@ import {
   Legend,
 } from 'chart.js';
 
-import type { SpeakerAreaResponse } from '@/shared/types';
+import type { SpeakerAreaResponse } from '@/shared/dto';
 
 defineOptions({ name: 'SpeakerAreasChart' });
 

@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FeedbackResponse } from '@/shared/types';
+import type { FeedbackResponse } from '@/shared/dto';
 
 defineOptions({ name: 'FeedbackCard' });
 

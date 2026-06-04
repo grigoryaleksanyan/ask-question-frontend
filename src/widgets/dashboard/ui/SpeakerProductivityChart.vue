@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SpeakerProductivityResponse } from '@/shared/types';
+import type { SpeakerProductivityResponse } from '@/shared/dto';
 
 defineOptions({ name: 'SpeakerProductivityChart' });
 

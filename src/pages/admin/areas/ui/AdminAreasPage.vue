@@ -78,7 +78,7 @@
 import { ref, computed, reactive, useTemplateRef } from 'vue';
 import Draggable from 'vuedraggable';
 
-import type { AreaResponse } from '@/shared/types';
+import type { AreaResponse } from '@/shared/dto';
 
 import Button from 'primevue/button';
 

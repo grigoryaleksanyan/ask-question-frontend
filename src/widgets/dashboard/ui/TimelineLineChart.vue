@@ -22,7 +22,7 @@ import {
   Tooltip,
 } from 'chart.js';
 
-import type { TimelinePointResponse } from '@/shared/types';
+import type { TimelinePointResponse } from '@/shared/dto';
 
 defineOptions({ name: 'TimelineLineChart' });
 

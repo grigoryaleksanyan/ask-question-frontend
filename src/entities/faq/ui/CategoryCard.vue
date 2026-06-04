@@ -19,7 +19,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { FaqCategoryWithEntriesResponse } from '@/shared/types';
+import type { FaqCategoryWithEntriesResponse } from '@/shared/dto';
 
 import { ContextMenuButton } from '@/shared/ui/context-menu';
 

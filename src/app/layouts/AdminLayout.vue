@@ -72,17 +72,16 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import type { NavItem } from '@/shared/types';
+import type { NavItem } from '@/shared/dto';
 
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 
-import { useAuthStore, Logout } from '@/features/auth';
+import { useAuthStore, Logout, UserProfile } from '@/features/auth';
 import { useApiCall } from '@/shared/lib';
 
 import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
 import { SlideOver } from '@/shared/ui/slide-over';
-import { UserProfile } from '@/entities/user';
 
 defineOptions({ name: 'AdminLayout' });
 

@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from 'chart.js';
 
-import type { AreaDistributionResponse } from '@/shared/types';
+import type { AreaDistributionResponse } from '@/shared/dto';
 
 defineOptions({ name: 'AreaBarChart' });
 

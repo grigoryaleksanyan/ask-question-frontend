@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
-import type { UserResponse } from '@/shared/types';
+import type { UserResponse } from '@/shared/dto';
 
 import { SetupRequired as SetupRequiredApi } from '../api/auth-repository';
 

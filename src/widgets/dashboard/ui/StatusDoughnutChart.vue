@@ -14,8 +14,8 @@ import { computed } from 'vue';
 import { Doughnut } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-import type { StatusDistributionResponse } from '@/shared/types';
-import { QuestionStatusId } from '@/shared/types';
+import type { StatusDistributionResponse } from '@/shared/dto';
+import { QuestionStatusId } from '@/shared/dto';
 
 defineOptions({ name: 'StatusDoughnutChart' });
 

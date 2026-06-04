@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItem } from '@/shared/types';
+import type { NavItem } from '@/shared/dto';
 
 defineOptions({ name: 'HeaderNavigation' });
 

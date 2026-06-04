@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-import type { SpeakerResponse } from '@/shared/types';
+import type { SpeakerResponse } from '@/shared/dto';
 
 import Select from 'primevue/select';
 

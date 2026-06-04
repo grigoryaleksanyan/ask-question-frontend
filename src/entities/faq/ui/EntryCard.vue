@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FaqEntryResponse } from '@/shared/types';
+import type { FaqEntryResponse } from '@/shared/dto';
 
 defineOptions({ name: 'EntryCard' });
 

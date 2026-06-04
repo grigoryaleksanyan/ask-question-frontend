@@ -36,8 +36,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { QuestionStatusId } from '@/shared/types';
-import type { QuestionStatusId as QuestionStatusIdType } from '@/shared/types';
+import { QuestionStatusId } from '@/shared/dto';
+import type { QuestionStatusId as QuestionStatusIdType } from '@/shared/dto';
 
 import { ChangeQuestionStatus, DeleteQuestion } from '@/entities/question';
 import { useToast } from 'primevue/usetoast';

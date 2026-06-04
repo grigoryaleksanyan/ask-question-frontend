@@ -2,7 +2,7 @@ import { ref, type Ref } from 'vue';
 
 import { useToast } from 'primevue/usetoast';
 
-import { usePreloaderStore } from '@/features/preloader';
+import { addLoader, removeLoader } from '@/shared/lib/preloader-state';
 
 import type { UseApiCallOptions, UseApiCallReturn } from './types';
 
@@ -15,7 +15,6 @@ export function useApiCall<T, A extends unknown[] = unknown[]>(
   options: UseApiCallOptions<T> = {},
 ): UseApiCallReturn<T, A> {
   const toast = useToast();
-  const preloaderStore = usePreloaderStore();
 
   const isLoading = ref(false) as Ref<boolean>;
   const error = ref(null) as Ref<Error | null>;
@@ -34,7 +33,7 @@ export function useApiCall<T, A extends unknown[] = unknown[]>(
     error.value = null;
 
     if (showPreloader) {
-      preloaderStore.addLoader();
+      addLoader();
     }
 
     try {
@@ -75,7 +74,7 @@ export function useApiCall<T, A extends unknown[] = unknown[]>(
       return undefined;
     } finally {
       if (showPreloader) {
-        preloaderStore.removeLoader();
+        removeLoader();
       }
 
       isLoading.value = false;

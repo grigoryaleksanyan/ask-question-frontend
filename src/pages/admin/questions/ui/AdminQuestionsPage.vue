@@ -137,9 +137,9 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 
-import type { QuestionResponse } from '@/shared/types';
+import type { QuestionResponse } from '@/shared/dto';
 
-import { QuestionStatusId } from '@/shared/types';
+import { QuestionStatusId } from '@/shared/dto';
 import Checkbox from 'primevue/checkbox';
 
 import { GetAllQuestions, type QuestionListParams } from '@/entities/question';
