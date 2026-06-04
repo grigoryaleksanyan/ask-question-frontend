@@ -28,9 +28,7 @@
 
       <SlideOver ref="createCategorySlideOver">
         <template #header>
-          <span class="admin-faq-page__slide-over-title">
-            Создать категорию
-          </span>
+          <span class="typography__headline--medium"> Создать категорию </span>
         </template>
         <template #default>
           <CreateCategory
@@ -54,9 +52,7 @@
 
       <SlideOver ref="updateCategorySlideOver">
         <template #header>
-          <span class="admin-faq-page__slide-over-title">
-            Изменить категорию
-          </span>
+          <span class="typography__headline--medium"> Изменить категорию </span>
         </template>
         <template #default>
           <UpdateCategory
@@ -255,11 +251,5 @@ if (route.name === 'admin-faq') {
 
 .admin-faq-page__actions {
   margin-bottom: 16px;
-}
-
-.admin-faq-page__slide-over-title {
-  color: variables.$text-primary-dark;
-  font-size: 1.25rem;
-  font-weight: 500;
 }
 </style>
