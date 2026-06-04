@@ -18,7 +18,7 @@
 
     <SlideOver ref="create-slide-over">
       <template #header>
-        <span class="slide-over-header">Создать спикера</span>
+        <span class="typography__headline--medium">Создать спикера</span>
       </template>
 
       <CreateSpeaker
@@ -39,7 +39,7 @@
 
     <SlideOver ref="update-slide-over">
       <template #header>
-        <span class="slide-over-header">Изменить спикера</span>
+        <span class="typography__headline--medium">Изменить спикера</span>
       </template>
 
       <UpdateSpeaker
@@ -61,9 +61,7 @@
     </SlideOver>
 
     <CenterModal ref="delete-modal">
-      <template #header>
-        <span class="slide-over-header">Удалить спикера</span>
-      </template>
+      <template #header>Удалить спикера</template>
 
       <DeleteSpeaker
         v-if="currentSpeaker"
@@ -177,11 +175,5 @@ fetchData();
   flex-direction: column;
   border-radius: 10px;
   gap: 8px;
-}
-
-.slide-over-header {
-  color: variables.$text-primary-dark;
-  font-size: 16px;
-  font-weight: 600;
 }
 </style>
