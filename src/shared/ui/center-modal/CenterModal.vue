@@ -8,9 +8,11 @@
     <template #header>
       <slot name="header"></slot>
     </template>
-    <slot
-      :confirm="confirm"
-      :close="close"></slot>
+    <div style="overflow-y: auto; overscroll-behavior: none">
+      <slot
+        :confirm="confirm"
+        :close="close"></slot>
+    </div>
     <template #footer>
       <slot name="footer"></slot>
     </template>
@@ -22,36 +24,60 @@ import { ref } from 'vue';
 
 import Dialog from 'primevue/dialog';
 
+import type { ModalResult } from '@/shared/types';
+
 defineOptions({ name: 'CenterModal' });
 
-const isVisible = ref(false);
-let resolvePromise: ((value: string) => void) | null = null;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { closeOnClickAway = true } = defineProps<Props>();
 
-function open(): Promise<string> {
-  isVisible.value = true;
-  return new Promise((resolve) => {
-    resolvePromise = resolve;
-  });
+interface Props {
+  closeOnClickAway?: boolean;
 }
 
-function confirm() {
+const isVisible = ref(false);
+let modalController: {
+  resolve: (value: ModalResult) => void;
+  reject: (reason?: unknown) => void;
+} | null = null;
+
+function open(): Promise<ModalResult> {
+  let resolve!: (value: ModalResult) => void;
+  let reject!: (reason?: unknown) => void;
+  const modalPromise = new Promise<ModalResult>((ok, fail) => {
+    resolve = ok;
+    reject = fail;
+  });
+
+  modalController = { resolve, reject };
+  isVisible.value = true;
+
+  return modalPromise;
+}
+
+function confirm(data?: unknown) {
+  modalController!.resolve({ status: true, data });
   isVisible.value = false;
-  resolvePromise?.('confirm');
-  resolvePromise = null;
+  modalController = null;
 }
 
 function close() {
+  modalController!.resolve({ status: false });
   isVisible.value = false;
-  resolvePromise?.('close');
-  resolvePromise = null;
+  modalController = null;
 }
 
 function onHide() {
-  resolvePromise?.('close');
-  resolvePromise = null;
+  if (modalController) {
+    modalController.resolve({ status: false });
+    modalController = null;
+  }
 }
 
-defineExpose({ open, confirm, close });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function togglePreloader(_status: boolean) {}
+
+defineExpose({ open, confirm, close, togglePreloader });
 </script>
 
 <style lang="scss" scoped>
