@@ -3,44 +3,40 @@
     ref="form"
     :resolver
     @submit="onSubmit">
-    <div class="create-area">
-      <div class="create-area__field">
-        <FormField
-          v-slot="$field"
-          name="title"
-          initial-value="">
-          <InputText
-            type="text"
-            placeholder="Заголовок"
-            class="create-area__input" />
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple">
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
-      </div>
+    <div class="modal-form">
+      <FormField
+        v-slot="$field"
+        name="title"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Заголовок"
+          class="create-area__input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
-      <div class="create-area__field">
-        <FormField
-          v-slot="$field"
-          name="order"
-          :initial-value="String(order)">
-          <InputText
-            type="text"
-            placeholder="Порядок"
-            class="create-area__input" />
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple">
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
-      </div>
+      <FormField
+        v-slot="$field"
+        name="order"
+        :initial-value="String(order)">
+        <InputText
+          type="text"
+          placeholder="Порядок"
+          class="create-area__input" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
     </div>
   </Form>
 </template>
@@ -118,19 +114,6 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.create-area {
-  display: flex;
-  flex-direction: column;
-  margin-top: 8px;
-  gap: 16px;
-}
-
-.create-area__field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .create-area__input {
   width: 100%;
   padding: 8px 12px;
