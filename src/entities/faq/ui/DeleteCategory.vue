@@ -1,9 +1,11 @@
 <template>
-  <div class="delete-category">
-    <p class="delete-category__text">
+  <div class="modal-form">
+    <p class="text-body-large">
       Вы действительно хотите удалить всю категорию?
     </p>
-    <p class="delete-category__warning">Так же будут удалены все записи!</p>
+    <p class="text-body-large delete-category__warning">
+      Так же будут удалены все записи!
+    </p>
   </div>
 </template>
 
@@ -41,18 +43,8 @@ defineExpose({ confirm, cancel });
 </script>
 
 <style lang="scss" scoped>
-.delete-category__text {
-  color: variables.$text-primary-dark;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5rem;
-}
-
 .delete-category__warning {
-  margin: 0;
   color: variables.$error-color;
-  font-size: 0.875rem;
   font-weight: 700;
-  line-height: 1.25rem;
 }
 </style>
