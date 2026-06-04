@@ -4,22 +4,24 @@
     :resolver
     :initial-values
     @submit="onSubmit">
-    <FormField
-      v-slot="$field"
-      name="name"
-      initial-value="">
-      <InputText
-        type="text"
-        placeholder="Название"
-        class="w-full" />
-      <Message
-        v-if="$field?.invalid"
-        severity="error"
-        size="small"
-        variant="simple">
-        {{ $field.error?.message }}
-      </Message>
-    </FormField>
+    <div class="modal-form">
+      <FormField
+        v-slot="$field"
+        name="name"
+        initial-value="">
+        <InputText
+          type="text"
+          placeholder="Название"
+          class="w-full" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
+    </div>
   </Form>
 </template>
 
