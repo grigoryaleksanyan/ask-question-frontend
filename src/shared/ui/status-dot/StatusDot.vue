@@ -33,7 +33,7 @@ const tagStyle = computed(() => {
     padding: 0,
     fontSize: '14px',
     fontWeight: '500',
-    gap: '6px',
+    gap: isDotOnly ? '0' : '6px',
     flexShrink: '0',
     display: 'inline-flex',
     alignItems: 'center',
@@ -41,7 +41,6 @@ const tagStyle = computed(() => {
     width: isDotOnly ? '10px' : 'auto',
     height: isDotOnly ? '10px' : 'auto',
     borderRadius: isDotOnly ? '50%' : '0',
-    overflow: isDotOnly ? 'hidden' : 'visible',
     color: label ? color : 'transparent',
   };
 });
