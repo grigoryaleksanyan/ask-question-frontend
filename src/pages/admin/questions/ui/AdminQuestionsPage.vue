@@ -1,17 +1,17 @@
 <template>
   <div class="admin-questions-page">
-    <div class="admin-questions-page__tabs">
-      <button
-        v-for="tab in tabs"
-        :key="tab.key"
-        class="admin-questions-page__tab"
-        :class="{
-          'admin-questions-page__tab--active': activeTab === tab.key,
-        }"
-        @click="activeTab = tab.key">
-        {{ tab.label }}
-      </button>
-    </div>
+    <Tabs
+      v-model:value="activeTab"
+      class="admin-questions-page__tabs">
+      <TabList>
+        <Tab
+          v-for="tab in tabs"
+          :key="tab.key"
+          :value="tab.key">
+          {{ tab.label }}
+        </Tab>
+      </TabList>
+    </Tabs>
 
     <DataTable
       v-model:selection="selectedQuestions"
@@ -103,6 +103,9 @@ import { QuestionStatusId } from '@/shared/dto';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
 import { useRouter } from 'vue-router';
 
 import { GetAllQuestions, type QuestionListParams } from '@/entities/question';
@@ -248,30 +251,5 @@ fetchData();
 .admin-questions-page {
   padding: 24px;
   color: variables.$text-primary-dark;
-}
-
-.admin-questions-page__tabs {
-  display: flex;
-  margin-bottom: 20px;
-  gap: 6px;
-}
-
-.admin-questions-page__tab {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 10px;
-  background: none;
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 14px;
-  transition:
-    color 0.15s,
-    background-color 0.15s;
-}
-
-.admin-questions-page__tab--active {
-  background: rgba(variables.$main-color, 0.15);
-  color: variables.$main-color;
-  font-weight: 500;
 }
 </style>
