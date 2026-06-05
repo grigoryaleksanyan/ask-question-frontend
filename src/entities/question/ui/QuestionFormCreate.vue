@@ -1,12 +1,26 @@
 <template>
   <div class="question-form-create">
-    <form @submit.prevent="submitForm">
-      <Textarea
-        v-model="controls.text"
-        auto-resize
-        rows="2"
-        placeholder="Расскажите подробнее о..."
-        class="question-form-create__textarea w-full" />
+    <Form
+      ref="form"
+      :resolver
+      @submit="onFormSubmit">
+      <FormField
+        v-slot="$field"
+        name="text"
+        initial-value="">
+        <Textarea
+          auto-resize
+          rows="2"
+          placeholder="Расскажите подробнее о..."
+          class="question-form-create__textarea w-full" />
+        <Message
+          v-if="$field?.invalid"
+          severity="error"
+          size="small"
+          variant="simple">
+          {{ $field.error?.message }}
+        </Message>
+      </FormField>
 
       <div class="question-form-create__actions">
         <Button
@@ -24,26 +38,51 @@
       <Transition name="expand">
         <div v-show="showDetails">
           <div class="question-form-create__details">
-            <InputText
-              v-model="controls.author"
-              placeholder="Имя"
-              class="w-full" />
+            <FormField
+              name="author"
+              initial-value="">
+              <InputText
+                placeholder="Имя"
+                class="w-full" />
+            </FormField>
 
-            <Select
-              v-model="controls.areaId"
-              :options="areas"
-              option-label="title"
-              option-value="id"
-              placeholder="Область*"
-              class="w-full" />
+            <FormField
+              v-slot="$field"
+              name="areaId"
+              initial-value="">
+              <Select
+                :options="areas"
+                option-label="title"
+                option-value="id"
+                placeholder="Область*"
+                class="w-full" />
+              <Message
+                v-if="$field?.invalid"
+                severity="error"
+                size="small"
+                variant="simple">
+                {{ $field.error?.message }}
+              </Message>
+            </FormField>
 
-            <Select
-              v-model="controls.speakerId"
-              :options="speakers"
-              option-label="lastName"
-              option-value="id"
-              placeholder="Спикер*"
-              class="w-full" />
+            <FormField
+              v-slot="$field"
+              name="speakerId"
+              initial-value="">
+              <Select
+                :options="speakers"
+                option-label="lastName"
+                option-value="id"
+                placeholder="Спикер*"
+                class="w-full" />
+              <Message
+                v-if="$field?.invalid"
+                severity="error"
+                size="small"
+                variant="simple">
+                {{ $field.error?.message }}
+              </Message>
+            </FormField>
 
             <div class="question-form-create__captcha-row">
               <InputText
@@ -65,22 +104,30 @@
           </div>
         </div>
       </Transition>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, useTemplateRef } from 'vue';
+
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import type { AreaResponse, SpeakerPublicResponse } from '@/shared/dto';
 
+import { requiredString } from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { useApiCall } from '@/shared/lib';
+
 import { GetCaptcha, Create } from '../api/questions-repository';
 
 import Textarea from 'primevue/textarea';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
+import Message from 'primevue/message';
 
 defineOptions({ name: 'QuestionFormCreate' });
 
@@ -89,6 +136,22 @@ const { areas, speakers } = defineProps<{
   speakers: SpeakerPublicResponse[];
 }>();
 
+const showDetails = ref(false);
+const captchaData = ref<string | null>(null);
+const captcha = ref(null as string | null);
+
+const schema = z.object({
+  text: requiredString(),
+  author: z.string(),
+  areaId: requiredString(),
+  speakerId: requiredString(),
+});
+
+const resolver = zodResolver(schema);
+
+const formRef = useTemplateRef('form');
+const { resetForm: resetFormAction } = useFormActions(formRef);
+
 const { execute: executeGetCaptcha } = useApiCall(GetCaptcha, {
   showPreloader: false,
 });
@@ -96,22 +159,13 @@ const { execute: executeSubmit } = useApiCall(Create, {
   successMessage: 'Ваш вопрос успешно добавлен',
   showPreloader: false,
   onSuccess() {
-    resetForm();
+    resetFormAction();
+    captcha.value = null;
+    showDetails.value = false;
   },
   onError() {
     executeGetCaptcha();
   },
-});
-
-const showDetails = ref(false);
-const captchaData = ref<string | null>(null);
-const captcha = ref(null as string | null);
-
-const controls = reactive({
-  text: null as string | null,
-  author: null as string | null,
-  speakerId: null as string | null,
-  areaId: undefined as string | undefined,
 });
 
 function toggleDetails() {
@@ -130,37 +184,27 @@ async function getCaptcha() {
   }
 }
 
-function validate(): boolean {
-  return !!(
-    controls.text?.trim() &&
-    controls.areaId &&
-    controls.speakerId &&
-    captcha.value?.trim()
-  );
-}
+async function onFormSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
 
-function resetForm() {
-  controls.text = null;
-  controls.author = null;
-  controls.speakerId = null;
-  controls.areaId = undefined;
-  captcha.value = null;
-  showDetails.value = false;
-}
-
-async function submitForm() {
   if (!showDetails.value) {
     toggleDetails();
     return;
   }
 
-  if (!validate()) return;
+  if (!captcha.value?.trim()) return;
 
   await executeSubmit(captcha.value!, {
-    text: controls.text!,
-    author: controls.author!,
-    areaId: controls.areaId ?? null,
-    speakerId: controls.speakerId ?? null,
+    text: values.text as string,
+    author: (values.author as string) || null,
+    areaId: values.areaId as string,
+    speakerId: values.speakerId as string,
   });
 }
 </script>
