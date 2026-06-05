@@ -26,10 +26,20 @@
           v-html="question.text"></p>
 
         <div class="question-id-view__meta">
-          <span>{{ question.author || 'Инкогнито' }}</span>
-          <span v-if="question.areaTitle"> · {{ question.areaTitle }}</span>
-          <span v-if="question.speakerName">
-            · спикер: {{ question.speakerName }}
+          <span
+            v-if="question.author"
+            class="question-id-view__meta-item">
+            <i class="pi pi-user"></i> {{ question.author }}
+          </span>
+          <span
+            v-if="question.areaTitle"
+            class="question-id-view__meta-item">
+            <i class="pi pi-tag"></i> {{ question.areaTitle }}
+          </span>
+          <span
+            v-if="question.speakerName"
+            class="question-id-view__meta-item">
+            <i class="pi pi-megaphone"></i> {{ question.speakerName }}
           </span>
         </div>
 
@@ -207,8 +217,21 @@ onMounted(() => {
 }
 
 .question-id-view__meta {
+  display: flex;
+  flex-wrap: wrap;
   color: variables.$text-muted;
   font-size: 13px;
+  gap: 16px;
+}
+
+.question-id-view__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.question-id-view__meta-item i {
+  font-size: 12px;
 }
 
 .question-id-view__vote-row {
