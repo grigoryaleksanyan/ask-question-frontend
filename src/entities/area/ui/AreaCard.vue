@@ -8,9 +8,7 @@
       @open="startEdit">
       <template #display>
         <span class="area-card__title">{{ area.title }}</span>
-        <i
-          class="pi pi-pencil area-card__edit"
-          @click.stop="startEdit"></i>
+        <i class="pi pi-pencil area-card__edit"></i>
       </template>
       <template #content="{ closeCallback }">
         <InputText
@@ -19,20 +17,25 @@
           class="area-card__input"
           @keydown.enter="saveEdit"
           @keydown.escape="cancelEdit" />
-        <i
-          class="pi pi-times area-card__cancel"
-          @click="closeCallback"></i>
+        <Button
+          icon="pi pi-times"
+          text
+          severity="warn"
+          @click="closeCallback" />
       </template>
     </Inplace>
 
-    <i
+    <Button
       v-if="!isEditing"
-      class="pi pi-trash area-card__delete"
-      @click="emit('delete')"></i>
-    <i
+      icon="pi pi-trash"
+      text
+      severity="danger"
+      @click="emit('delete')" />
+    <Button
       v-else
-      class="pi pi-save area-card__save"
-      @click="saveEdit"></i>
+      icon="pi pi-save"
+      text
+      @click="saveEdit" />
   </div>
 </template>
 
@@ -47,6 +50,7 @@ import {
 
 import Inplace from 'primevue/inplace';
 import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
 
 import type { AreaResponse } from '@/shared/dto';
 
@@ -134,7 +138,6 @@ async function saveEdit() {
 }
 
 .area-card__input {
-  width: fit-content;
   border: 1px solid variables.$main-color;
   margin-right: 10px;
   background: transparent;
@@ -150,18 +153,6 @@ async function saveEdit() {
 }
 
 .area-card__delete {
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.area-card__save {
-  color: variables.$main-color;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.area-card__cancel {
   color: variables.$text-secondary;
   cursor: pointer;
   font-size: 14px;
