@@ -1,33 +1,72 @@
 <template>
-  <span class="status-dot">
-    <span
-      class="status-dot__indicator"
-      :style="{ backgroundColor: color }"></span>
-    <span
-      v-if="label"
-      class="status-dot__label"
-      :style="{ color }">
-      {{ label }}
-    </span>
-  </span>
+  <Tag
+    :value="label"
+    class="status-dot"
+    :class="{ 'status-dot--no-label': !label }"
+    :pt="pt"
+    :style="tagStyle">
+    <template #icon>
+      <span
+        class="status-dot__indicator"
+        :style="{ backgroundColor: color }"></span>
+    </template>
+  </Tag>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import Tag from 'primevue/tag';
+
 defineOptions({ name: 'StatusDot' });
 
 const { color, label = '' } = defineProps<{
   color: string;
   label?: string;
 }>();
+
+const tagStyle = computed(() => {
+  const isDotOnly = !label;
+
+  return {
+    backgroundColor: 'transparent',
+    border: 'none',
+    padding: 0,
+    fontSize: '14px',
+    fontWeight: '500',
+    gap: '6px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    minWidth: isDotOnly ? '10px' : 'auto',
+    width: isDotOnly ? '10px' : 'auto',
+    height: isDotOnly ? '10px' : 'auto',
+    borderRadius: isDotOnly ? '50%' : '0',
+    overflow: isDotOnly ? 'hidden' : 'visible',
+    color: label ? color : 'transparent',
+  };
+});
+
+const pt = computed(() => ({
+  icon: {
+    style: {
+      margin: 0,
+      width: '10px',
+      height: '10px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: '0',
+    },
+  },
+  value: {
+    style: {
+      display: label ? 'inline' : 'none',
+      lineHeight: '1',
+    },
+  },
+}));
 </script>
 
 <style lang="scss" scoped>
-.status-dot {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .status-dot__indicator {
   width: 10px;
   height: 10px;
@@ -35,8 +74,7 @@ const { color, label = '' } = defineProps<{
   border-radius: 50%;
 }
 
-.status-dot__label {
-  font-size: 14px;
-  font-weight: 500;
+.status-dot--no-label {
+  /* Dot-only modifier for potential parent overrides */
 }
 </style>
