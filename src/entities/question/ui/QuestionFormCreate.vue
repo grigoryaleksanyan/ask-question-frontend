@@ -245,6 +245,10 @@ async function onFormSubmit({
   font-size: 13px;
 }
 
+.question-form-create :deep(.p-select-label) {
+  justify-content: flex-start;
+}
+
 .question-form-create__details {
   display: flex;
   flex-direction: column;
