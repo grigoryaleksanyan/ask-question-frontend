@@ -44,13 +44,13 @@ src/
 
 Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + @primeuix/themes + Zod + Pinia 3 + Vue Router 5 + Axios + TypeScript. **Composition API** (`<script setup>`), без Options API. Хранилище — **Pinia** (Composition Stores), не Vuex. Vite 8. ESLint 10 (flat config через `typescript-eslint`, без `@eslint/eslintrc`), плагины: `typescript-eslint`, `eslint-plugin-unicorn`, `eslint-plugin-import-x`, `eslint-plugin-vue`. Резолверы алиасов: `eslint-import-resolver-vite`, `eslint-import-resolver-typescript`.
 
-Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable.
+Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable, docx, exceljs, file-saver.
 
 ## Стили
 
 - SCSS, глобальные переменные автоинжектируются через Vite — не добавляй `@use "@/app/styles/variables.scss"` вручную в компоненты
 - Имена классов — **BEM**: `block__element--modifier` (строго через kebab-case). Паттерн проверяется и ESLint, и Stylelint
-- Порядок CSS-свойств — idiomatic-order (stylelint-config-recommended-scss). Плагин `stylelint-scss` (транзитивная зависимость). Правило `import-notation: string` для SCSS-импортов
+- Порядок CSS-свойств — idiomatic-order (stylelint-config-idiomatic-order). Extends: `stylelint-config-standard`, `stylelint-config-recommended-vue/scss`, `stylelint-config-idiomatic-order`. Плагины: `stylelint-order`, `stylelint-scss`. Правило `selector-class-pattern` с BEM-regex. Правило `import-notation: string` для SCSS-импортов
 
 ## Prettier
 
@@ -105,11 +105,11 @@ printWidth: 80, singleQuote: true, trailingComma: all, tabWidth: 2, semi: true, 
 
 ## Коммиты
 
-Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase (`general`, `client`, `server`), заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged (автофикс: `prettier --write`, `eslint --fix`, `stylelint --fix`), commit-msg: commitlint. Breaking changes отключены.
+Conventional Commits: типы `build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore`, scope в lowercase (`general`, `client`, `server`, `none`), заголовок ≤ 72 символов, без точки в конце. Конфиг better-commits: `.better-commits.jsonc`, commitlint: `.commitlintrc.cjs`. Pre-commit: lint-staged (автофикс: `prettier --write`, `eslint --fix`, `stylelint --fix`), commit-msg: commitlint. Breaking changes отключены.
 
 ## API-клиент
 
-`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 — мягкая навигация через `router.push({ name: 'login', query: { redirect: currentRoute } })` в `@/app/lib/http-client-interceptors.ts`, не в shared. Базовый URL из `import.meta.env.BASE_URL`.
+`@/shared/api` — axios-инстанс с `withCredentials: true`. Перехватчик 401 — мягкая навигация через `router.push({ name: 'login', query: { redirect: currentRoute } })` в `@/app/lib/http-client-interceptors.ts`, не в shared. Базовый URL из `import.meta.env.BASE_URL`. Auth-middleware передаёт `redirect: to.fullPath` в query при редиректе на `/setup` и `/login`.
 
 ## Роутинг
 
@@ -137,7 +137,7 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 ## Shared UI
 
 - `center-modal/` — CenterModal
-- `slide-over/` — SlideOver (глобальный компонент, promise-based API: open/confirm/close через scoped slot props, проп `contentPadding` управляет паддингом контента, по умолчанию `true`)
+- `slide-over/` — SlideOver (глобальный компонент, promise-based API: `confirm` и `close` через scoped slot props, `open` — через template ref / `defineExpose`; проп `closeOnClickAway: boolean`, default `true`)
 - `context-menu/` — ContextMenuButton
 - `status-dot/` — StatusDot
 - `toast/` — AppToast
@@ -148,8 +148,8 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 
 | Composable/утилита | Путь | Описание |
 |---|---|---|
-| `useApiCall` | `shared/lib/use-api-call/` | Универсальный composable для API-вызовов: автоматически показывает/скрывает прелоадер, показывает toast при успехе/ошибке. Возвращает `execute`, `isLoading`, `error`, `data` |
-| `useDeleteConfirm` | `shared/lib/use-delete-confirm/` | Обёртка над `useApiCall` для подтверждения удаления |
+| `useApiCall` | `shared/lib/use-api-call/` | Универсальный composable для API-вызовов: автоматически показывает/скрывает прелоадер, показывает toast при успехе/ошибке. Возвращает `execute`, `isLoading`, `error`, `data`. Опции: `successMessage`, `errorMapper`, `onSuccess`, `onError`, `showPreloader` (default: `true`). Экспортирует `TOAST_HANDLED` symbol для маркировки обработанных ошибок |
+| `useDeleteConfirm` | `shared/lib/use-delete-confirm/` | Обёртка над `useApiCall` для подтверждения удаления. Возвращает `confirm(id: string): Promise<boolean>` |
 | `copyToClipboard` | `shared/lib/copy-to-clipboard.ts` | Копирование текста в буфер обмена через `navigator.clipboard` |
 | `sanitizeHtml` | `shared/lib/html-sanitize.ts` | Санитизация HTML через DOMPurify с автоматическим `target="_blank"` + `rel="noopener noreferrer"` |
 | `preloader-state` | `shared/lib/preloader-state/` | Реактивный счётчик загрузок: `showPreloader` (computed), `addLoader()`, `removeLoader()`. Используется `features/preloader/store` |
@@ -157,6 +157,22 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 ## Entities — config
 
 - `entities/question/config/question-statuses.ts` — маппинг статусов (New/InFocus/Answered) с цветами и названиями: `QUESTION_STATUSES`, `questionStatusMap`, `getStatusColor()`, `getStatusLabel()`
+- `entities/question/ui/` — QuestionCard, QuestionFilters, QuestionFormCreate, QuestionIdView, QuestionListItem, QuestionStatusIcon, QuestionsView, QuestionVote
+- `entities/question/api/` — questions-repository.ts
+- `entities/area/ui/` — AreaCard, CreateArea, DeleteArea, UpdateArea
+- `entities/area/api/` — areas-repository.ts
+- `entities/faq/ui/` — CategoryCard, CreateCategory, CreateEntryContent, DeleteCategory, DeleteEntry, EntryCard, FAQView, UpdateCategory, UpdateEntryContent
+- `entities/faq/api/` — faq-category-repository.ts, faq-entry-repository.ts
+- `entities/user/ui/` — CreateSpeaker, DeleteSpeaker, SpeakerAvatar, SpeakerCard, UpdateSpeaker
+- `entities/user/api/` — speakers-repository.ts, user-repository.ts
+- `entities/dashboard/api/` — dashboard-repository.ts
+
+## Features — компоненты
+
+- `auth/` — аутентификация (store, UserProfile — форма смены пароля и данные пользователя)
+- `feedback/` — DeleteFeedback, FeedbackCard, SidebarFeedbackContent
+- `manage-question/` — QuestionBulkActions, QuestionCommentButton, QuestionExportButton, QuestionStatusDropdown; `lib/export-docx.ts`, `lib/export-xlsx.ts` (экспорт вопросов в DOCX/XLSX)
+- `preloader/` — прелоадер (store)
 
 ## Auth store — расширения
 
@@ -178,7 +194,17 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 
 Правило `fsd/insignificant-slice` **явно отключено** в `steiger.config.ts` — не считается ошибкой.
 
-- `features/auth/ui/UserProfile.vue` — форма смены пароля и отображение данных пользователя (экспортируется через `features/auth/index.ts`)
+## Widgets — dashboard
+
+9 компонентов: AreaBarChart, DashboardFilters, DashboardWidget, SpeakerAreasChart, SpeakerProductivityChart, StatCardsRow, StatusDoughnutChart, TimelineLineChart, VotesSummary.
+
+## Shared routes
+
+`shared/routes/routes.ts` — именованные константы маршрутов: `main`, `notFound`, `adminQuestionDetail`.
+
+## Shared assets
+
+`shared/assets/` — fonts/, img/, logo.svg, index.ts.
 
 ## Заглушки и неточности
 
