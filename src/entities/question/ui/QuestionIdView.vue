@@ -24,7 +24,7 @@
         <p class="question-id-view__text">{{ question.text }}</p>
 
         <div class="question-id-view__meta">
-          <span v-if="question.author">{{ question.author }}</span>
+          <span>{{ question.author || 'Инкогнито' }}</span>
           <span v-if="question.areaTitle"> · {{ question.areaTitle }}</span>
           <span v-if="question.speakerName">
             · спикер: {{ question.speakerName }}

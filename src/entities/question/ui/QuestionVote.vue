@@ -4,13 +4,15 @@
       class="question-vote__btn"
       :class="{ 'question-vote__btn--active-up': userVote === 'Like' }"
       @click="$emit('like')">
-      ↑ <span class="question-vote__count">{{ likes }}</span>
+      <i class="pi pi-thumbs-up"></i>
+      <span class="question-vote__count">{{ likes }}</span>
     </button>
     <button
       class="question-vote__btn"
       :class="{ 'question-vote__btn--active-down': userVote === 'Dislike' }"
       @click="$emit('dislike')">
-      ↓ <span class="question-vote__count--muted">{{ dislikes }}</span>
+      <i class="pi pi-thumbs-down"></i>
+      <span class="question-vote__count--muted">{{ dislikes }}</span>
     </button>
   </div>
 </template>
