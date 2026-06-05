@@ -10,23 +10,25 @@
         placeholder="Поиск вопросов..." />
     </div>
 
+    <SelectButton
+      v-model="activeTab"
+      :options="tabs"
+      option-label="label"
+      option-value="value"
+      aria-label="Статус вопроса"
+      class="questions-view__segment"
+      fluid>
+      <template #option="{ option }">
+        <StatusDot
+          :color="option.color"
+          :label="option.label" />
+      </template>
+    </SelectButton>
+
     <QuestionFilters
       :areas="areas"
       :speakers="speakers"
       @change="onFiltersChange" />
-
-    <div class="questions-view__tabs">
-      <button
-        v-for="tab in tabs"
-        :key="tab.value"
-        class="questions-view__tab"
-        :class="{ 'questions-view__tab--active': activeTab === tab.value }"
-        @click="activeTab = tab.value">
-        <StatusDot
-          :color="tab.color"
-          :label="tab.label" />
-      </button>
-    </div>
 
     <template v-if="questions.length > 0">
       <div class="questions-view__list">
@@ -71,6 +73,7 @@ import type {
 } from '@/shared/dto';
 
 import { QuestionStatusId } from '@/shared/dto';
+import SelectButton from 'primevue/selectbutton';
 import { useApiCall } from '@/shared/lib';
 import { StatusDot } from '@/shared/ui/status-dot';
 import { GetAll, type QuestionListParams } from '../api/questions-repository';
@@ -227,30 +230,15 @@ fetchData();
   }
 }
 
-.questions-view__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-  gap: 8px;
-}
+.questions-view__segment {
+  width: 100%;
+  margin-bottom: 12px;
 
-.questions-view__tab {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  border: 1px solid variables.$border-light;
-  border-radius: 6px;
-  background: variables.$surface-card;
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 13px;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
-
-  &--active {
-    border-color: variables.$main-color;
-    background: rgb(79 106 246 / 6%);
+  :deep(.p-selectbutton-option) {
+    flex: 1;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 15px;
   }
 }
 

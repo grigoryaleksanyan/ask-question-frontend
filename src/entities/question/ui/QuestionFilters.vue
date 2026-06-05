@@ -1,24 +1,7 @@
 <template>
   <div class="question-filters">
     <div class="question-filters__row">
-      <button
-        class="question-filters__chip"
-        :class="{
-          'question-filters__chip--active': sortOrder === 'desc',
-        }"
-        @click="setSortOrder('desc')">
-        Сначала новые
-      </button>
-      <button
-        class="question-filters__chip"
-        :class="{
-          'question-filters__chip--active': sortOrder === 'asc',
-        }"
-        @click="setSortOrder('asc')">
-        Сначала старые
-      </button>
-
-      <div class="question-filters__select-wrap">
+      <div class="question-filters__filters">
         <Select
           v-model="selectedSpeaker"
           :options="speakers"
@@ -28,32 +11,43 @@
           "
           option-value="id"
           placeholder="Спикер"
+          size="small"
           show-clear
-          class="question-filters__select"
-          @update:model-value="onFilterChange" />
-      </div>
+          class="question-filters__select" />
 
-      <div class="question-filters__select-wrap">
         <Select
           v-model="selectedAreaId"
           :options="areas"
           option-label="title"
           option-value="id"
           placeholder="Зона"
+          size="small"
           show-clear
-          class="question-filters__select"
-          @update:model-value="onFilterChange" />
+          class="question-filters__select" />
       </div>
+
+      <SelectButton
+        v-model="sortOrder"
+        :options="sortOptions"
+        option-label="label"
+        option-value="value"
+        aria-label="Сортировка"
+        class="question-filters__sort">
+        <template #option="{ option }">
+          <i :class="option.icon" />
+        </template>
+      </SelectButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import type { SpeakerPublicResponse, AreaResponse } from '@/shared/dto';
 
 import Select from 'primevue/select';
+import SelectButton from 'primevue/selectbutton';
 
 defineOptions({ name: 'QuestionFilters' });
 
@@ -73,22 +67,22 @@ const emit = defineEmits<{
   ): void;
 }>();
 
-const sortOrder = ref<'asc' | 'desc'>('desc');
+const sortOptions = [
+  { label: 'Сначала новые', icon: 'pi pi-sort-amount-down', value: 'desc' },
+  { label: 'Сначала старые', icon: 'pi pi-sort-amount-up', value: 'asc' },
+];
+
+const sortOrder = ref<string>('desc');
 const selectedSpeaker = ref<string | null>(null);
 const selectedAreaId = ref<string | null>(null);
 
-function setSortOrder(order: 'asc' | 'desc') {
-  sortOrder.value = order;
-  onFilterChange();
-}
-
-function onFilterChange() {
+watch([sortOrder, selectedSpeaker, selectedAreaId], () => {
   emit('change', {
     speakerId: selectedSpeaker.value ?? undefined,
     areaId: selectedAreaId.value ?? undefined,
-    sortOrder: sortOrder.value,
+    sortOrder: sortOrder.value as 'asc' | 'desc',
   });
-}
+});
 </script>
 
 <style lang="scss" scoped>
@@ -96,34 +90,29 @@ function onFilterChange() {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 16px;
-  gap: 8px;
+  gap: 6px;
 }
 
-.question-filters__chip {
-  padding: 5px 12px;
-  border: 1px solid variables.$border-light;
-  border-radius: 6px;
-  background: variables.$surface-card;
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 13px;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
-
-  &--active {
-    border-color: variables.$main-color;
-    background: rgb(79 106 246 / 6%);
-    color: variables.$main-color;
-  }
-}
-
-.question-filters__select-wrap {
-  min-width: 120px;
+.question-filters__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
 }
 
 .question-filters__select {
   font-size: 13px;
+}
+
+.question-filters__sort {
+  :deep(.p-selectbutton-option) {
+    padding: 6px 10px;
+  }
+
+  :deep(.p-selectbutton-option-icon) {
+    font-size: 14px;
+  }
 }
 </style>
