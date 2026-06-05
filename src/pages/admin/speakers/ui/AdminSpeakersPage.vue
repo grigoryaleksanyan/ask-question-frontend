@@ -75,7 +75,7 @@ import {
   SpeakerCard,
   CreateSpeaker,
   UpdateSpeaker,
-  Delete as DeleteSpeakerApi,
+  DeleteSpeakerApi,
 } from '@/entities/user';
 
 defineOptions({ name: 'AdminSpeakersPage' });

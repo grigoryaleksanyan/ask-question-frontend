@@ -67,7 +67,7 @@ import {
   SetAreaOrder,
   AreaCard,
   CreateArea,
-  Delete as DeleteAreaApi,
+  DeleteAreaApi,
 } from '@/entities/area';
 
 defineOptions({ name: 'AdminAreasPage' });
