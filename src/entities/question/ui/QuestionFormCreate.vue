@@ -24,9 +24,10 @@
 
       <div class="question-form-create__actions">
         <Button
-          type="submit"
+          :type="showDetails ? 'submit' : 'button'"
           severity="primary"
-          label="Отправить" />
+          label="Отправить"
+          @click="onButtonClick" />
 
         <span
           class="question-form-create__details-link"
@@ -176,6 +177,12 @@ function toggleDetails() {
   showDetails.value = !showDetails.value;
 }
 
+function onButtonClick() {
+  if (!showDetails.value) {
+    toggleDetails();
+  }
+}
+
 async function getCaptcha() {
   captchaData.value = null;
   const result = await executeGetCaptcha();
@@ -192,11 +199,6 @@ async function onFormSubmit({
   values: Record<string, unknown>;
 }) {
   if (!valid) return;
-
-  if (!showDetails.value) {
-    toggleDetails();
-    return;
-  }
 
   if (!captcha.value?.trim()) return;
 
