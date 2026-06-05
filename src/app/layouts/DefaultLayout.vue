@@ -6,7 +6,10 @@
       modal
       class="drawer-navigation">
       <template #header><span>Навигация</span></template>
-      <DrawerNavigation :nav-items="navItems" />
+      <AppNavigation
+        :nav-items="navItems"
+        :is-authorized="isAuthorized"
+        layout="vertical" />
     </Drawer>
 
     <Toolbar class="app-toolbar">
@@ -18,10 +21,10 @@
         <AppLogo />
       </template>
       <template #end>
-        <HeaderNavigation
+        <AppNavigation
           :nav-items="navItems"
           :is-authorized="isAuthorized"
-          class="header-navigation" />
+          layout="horizontal" />
       </template>
     </Toolbar>
 
@@ -72,9 +75,8 @@ import Drawer from 'primevue/drawer';
 import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
 
-import DrawerNavigation from '@/shared/ui/DrawerNavigation.vue';
-import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
 import AppLogo from '@/shared/ui/AppLogo.vue';
+import AppNavigation from '@/shared/ui/AppNavigation.vue';
 
 import { SidebarFeedbackContent } from '@/features/feedback';
 import { useAuthStore } from '@/features/auth';
@@ -149,13 +151,13 @@ async function showFeedbackModal() {
   color: variables.$text-primary !important;
 }
 
-@media (width <= 600px) {
-  .header-navigation {
+@media (width <= 768px) {
+  .app-toolbar .app-navigation {
     display: none;
   }
 }
 
-@media (width >= 600px) {
+@media (width >= 769px) {
   .drawer-navigation,
   .drawer-navigation-burger {
     display: none;
