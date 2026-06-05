@@ -113,6 +113,7 @@ async function saveEdit() {
 }
 
 .area-card__title {
+  margin-right: 12px;
   color: variables.$text-primary-dark;
   font-size: 15px;
 }
