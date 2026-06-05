@@ -79,18 +79,18 @@
       </Column>
     </DataTable>
 
-    <QuestionBulkActions
-      :selected-ids="selectedIds"
-      :questions="questions"
-      @action-completed="fetchData"
-      @clear-selection="clearSelection" />
-
     <Paginator
       v-model:first="firstRow"
       :rows="pageSize"
       :total-records="totalCount"
       template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       class="admin-questions-page__pagination" />
+
+    <QuestionBulkActions
+      :selected-ids="selectedIds"
+      :questions="questions"
+      @action-completed="fetchData"
+      @clear-selection="clearSelection" />
   </div>
 </template>
 
