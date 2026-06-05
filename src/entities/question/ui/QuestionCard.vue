@@ -16,7 +16,7 @@
         <template v-if="hasComment">
           ·
           <i
-            v-tooltip="'Дан комментарий'"
+            v-tooltip="'Есть комментарий'"
             class="pi pi-comment"
             aria-label="Есть комментарий"></i>
         </template>
