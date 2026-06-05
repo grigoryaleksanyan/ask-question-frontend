@@ -119,7 +119,7 @@ function sliceText(text: string) {
 
 .question-card__status {
   flex-shrink: 0;
-  margin-right: 12px;
+  margin-right: 10px;
 }
 
 .question-card__body {
