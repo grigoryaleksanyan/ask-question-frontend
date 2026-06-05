@@ -15,18 +15,26 @@
     </template>
     <template #default>
       <div class="modal-form">
-        <Textarea
-          v-model="localComment"
-          auto-resize
-          rows="4"
-          class="w-full"
-          placeholder="Введите комментарий..." />
+        <Form
+          ref="form"
+          :resolver
+          @submit="onFormSubmit">
+          <FormField
+            name="comment"
+            :initial-value="localComment">
+            <Textarea
+              auto-resize
+              rows="4"
+              class="w-full"
+              placeholder="Введите комментарий..." />
+          </FormField>
+        </Form>
       </div>
     </template>
     <template #footer>
       <Button
         label="Сохранить"
-        @click="saveComment()" />
+        @click="submitForm" />
       <Button
         label="Отмена"
         outlined
@@ -39,8 +47,15 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
+
+import { optionalString } from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { SetQuestionComment } from '@/entities/question';
 import { useApiCall } from '@/shared/lib';
+
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 
@@ -59,6 +74,15 @@ const emit = defineEmits<{
 const slideOverRef = useTemplateRef('slideOverRef');
 const localComment = ref(comment ?? '');
 
+const schema = z.object({
+  comment: optionalString(),
+});
+
+const resolver = zodResolver(schema);
+
+const formRef = useTemplateRef('form');
+const { submitForm } = useFormActions(formRef);
+
 const { execute: executeSetComment } = useApiCall(SetQuestionComment, {
   showPreloader: false,
   successMessage: 'Комментарий сохранён',
@@ -75,7 +99,16 @@ async function openModal() {
   await slideOverRef.value?.open();
 }
 
-async function saveComment() {
+async function onFormSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
+  localComment.value = (values.comment as string) || '';
   const result = await executeSetComment(
     questionId,
     localComment.value || null,
