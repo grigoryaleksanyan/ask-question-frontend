@@ -13,6 +13,13 @@
 
       <div class="question-card__meta">
         {{ metaText }}
+        <template v-if="hasComment">
+          ·
+          <i
+            v-tooltip="'Дан комментарий'"
+            class="pi pi-comment"
+            aria-label="Есть комментарий"></i>
+        </template>
       </div>
     </div>
 
@@ -51,6 +58,10 @@ const router = useRouter();
 const localLikes = ref(question.likes);
 const localDislikes = ref(question.dislikes);
 const localViews = ref(question.views);
+
+const hasComment = computed(
+  () => question.comment !== null && question.comment !== '',
+);
 
 const statusColor = computed(() => getStatusColor(question.status));
 
@@ -127,6 +138,11 @@ function sliceText(text: string) {
   margin-top: 4px;
   color: variables.$text-muted;
   font-size: 12px;
+
+  .pi {
+    color: variables.$primary-color;
+    font-size: 10px;
+  }
 }
 
 .question-card__votes {
