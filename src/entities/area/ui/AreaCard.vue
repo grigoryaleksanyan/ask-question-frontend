@@ -2,23 +2,25 @@
   <div class="area-card">
     <span class="area-card__handle handle">⠷</span>
 
-    <template v-if="isEditing">
-      <input
-        ref="edit-input"
-        v-model="editTitle"
-        class="area-card__input"
-        @keydown.enter="saveEdit"
-        @keydown.escape="cancelEdit"
-        @blur="saveEdit" />
-    </template>
-
-    <template v-else>
-      <span class="area-card__title">{{ area.title }}</span>
-    </template>
-
-    <i
-      class="pi pi-pencil area-card__edit"
-      @click="startEdit"></i>
+    <Inplace
+      v-model:active="isEditing"
+      closable>
+      <template #display>
+        <span class="area-card__title">{{ area.title }}</span>
+        <i
+          class="pi pi-pencil area-card__edit"
+          @click.stop="startEdit"></i>
+      </template>
+      <template #content>
+        <InputText
+          ref="editInputRef"
+          v-model="editTitle"
+          class="area-card__input"
+          @keydown.enter="saveEdit"
+          @keydown.escape="cancelEdit"
+          @blur="saveEdit" />
+      </template>
+    </Inplace>
 
     <i
       class="pi pi-trash area-card__delete"
@@ -27,7 +29,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, useTemplateRef } from 'vue';
+import {
+  ref,
+  nextTick,
+  useTemplateRef,
+  type ComponentPublicInstance,
+} from 'vue';
+
+import Inplace from 'primevue/inplace';
+import InputText from 'primevue/inputtext';
 
 import type { AreaResponse } from '@/shared/dto';
 
@@ -47,7 +57,7 @@ const emit = defineEmits<{
 
 const isEditing = ref(false);
 const editTitle = ref('');
-const editInput = useTemplateRef('edit-input');
+const editInputRef = useTemplateRef<ComponentPublicInstance>('editInputRef');
 
 const { execute: executeUpdate } = useApiCall(Update, {
   successMessage: 'Область изменена',
@@ -58,7 +68,7 @@ async function startEdit() {
   isEditing.value = true;
   editTitle.value = area.title;
   await nextTick();
-  editInput.value?.focus();
+  (editInputRef.value?.$el as HTMLInputElement | undefined)?.focus?.();
 }
 
 function cancelEdit() {
