@@ -65,6 +65,8 @@
         </template>
       </template>
     </SlideOver>
+
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -75,6 +77,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { NavItem } from '@/shared/dto';
 
 import Button from 'primevue/button';
+import ConfirmDialog from 'primevue/confirmdialog';
 import Menu from 'primevue/menu';
 
 import { useAuthStore, Logout, UserProfile } from '@/features/auth';

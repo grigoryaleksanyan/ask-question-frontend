@@ -73,28 +73,6 @@
             @click="updateCategoryRef?.cancel()" />
         </template>
       </SlideOver>
-
-      <CenterModal ref="deleteCategoryModalRef">
-        <template #header>
-          <span>Удалить категорию</span>
-        </template>
-        <DeleteCategory
-          :id="categoryToDeleteId"
-          ref="deleteCategoryRef"
-          @success="onDeleteCategorySuccess"
-          @cancel="deleteCategoryModalRef?.close()" />
-        <template #footer>
-          <Button
-            label="Удалить"
-            severity="danger"
-            @click="deleteCategoryRef?.confirm()" />
-          <Button
-            label="Отмена"
-            outlined
-            severity="secondary"
-            @click="deleteCategoryModalRef?.close()" />
-        </template>
-      </CenterModal>
     </template>
 
     <router-view></router-view>
@@ -113,16 +91,15 @@ import type {
 
 import Button from 'primevue/button';
 
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, useDeleteConfirmDialog } from '@/shared/lib';
 import {
   GetAllWithEntriesForAdmin,
   SetCategoryOrder,
   CategoryCard,
   CreateCategory,
   UpdateCategory,
-  DeleteCategory,
+  DeleteCategoryApi,
 } from '@/entities/faq';
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 defineOptions({ name: 'AdminFAQPage' });
 
@@ -141,14 +118,19 @@ const currentCategory = ref<FaqCategoryWithEntriesResponse | null>(null);
 
 const showCreateCategory = ref(false);
 const showUpdateCategory = ref(false);
-const categoryToDeleteId = ref('');
 
 const createCategorySlideOver = useTemplateRef('createCategorySlideOver');
 const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
 const createCategoryRef = useTemplateRef('create-category');
 const updateCategoryRef = useTemplateRef('update-category');
-const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
-const deleteCategoryModalRef = useTemplateRef('deleteCategoryModalRef');
+
+const { confirmDelete: confirmDeleteCategory } = useDeleteConfirmDialog({
+  apiFn: DeleteCategoryApi,
+  message:
+    'Вы действительно хотите удалить всю категорию?\n\nТакже будут удалены все записи!',
+  header: 'Удалить категорию',
+  successMessage: 'Категория успешно удалена',
+});
 
 const dragOptions = reactive({
   animation: 150,
@@ -229,13 +211,10 @@ function cancelUpdateCategory() {
 }
 
 async function clickDeleteCategoryBtn(cat: FaqCategoryWithEntriesResponse) {
-  categoryToDeleteId.value = cat.id;
-  await deleteCategoryModalRef.value?.open();
-}
-
-function onDeleteCategorySuccess(id: string) {
-  categories.value = categories.value.filter((category) => category.id !== id);
-  deleteCategoryModalRef.value?.confirm();
+  const ok = await confirmDeleteCategory(cat.id);
+  if (ok) {
+    categories.value = categories.value.filter((c) => c.id !== cat.id);
+  }
 }
 
 if (route.name === 'admin-faq') {

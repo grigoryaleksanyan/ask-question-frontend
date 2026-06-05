@@ -71,26 +71,6 @@
         </template>
       </SlideOver>
 
-      <CenterModal ref="deleteCategoryModalRef">
-        <template #header>Удалить категорию</template>
-        <DeleteCategory
-          :id="category?.id || ''"
-          ref="deleteCategoryRef"
-          @success="onDeleteCategorySuccess"
-          @cancel="deleteCategoryModalRef?.close()" />
-        <template #footer>
-          <Button
-            label="Удалить"
-            severity="danger"
-            @click="deleteCategoryRef?.confirm()" />
-          <Button
-            label="Отмена"
-            outlined
-            severity="secondary"
-            @click="deleteCategoryModalRef?.close()" />
-        </template>
-      </CenterModal>
-
       <SlideOver ref="createEntrySlideOver">
         <template #header>
           <span class="typography__headline--medium">
@@ -143,26 +123,6 @@
             @click="updateEntryContentRef?.cancel()" />
         </template>
       </SlideOver>
-
-      <CenterModal ref="deleteEntryModalRef">
-        <template #header>Удалить запись</template>
-        <DeleteEntryModal
-          :id="entryToDeleteId"
-          ref="deleteEntryRef"
-          @success="onDeleteEntrySuccess"
-          @cancel="deleteEntryModalRef?.close()" />
-        <template #footer>
-          <Button
-            label="Удалить"
-            severity="danger"
-            @click="deleteEntryRef?.confirm()" />
-          <Button
-            label="Отмена"
-            outlined
-            severity="secondary"
-            @click="deleteEntryModalRef?.close()" />
-        </template>
-      </CenterModal>
     </template>
   </div>
 </template>
@@ -179,20 +139,18 @@ import type {
 
 import Button from 'primevue/button';
 
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, useDeleteConfirmDialog } from '@/shared/lib';
 
 import {
   GetCategoryById,
   SetEntryOrder,
   EntryCard,
   UpdateCategory,
-  DeleteCategory,
-  DeleteEntryModal,
+  DeleteCategoryApi,
+  DeleteEntryApi,
   CreateEntryContent,
   UpdateEntryContent,
 } from '@/entities/faq';
-
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
 
 defineOptions({ name: 'AdminFAQCategoryPage' });
 
@@ -217,18 +175,28 @@ const currentEntry = ref<FaqEntryResponse | null>(null);
 const showUpdateCategory = ref(false);
 const showCreateEntry = ref(false);
 const showUpdateEntry = ref(false);
-const entryToDeleteId = ref('');
 
 const updateCategorySlideOver = useTemplateRef('updateCategorySlideOver');
 const createEntrySlideOver = useTemplateRef('createEntrySlideOver');
 const updateEntrySlideOver = useTemplateRef('updateEntrySlideOver');
 const updateCategoryRef = useTemplateRef('update-category');
-const deleteCategoryModalRef = useTemplateRef('deleteCategoryModalRef');
-const deleteCategoryRef = useTemplateRef('deleteCategoryRef');
 const createEntryContentRef = useTemplateRef('create-entry-content');
 const updateEntryContentRef = useTemplateRef('update-entry-content');
-const deleteEntryModalRef = useTemplateRef('deleteEntryModalRef');
-const deleteEntryRef = useTemplateRef('deleteEntryRef');
+
+const { confirmDelete: confirmDeleteCategory } = useDeleteConfirmDialog({
+  apiFn: DeleteCategoryApi,
+  message:
+    'Вы действительно хотите удалить всю категорию?\n\nТакже будут удалены все записи!',
+  header: 'Удалить категорию',
+  successMessage: 'Категория успешно удалена',
+});
+
+const { confirmDelete: confirmDeleteEntry } = useDeleteConfirmDialog({
+  apiFn: DeleteEntryApi,
+  message: 'Вы действительно хотите удалить запись?',
+  header: 'Удалить запись',
+  successMessage: 'Запись успешно удалена',
+});
 
 const dragOptions = reactive({
   animation: 150,
@@ -277,13 +245,12 @@ function cancelUpdateCategory() {
   updateCategorySlideOver.value?.close();
 }
 
-function openDeleteCategory() {
-  deleteCategoryModalRef.value?.open();
-}
-
-function onDeleteCategorySuccess() {
-  deleteCategoryModalRef.value?.confirm();
-  router.push({ name: 'admin-faq' });
+async function openDeleteCategory() {
+  if (!category.value) return;
+  const ok = await confirmDeleteCategory(category.value.id);
+  if (ok) {
+    router.push({ name: 'admin-faq' });
+  }
 }
 
 async function openCreateEntry() {
@@ -321,19 +288,13 @@ function cancelUpdateEntry() {
   updateEntrySlideOver.value?.close();
 }
 
-function openDeleteEntry(entry: FaqEntryResponse) {
-  entryToDeleteId.value = entry.id;
-  deleteEntryModalRef.value?.open();
-}
-
-function onDeleteEntrySuccess(entryId: string) {
-  if (category.value) {
+async function openDeleteEntry(entry: FaqEntryResponse) {
+  const ok = await confirmDeleteEntry(entry.id);
+  if (ok && category.value) {
     category.value.entries = category.value.entries.filter(
-      (e: FaqEntryResponse) => e.id !== entryId,
+      (e: FaqEntryResponse) => e.id !== entry.id,
     );
   }
-
-  deleteEntryModalRef.value?.confirm();
 }
 
 fetchData();

@@ -49,28 +49,6 @@
           @click="createAreaModal?.close()" />
       </template>
     </SlideOver>
-
-    <CenterModal ref="delete-area-modal">
-      <template #header>Удалить запись</template>
-      <template #default>
-        <DeleteArea
-          v-if="currentArea"
-          :id="currentArea.id"
-          ref="delete-area"
-          @success="successDeleteArea" />
-      </template>
-      <template #footer>
-        <Button
-          label="Удалить"
-          severity="danger"
-          @click="deleteAreaRef?.confirm()" />
-        <Button
-          label="Отмена"
-          outlined
-          severity="secondary"
-          @click="deleteAreaModalRef?.close()" />
-      </template>
-    </CenterModal>
   </div>
 </template>
 
@@ -82,16 +60,14 @@ import type { AreaResponse } from '@/shared/dto';
 
 import Button from 'primevue/button';
 
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
-
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, useDeleteConfirmDialog } from '@/shared/lib';
 
 import {
   GetAllAreas,
   SetAreaOrder,
   AreaCard,
   CreateArea,
-  DeleteArea,
+  Delete as DeleteAreaApi,
 } from '@/entities/area';
 
 defineOptions({ name: 'AdminAreasPage' });
@@ -105,12 +81,16 @@ const { execute: executeSetOrder } = useApiCall(SetAreaOrder, {
   },
 });
 const { execute: executeFetch } = useApiCall(GetAllAreas);
-const currentArea = ref<AreaResponse | null>(null);
 
 const createAreaModal = useTemplateRef('create-area-modal');
 const createAreaRef = useTemplateRef('create-area');
-const deleteAreaRef = useTemplateRef('delete-area');
-const deleteAreaModalRef = useTemplateRef('delete-area-modal');
+
+const { confirmDelete: confirmDeleteArea } = useDeleteConfirmDialog({
+  apiFn: DeleteAreaApi,
+  message: 'Вы действительно хотите удалить область?',
+  header: 'Удалить область',
+  successMessage: 'Область успешно удалена',
+});
 
 const dragOptions = reactive({
   animation: 150,
@@ -154,14 +134,11 @@ function successUpdateArea(modifiedArea: AreaResponse) {
   );
 }
 
-function clickDeleteAreaBtn(area: AreaResponse) {
-  currentArea.value = area;
-  deleteAreaModalRef?.value?.open();
-}
-
-function successDeleteArea(areaId: string) {
-  areas.value = areas.value.filter((area) => area.id !== areaId);
-  deleteAreaModalRef.value?.confirm();
+async function clickDeleteAreaBtn(area: AreaResponse) {
+  const ok = await confirmDeleteArea(area.id);
+  if (ok) {
+    areas.value = areas.value.filter((a) => a.id !== area.id);
+  }
 }
 
 fetchData();

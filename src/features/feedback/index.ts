@@ -5,5 +5,4 @@ export {
 } from './api/feedback-repository';
 
 export { default as FeedbackCard } from './ui/FeedbackCard.vue';
-export { default as DeleteFeedback } from './ui/DeleteFeedback.vue';
 export { default as SidebarFeedbackContent } from './ui/SidebarFeedbackContent.vue';

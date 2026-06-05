@@ -8,4 +8,3 @@ export {
 
 export { default as AreaCard } from './ui/AreaCard.vue';
 export { default as CreateArea } from './ui/CreateArea.vue';
-export { default as DeleteArea } from './ui/DeleteArea.vue';

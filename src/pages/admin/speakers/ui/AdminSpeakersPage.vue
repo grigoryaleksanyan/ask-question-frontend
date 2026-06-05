@@ -59,28 +59,6 @@
           @click="updateSlideOverRef?.close()" />
       </template>
     </SlideOver>
-
-    <CenterModal ref="delete-modal">
-      <template #header>Удалить спикера</template>
-
-      <DeleteSpeaker
-        v-if="currentSpeaker"
-        :id="currentSpeaker.id"
-        ref="delete-speaker"
-        @success="successDeleteSpeaker" />
-
-      <template #footer>
-        <Button
-          label="Удалить"
-          severity="danger"
-          @click="deleteSpeakerRef?.confirm()" />
-        <Button
-          label="Отмена"
-          outlined
-          severity="secondary"
-          @click="deleteModalRef?.close()" />
-      </template>
-    </CenterModal>
   </div>
 </template>
 
@@ -91,14 +69,13 @@ import type { SpeakerResponse, CreateSpeakerResponse } from '@/shared/dto';
 
 import Button from 'primevue/button';
 
-import { useApiCall } from '@/shared/lib';
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
+import { useApiCall, useDeleteConfirmDialog } from '@/shared/lib';
 import {
   GetAllSpeakers,
   SpeakerCard,
   CreateSpeaker,
   UpdateSpeaker,
-  DeleteSpeaker,
+  Delete as DeleteSpeakerApi,
 } from '@/entities/user';
 
 defineOptions({ name: 'AdminSpeakersPage' });
@@ -111,11 +88,15 @@ const currentSpeaker = ref<SpeakerResponse | null>(null);
 const createSlideOverRef = useTemplateRef('create-slide-over');
 const updateSlideOverRef = useTemplateRef('update-slide-over');
 
-const deleteModalRef = useTemplateRef('delete-modal');
-
 const createSpeakerRef = useTemplateRef('create-speaker');
 const updateSpeakerRef = useTemplateRef('update-speaker');
-const deleteSpeakerRef = useTemplateRef('delete-speaker');
+
+const { confirmDelete: confirmDeleteSpeaker } = useDeleteConfirmDialog({
+  apiFn: DeleteSpeakerApi,
+  message: 'Вы действительно хотите удалить спикера?',
+  header: 'Удалить спикера',
+  successMessage: 'Спикер успешно удалён',
+});
 
 async function fetchData() {
   const result = await executeFetch();
@@ -147,14 +128,11 @@ function successUpdateSpeaker(modifiedSpeaker: SpeakerResponse) {
   updateSlideOverRef.value?.confirm();
 }
 
-function openDeleteSlideOver(speaker: SpeakerResponse) {
-  currentSpeaker.value = speaker;
-  deleteModalRef.value?.open();
-}
-
-function successDeleteSpeaker(speakerId: string) {
-  speakers.value = speakers.value.filter((s) => s.id !== speakerId);
-  deleteModalRef.value?.confirm();
+async function openDeleteSlideOver(speaker: SpeakerResponse) {
+  const ok = await confirmDeleteSpeaker(speaker.id);
+  if (ok) {
+    speakers.value = speakers.value.filter((s) => s.id !== speaker.id);
+  }
 }
 
 fetchData();

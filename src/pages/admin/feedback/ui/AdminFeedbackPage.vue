@@ -14,45 +14,20 @@
       class="admin-feedback-page__empty">
       Обратная связь отсутствует
     </p>
-
-    <CenterModal ref="feedbackModalRef">
-      <template #header> Удалить обратную связь </template>
-      <DeleteFeedback
-        v-if="currentFeedback"
-        :id="currentFeedback.id"
-        ref="delete-feedback"
-        @success="successDeleteFeedback"
-        @cancel="feedbackModalRef?.close()" />
-      <template #footer>
-        <Button
-          label="Удалить"
-          severity="danger"
-          @click="deleteFeedbackRef?.confirm()" />
-        <Button
-          label="Отмена"
-          outlined
-          severity="secondary"
-          @click="feedbackModalRef?.close()" />
-      </template>
-    </CenterModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue';
+import { ref } from 'vue';
 
 import type { FeedbackResponse } from '@/shared/dto';
 
-import Button from 'primevue/button';
-
-import CenterModal from '@/shared/ui/center-modal/CenterModal.vue';
-
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, useDeleteConfirmDialog } from '@/shared/lib';
 
 import {
   GetAllFeedback,
+  deleteFeedbackApi as DeleteFeedbackApi,
   FeedbackCard,
-  DeleteFeedback,
 } from '@/features/feedback';
 
 defineOptions({ name: 'AdminFeedbackPage' });
@@ -60,11 +35,13 @@ defineOptions({ name: 'AdminFeedbackPage' });
 const { execute: executeFetchFeedbacks } = useApiCall(GetAllFeedback);
 
 const feedbacks = ref<FeedbackResponse[]>([]);
-const currentFeedback = ref<FeedbackResponse | null>(null);
 
-const feedbackModalRef =
-  useTemplateRef<InstanceType<typeof CenterModal>>('feedbackModalRef');
-const deleteFeedbackRef = useTemplateRef('delete-feedback');
+const { confirmDelete: confirmDeleteFeedback } = useDeleteConfirmDialog({
+  apiFn: DeleteFeedbackApi,
+  message: 'Вы действительно хотите удалить обратную связь?',
+  header: 'Удалить обратную связь',
+  successMessage: 'Обратная связь успешно удалена',
+});
 
 async function fetchData() {
   const result = await executeFetchFeedbacks();
@@ -73,16 +50,11 @@ async function fetchData() {
   }
 }
 
-function clickDeleteFeedbackBtn(feedback: FeedbackResponse) {
-  currentFeedback.value = feedback;
-  feedbackModalRef.value?.open();
-}
-
-function successDeleteFeedback(feedbackId: string) {
-  feedbacks.value = feedbacks.value.filter(
-    (feedback) => feedback.id !== feedbackId,
-  );
-  feedbackModalRef.value?.confirm();
+async function clickDeleteFeedbackBtn(feedback: FeedbackResponse) {
+  const ok = await confirmDeleteFeedback(feedback.id);
+  if (ok) {
+    feedbacks.value = feedbacks.value.filter((f) => f.id !== feedback.id);
+  }
 }
 
 fetchData();
