@@ -10,9 +10,7 @@
     <template #header>
       <slot name="header"></slot>
     </template>
-    <div
-      class="slide-over__content"
-      style="overflow-y: auto; overscroll-behavior: none">
+    <div class="slide-over__content">
       <slot
         :confirm="confirm"
         :close="close"></slot>
@@ -91,7 +89,8 @@ defineExpose({ open, confirm, close, togglePreloader });
 
 <style lang="scss" scoped>
 .slide-over__content {
-  padding: 1rem;
+  overflow-y: auto;
+  overscroll-behavior: none;
 }
 
 .slide-over {
