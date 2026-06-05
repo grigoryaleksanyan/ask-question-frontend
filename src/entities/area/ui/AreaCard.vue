@@ -4,27 +4,35 @@
 
     <Inplace
       v-model:active="isEditing"
-      closable>
+      closable
+      @open="startEdit">
       <template #display>
         <span class="area-card__title">{{ area.title }}</span>
         <i
           class="pi pi-pencil area-card__edit"
           @click.stop="startEdit"></i>
       </template>
-      <template #content>
+      <template #content="{ closeCallback }">
         <InputText
           ref="editInputRef"
           v-model="editTitle"
           class="area-card__input"
           @keydown.enter="saveEdit"
-          @keydown.escape="cancelEdit"
-          @blur="saveEdit" />
+          @keydown.escape="cancelEdit" />
+        <i
+          class="pi pi-times area-card__cancel"
+          @click="closeCallback"></i>
       </template>
     </Inplace>
 
     <i
+      v-if="!isEditing"
       class="pi pi-trash area-card__delete"
       @click="emit('delete')"></i>
+    <i
+      v-else
+      class="pi pi-save area-card__save"
+      @click="saveEdit"></i>
   </div>
 </template>
 
@@ -32,6 +40,7 @@
 import {
   ref,
   nextTick,
+  watch,
   useTemplateRef,
   type ComponentPublicInstance,
 } from 'vue';
@@ -64,6 +73,12 @@ const { execute: executeUpdate } = useApiCall(Update, {
   showPreloader: false,
 });
 
+watch(isEditing, (newVal) => {
+  if (!newVal) {
+    editTitle.value = '';
+  }
+});
+
 async function startEdit() {
   isEditing.value = true;
   editTitle.value = area.title;
@@ -86,12 +101,12 @@ async function saveEdit() {
   }
 
   const result = await executeUpdate({ id: area.id, title: trimmed });
+  if (!isEditing.value) return; // user cancelled while saving
   if (result) {
     emit('updated', result);
+    isEditing.value = false;
+    editTitle.value = '';
   }
-
-  isEditing.value = false;
-  editTitle.value = '';
 }
 </script>
 
@@ -119,10 +134,9 @@ async function saveEdit() {
 }
 
 .area-card__input {
-  width: auto;
-  padding: 2px 6px;
+  width: fit-content;
   border: 1px solid variables.$main-color;
-  border-radius: 4px;
+  margin-right: 10px;
   background: transparent;
   color: variables.$text-primary-dark;
   font-size: 15px;
@@ -136,6 +150,18 @@ async function saveEdit() {
 }
 
 .area-card__delete {
+  color: variables.$text-secondary;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.area-card__save {
+  color: variables.$main-color;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.area-card__cancel {
   color: variables.$text-secondary;
   cursor: pointer;
   font-size: 14px;
