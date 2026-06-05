@@ -28,18 +28,12 @@
         name="password"
         initial-value="">
         <label class="setup-view__label">Пароль</label>
-        <div class="setup-view__password-field">
-          <InputText
-            :type="isPasswordVisible ? 'text' : 'password'"
-            autocomplete="new-password"
-            class="setup-view__input" />
-          <button
-            type="button"
-            class="setup-view__toggle-password"
-            @click="isPasswordVisible = !isPasswordVisible">
-            <i :class="isPasswordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'" />
-          </button>
-        </div>
+        <Password
+          v-model="$field.value"
+          toggle-mask
+          :feedback="false"
+          autocomplete="new-password"
+          class="w-full" />
         <Message
           v-if="$field?.invalid"
           severity="error"
@@ -54,21 +48,12 @@
         name="confirmPassword"
         initial-value="">
         <label class="setup-view__label">Подтверждение пароля</label>
-        <div class="setup-view__password-field">
-          <InputText
-            :type="isConfirmPasswordVisible ? 'text' : 'password'"
-            autocomplete="new-password"
-            class="setup-view__input" />
-          <button
-            type="button"
-            class="setup-view__toggle-password"
-            @click="isConfirmPasswordVisible = !isConfirmPasswordVisible">
-            <i
-              :class="
-                isConfirmPasswordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'
-              " />
-          </button>
-        </div>
+        <Password
+          v-model="$field.value"
+          toggle-mask
+          :feedback="false"
+          autocomplete="new-password"
+          class="w-full" />
         <Message
           v-if="$field?.invalid"
           severity="error"
@@ -137,7 +122,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Form, FormField } from '@primevue/forms';
@@ -145,6 +129,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 
 import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
@@ -164,9 +149,6 @@ defineOptions({ name: 'SetupView' });
 const router = useRouter();
 
 const authStore = useAuthStore();
-
-const isPasswordVisible = ref(false);
-const isConfirmPasswordVisible = ref(false);
 
 const { execute: executeSetup, error } = useApiCall(Setup, {
   showPreloader: false,
@@ -249,25 +231,6 @@ async function onSubmit({
   border-radius: 6px;
   background: variables.$surface-card;
   font-size: 14px;
-}
-
-.setup-view__password-field {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.setup-view__toggle-password {
-  position: absolute;
-  right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border: none;
-  background: transparent;
-  color: variables.$text-secondary;
-  cursor: pointer;
 }
 
 .setup-view__submit {
