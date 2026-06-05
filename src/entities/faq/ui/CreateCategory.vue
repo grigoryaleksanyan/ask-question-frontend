@@ -36,7 +36,7 @@ import type { FaqCategoryResponse } from '@/shared/dto';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, requiredString, useFormActions } from '@/shared/lib';
 import { Create as CreateCategoryApi } from '../api/faq-category-repository';
 
 defineOptions({ name: 'CreateCategory' });
@@ -55,9 +55,10 @@ const { execute: executeCreate } = useApiCall(CreateCategoryApi, {
   showPreloader: false,
 });
 const formRef = useTemplateRef('form');
+const { submitForm } = useFormActions(formRef);
 
 const schema = z.object({
-  name: z.string().min(1, 'Обязательное поле'),
+  name: requiredString(),
 });
 
 const resolver = zodResolver(schema);
@@ -79,11 +80,6 @@ async function onSubmit({
   if (createdCategory) {
     emit('success', createdCategory);
   }
-}
-
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
 }
 
 function cancel() {

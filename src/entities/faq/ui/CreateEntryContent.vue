@@ -52,7 +52,7 @@ import sanitizeHtml from '@/shared/lib/html-sanitize';
 
 import type { FaqEntryResponse } from '@/shared/dto';
 
-import { useApiCall } from '@/shared/lib';
+import { useApiCall, requiredString, useFormActions } from '@/shared/lib';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
@@ -76,10 +76,11 @@ const { execute: executeCreateEntry } = useApiCall(CreateEntry, {
 });
 
 const formRef = useTemplateRef('form');
+const { submitForm } = useFormActions(formRef);
 
 const schema = z.object({
-  question: z.string().min(1, 'Обязательное поле'),
-  answer: z.string().min(1, 'Обязательное поле'),
+  question: requiredString(),
+  answer: requiredString(),
 });
 
 const resolver = zodResolver(schema);
@@ -103,11 +104,6 @@ async function onSubmit({
   if (entry) {
     emit('success', entry);
   }
-}
-
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
 }
 
 function cancel() {
