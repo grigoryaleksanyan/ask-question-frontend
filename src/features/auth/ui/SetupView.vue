@@ -148,6 +148,13 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
+import {
+  emailString,
+  passwordString,
+  requiredString,
+  optionalString,
+  withConfirmPassword,
+} from '@/shared/lib/zod-schemas';
 import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '../store';
 import { Setup } from '../api/auth-repository';
@@ -169,22 +176,16 @@ const { execute: executeSetup, error } = useApiCall(Setup, {
   },
 });
 
-const schema = z
-  .object({
-    email: z
-      .string()
-      .min(1, 'Обязательное поле')
-      .email('Введите корректный email'),
-    password: z.string().min(6, 'Минимум 6 символов'),
-    confirmPassword: z.string().min(1, 'Обязательное поле'),
-    firstName: z.string().min(1, 'Обязательное поле'),
-    lastName: z.string().min(1, 'Обязательное поле'),
-    patronymic: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Пароли не совпадают',
-    path: ['confirmPassword'],
-  });
+const schema = withConfirmPassword()(
+  z.object({
+    email: emailString(),
+    password: passwordString(),
+    confirmPassword: requiredString(),
+    firstName: requiredString(),
+    lastName: requiredString(),
+    patronymic: optionalString(),
+  }),
+);
 
 const resolver = zodResolver(schema);
 

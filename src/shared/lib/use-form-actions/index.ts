@@ -1,4 +1,4 @@
-import type { ComponentPublicInstance, Ref } from 'vue';
+import type { Ref } from 'vue';
 
 interface FormActions {
   submit: () => void;
@@ -6,7 +6,7 @@ interface FormActions {
   setValues: (values: Record<string, unknown>) => void;
 }
 
-export function useFormActions(formRef: Ref<ComponentPublicInstance | null>) {
+export function useFormActions<T>(formRef: Readonly<Ref<T | null>>) {
   const getForm = () => formRef.value as FormActions | null;
 
   return {

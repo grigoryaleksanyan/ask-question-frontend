@@ -105,6 +105,8 @@ import { z } from 'zod';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
+import { requiredString, withConfirmPassword } from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { useApiCall } from '@/shared/lib';
 import { useAuthStore } from '../store';
 import { ChangePassword } from '@/entities/user';
@@ -128,20 +130,21 @@ const { getUserData } = storeToRefs(authStore);
 
 const showChangePassword = ref(false);
 
-const schema = z
-  .object({
-    password: z.string().min(1, 'Обязательное поле'),
-    newPassword: z.string().min(1, 'Обязательное поле'),
-    confirmPassword: z.string().min(1, 'Обязательное поле'),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'Пароли не совпадают',
-    path: ['confirmPassword'],
-  });
+const schema = withConfirmPassword(
+  'newPassword',
+  'confirmPassword',
+)(
+  z.object({
+    password: requiredString(),
+    newPassword: requiredString(),
+    confirmPassword: requiredString(),
+  }),
+);
 
 const resolver = zodResolver(schema);
 
 const formRef = useTemplateRef('form');
+const { submitForm } = useFormActions(formRef);
 
 const isChangingPassword = computed(() => showChangePassword.value);
 
@@ -151,11 +154,6 @@ function changePassword() {
 
 function cancelChangePassword() {
   showChangePassword.value = false;
-}
-
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
 }
 
 const getUserStringRole = computed(() => {
