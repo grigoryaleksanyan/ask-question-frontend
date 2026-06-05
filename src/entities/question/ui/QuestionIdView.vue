@@ -149,7 +149,14 @@ onMounted(() => {
 <style lang="scss" scoped>
 .question-id-view {
   max-width: 640px;
+  padding: 24px 24px 48px;
   margin: 0 auto;
+}
+
+@media (width <= 600px) {
+  .question-id-view {
+    padding: 16px 16px 32px;
+  }
 }
 
 .question-id-view__back-link {

@@ -100,7 +100,14 @@ fetchData();
 <style lang="scss" scoped>
 .faq-view {
   max-width: 640px;
+  padding: 24px 24px 48px;
   margin: 0 auto;
+}
+
+@media (width <= 600px) {
+  .faq-view {
+    padding: 16px 16px 32px;
+  }
 }
 
 .faq-view__title {

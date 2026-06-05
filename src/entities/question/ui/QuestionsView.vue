@@ -186,7 +186,14 @@ fetchData();
 <style lang="scss" scoped>
 .questions-view {
   max-width: 640px;
+  padding: 24px 24px 48px;
   margin: 0 auto;
+}
+
+@media (width <= 600px) {
+  .questions-view {
+    padding: 16px 16px 32px;
+  }
 }
 
 .questions-view__title {
