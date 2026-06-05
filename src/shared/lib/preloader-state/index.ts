@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 
-const loadings = ref(0);
+export const loadings = ref(0);
 
 export const showPreloader = computed(() => loadings.value > 0);
 
