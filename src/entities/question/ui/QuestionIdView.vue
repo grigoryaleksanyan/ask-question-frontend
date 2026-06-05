@@ -21,7 +21,9 @@
           </span>
         </div>
 
-        <p class="question-id-view__text">{{ question.text }}</p>
+        <p
+          class="question-id-view__text"
+          v-html="question.text"></p>
 
         <div class="question-id-view__meta">
           <span>{{ question.author || 'Инкогнито' }}</span>
