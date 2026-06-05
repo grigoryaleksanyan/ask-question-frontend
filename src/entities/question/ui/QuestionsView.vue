@@ -2,13 +2,13 @@
   <div class="questions-view">
     <h1 class="questions-view__title">Вопросы</h1>
 
-    <div class="questions-view__search-wrap">
-      <i class="pi pi-search questions-view__search-icon"></i>
-      <input
+    <IconField class="questions-view__search-wrap">
+      <InputIcon class="pi pi-search" />
+      <InputText
         v-model="searchQuery"
         class="questions-view__search-input"
         placeholder="Поиск вопросов..." />
-    </div>
+    </IconField>
 
     <SelectButton
       v-model="activeTab"
@@ -62,6 +62,9 @@ import type {
 } from '@/shared/dto';
 
 import { QuestionStatusId } from '@/shared/dto';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
 import SelectButton from 'primevue/selectbutton';
 import { useApiCall } from '@/shared/lib';
@@ -198,23 +201,13 @@ fetchData();
 }
 
 .questions-view__search-wrap {
-  position: relative;
   margin-bottom: 16px;
-}
-
-.questions-view__search-icon {
-  position: absolute;
-  top: 50%;
-  left: 14px;
-  color: variables.$text-muted;
-  font-size: 14px;
-  transform: translateY(-50%);
 }
 
 .questions-view__search-input {
   display: block;
   width: 100%;
-  padding: 10px 14px 10px 38px;
+  padding: 10px 14px;
   border: 1px solid variables.$border-light;
   border-radius: 8px;
   background: variables.$surface-card;
