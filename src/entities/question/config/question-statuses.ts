@@ -11,7 +11,7 @@ const QUESTION_STATUSES: Record<string, QuestionStatus> = {
   IN_FOCUS: {
     STATUS_ID: QuestionStatusId.InFocus,
     TITLE: 'в фокусе',
-    COLOR: '#2AA89A',
+    COLOR: '#EAB308',
   },
   ANSWERED: {
     STATUS_ID: QuestionStatusId.Answered,

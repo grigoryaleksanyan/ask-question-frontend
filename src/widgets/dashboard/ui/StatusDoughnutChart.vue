@@ -33,7 +33,7 @@ const STATUS_LABELS: Record<number, string> = {
 
 const STATUS_COLORS: Record<number, string> = {
   [QuestionStatusId.New]: '#6B7CF6',
-  [QuestionStatusId.InFocus]: '#2AA89A',
+  [QuestionStatusId.InFocus]: '#EAB308',
   [QuestionStatusId.Answered]: '#45BF8A',
 };
 
