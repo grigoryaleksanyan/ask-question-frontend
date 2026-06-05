@@ -34,6 +34,7 @@ const tagStyle = computed(() => {
     fontSize: '14px',
     fontWeight: '500',
     gap: '6px',
+    flexShrink: '0',
     display: 'inline-flex',
     alignItems: 'center',
     minWidth: isDotOnly ? '10px' : 'auto',
