@@ -38,23 +38,12 @@
           :question="question" />
       </div>
 
-      <div class="questions-view__pagination">
-        <button
-          class="questions-view__page-btn"
-          :disabled="currentPage <= 1"
-          @click="currentPage--">
-          ‹
-        </button>
-        <span class="questions-view__page-info">
-          {{ currentPage }} / {{ totalPages }}
-        </span>
-        <button
-          class="questions-view__page-btn"
-          :disabled="currentPage >= totalPages"
-          @click="currentPage++">
-          ›
-        </button>
-      </div>
+      <Paginator
+        v-model:first="firstRow"
+        :rows="pageSize"
+        :total-records="totalCount"
+        template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        class="questions-view__pagination" />
     </template>
 
     <template v-else-if="!isLoading">
@@ -73,6 +62,7 @@ import type {
 } from '@/shared/dto';
 
 import { QuestionStatusId } from '@/shared/dto';
+import Paginator from 'primevue/paginator';
 import SelectButton from 'primevue/selectbutton';
 import { useApiCall } from '@/shared/lib';
 import { StatusDot } from '@/shared/ui/status-dot';
@@ -97,6 +87,7 @@ const questions = ref<QuestionResponse[]>([]);
 const totalCount = ref(0);
 const currentPage = ref(1);
 const pageSize = 10;
+const firstRow = ref(0);
 const searchQuery = ref('');
 const activeTab = ref('new');
 const filterSortOrder = ref<'asc' | 'desc'>('desc');
@@ -127,10 +118,6 @@ const tabToStatus: Record<string, QuestionStatusId> = {
   answered: QuestionStatusId.Answered,
 };
 
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil(totalCount.value / pageSize)),
-);
-
 const params = computed<QuestionListParams>(() => ({
   page: currentPage.value,
   pageSize,
@@ -158,6 +145,13 @@ watch(activeTab, () => {
 
 watch(currentPage, () => {
   fetchData();
+});
+
+watch(currentPage, (newPage) => {
+  firstRow.value = (newPage - 1) * pageSize;
+});
+watch(firstRow, (newFirst) => {
+  currentPage.value = Math.floor(newFirst / pageSize) + 1;
 });
 
 function onFiltersChange(filters: {
@@ -261,28 +255,6 @@ fetchData();
   justify-content: center;
   margin-top: 20px;
   gap: 12px;
-}
-
-.questions-view__page-btn {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid variables.$border-light;
-  border-radius: 6px;
-  background: variables.$surface-card;
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 16px;
-
-  &:disabled {
-    cursor: default;
-    opacity: 0.4;
-  }
-}
-
-.questions-view__page-info {
-  color: variables.$text-muted;
-  font-size: 13px;
 }
 
 .questions-view__empty {
