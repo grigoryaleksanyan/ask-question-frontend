@@ -33,7 +33,7 @@
           </span>
         </div>
 
-        <div class="question-id-view__divider"></div>
+        <Divider />
 
         <div
           v-if="question.comment"
@@ -84,6 +84,7 @@ import { getStatusColor, getStatusLabel } from '../config/question-statuses';
 
 import QuestionVote from './QuestionVote.vue';
 import ProgressSpinner from 'primevue/progressspinner';
+import Divider from 'primevue/divider';
 
 defineOptions({ name: 'QuestionIdView' });
 
@@ -208,11 +209,6 @@ onMounted(() => {
 .question-id-view__meta {
   color: variables.$text-muted;
   font-size: 13px;
-}
-
-.question-id-view__divider {
-  border-top: 1px solid #f0f0f0;
-  margin: 20px 0;
 }
 
 .question-id-view__vote-row {

@@ -47,7 +47,7 @@
         </span>
       </div>
 
-      <div class="admin-question-detail__divider"></div>
+      <Divider />
 
       <div class="admin-question-detail__actions">
         <QuestionCommentButton
@@ -66,7 +66,7 @@
         </p>
       </div>
 
-      <div class="admin-question-detail__divider"></div>
+      <Divider />
 
       <div class="admin-question-detail__stats">
         <span class="admin-question-detail__stat">
@@ -110,6 +110,7 @@ import type {
 } from '@/shared/dto';
 
 import ProgressSpinner from 'primevue/progressspinner';
+import Divider from 'primevue/divider';
 
 import { GetById as GetQuestionById } from '@/entities/question';
 import {
@@ -227,11 +228,6 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-}
-
-.admin-question-detail__divider {
-  border-top: 1px solid variables.$border-dark;
-  margin: 20px 0;
 }
 
 .admin-question-detail__actions {
