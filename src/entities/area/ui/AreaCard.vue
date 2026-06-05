@@ -4,7 +4,6 @@
 
     <Inplace
       v-model:active="isEditing"
-      closable
       @open="startEdit">
       <template #display>
         <span class="area-card__title">{{ area.title }}</span>
@@ -20,7 +19,7 @@
         <Button
           icon="pi pi-times"
           text
-          severity="warn"
+          severity="danger"
           @click="closeCallback" />
       </template>
     </Inplace>
@@ -147,12 +146,6 @@ async function saveEdit() {
 }
 
 .area-card__edit {
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.area-card__delete {
   color: variables.$text-secondary;
   cursor: pointer;
   font-size: 14px;
