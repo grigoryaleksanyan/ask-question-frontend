@@ -246,7 +246,7 @@ async function onFormSubmit({
 }
 
 .question-form-create :deep(.p-select-label) {
-  justify-content: flex-start;
+  text-align: left;
 }
 
 .question-form-create__details {
