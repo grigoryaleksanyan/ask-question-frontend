@@ -9,7 +9,7 @@
         name="username"
         initial-value="">
         <InputText
-          placeholder="Имя"
+          placeholder="Имя*"
           class="w-full" />
         <Message
           v-if="$field?.invalid"
@@ -25,7 +25,7 @@
         name="email"
         initial-value="">
         <InputText
-          placeholder="Email"
+          placeholder="Email*"
           class="w-full" />
         <Message
           v-if="$field?.invalid"
@@ -42,7 +42,7 @@
         initial-value="">
         <Select
           :options="themes"
-          placeholder="Тема обращения"
+          placeholder="Тема обращения*"
           class="w-full" />
         <Message
           v-if="$field?.invalid"
@@ -58,7 +58,7 @@
         name="text"
         initial-value="">
         <Textarea
-          placeholder="Текст обращения"
+          placeholder="Текст обращения*"
           auto-resize
           class="w-full" />
         <Message

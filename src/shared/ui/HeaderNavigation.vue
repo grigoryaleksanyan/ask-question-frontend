@@ -9,6 +9,13 @@
       <span>{{ item.title }}</span>
     </router-link>
     <router-link
+      v-if="isAuthorized"
+      to="/admin"
+      class="header-nav-login">
+      Админ-панель
+    </router-link>
+    <router-link
+      v-else
       to="/login"
       class="header-nav-login">
       Войти
@@ -21,8 +28,9 @@ import type { NavItem } from '@/shared/dto';
 
 defineOptions({ name: 'HeaderNavigation' });
 
-const { navItems } = defineProps<{
+const { navItems, isAuthorized } = defineProps<{
   navItems: NavItem[];
+  isAuthorized: boolean;
 }>();
 </script>
 

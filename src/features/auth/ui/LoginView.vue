@@ -30,9 +30,9 @@
           name="password"
           initial-value="">
           <Password
-            autocomplete="current-password"
             :feedback="false"
             class="login-view__password"
+            :input-props="{ autocomplete: 'current-password' }"
             input-class="login-view__input" />
           <Message
             v-if="$field?.invalid"

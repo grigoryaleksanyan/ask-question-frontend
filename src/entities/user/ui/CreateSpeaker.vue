@@ -10,7 +10,7 @@
         initial-value="">
         <InputText
           type="text"
-          placeholder="Фамилия"
+          placeholder="Фамилия*"
           class="w-full dark-input" />
         <Message
           v-if="$field?.invalid"
@@ -27,7 +27,7 @@
         initial-value="">
         <InputText
           type="text"
-          placeholder="Имя"
+          placeholder="Имя*"
           class="w-full dark-input" />
         <Message
           v-if="$field?.invalid"
@@ -53,7 +53,7 @@
         initial-value="">
         <InputText
           type="text"
-          placeholder="Почта"
+          placeholder="Почта*"
           class="w-full dark-input" />
         <Message
           v-if="$field?.invalid"

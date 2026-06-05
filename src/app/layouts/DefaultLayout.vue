@@ -20,6 +20,7 @@
       <template #end>
         <HeaderNavigation
           :nav-items="navItems"
+          :is-authorized="isAuthorized"
           class="header-navigation" />
       </template>
     </Toolbar>
@@ -76,8 +77,13 @@ import HeaderNavigation from '@/shared/ui/HeaderNavigation.vue';
 import AppLogo from '@/shared/ui/AppLogo.vue';
 
 import { SidebarFeedbackContent } from '@/features/feedback';
+import { useAuthStore } from '@/features/auth';
 
 defineOptions({ name: 'DefaultLayout' });
+
+const authStore = useAuthStore();
+
+const isAuthorized = computed(() => authStore.getAuthStatus);
 
 const drawerVisible = ref(false);
 
