@@ -2,22 +2,46 @@
   <div class="login-view">
     <h1 class="login-view__title">Вход</h1>
     <p class="login-view__subtitle">Панель администратора</p>
-    <form @submit.prevent="onSubmit">
+    <Form
+      :resolver
+      @submit="onFormSubmit">
       <div class="login-view__field">
         <label class="login-view__label">Email</label>
-        <InputText
-          v-model="controls.email"
-          autocomplete="username"
-          class="login-view__input" />
+        <FormField
+          v-slot="$field"
+          name="email"
+          initial-value="">
+          <InputText
+            autocomplete="username"
+            class="login-view__input" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
       </div>
       <div class="login-view__field">
         <label class="login-view__label">Пароль</label>
-        <Password
-          v-model="controls.password"
-          autocomplete="current-password"
-          :feedback="false"
-          class="login-view__password"
-          input-class="login-view__input" />
+        <FormField
+          v-slot="$field"
+          name="password"
+          initial-value="">
+          <Password
+            autocomplete="current-password"
+            :feedback="false"
+            class="login-view__password"
+            input-class="login-view__input" />
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple">
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
       </div>
       <Button
         type="submit"
@@ -29,21 +53,26 @@
         class="login-view__error">
         {{ error.message }}
       </p>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useApiCall } from '@/shared/lib';
-import { useAuthStore } from '../store';
-import { Login } from '../api/auth-repository';
+import { Form, FormField } from '@primevue/forms';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
 
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
+import Message from 'primevue/message';
+
+import { emailString, requiredString } from '@/shared/lib/zod-schemas';
+import { useApiCall } from '@/shared/lib';
+import { useAuthStore } from '../store';
+import { Login } from '../api/auth-repository';
 
 defineOptions({ name: 'LoginView' });
 
@@ -60,15 +89,25 @@ const { execute: executeLogin, error } = useApiCall(Login, {
   },
 });
 
-const controls = reactive({
-  email: null as string | null,
-  password: null as string | null,
+const schema = z.object({
+  email: emailString(),
+  password: requiredString(),
 });
 
-async function onSubmit() {
+const resolver = zodResolver(schema);
+
+async function onFormSubmit({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: Record<string, unknown>;
+}) {
+  if (!valid) return;
+
   await executeLogin({
-    email: controls.email!,
-    password: controls.password!,
+    email: values.email as string,
+    password: values.password as string,
   });
 }
 </script>
