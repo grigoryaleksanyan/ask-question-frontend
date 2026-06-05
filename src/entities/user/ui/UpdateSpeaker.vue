@@ -99,6 +99,12 @@ import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
 
+import {
+  requiredString,
+  emailString,
+  optionalString,
+} from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { useApiCall } from '@/shared/lib';
 import { Update } from '../api/speakers-repository';
 
@@ -117,17 +123,15 @@ const { execute: executeUpdate, error: updateError } = useApiCall(Update, {
 });
 
 const formRef = useTemplateRef('form');
+const { submitForm, setFormValues } = useFormActions(formRef);
 
 const schema = z.object({
-  lastName: z.string().min(1, 'Обязательное поле'),
-  firstName: z.string().min(1, 'Обязательное поле'),
-  patronymic: z.string(),
-  email: z
-    .string()
-    .min(1, 'Обязательное поле')
-    .email('Введите корректный email'),
-  position: z.string(),
-  additionalInfo: z.string(),
+  lastName: requiredString(),
+  firstName: requiredString(),
+  patronymic: optionalString(),
+  email: emailString(),
+  position: optionalString(),
+  additionalInfo: optionalString(),
 });
 
 const resolver = zodResolver(schema);
@@ -180,8 +184,7 @@ watch(
 );
 
 function fillForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.setValues({
+  setFormValues({
     firstName: speaker.firstName,
     lastName: speaker.lastName,
     patronymic: speaker.patronymic ?? '',
@@ -189,11 +192,6 @@ function fillForm() {
     position: speaker.position ?? '',
     additionalInfo: speaker.additionalInfo ?? '',
   });
-}
-
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
 }
 
 defineExpose({

@@ -100,6 +100,12 @@ import type { CreateSpeakerResponse } from '@/shared/dto';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
+import {
+  requiredString,
+  emailString,
+  optionalString,
+} from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { useApiCall } from '@/shared/lib';
 import { Create } from '../api/speakers-repository';
 
@@ -115,6 +121,7 @@ const createdCredentials = ref<{
 } | null>(null);
 
 const formRef = useTemplateRef('form');
+const { submitForm, resetForm: resetFormAction } = useFormActions(formRef);
 
 const { execute: executeCreate } = useApiCall(Create, {
   successMessage: 'Спикер успешно создан',
@@ -128,14 +135,11 @@ const { execute: executeCreate } = useApiCall(Create, {
 });
 
 const schema = z.object({
-  lastName: z.string().min(1, 'Обязательное поле'),
-  firstName: z.string().min(1, 'Обязательное поле'),
-  patronymic: z.string(),
-  email: z
-    .string()
-    .min(1, 'Обязательное поле')
-    .email('Введите корректный email'),
-  position: z.string(),
+  lastName: requiredString(),
+  firstName: requiredString(),
+  patronymic: optionalString(),
+  email: emailString(),
+  position: optionalString(),
 });
 
 const resolver = zodResolver(schema);
@@ -159,14 +163,8 @@ async function onSubmit({
 }
 
 function resetForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.reset();
+  resetFormAction();
   createdCredentials.value = null;
-}
-
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
 }
 
 defineExpose({
