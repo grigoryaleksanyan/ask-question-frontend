@@ -5,3 +5,5 @@ export {
   optionalString,
   nonNegativeInt,
 } from './primitives';
+
+export { withConfirmPassword } from './compositions';
