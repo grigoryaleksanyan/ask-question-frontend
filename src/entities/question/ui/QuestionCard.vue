@@ -17,9 +17,15 @@
     </div>
 
     <div class="question-card__votes">
-      <span class="question-card__vote">▲ {{ localLikes }}</span>
-      <span class="question-card__vote">▽ {{ localDislikes }}</span>
-      <span class="question-card__vote">◎ {{ localViews }}</span>
+      <span class="question-card__vote"
+        >{{ localLikes }} <i class="pi pi-thumbs-up"></i
+      ></span>
+      <span class="question-card__vote"
+        >{{ localDislikes }} <i class="pi pi-thumbs-down"></i
+      ></span>
+      <span class="question-card__vote"
+        >{{ localViews }} <i class="pi pi-eye"></i
+      ></span>
     </div>
   </div>
 </template>
@@ -48,10 +54,15 @@ const localViews = ref(question.views);
 
 const statusColor = computed(() => getStatusColor(question.status));
 
+const formattedDate = computed(() =>
+  new Date(question.created).toLocaleDateString('ru-RU'),
+);
+
 const metaText = computed(() => {
   const parts: string[] = [];
   if (question.speakerName) parts.push(question.speakerName);
   if (question.areaTitle) parts.push(question.areaTitle);
+  if (formattedDate.value) parts.push(formattedDate.value);
   return parts.join(' · ');
 });
 
@@ -124,11 +135,19 @@ function sliceText(text: string) {
   flex-shrink: 0;
   align-items: flex-end;
   margin-left: 12px;
+  gap: 2px;
 }
 
 .question-card__vote {
+  display: inline-flex;
+  align-items: center;
   color: variables.$text-muted;
   font-size: 12px;
+  gap: 4px;
   line-height: 1.5;
+
+  .pi {
+    font-size: 10px;
+  }
 }
 </style>

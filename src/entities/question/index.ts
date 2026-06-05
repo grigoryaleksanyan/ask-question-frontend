@@ -22,7 +22,6 @@ export {
 } from './config/question-statuses';
 
 export { default as QuestionCard } from './ui/QuestionCard.vue';
-export { default as QuestionListItem } from './ui/QuestionListItem.vue';
 export { default as QuestionVote } from './ui/QuestionVote.vue';
 export { default as QuestionStatusIcon } from './ui/QuestionStatusIcon.vue';
 export { default as QuestionFilters } from './ui/QuestionFilters.vue';

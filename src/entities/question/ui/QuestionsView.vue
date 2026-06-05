@@ -32,7 +32,7 @@
 
     <template v-if="questions.length > 0">
       <div class="questions-view__list">
-        <QuestionListItem
+        <QuestionCard
           v-for="question in questions"
           :key="question.id"
           :question="question" />
@@ -80,7 +80,7 @@ import { GetAll, type QuestionListParams } from '../api/questions-repository';
 import { questionStatusMap } from '../config/question-statuses';
 
 import QuestionFilters from './QuestionFilters.vue';
-import QuestionListItem from './QuestionListItem.vue';
+import QuestionCard from './QuestionCard.vue';
 
 defineOptions({ name: 'QuestionsView' });
 
@@ -243,9 +243,9 @@ fetchData();
 }
 
 .questions-view__list {
-  overflow: hidden;
-  border: 1px solid variables.$border-light;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .questions-view__pagination {
