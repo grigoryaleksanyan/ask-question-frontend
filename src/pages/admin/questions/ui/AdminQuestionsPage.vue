@@ -28,7 +28,7 @@
         </div>
         <div
           class="admin-questions-page__cell admin-questions-page__cell--area">
-          Зона
+          Область
         </div>
         <div
           class="admin-questions-page__cell admin-questions-page__cell--speaker">

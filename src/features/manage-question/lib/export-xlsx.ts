@@ -32,7 +32,7 @@ export async function exportToXlsx(
 
   worksheet.columns = [
     { header: 'Вопрос', key: 'text', width: 50 },
-    { header: 'Зона', key: 'areaTitle', width: 18 },
+    { header: 'Область', key: 'areaTitle', width: 18 },
     { header: 'Спикер', key: 'speakerName', width: 20 },
     { header: 'Статус', key: 'status', width: 15 },
     { header: 'Дата создания', key: 'created', width: 16 },

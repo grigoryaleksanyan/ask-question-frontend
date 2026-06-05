@@ -57,7 +57,7 @@ function buildQuestionCard(question: QuestionResponse): Paragraph[] {
           size: 22,
         }),
         new TextRun({
-          text: `  |  Зона: ${question.areaTitle ?? '\u2014'}`,
+          text: `  |  Область: ${question.areaTitle ?? '\u2014'}`,
           font: 'Arial',
           size: 22,
         }),

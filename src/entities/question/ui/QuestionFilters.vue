@@ -20,7 +20,7 @@
           :options="areas"
           option-label="title"
           option-value="id"
-          placeholder="Зона"
+          placeholder="Область"
           size="small"
           show-clear
           class="question-filters__select" />
