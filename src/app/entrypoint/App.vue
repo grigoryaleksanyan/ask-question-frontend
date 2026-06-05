@@ -3,6 +3,7 @@
     <component :is="layout" />
     <AppPreloader />
     <AppToast />
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import { useRoute } from 'vue-router';
 
 import { AppPreloader } from '@/features/preloader';
 import AppToast from '@/shared/ui/toast/AppToast.vue';
+import ConfirmDialog from 'primevue/confirmdialog';
 
 defineOptions({ name: 'App' });
 
