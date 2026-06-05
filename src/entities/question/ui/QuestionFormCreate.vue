@@ -85,23 +85,34 @@
               </Message>
             </FormField>
 
-            <div class="question-form-create__captcha-row">
-              <InputText
-                v-model="captcha"
-                placeholder="Код*"
-                class="w-full" />
+            <FormField
+              v-slot="$field"
+              name="captcha"
+              initial-value="">
+              <div class="question-form-create__captcha-row">
+                <InputText
+                  placeholder="Код*"
+                  class="w-full" />
 
-              <template v-if="captchaData">
-                <img
-                  :src="captchaData"
-                  class="question-form-create__captcha"
-                  alt="captcha" />
-              </template>
+                <template v-if="captchaData">
+                  <img
+                    :src="captchaData"
+                    class="question-form-create__captcha"
+                    alt="captcha" />
+                </template>
 
-              <template v-else>
-                <i class="pi pi-refresh question-form-create__spinner"></i>
-              </template>
-            </div>
+                <template v-else>
+                  <i class="pi pi-refresh question-form-create__spinner"></i>
+                </template>
+              </div>
+              <Message
+                v-if="$field?.invalid"
+                severity="error"
+                size="small"
+                variant="simple">
+                {{ $field.error?.message }}
+              </Message>
+            </FormField>
           </div>
         </div>
       </Transition>
@@ -139,13 +150,13 @@ const { areas, speakers } = defineProps<{
 
 const showDetails = ref(false);
 const captchaData = ref<string | null>(null);
-const captcha = ref(null as string | null);
 
 const schema = z.object({
   text: requiredString(),
   author: z.string(),
   areaId: requiredString(),
   speakerId: requiredString(),
+  captcha: requiredString(),
 });
 
 const resolver = zodResolver(schema);
@@ -161,7 +172,6 @@ const { execute: executeSubmit } = useApiCall(Create, {
   showPreloader: false,
   onSuccess() {
     resetFormAction();
-    captcha.value = null;
     showDetails.value = false;
   },
   onError() {
@@ -200,9 +210,7 @@ async function onFormSubmit({
 }) {
   if (!valid) return;
 
-  if (!captcha.value?.trim()) return;
-
-  await executeSubmit(captcha.value!, {
+  await executeSubmit(values.captcha as string, {
     text: values.text as string,
     author: (values.author as string) || null,
     areaId: values.areaId as string,
