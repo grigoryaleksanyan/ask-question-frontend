@@ -54,6 +54,8 @@ import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 
 import { useApiCall } from '@/shared/lib';
+import { nonNegativeInt, requiredString } from '@/shared/lib/zod-schemas';
+import { useFormActions } from '@/shared/lib/use-form-actions';
 import { Create } from '../api/areas-repository';
 
 defineOptions({ name: 'CreateArea' });
@@ -74,10 +76,11 @@ const { execute: executeCreate } = useApiCall(Create, {
 });
 
 const formRef = useTemplateRef('form');
+const { submitForm, resetForm } = useFormActions(formRef);
 
 const schema = z.object({
-  title: z.string().min(1, 'Обязательное поле'),
-  order: z.coerce.number().int().min(0, 'Минимум 0'),
+  title: requiredString(),
+  order: nonNegativeInt(),
 });
 
 const resolver = zodResolver(schema);
@@ -97,14 +100,8 @@ async function onSubmit({
   });
 }
 
-function submitForm() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.submit();
-}
-
 function cancel() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formRef.value as any)?.reset();
+  resetForm();
 }
 
 defineExpose({
