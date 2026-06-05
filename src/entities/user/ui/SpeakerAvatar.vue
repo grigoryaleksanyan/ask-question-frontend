@@ -1,11 +1,13 @@
 <template>
-  <div class="speaker-avatar">
-    {{ initials }}
-  </div>
+  <Avatar
+    :label="initials"
+    shape="circle"
+    class="speaker-avatar" />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import Avatar from 'primevue/avatar';
 
 defineOptions({ name: 'SpeakerAvatar' });
 
@@ -21,13 +23,6 @@ const initials = computed(() =>
 
 <style lang="scss" scoped>
 .speaker-avatar {
-  display: flex;
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
   background: variables.$surface-dark-border;
   color: variables.$text-muted;
   font-size: 13px;
