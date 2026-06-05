@@ -1,18 +1,11 @@
 <template>
   <div class="flex align-items-center gap-3">
-    <div class="dashboard-filters__period-tabs">
-      <button
-        v-for="option in periodOptions"
-        :key="option.value"
-        class="dashboard-filters__period-tab"
-        :class="{
-          'dashboard-filters__period-tab--active':
-            selectedPeriod === option.value,
-        }"
-        @click="selectedPeriod = option.value">
-        {{ option.label }}
-      </button>
-    </div>
+    <SelectButton
+      v-model="selectedPeriod"
+      :options="periodOptions"
+      option-label="label"
+      option-value="value"
+      class="dashboard-filters__period-tabs" />
     <Select
       v-model="selectedSpeakerId"
       :options="speakerItems"
@@ -30,6 +23,7 @@ import { ref, onMounted } from 'vue';
 import type { SpeakerResponse } from '@/shared/dto';
 
 import Select from 'primevue/select';
+import SelectButton from 'primevue/selectbutton';
 
 import { GetAllSpeakers } from '@/entities/user';
 import { useApiCall } from '@/shared/lib';
@@ -66,33 +60,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style lang="scss" scoped>
-.dashboard-filters__period-tabs {
-  display: flex;
-  gap: 4px;
-}
-
-.dashboard-filters__period-tab {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 10px;
-  background: variables.$surface-dark-elevated;
-  color: variables.$text-secondary;
-  cursor: pointer;
-  font-size: 14px;
-  transition:
-    background 0.15s,
-    color 0.15s;
-
-  &:hover {
-    color: variables.$text-primary-dark;
-  }
-
-  &--active {
-    background: rgba(variables.$main-color, 0.15);
-    color: variables.$main-color;
-    font-weight: 500;
-  }
-}
-</style>
