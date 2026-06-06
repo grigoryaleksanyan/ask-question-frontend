@@ -57,7 +57,7 @@ interface QueryOverrides {
   search?: string;
 }
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 7;
 
 export function useQuestionsFilters() {
   const route = useRoute();

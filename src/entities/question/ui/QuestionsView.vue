@@ -46,6 +46,7 @@
       </div>
 
       <Paginator
+        v-if="totalCount > PAGE_SIZE"
         :first="firstRow"
         :rows="pageSize"
         :total-records="totalCount"

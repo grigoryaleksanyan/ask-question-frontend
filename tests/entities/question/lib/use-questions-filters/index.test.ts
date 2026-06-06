@@ -127,7 +127,7 @@ describe('useQuestionsFilters', () => {
       const { apiParams } = useQuestionsFilters();
       expect(apiParams.value).toEqual({
         page: 1,
-        pageSize: 10,
+        pageSize: 7,
         status: QuestionStatusId.New,
         speakerId: undefined,
         areaId: undefined,
@@ -150,7 +150,7 @@ describe('useQuestionsFilters', () => {
       const { apiParams } = useQuestionsFilters();
       expect(apiParams.value).toEqual({
         page: 2,
-        pageSize: 10,
+        pageSize: 7,
         status: QuestionStatusId.InFocus,
         speakerId: 'sp1',
         areaId: 'ar1',
