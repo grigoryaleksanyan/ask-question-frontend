@@ -1,5 +1,6 @@
 <template>
   <div
+    :data-question-id="question.id"
     class="question-card"
     @click="navigateToQuestion">
     <StatusDot
@@ -78,6 +79,7 @@ const metaText = computed(() => {
 });
 
 function navigateToQuestion() {
+  sessionStorage.setItem('questions-scroll-id', question.id);
   router.push(`/question/${question.id}`);
 }
 

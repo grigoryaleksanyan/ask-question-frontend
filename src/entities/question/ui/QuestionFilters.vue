@@ -3,7 +3,7 @@
     <div class="question-filters__row">
       <div class="question-filters__filters">
         <Select
-          v-model="selectedSpeaker"
+          :model-value="speakerId"
           :options="speakers"
           :option-label="
             (speaker: SpeakerPublicResponse) =>
@@ -13,26 +13,30 @@
           placeholder="Спикер"
           size="small"
           show-clear
-          class="question-filters__select" />
+          class="question-filters__select"
+          @update:model-value="onSpeakerChange" />
 
         <Select
-          v-model="selectedAreaId"
+          :model-value="areaId"
           :options="areas"
           option-label="title"
           option-value="id"
           placeholder="Область"
           size="small"
           show-clear
-          class="question-filters__select" />
+          class="question-filters__select"
+          @update:model-value="onAreaChange" />
       </div>
 
       <SelectButton
-        v-model="sortOrder"
+        :model-value="sortOrder"
         :options="sortOptions"
         option-label="label"
         option-value="value"
         aria-label="Сортировка"
-        class="question-filters__sort">
+        :allow-empty="false"
+        class="question-filters__sort"
+        @update:model-value="onSortChange">
         <template #option="{ option }">
           <i :class="option.icon" />
         </template>
@@ -42,8 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-
 import type { SpeakerPublicResponse, AreaResponse } from '@/shared/dto';
 
 import Select from 'primevue/select';
@@ -51,20 +53,18 @@ import SelectButton from 'primevue/selectbutton';
 
 defineOptions({ name: 'QuestionFilters' });
 
-const { areas, speakers } = defineProps<{
+const { areas, speakers, speakerId, areaId, sortOrder } = defineProps<{
   areas: AreaResponse[];
   speakers: SpeakerPublicResponse[];
+  speakerId: string | null;
+  areaId: string | null;
+  sortOrder: 'asc' | 'desc';
 }>();
 
 const emit = defineEmits<{
-  (
-    e: 'change',
-    filters: {
-      speakerId?: string;
-      areaId?: string;
-      sortOrder: 'asc' | 'desc';
-    },
-  ): void;
+  (e: 'update:speakerId', value: string | null): void;
+  (e: 'update:areaId', value: string | null): void;
+  (e: 'update:sortOrder', value: 'asc' | 'desc'): void;
 }>();
 
 const sortOptions = [
@@ -72,17 +72,17 @@ const sortOptions = [
   { label: 'Сначала старые', icon: 'pi pi-sort-amount-up', value: 'asc' },
 ];
 
-const sortOrder = ref<string>('desc');
-const selectedSpeaker = ref<string | null>(null);
-const selectedAreaId = ref<string | null>(null);
+function onSpeakerChange(value: string | null) {
+  emit('update:speakerId', value);
+}
 
-watch([sortOrder, selectedSpeaker, selectedAreaId], () => {
-  emit('change', {
-    speakerId: selectedSpeaker.value ?? undefined,
-    areaId: selectedAreaId.value ?? undefined,
-    sortOrder: sortOrder.value as 'asc' | 'desc',
-  });
-});
+function onAreaChange(value: string | null) {
+  emit('update:areaId', value);
+}
+
+function onSortChange(value: 'asc' | 'desc') {
+  emit('update:sortOrder', value);
+}
 </script>
 
 <style lang="scss" scoped>

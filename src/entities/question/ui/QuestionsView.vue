@@ -5,19 +5,21 @@
     <IconField class="questions-view__search-wrap">
       <InputIcon class="pi pi-search" />
       <InputText
-        v-model="searchQuery"
+        v-model="searchInput"
         class="questions-view__search-input"
         placeholder="Поиск вопросов..." />
     </IconField>
 
     <SelectButton
-      v-model="activeTab"
+      :model-value="status"
       :options="tabs"
       option-label="label"
       option-value="value"
       aria-label="Статус вопроса"
+      :allow-empty="false"
       class="questions-view__segment"
-      fluid>
+      fluid
+      @update:model-value="onStatusChange">
       <template #option="{ option }">
         <StatusDot
           :color="option.color"
@@ -28,7 +30,12 @@
     <QuestionFilters
       :areas="areas"
       :speakers="speakers"
-      @change="onFiltersChange" />
+      :speaker-id="speakerId"
+      :area-id="areaId"
+      :sort-order="sortOrder"
+      @update:speaker-id="setSpeakerId"
+      @update:area-id="setAreaId"
+      @update:sort-order="setSortOrder" />
 
     <template v-if="questions.length > 0">
       <div class="questions-view__list">
@@ -39,11 +46,12 @@
       </div>
 
       <Paginator
-        v-model:first="firstRow"
+        :first="firstRow"
         :rows="pageSize"
         :total-records="totalCount"
         template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-        class="questions-view__pagination" />
+        class="questions-view__pagination"
+        @page="onPageChange" />
     </template>
 
     <template v-else-if="!isLoading">
@@ -53,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 
 import type {
   QuestionResponse,
@@ -69,7 +77,8 @@ import Paginator from 'primevue/paginator';
 import SelectButton from 'primevue/selectbutton';
 import { useApiCall } from '@/shared/lib';
 import { StatusDot } from '@/shared/ui/status-dot';
-import { GetAll, type QuestionListParams } from '../api/questions-repository';
+import { useQuestionsFilters, PAGE_SIZE } from '../lib/use-questions-filters';
+import { GetAll } from '../api/questions-repository';
 import { questionStatusMap } from '../config/question-statuses';
 
 import QuestionFilters from './QuestionFilters.vue';
@@ -82,20 +91,31 @@ const { areas, speakers } = defineProps<{
   speakers: SpeakerPublicResponse[];
 }>();
 
+const {
+  status,
+  page,
+  speakerId,
+  areaId,
+  sortOrder,
+  search,
+  apiParams,
+  setStatus,
+  setPage,
+  setSpeakerId,
+  setAreaId,
+  setSortOrder,
+  setSearch,
+} = useQuestionsFilters();
+
 const { execute: executeFetch, isLoading } = useApiCall(GetAll, {
   showPreloader: false,
 });
 
 const questions = ref<QuestionResponse[]>([]);
 const totalCount = ref(0);
-const currentPage = ref(1);
-const pageSize = 10;
-const firstRow = ref(0);
-const searchQuery = ref('');
-const activeTab = ref('new');
-const filterSortOrder = ref<'asc' | 'desc'>('desc');
-const filterSpeakerId = ref<string | undefined>(undefined);
-const filterAreaId = ref<string | undefined>(undefined);
+const pageSize = PAGE_SIZE;
+
+const searchInput = ref(search.value);
 
 const tabs = [
   {
@@ -115,69 +135,62 @@ const tabs = [
   },
 ];
 
-const tabToStatus: Record<string, QuestionStatusId> = {
-  new: QuestionStatusId.New,
-  inFocus: QuestionStatusId.InFocus,
-  answered: QuestionStatusId.Answered,
-};
-
-const params = computed<QuestionListParams>(() => ({
-  page: currentPage.value,
-  pageSize,
-  status: tabToStatus[activeTab.value],
-  speakerId: filterSpeakerId.value,
-  areaId: filterAreaId.value,
-  search: searchQuery.value || undefined,
-  sortOrder: filterSortOrder.value,
-}));
+const firstRow = computed(() => (page.value - 1) * pageSize);
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
-watch(searchQuery, () => {
+watch(searchInput, () => {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    currentPage.value = 1;
-    fetchData();
+    setSearch(searchInput.value);
   }, 300);
 });
 
-watch(activeTab, () => {
-  currentPage.value = 1;
+watch(search, (newSearch) => {
+  if (searchInput.value !== newSearch) {
+    searchInput.value = newSearch;
+  }
+});
+
+watch(apiParams, () => {
   fetchData();
 });
 
-watch(currentPage, () => {
-  fetchData();
-});
-
-watch(currentPage, (newPage) => {
-  firstRow.value = (newPage - 1) * pageSize;
-});
-watch(firstRow, (newFirst) => {
-  currentPage.value = Math.floor(newFirst / pageSize) + 1;
-});
-
-function onFiltersChange(filters: {
-  speakerId?: string;
-  areaId?: string;
-  sortOrder: 'asc' | 'desc';
-}) {
-  filterSpeakerId.value = filters.speakerId;
-  filterAreaId.value = filters.areaId;
-  filterSortOrder.value = filters.sortOrder;
-  currentPage.value = 1;
-  fetchData();
+function onStatusChange(value: string) {
+  setStatus(value as 'new' | 'inFocus' | 'answered');
 }
 
+function onPageChange(event: { first: number }) {
+  const newPage = Math.floor(event.first / pageSize) + 1;
+  setPage(newPage);
+}
+
+let pendingScrollId: string | null = null;
+
 async function fetchData() {
-  const result = await executeFetch(params.value);
+  const result = await executeFetch(apiParams.value);
   if (result) {
     questions.value = result.items;
     totalCount.value = result.totalCount;
   }
+  if (pendingScrollId) {
+    await nextTick();
+    const el = document.querySelector(
+      `[data-question-id="${pendingScrollId}"]`,
+    );
+    el?.scrollIntoView({ block: 'center' });
+    pendingScrollId = null;
+  }
 }
 
-fetchData();
+onMounted(() => {
+  const scrollId = sessionStorage.getItem('questions-scroll-id');
+  if (scrollId) {
+    pendingScrollId = scrollId;
+    sessionStorage.removeItem('questions-scroll-id');
+  }
+  fetchData();
+});
 </script>
 
 <style lang="scss" scoped>

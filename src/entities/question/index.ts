@@ -14,6 +14,8 @@ export {
 
 export type { QuestionListParams } from './api/questions-repository';
 
+export { useQuestionsFilters, PAGE_SIZE } from './lib/use-questions-filters';
+
 export {
   default as QUESTION_STATUSES,
   questionStatusMap,
