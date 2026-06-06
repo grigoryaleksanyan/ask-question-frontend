@@ -8,6 +8,10 @@
         v-model="searchInput"
         class="questions-view__search-input"
         placeholder="Поиск вопросов..." />
+      <InputIcon
+        v-if="searchInput"
+        class="pi pi-times questions-view__search-clear"
+        @click="clearSearch" />
     </IconField>
 
     <SelectButton
@@ -157,6 +161,10 @@ watch(apiParams, () => {
   fetchData();
 });
 
+function clearSearch() {
+  searchInput.value = '';
+}
+
 function onStatusChange(value: string) {
   setStatus(value as 'new' | 'inFocus' | 'answered');
 }
@@ -216,6 +224,10 @@ onMounted(() => {
 
 .questions-view__search-wrap {
   margin-bottom: 16px;
+}
+
+.questions-view__search-clear {
+  cursor: pointer;
 }
 
 .questions-view__search-input {
