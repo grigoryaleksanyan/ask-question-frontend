@@ -46,6 +46,8 @@ Vue 3.5 + PrimeVue 4 + PrimeFlex + PrimeIcons + @primevue/forms + @primeuix/them
 
 Дополнительные зависимости: chart.js, vue-chartjs, DOMPurify, vuedraggable, docx, exceljs, file-saver.
 
+При построении интерфейсов прежде чем писать свою реализацию, необходимо проверить, нет ли готовых компонентов в PrimeVue.
+
 ## Стили
 
 - SCSS, глобальные переменные автоинжектируются через Vite — не добавляй `@use "@/app/styles/variables.scss"` вручную в компоненты
@@ -142,7 +144,7 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 - `status-dot/` — StatusDot
 - `toast/` — AppToast
 - `rich-editor/` — RichEditor (**заглушка**, пустой div)
-- AppLogo, HeaderNavigation, DrawerNavigation
+- AppLogo, AppNavigation, DrawerNavigation
 
 ## Shared lib — composables и утилиты
 
@@ -150,29 +152,32 @@ PrimeVue подключается в `@/app/lib/primevue-theme.ts` (кастом
 |---|---|---|
 | `useApiCall` | `shared/lib/use-api-call/` | Универсальный composable для API-вызовов: автоматически показывает/скрывает прелоадер, показывает toast при успехе/ошибке. Возвращает `execute`, `isLoading`, `error`, `data`. Опции: `successMessage`, `errorMapper`, `onSuccess`, `onError`, `showPreloader` (default: `true`). Экспортирует `TOAST_HANDLED` symbol для маркировки обработанных ошибок |
 | `useDeleteConfirm` | `shared/lib/use-delete-confirm/` | Обёртка над `useApiCall` для подтверждения удаления. Возвращает `confirm(id: string): Promise<boolean>` |
+| `useDeleteConfirmDialog` | `shared/lib/use-delete-confirm-dialog.ts` | Диалог подтверждения удаления через CenterModal |
+| `useFormActions` | `shared/lib/use-form-actions/` | Утилиты для работы с формами (сброс, валидация, состояния) |
 | `copyToClipboard` | `shared/lib/copy-to-clipboard.ts` | Копирование текста в буфер обмена через `navigator.clipboard` |
 | `sanitizeHtml` | `shared/lib/html-sanitize.ts` | Санитизация HTML через DOMPurify с автоматическим `target="_blank"` + `rel="noopener noreferrer"` |
 | `preloader-state` | `shared/lib/preloader-state/` | Реактивный счётчик загрузок: `showPreloader` (computed), `addLoader()`, `removeLoader()`. Используется `features/preloader/store` |
+| `zod-schemas` | `shared/lib/zod-schemas/` | Примитивы и композиции Zod-схем для валидации форм (`primitives.ts`, `compositions.ts`) |
 
 ## Entities — config
 
 - `entities/question/config/question-statuses.ts` — маппинг статусов (New/InFocus/Answered) с цветами и названиями: `QUESTION_STATUSES`, `questionStatusMap`, `getStatusColor()`, `getStatusLabel()`
-- `entities/question/ui/` — QuestionCard, QuestionFilters, QuestionFormCreate, QuestionIdView, QuestionListItem, QuestionStatusIcon, QuestionsView, QuestionVote
+- `entities/question/ui/` — QuestionCard, QuestionFilters, QuestionFormCreate, QuestionIdView, QuestionStatusIcon, QuestionsView, QuestionVote
 - `entities/question/api/` — questions-repository.ts
-- `entities/area/ui/` — AreaCard, CreateArea, DeleteArea, UpdateArea
+- `entities/area/ui/` — AreaCard, CreateArea, UpdateArea
 - `entities/area/api/` — areas-repository.ts
-- `entities/faq/ui/` — CategoryCard, CreateCategory, CreateEntryContent, DeleteCategory, DeleteEntry, EntryCard, FAQView, UpdateCategory, UpdateEntryContent
+- `entities/faq/ui/` — CategoryCard, CreateCategory, CreateEntryContent, EntryCard, FAQView, UpdateCategory, UpdateEntryContent
 - `entities/faq/api/` — faq-category-repository.ts, faq-entry-repository.ts
-- `entities/user/ui/` — CreateSpeaker, DeleteSpeaker, SpeakerAvatar, SpeakerCard, UpdateSpeaker
+- `entities/user/ui/` — CreateSpeaker, SpeakerAvatar, SpeakerCard, UpdateSpeaker
 - `entities/user/api/` — speakers-repository.ts, user-repository.ts
 - `entities/dashboard/api/` — dashboard-repository.ts
 
 ## Features — компоненты
 
-- `auth/` — аутентификация (store, UserProfile — форма смены пароля и данные пользователя)
-- `feedback/` — DeleteFeedback, FeedbackCard, SidebarFeedbackContent
+- `auth/` — аутентификация (store, LoginView, SetupView, UserProfile — форма смены пароля и данные пользователя; `api/auth-repository.ts` — Login, Logout, SetupRequired, Setup)
+- `feedback/` — FeedbackCard, SidebarFeedbackContent; `api/feedback-repository.ts` — GetAll, Create, Delete
 - `manage-question/` — QuestionBulkActions, QuestionCommentButton, QuestionExportButton, QuestionStatusDropdown; `lib/export-docx.ts`, `lib/export-xlsx.ts` (экспорт вопросов в DOCX/XLSX)
-- `preloader/` — прелоадер (store)
+- `preloader/` — прелоадер (store, AppPreloader UI-компонент)
 
 ## Auth store — расширения
 
