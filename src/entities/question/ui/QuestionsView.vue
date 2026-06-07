@@ -213,6 +213,14 @@ onMounted(() => {
   .questions-view {
     padding: 16px 16px 32px;
   }
+
+  .questions-view__segment :deep(.status-dot__indicator) {
+    display: none;
+  }
+
+  .questions-view__segment :deep(.p-tag-label) {
+    font-size: 12px;
+  }
 }
 
 .questions-view__title {
@@ -254,10 +262,10 @@ onMounted(() => {
   width: 100%;
   margin-bottom: 12px;
 
-  :deep(.p-selectbutton-option) {
+  :deep(.p-togglebutton-content) {
     flex: 1;
     justify-content: center;
-    padding: 12px 16px;
+    padding: 10px;
     font-size: 15px;
   }
 }
