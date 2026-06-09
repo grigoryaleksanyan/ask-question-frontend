@@ -46,7 +46,6 @@
       <Button
         type="submit"
         label="Войти"
-        severity="primary"
         class="login-view__submit" />
       <p
         v-if="error"

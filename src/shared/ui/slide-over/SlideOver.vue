@@ -6,6 +6,7 @@
     :dismissable="closeOnClickAway"
     :style="{ width: slideOverWidth }"
     class="slide-over"
+    :pt="drawerPt"
     @hide="onHide">
     <template #header>
       <slot name="header"></slot>
@@ -46,6 +47,14 @@ let modalController: {
 const slideOverWidth = computed(() =>
   window.innerWidth < 600 ? '100%' : '400px',
 );
+
+const drawerPt = computed(() => ({
+  footer: {
+    style: {
+      borderTop: '1px solid var(--p-surface-border)',
+    },
+  },
+}));
 
 function open(): Promise<ModalResult> {
   let resolve!: (value: ModalResult) => void;
@@ -94,10 +103,6 @@ defineExpose({ open, confirm, close, togglePreloader });
 }
 
 .slide-over {
-  :deep(.p-drawer-footer) {
-    border-top: 1px solid var(--p-surface-border);
-  }
-
   :global(.p-dark) & {
     :deep(.p-drawer) {
       background: variables.$surface-dark-elevated;

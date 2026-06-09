@@ -57,7 +57,7 @@ const pt = computed(() => ({
       flexShrink: '0',
     },
   },
-  value: {
+  label: {
     style: {
       display: label ? 'inline' : 'none',
       lineHeight: '1',

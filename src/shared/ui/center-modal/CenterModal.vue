@@ -3,7 +3,9 @@
     v-model:visible="isVisible"
     modal
     :draggable="false"
+    :dismissable-mask="closeOnClickAway"
     :style="{ maxWidth: '600px' }"
+    :pt="dialogPt"
     @hide="onHide">
     <template #header>
       <slot name="header"></slot>
@@ -20,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 import Dialog from 'primevue/dialog';
 
@@ -28,7 +30,6 @@ import type { ModalResult } from '@/shared/dto';
 
 defineOptions({ name: 'CenterModal' });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { closeOnClickAway = true } = defineProps<Props>();
 
 interface Props {
@@ -40,6 +41,14 @@ let modalController: {
   resolve: (value: ModalResult) => void;
   reject: (reason?: unknown) => void;
 } | null = null;
+
+const dialogPt = computed(() => ({
+  footer: {
+    style: {
+      borderTop: '1px solid var(--p-surface-border)',
+    },
+  },
+}));
 
 function open(): Promise<ModalResult> {
   let resolve!: (value: ModalResult) => void;
@@ -81,10 +90,6 @@ defineExpose({ open, confirm, close, togglePreloader });
 </script>
 
 <style lang="scss" scoped>
-:deep(.p-dialog-footer) {
-  border-top: 1px solid var(--p-surface-border);
-}
-
 :global(.p-dark) .p-dialog {
   background: variables.$surface-dark-elevated;
   color: variables.$text-primary-dark;

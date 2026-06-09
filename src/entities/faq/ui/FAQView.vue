@@ -11,19 +11,25 @@
           {{ category.name }}
         </div>
         <div class="faq-view__category-entries">
-          <Accordion multiple>
+          <Accordion
+            multiple
+            :pt="accordionPt">
             <AccordionPanel
               v-for="entry in category.entries"
               :key="entry.id"
-              :value="entry.id">
-              <AccordionHeader>
+              :value="entry.id"
+              :pt="panelPt">
+              <AccordionHeader :pt="headerPt">
                 <span
                   class="faq-view__question"
                   :data-entry-id="entry.id"
+                  :class="{
+                    'faq-view__question--active': activePanels.has(entry.id),
+                  }"
                   >{{ entry.question }}</span
                 >
               </AccordionHeader>
-              <AccordionContent>
+              <AccordionContent :pt="contentPt">
                 <div
                   class="faq-view__answer"
                   v-html="entry.answer"></div>
@@ -62,6 +68,43 @@ const route = useRoute();
 const { execute: executeFetchCategories } = useApiCall(GetAllWithEntries);
 
 const categories = ref<FaqCategoryWithEntriesResponse[]>([]);
+const activePanels = ref<Set<string>>(new Set());
+
+const accordionPt = {
+  root: {
+    style: {
+      border: 'none',
+    },
+  },
+};
+
+const panelPt = {
+  root: {
+    style: {
+      borderBottom: '1px solid var(--p-surface-border)',
+    },
+    class: 'faq-accordion-panel',
+  },
+};
+
+const headerPt = {
+  link: {
+    style: {
+      padding: '14px 16px',
+      border: 'none',
+      background: 'transparent',
+    },
+  },
+};
+
+const contentPt = {
+  content: {
+    style: {
+      padding: '0 16px 14px',
+      border: 'none',
+    },
+  },
+};
 
 async function fetchData() {
   const result = await executeFetchCategories();
@@ -78,16 +121,16 @@ onMounted(() => {
       const entrySpan = document.querySelector(`[data-entry-id="${id}"]`);
 
       if (entrySpan) {
-        const panel = entrySpan.closest('.p-accordion-panel');
+        const panel = entrySpan.closest('.faq-accordion-panel');
 
         if (panel) {
           panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-          const headerLink = panel.querySelector<HTMLElement>(
-            '.p-accordion-header-link',
-          );
+          const headerLink =
+            panel.querySelector<HTMLElement>('.p-accordionheader');
 
           headerLink?.click();
+          activePanels.value.add(id as string);
         }
       }
     }, 100);
@@ -133,33 +176,12 @@ fetchData();
   border-radius: 8px;
   margin-bottom: 16px;
 
-  :deep(.p-accordion) {
-    border: none;
-  }
-
-  :deep(.p-accordion-panel) {
-    border-bottom: 1px solid #f0f0f0;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  :deep(.p-accordion-header-link) {
-    padding: 14px 16px;
-    border: none;
-    background: transparent;
-  }
-
-  :deep(.p-accordion-content) {
-    padding: 0 16px 14px;
-    border: none;
+  :deep(.faq-accordion-panel:last-child) {
+    border-bottom: none;
   }
 }
 
-.faq-view__category-entries
-  :deep(.p-accordion-panel[data-p-active='true'])
-  .faq-view__question {
+.faq-view__question--active {
   font-weight: 500;
 }
 

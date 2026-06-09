@@ -25,7 +25,6 @@
       <div class="question-form-create__actions">
         <Button
           :type="showDetails ? 'submit' : 'button'"
-          severity="primary"
           label="Отправить"
           @click="onButtonClick" />
 
@@ -56,7 +55,8 @@
                 option-label="title"
                 option-value="id"
                 placeholder="Область*"
-                class="w-full" />
+                class="w-full"
+                :pt="{ label: { style: { textAlign: 'left' } } }" />
               <Message
                 v-if="$field?.invalid"
                 severity="error"
@@ -75,7 +75,8 @@
                 option-label="lastName"
                 option-value="id"
                 placeholder="Спикер*"
-                class="w-full" />
+                class="w-full"
+                :pt="{ label: { style: { textAlign: 'left' } } }" />
               <Message
                 v-if="$field?.invalid"
                 severity="error"
@@ -251,10 +252,6 @@ async function onFormSubmit({
   color: variables.$text-muted;
   cursor: pointer;
   font-size: 13px;
-}
-
-.question-form-create :deep(.p-select-label) {
-  text-align: left;
 }
 
 .question-form-create__details {

@@ -16,7 +16,8 @@
       <template #start>
         <Button
           icon="pi pi-bars"
-          class="drawer-navigation-burger p-button-text"
+          text
+          class="drawer-navigation-burger"
           @click="drawerVisible = true" />
         <AppLogo />
       </template>
@@ -139,12 +140,6 @@ async function showFeedbackModal() {
 
 .app-footer__feedback-btn {
   color: variables.$text-secondary;
-}
-
-.drawer-navigation {
-  :deep(.p-drawer-content) {
-    background-color: variables.$toolbar-bg;
-  }
 }
 
 .drawer-navigation-burger {

@@ -36,6 +36,7 @@
         aria-label="Сортировка"
         :allow-empty="false"
         class="question-filters__sort"
+        :pt="sortSelectButtonPt"
         @update:model-value="onSortChange">
         <template #option="{ option }">
           <i :class="option.icon" />
@@ -72,6 +73,21 @@ const sortOptions = [
   { label: 'Сначала старые', icon: 'pi pi-sort-amount-up', value: 'asc' },
 ];
 
+const sortSelectButtonPt = {
+  pcToggleButton: {
+    content: {
+      style: {
+        padding: '6px 10px',
+      },
+    },
+    icon: {
+      style: {
+        fontSize: '14px',
+      },
+    },
+  },
+};
+
 function onSpeakerChange(value: string | null) {
   emit('update:speakerId', value);
 }
@@ -104,15 +120,5 @@ function onSortChange(value: 'asc' | 'desc') {
 
 .question-filters__select {
   font-size: 13px;
-}
-
-.question-filters__sort {
-  :deep(.p-selectbutton-option) {
-    padding: 6px 10px;
-  }
-
-  :deep(.p-selectbutton-option-icon) {
-    font-size: 14px;
-  }
 }
 </style>

@@ -23,6 +23,7 @@
       :allow-empty="false"
       class="questions-view__segment"
       fluid
+      :pt="selectButtonPt"
       @update:model-value="onStatusChange">
       <template #option="{ option }">
         <StatusDot
@@ -141,6 +142,19 @@ const tabs = [
 ];
 
 const firstRow = computed(() => (page.value - 1) * pageSize);
+
+const selectButtonPt = {
+  pcToggleButton: {
+    content: {
+      style: {
+        flex: '1',
+        justifyContent: 'center',
+        padding: '10px',
+        fontSize: '15px',
+      },
+    },
+  },
+};
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -261,13 +275,6 @@ onMounted(() => {
 .questions-view__segment {
   width: 100%;
   margin-bottom: 12px;
-
-  :deep(.p-togglebutton-content) {
-    flex: 1;
-    justify-content: center;
-    padding: 10px;
-    font-size: 15px;
-  }
 }
 
 .questions-view__list {

@@ -8,7 +8,8 @@
       <FormField
         v-slot="$field"
         name="email"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Email</label>
         <InputText
           type="text"
@@ -26,7 +27,8 @@
       <FormField
         v-slot="$field"
         name="password"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Пароль</label>
         <Password
           v-model="$field.value"
@@ -46,7 +48,8 @@
       <FormField
         v-slot="$field"
         name="confirmPassword"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Подтверждение пароля</label>
         <Password
           v-model="$field.value"
@@ -66,7 +69,8 @@
       <FormField
         v-slot="$field"
         name="firstName"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Имя</label>
         <InputText
           type="text"
@@ -83,7 +87,8 @@
       <FormField
         v-slot="$field"
         name="lastName"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Фамилия</label>
         <InputText
           type="text"
@@ -99,7 +104,8 @@
 
       <FormField
         name="patronymic"
-        initial-value="">
+        initial-value=""
+        :pt="formFieldPt">
         <label class="setup-view__label">Отчество</label>
         <InputText
           type="text"
@@ -109,7 +115,6 @@
       <Button
         type="submit"
         label="Создать администратора"
-        severity="primary"
         class="setup-view__submit" />
 
       <p
@@ -157,6 +162,14 @@ const { execute: executeSetup, error } = useApiCall(Setup, {
     router.push('/admin');
   },
 });
+
+const formFieldPt = {
+  root: {
+    style: {
+      marginBottom: '10px',
+    },
+  },
+};
 
 const schema = withConfirmPassword()(
   z.object({
@@ -211,10 +224,6 @@ async function onSubmit({
   color: variables.$text-muted;
   font-size: 14px;
   text-align: center;
-}
-
-:deep(.p-formfield) {
-  margin-bottom: 10px;
 }
 
 .setup-view__label {
