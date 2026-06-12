@@ -3,7 +3,7 @@
     ref="form"
     :resolver
     @submit="onSubmit">
-    <template v-if="getUserData?.userRoleId === 2">
+    <template v-if="getUserData?.userDetails">
       <p>
         <b>ФИО:</b>
         {{ getUserData?.userDetails?.lastName }}
@@ -108,6 +108,7 @@ import Message from 'primevue/message';
 import { requiredString, withConfirmPassword } from '@/shared/lib/zod-schemas';
 import { useFormActions } from '@/shared/lib/use-form-actions';
 import { useApiCall } from '@/shared/lib';
+import { UserRoleId } from '@/shared/dto';
 import { useAuthStore } from '../store';
 import { ChangePassword } from '@/entities/user';
 
@@ -157,7 +158,7 @@ function cancelChangePassword() {
 }
 
 const getUserStringRole = computed(() => {
-  if (getUserData.value?.userRoleId === 1) {
+  if (getUserData.value?.userRoleId === UserRoleId.Administrator) {
     return 'Администратор';
   }
 
