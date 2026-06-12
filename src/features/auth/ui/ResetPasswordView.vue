@@ -114,9 +114,9 @@ const { execute: executeResetPassword, error } = useApiCall(ResetPassword, {
       err.message?.includes('истекла')
     ) {
       apiTokenError.value = true;
-      return { message: '' };
+      return '';
     }
-    return { message: err.message };
+    return err.message;
   },
 });
 
