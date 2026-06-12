@@ -43,6 +43,7 @@
         </template>
       </Column>
       <Column
+        v-if="!isSpeaker"
         field="speakerName"
         header="Спикер">
         <template #body="{ data }">
@@ -97,7 +98,7 @@ import { ref, computed, watch } from 'vue';
 
 import type { QuestionResponse } from '@/shared/dto';
 
-import { QuestionStatusId } from '@/shared/dto';
+import { QuestionStatusId, UserRoleId } from '@/shared/dto';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
@@ -135,7 +136,9 @@ const selectedIds = computed(
 const activeTab = ref<string>('all');
 const firstRow = ref(0);
 
-const isSpeaker = computed(() => authStore.userData?.userRoleId === 2);
+const isSpeaker = computed(
+  () => authStore.userData?.userRoleId === UserRoleId.Speaker,
+);
 
 const tabs = [
   { key: 'all', label: 'Все' },
