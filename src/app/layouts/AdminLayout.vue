@@ -161,7 +161,9 @@ const allNavItems: NavItem[] = [
 const navItems = computed(() =>
   allNavItems.filter(
     (item) =>
-      !item.roles || item.roles.includes(authStore.userData!.userRoleId),
+      !item.roles ||
+      (authStore.userData &&
+        item.roles.includes(authStore.userData.userRoleId)),
   ),
 );
 
