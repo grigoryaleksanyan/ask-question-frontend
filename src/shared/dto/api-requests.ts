@@ -98,3 +98,13 @@ export interface SetupRequest {
   lastName: string;
   patronymic: string | null;
 }
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}

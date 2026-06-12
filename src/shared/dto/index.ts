@@ -40,6 +40,8 @@ export type {
   QuestionStatusChangeRequest,
   QuestionCommentRequest,
   SetupRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
 } from './api-requests';
 
 export {
