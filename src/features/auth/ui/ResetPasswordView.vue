@@ -88,11 +88,7 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
-import {
-  passwordString,
-  requiredString,
-  withConfirmPassword,
-} from '@/shared/lib/zod-schemas';
+import { passwordString, requiredString } from '@/shared/lib/zod-schemas';
 import { useApiCall } from '@/shared/lib';
 import { ResetPassword } from '../api/auth-repository';
 
@@ -128,12 +124,10 @@ const schema = z
     newPassword: passwordString(),
     confirmPassword: requiredString(),
   })
-  .pipe(
-    withConfirmPassword(
-      'newPassword',
-      'confirmPassword',
-    ) as unknown as z.ZodType,
-  );
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Пароли не совпадают',
+    path: ['confirmPassword'],
+  });
 
 const resolver = zodResolver(schema);
 
