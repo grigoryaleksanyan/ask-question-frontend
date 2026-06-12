@@ -47,6 +47,7 @@
     "@commitlint/cli": "^21.0.1",
     "@eslint/js": "^10.0.1",
     "@feature-sliced/steiger-plugin": "^0.5.8",
+    "@types/file-saver": "^2.0.7",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
     "@vitejs/plugin-vue": "^6.0.7",
