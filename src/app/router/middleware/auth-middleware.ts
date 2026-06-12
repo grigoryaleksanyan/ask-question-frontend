@@ -1,5 +1,7 @@
 import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router';
 
+import ROUTES from '@/shared/routes';
+
 import { useAuthStore } from '@/features/auth';
 import { GetUserData } from '@/entities/user';
 
@@ -12,7 +14,6 @@ export default async function checkAuth(
     try {
       const user = await GetUserData();
       authStore.setAuthData(user);
-      return true;
     } catch {
       if (authStore.getSetupRequired === null) {
         await authStore.checkSetupRequired();
@@ -24,6 +25,13 @@ export default async function checkAuth(
 
       return { name: 'login', query: { redirect: to.fullPath } };
     }
+  }
+
+  if (
+    to.meta.requiredRole !== undefined &&
+    authStore.userData?.userRoleId !== to.meta.requiredRole
+  ) {
+    return { name: ROUTES.admin };
   }
 
   return true;
