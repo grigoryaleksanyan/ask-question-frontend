@@ -34,6 +34,22 @@ const routes = [
     },
   },
   {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: () => import('@/features/auth/ui/ForgotPasswordView.vue'),
+    meta: {
+      layout: 'EmptyLayout',
+    },
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('@/features/auth/ui/ResetPasswordView.vue'),
+    meta: {
+      layout: 'EmptyLayout',
+    },
+  },
+  {
     path: '/questions',
     name: 'questions',
     component: () => import('@/pages/questions'),
