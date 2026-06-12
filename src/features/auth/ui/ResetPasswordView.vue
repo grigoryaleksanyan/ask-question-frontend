@@ -88,8 +88,11 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
-import { passwordString, requiredString } from '@/shared/lib/zod-schemas';
-import { withConfirmPassword } from '@/shared/lib/zod-schemas/compositions';
+import {
+  passwordString,
+  requiredString,
+  withConfirmPassword,
+} from '@/shared/lib/zod-schemas';
 import { useApiCall } from '@/shared/lib';
 import { ResetPassword } from '../api/auth-repository';
 
