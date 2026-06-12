@@ -47,6 +47,13 @@
         type="submit"
         label="Войти"
         class="login-view__submit" />
+      <div class="login-view__forgot">
+        <router-link
+          :to="{ name: 'forgot-password' }"
+          class="login-view__forgot-link">
+          Забыли пароль?
+        </router-link>
+      </div>
       <p
         v-if="error"
         class="login-view__error">
@@ -162,6 +169,17 @@ async function onFormSubmit({
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
+}
+
+.login-view__forgot {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.login-view__forgot-link {
+  color: variables.$primary-color;
+  font-size: 13px;
+  text-decoration: none;
 }
 
 .login-view__error {
