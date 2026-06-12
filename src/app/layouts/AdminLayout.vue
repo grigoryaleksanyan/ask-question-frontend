@@ -2,7 +2,7 @@
   <div class="admin-layout">
     <aside class="admin-sidebar">
       <router-link
-        to="/admin"
+        to="/"
         class="admin-sidebar__logo"
         >A</router-link
       >
@@ -72,6 +72,7 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { UserRoleId } from '@/shared/dto';
 import type { NavItem } from '@/shared/dto';
 
 import Button from 'primevue/button';
@@ -112,41 +113,60 @@ onUnmounted(() => {
   document.documentElement.classList.remove('p-dark');
 });
 
-const navItems: NavItem[] = [
+const allNavItems: NavItem[] = [
   {
     title: 'Сводка',
     icon: 'pi pi-chart-line',
     link: '/admin',
+    roles: [UserRoleId.Administrator, UserRoleId.Speaker],
+  },
+  {
+    title: 'Мои вопросы',
+    icon: 'pi pi-user',
+    link: '/admin-questions',
+    roles: [UserRoleId.Speaker],
   },
   {
     title: 'Вопросы',
     icon: 'pi pi-user',
     link: '/admin-questions',
+    roles: [UserRoleId.Administrator],
   },
   {
     title: 'Записи в FAQ',
     icon: 'pi pi-question',
     link: '/admin-faq',
+    roles: [UserRoleId.Administrator],
   },
   {
     title: 'Спикеры',
     icon: 'pi pi-users',
     link: '/admin-speakers',
+    roles: [UserRoleId.Administrator],
   },
   {
     title: 'Области',
     icon: 'pi pi-directions',
     link: '/admin-areas',
+    roles: [UserRoleId.Administrator],
   },
   {
     title: 'Обратная связь',
     icon: 'pi pi-inbox',
     link: '/admin-feedback',
+    roles: [UserRoleId.Administrator],
   },
 ];
 
+const navItems = computed(() =>
+  allNavItems.filter(
+    (item) =>
+      !item.roles || item.roles.includes(authStore.userData!.userRoleId),
+  ),
+);
+
 const sectionName = computed(() => {
-  const item = navItems.find(
+  const item = allNavItems.find(
     (i) => route.path === i.link || route.path.startsWith(`${i.link}/`),
   );
   return item?.title ?? 'Панель администратора';
