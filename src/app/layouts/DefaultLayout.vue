@@ -8,7 +8,6 @@
       <template #header><span>Навигация</span></template>
       <AppNavigation
         :nav-items="navItems"
-        :is-authorized="isAuthorized"
         layout="vertical" />
     </Drawer>
 
@@ -24,7 +23,6 @@
       <template #end>
         <AppNavigation
           :nav-items="navItems"
-          :is-authorized="isAuthorized"
           layout="horizontal" />
       </template>
     </Toolbar>
@@ -80,13 +78,8 @@ import AppLogo from '@/shared/ui/AppLogo.vue';
 import AppNavigation from '@/shared/ui/AppNavigation.vue';
 
 import { SidebarFeedbackContent } from '@/features/feedback';
-import { useAuthStore } from '@/features/auth';
 
 defineOptions({ name: 'DefaultLayout' });
-
-const authStore = useAuthStore();
-
-const isAuthorized = computed(() => authStore.getAuthStatus);
 
 const drawerVisible = ref(false);
 
