@@ -1,13 +1,25 @@
 <template>
   <div class="admin-summary-page">
-    <DashboardWidget />
+    <DashboardWidget v-if="isAdmin" />
+    <SpeakerDashboardWidget v-else />
   </div>
 </template>
 
 <script setup lang="ts">
-import { DashboardWidget } from '@/widgets/dashboard';
+import { computed } from 'vue';
+
+import { UserRoleId } from '@/shared/dto';
+
+import { useAuthStore } from '@/features/auth';
+import { DashboardWidget, SpeakerDashboardWidget } from '@/widgets/dashboard';
 
 defineOptions({ name: 'AdminMainPage' });
+
+const authStore = useAuthStore();
+
+const isAdmin = computed(
+  () => authStore.userData?.userRoleId === UserRoleId.Administrator,
+);
 </script>
 
 <style lang="scss" scoped>
