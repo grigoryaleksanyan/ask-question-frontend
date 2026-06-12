@@ -17,9 +17,7 @@
       v-model:selection="selectedQuestions"
       :value="questions"
       data-key="id"
-      selection-mode="multiple"
-      class="admin-questions-page__table"
-      @row-click="onRowClick">
+      class="admin-questions-page__table">
       <Column
         selection-mode="multiple"
         header-style="width: 3rem" />
@@ -106,7 +104,6 @@ import Paginator from 'primevue/paginator';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
-import { useRouter } from 'vue-router';
 
 import { GetAllQuestions, type QuestionListParams } from '@/entities/question';
 import {
@@ -122,7 +119,6 @@ import { useApiCall } from '@/shared/lib';
 defineOptions({ name: 'AdminQuestionsPage' });
 
 const authStore = useAuthStore();
-const router = useRouter();
 
 const { execute: executeFetch } = useApiCall(GetAllQuestions, {
   showPreloader: false,
@@ -181,14 +177,6 @@ watch(firstRow, (newFirst) => {
 
 function clearSelection() {
   selectedQuestions.value = [];
-}
-
-function navigateToDetail(id: string) {
-  router.push({ name: ROUTES.adminQuestionDetail, params: { id } });
-}
-
-function onRowClick(event: { data: QuestionResponse }) {
-  navigateToDetail(event.data.id);
 }
 
 function onStatusChanged(id: string, newStatus: QuestionStatusId) {
