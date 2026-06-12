@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import checkAuth from '@/app/router/middleware/auth-middleware';
 import { useAuthStore } from '@/features/auth';
+import { UserRoleId } from '@/shared/dto';
 import ROUTES from '@/shared/routes';
 
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string;
     isProtected?: boolean;
+    requiredRole?: UserRoleId;
   }
 }
 
@@ -66,13 +68,13 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'admin',
+    name: ROUTES.admin,
     component: () => import('@/pages/admin/main'),
     meta: { layout: 'AdminLayout', isProtected: true },
   },
   {
     path: '/admin-questions',
-    name: 'admin-questions',
+    name: ROUTES.adminQuestions,
     component: () => import('@/pages/admin/questions'),
     meta: { layout: 'AdminLayout', isProtected: true },
   },
@@ -84,17 +86,25 @@ const routes = [
   },
   {
     path: '/admin-faq',
-    name: 'admin-faq',
+    name: ROUTES.adminFaq,
     component: () => import('@/pages/admin/faq'),
-    meta: { layout: 'AdminLayout', isProtected: true },
+    meta: {
+      layout: 'AdminLayout',
+      isProtected: true,
+      requiredRole: UserRoleId.Administrator,
+    },
     children: [
       {
         path: ':id',
-        name: 'admin-faq-category',
+        name: ROUTES.adminFaqCategory,
         props: (route: { params: { id: string } }) => ({
           id: route.params.id,
         }),
-        meta: { layout: 'AdminLayout', isProtected: true },
+        meta: {
+          layout: 'AdminLayout',
+          isProtected: true,
+          requiredRole: UserRoleId.Administrator,
+        },
         component: () =>
           import('@/pages/admin/faq/ui/AdminFAQCategoryPage.vue'),
       },
@@ -102,23 +112,34 @@ const routes = [
   },
   {
     path: '/admin-speakers',
-    name: 'admin-speakers',
+    name: ROUTES.adminSpeakers,
     component: () => import('@/pages/admin/speakers'),
-    meta: { layout: 'AdminLayout', isProtected: true },
+    meta: {
+      layout: 'AdminLayout',
+      isProtected: true,
+      requiredRole: UserRoleId.Administrator,
+    },
   },
   {
     path: '/admin-areas',
-    name: 'admin-areas',
+    name: ROUTES.adminAreas,
     component: () => import('@/pages/admin/areas'),
-    meta: { layout: 'AdminLayout', isProtected: true },
+    meta: {
+      layout: 'AdminLayout',
+      isProtected: true,
+      requiredRole: UserRoleId.Administrator,
+    },
   },
   {
     path: '/admin-feedback',
-    name: 'admin-feedback',
+    name: ROUTES.adminFeedback,
     component: () => import('@/pages/admin/feedback'),
-    meta: { layout: 'AdminLayout', isProtected: true },
+    meta: {
+      layout: 'AdminLayout',
+      isProtected: true,
+      requiredRole: UserRoleId.Administrator,
+    },
   },
-
   {
     path: '/:catchAll(.*)',
     name: ROUTES.notFound,
@@ -142,7 +163,7 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === 'login' && authStore.getAuthStatus) {
-    return { name: 'admin' };
+    return { name: ROUTES.admin };
   }
 
   if (to.name === 'setup' && !authStore.getSetupRequired) {
